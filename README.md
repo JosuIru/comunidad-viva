@@ -1,14 +1,84 @@
-# Comunidad Viva
+<div align="center">
 
-Red social de economía colaborativa local con sistema híbrido revolucionario de capas económicas.
+# 🌱 Comunidad Viva
+
+### Plataforma de Economía Colaborativa Local
+
+*Red social innovadora con sistema híbrido revolucionario de capas económicas*
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
+[![NestJS](https://img.shields.io/badge/NestJS-10-red.svg)](https://nestjs.com/)
+[![Next.js](https://img.shields.io/badge/Next.js-14-black.svg)](https://nextjs.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
+
+[Características](#-características-principales) •
+[Instalación](#️-instalación) •
+[Documentación](#-documentación) •
+[API](#-documentación-api) •
+[Contribuir](#-contribución)
+
+</div>
+
+---
+
+## 📸 Vista Previa
+
+![Comunidad Viva](app.png)
 
 **🚀 [Quick Start Guide](QUICK_START.md)** - Empieza en 5 minutos
 
-**📚 Documentación:**
-- [API Reference](API_REFERENCE.md) - Referencia completa de ~120 endpoints
-- [Changelog](CHANGELOG.md) - Historial de implementaciones
-- [Sistema Híbrido](packages/backend/src/hybrid/README.md) - Guía del sistema de capas económicas
-- [Gobernanza](CONSENSUS_GOVERNANCE_GUIDE.md) - Proof of Help y consenso descentralizado
+## 🎯 ¿Qué es Comunidad Viva?
+
+Comunidad Viva es una plataforma innovadora que reimagina la economía local, permitiendo que convivan **3 paradigmas económicos diferentes** en una sola aplicación. Desde el capitalismo tradicional hasta la economía de regalo pura, pasando por modelos de transición.
+
+### 💡 Características Únicas
+
+- 🔄 **Sistema Híbrido de 3 Capas Económicas** - Capitalismo, Pay-it-Forward y Economía de Regalo
+- 🏛️ **Gobernanza Descentralizada** - Proof of Help inspirado en Bitcoin
+- 🎮 **Gamificación Viral** - Swipe, Challenges, Flash Deals, Stories
+- 🌍 **Multilenguaje** - Castellano y Euskera (más idiomas próximamente)
+- 🔒 **Seguridad First** - Rate limiting, JWT, sanitización de inputs
+
+---
+
+## 🛠️ Tech Stack
+
+<div align="center">
+
+### Backend
+![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
+
+### Frontend
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Socket.io](https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white)
+
+### DevOps
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
+
+</div>
+
+---
+
+## 📚 Documentación
+
+| Documento | Descripción |
+|-----------|-------------|
+| [📖 Quick Start](QUICK_START.md) | Empieza en 5 minutos |
+| [📖 API Reference](API_REFERENCE.md) | Referencia completa de ~120 endpoints |
+| [📖 Changelog](CHANGELOG.md) | Historial de implementaciones |
+| [📖 Sistema Híbrido](packages/backend/src/hybrid/README.md) | Guía del sistema de capas económicas |
+| [📖 Gobernanza](CONSENSUS_GOVERNANCE_GUIDE.md) | Proof of Help y consenso descentralizado |
+| [📖 Multilenguaje](packages/web/MULTILENGUAJE.md) | Sistema i18n (ES/EU) |
 
 ## 🌟 Características Principales
 
