@@ -1,0 +1,105 @@
+{
+  "nav": {
+    "title": "Comunidad Viva",
+    "home": "Inicio",
+    "offers": "Ofertas",
+    "events": "Eventos",
+    "docs": "Documentación",
+    "discover": "Descubre",
+    "economy": "Economía",
+    "manage": "Gestionar",
+    "profile": "Perfil",
+    "logout": "Salir",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "swipeOffers": "Swipe Ofertas",
+    "myMatches": "Mis Matches",
+    "stories": "Historias",
+    "flashDeals": "Flash Deals",
+    "weeklyChallenges": "Retos Semanales",
+    "economicDashboard": "Dashboard Económico",
+    "sendCredits": "Enviar Créditos",
+    "communityPools": "Pools Comunitarios"
+  },
+  "auth": {
+    "sessionClosed": "Sesión cerrada"
+  },
+  "common": {
+    "menu": "Menú",
+    "close": "Cerrar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "loading": "Cargando...",
+    "loadingOffers": "Cargando ofertas...",
+    "error": "Ha ocurrido un error",
+    "success": "¡Éxito!",
+    "noResults": "No se encontraron resultados",
+    "viewMore": "Ver más",
+    "viewLess": "Ver menos",
+    "noImage": "Sin imagen",
+    "credits": "créditos",
+    "views": "visualizaciones"
+  },
+  "offers": {
+    "title": "Ofertas",
+    "newOffer": "+ Nueva Oferta",
+    "create": "Crear nueva oferta",
+    "myOffers": "Mis ofertas",
+    "category": "Categoría",
+    "price": "Precio",
+    "description": "Descripción",
+    "location": "Ubicación",
+    "allTypes": "Todos los tipos",
+    "allCategories": "Todas las categorías",
+    "noOffersAvailable": "No hay ofertas disponibles",
+    "createFirstOffer": "Crear la primera oferta",
+    "types": {
+      "PRODUCT": "Producto",
+      "SERVICE": "Servicio",
+      "TIME_BANK": "Banco de Tiempo",
+      "GROUP_BUY": "Compra Grupal",
+      "EVENT": "Evento"
+    },
+    "categories": {
+      "Alimentación": "Alimentación",
+      "Ropa": "Ropa",
+      "Hogar": "Hogar",
+      "Tecnología": "Tecnología",
+      "Servicios": "Servicios",
+      "Otros": "Otros"
+    }
+  },
+  "events": {
+    "title": "Eventos",
+    "create": "Crear nuevo evento",
+    "myEvents": "Mis eventos",
+    "date": "Fecha",
+    "time": "Hora",
+    "participants": "Participantes"
+  },
+  "credits": {
+    "balance": "Saldo",
+    "send": "Enviar",
+    "receive": "Recibir",
+    "history": "Historial",
+    "amount": "Cantidad",
+    "recipient": "Destinatario"
+  },
+  "profile": {
+    "myProfile": "Mi perfil",
+    "editProfile": "Editar perfil",
+    "settings": "Configuración",
+    "language": "Idioma"
+  },
+  "manage": {
+    "title": "Gestionar",
+    "myOffers": "Mis Ofertas",
+    "myEvents": "Mis Eventos",
+    "timeBank": "Banco de Tiempo",
+    "myProfile": "Mi Perfil"
+  }
+}

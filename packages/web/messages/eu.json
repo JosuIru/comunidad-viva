@@ -1,0 +1,105 @@
+{
+  "nav": {
+    "title": "Bizirik Komunitatea",
+    "home": "Hasiera",
+    "offers": "Eskaintzak",
+    "events": "Ekitaldiak",
+    "docs": "Dokumentazioa",
+    "discover": "Aurkitu",
+    "economy": "Ekonomia",
+    "manage": "Kudeatu",
+    "profile": "Profila",
+    "logout": "Irten",
+    "login": "Hasi saioa",
+    "register": "Erregistratu",
+    "swipeOffers": "Swipe Eskaintzak",
+    "myMatches": "Nire Matches",
+    "stories": "Istoriak",
+    "flashDeals": "Flash Eskaintzak",
+    "weeklyChallenges": "Asteko Erronkak",
+    "economicDashboard": "Ekonomia Panela",
+    "sendCredits": "Kreditoak Bidali",
+    "communityPools": "Komunitateko Putzuak"
+  },
+  "auth": {
+    "sessionClosed": "Saioa itxita"
+  },
+  "common": {
+    "menu": "Menua",
+    "close": "Itxi",
+    "save": "Gorde",
+    "cancel": "Ezeztatu",
+    "edit": "Editatu",
+    "delete": "Ezabatu",
+    "search": "Bilatu",
+    "filter": "Iragazi",
+    "loading": "Kargatzen...",
+    "loadingOffers": "Eskaintzak kargatzen...",
+    "error": "Errorea gertatu da",
+    "success": "Arrakasta!",
+    "noResults": "Ez da emaitzarik aurkitu",
+    "viewMore": "Ikusi gehiago",
+    "viewLess": "Ikusi gutxiago",
+    "noImage": "Irudirik gabe",
+    "credits": "kredituak",
+    "views": "ikustaldiak"
+  },
+  "offers": {
+    "title": "Eskaintzak",
+    "newOffer": "+ Eskaintza Berria",
+    "create": "Eskaintza berria sortu",
+    "myOffers": "Nire eskaintzak",
+    "category": "Kategoria",
+    "price": "Prezioa",
+    "description": "Deskribapena",
+    "location": "Kokapena",
+    "allTypes": "Mota guztiak",
+    "allCategories": "Kategoria guztiak",
+    "noOffersAvailable": "Ez dago eskaintza eskuragarririk",
+    "createFirstOffer": "Lehenengo eskaintza sortu",
+    "types": {
+      "PRODUCT": "Produktua",
+      "SERVICE": "Zerbitzua",
+      "TIME_BANK": "Denbora Bankua",
+      "GROUP_BUY": "Talde Erosketa",
+      "EVENT": "Ekitaldia"
+    },
+    "categories": {
+      "Alimentación": "Elikadura",
+      "Ropa": "Arropa",
+      "Hogar": "Etxea",
+      "Tecnología": "Teknologia",
+      "Servicios": "Zerbitzuak",
+      "Otros": "Besteak"
+    }
+  },
+  "events": {
+    "title": "Ekitaldiak",
+    "create": "Ekitaldi berria sortu",
+    "myEvents": "Nire ekitaldiak",
+    "date": "Data",
+    "time": "Ordua",
+    "participants": "Parte-hartzaileak"
+  },
+  "credits": {
+    "balance": "Saldoa",
+    "send": "Bidali",
+    "receive": "Jaso",
+    "history": "Historia",
+    "amount": "Kopurua",
+    "recipient": "Hartzailea"
+  },
+  "profile": {
+    "myProfile": "Nire profila",
+    "editProfile": "Profila editatu",
+    "settings": "Ezarpenak",
+    "language": "Hizkuntza"
+  },
+  "manage": {
+    "title": "Kudeatu",
+    "myOffers": "Nire Eskaintzak",
+    "myEvents": "Nire Ekitaldiak",
+    "timeBank": "Denbora Bankua",
+    "myProfile": "Nire Profila"
+  }
+}

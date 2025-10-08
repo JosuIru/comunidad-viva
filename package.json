@@ -1,0 +1,20 @@
+{
+  "name": "comunidad-viva",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Red social de economía colaborativa local",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:web\"",
+    "dev:backend": "cd packages/backend && npm run dev",
+    "dev:web": "cd packages/web && npm run dev",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

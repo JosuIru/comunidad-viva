@@ -1,0 +1,545 @@
+import { useState } from 'react';
+import { getI18nProps } from '@/lib/i18n';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import Layout from '@/components/Layout';
+import { api } from '@/lib/api';
+import toast from 'react-hot-toast';
+
+interface Delegate {
+  id: string;
+  userId: string;
+  userName: string;
+  avatar?: string;
+  reputation: number;
+  expertise: string[];
+  activeDelegations: number;
+  successRate: number;
+  bio: string;
+}
+
+interface Delegation {
+  id: string;
+  delegateId: string;
+  delegateName: string;
+  category?: string;
+  votingPower: number;
+  createdAt: string;
+  expiresAt?: string;
+  active: boolean;
+}
+
+interface UserDelegationStats {
+  totalDelegated: number;
+  totalDelegations: number;
+  receivedDelegations: number;
+  votingPowerDelegated: number;
+}
+
+export default function DelegationPage() {
+  const queryClient = useQueryClient();
+  const [selectedDelegate, setSelectedDelegate] = useState<Delegate | null>(null);
+  const [delegationCategory, setDelegationCategory] = useState<string>('');
+  const [delegationPower, setDelegationPower] = useState<number>(10);
+  const [activeTab, setActiveTab] = useState<'delegates' | 'my-delegations'>('delegates');
+
+  // Fetch available delegates
+  const { data: delegates, isLoading: delegatesLoading } = useQuery<Delegate[]>({
+    queryKey: ['available-delegates'],
+    queryFn: async () => {
+      const response = await api.get('/consensus/delegation/available');
+      return response.data.delegates || [];
+    },
+  });
+
+  // Fetch user's delegations
+  const { data: myDelegations } = useQuery<Delegation[]>({
+    queryKey: ['my-delegations'],
+    queryFn: async () => {
+      const response = await api.get('/consensus/delegation/my-delegations');
+      return response.data.delegations || [];
+    },
+  });
+
+  // Fetch delegation stats
+  const { data: stats } = useQuery<UserDelegationStats>({
+    queryKey: ['delegation-stats'],
+    queryFn: async () => {
+      const response = await api.get('/consensus/delegation/stats');
+      return response.data;
+    },
+  });
+
+  // Delegate mutation
+  const delegateMutation = useMutation({
+    mutationFn: async (data: { delegateId: string; category?: string; votingPower: number }) => {
+      const response = await api.post('/consensus/delegation/delegate', data);
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success('¡Delegación creada exitosamente!');
+      queryClient.invalidateQueries({ queryKey: ['my-delegations'] });
+      queryClient.invalidateQueries({ queryKey: ['delegation-stats'] });
+      queryClient.invalidateQueries({ queryKey: ['available-delegates'] });
+      setSelectedDelegate(null);
+      setDelegationCategory('');
+      setDelegationPower(10);
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Error al crear delegación');
+    },
+  });
+
+  // Revoke delegation mutation
+  const revokeMutation = useMutation({
+    mutationFn: async (delegationId: string) => {
+      const response = await api.post(`/consensus/delegation/revoke/${delegationId}`);
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success('Delegación revocada');
+      queryClient.invalidateQueries({ queryKey: ['my-delegations'] });
+      queryClient.invalidateQueries({ queryKey: ['delegation-stats'] });
+      queryClient.invalidateQueries({ queryKey: ['available-delegates'] });
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Error al revocar delegación');
+    },
+  });
+
+  const categories = [
+    'Todas las Categorías',
+    'Tecnología',
+    'Economía',
+    'Gobernanza',
+    'Desarrollo',
+    'Comunidad',
+    'Sostenibilidad',
+  ];
+
+  const getReputationColor = (reputation: number) => {
+    if (reputation >= 80) return 'text-purple-600';
+    if (reputation >= 50) return 'text-blue-600';
+    if (reputation >= 20) return 'text-green-600';
+    return 'text-gray-600';
+  };
+
+  const getReputationBadge = (reputation: number) => {
+    if (reputation >= 80) return '👑 Experto';
+    if (reputation >= 50) return '⭐ Avanzado';
+    if (reputation >= 20) return '✓ Confiable';
+    return '🌱 Nuevo';
+  };
+
+  return (
+    <Layout title="Delegación de Votos - Comunidad Viva">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white">
+          <div className="container mx-auto px-4 py-12">
+            <h1 className="text-4xl font-bold mb-4">🗳️ Delegación de Votos</h1>
+            <p className="text-xl opacity-90">
+              Delega tu poder de voto en expertos de confianza
+            </p>
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4 py-8">
+          {/* Stats Overview */}
+          {stats && (
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+              <div className="bg-white rounded-lg shadow-lg p-6 text-center">
+                <div className="text-4xl font-bold text-indigo-600">{stats.totalDelegations}</div>
+                <div className="text-sm text-gray-600 mt-1">Delegaciones Activas</div>
+              </div>
+              <div className="bg-white rounded-lg shadow-lg p-6 text-center">
+                <div className="text-4xl font-bold text-purple-600">{stats.votingPowerDelegated}</div>
+                <div className="text-sm text-gray-600 mt-1">Poder Delegado</div>
+              </div>
+              <div className="bg-white rounded-lg shadow-lg p-6 text-center">
+                <div className="text-4xl font-bold text-pink-600">{stats.receivedDelegations}</div>
+                <div className="text-sm text-gray-600 mt-1">Delegaciones Recibidas</div>
+              </div>
+              <div className="bg-white rounded-lg shadow-lg p-6 text-center">
+                <div className="text-4xl font-bold text-blue-600">{stats.totalDelegated}</div>
+                <div className="text-sm text-gray-600 mt-1">Total Gestionado</div>
+              </div>
+            </div>
+          )}
+
+          {/* Info Banner */}
+          <div className="bg-gradient-to-r from-indigo-100 to-purple-100 border-2 border-indigo-300 rounded-lg p-6 mb-8">
+            <div className="flex items-start gap-4">
+              <div className="text-4xl">💡</div>
+              <div>
+                <h3 className="font-bold text-indigo-900 mb-2">¿Qué es la Delegación de Votos?</h3>
+                <p className="text-indigo-800 text-sm">
+                  La delegación te permite transferir tu poder de voto a personas de confianza con experiencia
+                  en áreas específicas. Ellos votarán en tu nombre, pero puedes revocar la delegación en cualquier
+                  momento.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <div className="mb-8">
+            <div className="flex border-b border-gray-200">
+              <button
+                onClick={() => setActiveTab('delegates')}
+                className={`px-6 py-3 font-semibold transition-colors ${
+                  activeTab === 'delegates'
+                    ? 'border-b-2 border-indigo-500 text-indigo-600'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                👥 Delegados Disponibles
+              </button>
+              <button
+                onClick={() => setActiveTab('my-delegations')}
+                className={`px-6 py-3 font-semibold transition-colors ${
+                  activeTab === 'my-delegations'
+                    ? 'border-b-2 border-purple-500 text-purple-600'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                📋 Mis Delegaciones
+              </button>
+            </div>
+          </div>
+
+          {/* Delegates Tab */}
+          {activeTab === 'delegates' && (
+            <div>
+              {delegatesLoading ? (
+                <div className="text-center py-12">
+                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+                </div>
+              ) : delegates && delegates.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {delegates.map((delegate) => (
+                    <div
+                      key={delegate.id}
+                      className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                    >
+                      <div className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white p-6">
+                        <div className="flex items-center gap-4 mb-3">
+                          <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-3xl">
+                            {delegate.avatar || '👤'}
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-xl font-bold">{delegate.userName}</h3>
+                            <p className={`text-sm font-semibold ${getReputationColor(delegate.reputation)}`}>
+                              {getReputationBadge(delegate.reputation)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="p-6">
+                        {/* Bio */}
+                        <p className="text-gray-700 text-sm mb-4">{delegate.bio}</p>
+
+                        {/* Stats */}
+                        <div className="grid grid-cols-3 gap-3 mb-4">
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-indigo-600">{delegate.reputation}</div>
+                            <div className="text-xs text-gray-600">Reputación</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-purple-600">{delegate.activeDelegations}</div>
+                            <div className="text-xs text-gray-600">Delegaciones</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-pink-600">
+                              {Math.round(delegate.successRate)}%
+                            </div>
+                            <div className="text-xs text-gray-600">Éxito</div>
+                          </div>
+                        </div>
+
+                        {/* Expertise */}
+                        {delegate.expertise && delegate.expertise.length > 0 && (
+                          <div className="mb-4">
+                            <div className="text-sm font-semibold text-gray-700 mb-2">Áreas de Experticia:</div>
+                            <div className="flex flex-wrap gap-2">
+                              {delegate.expertise.map((exp, index) => (
+                                <span
+                                  key={index}
+                                  className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-semibold"
+                                >
+                                  {exp}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Delegate Button */}
+                        <button
+                          onClick={() => setSelectedDelegate(delegate)}
+                          className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-colors font-semibold"
+                        >
+                          🗳️ Delegar Voto
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="bg-white rounded-lg shadow-lg p-12 text-center">
+                  <div className="text-6xl mb-4">👥</div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">No hay delegados disponibles</h3>
+                  <p className="text-gray-600">
+                    Los delegados aparecerán aquí cuando haya miembros con suficiente reputación
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* My Delegations Tab */}
+          {activeTab === 'my-delegations' && (
+            <div>
+              {myDelegations && myDelegations.length > 0 ? (
+                <div className="space-y-4">
+                  {myDelegations.map((delegation) => (
+                    <div
+                      key={delegation.id}
+                      className="bg-white rounded-lg shadow-lg p-6 flex items-center justify-between"
+                    >
+                      <div className="flex items-center gap-4 flex-1">
+                        <div className="w-16 h-16 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                          {delegation.delegateName.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-bold text-gray-900 text-lg">{delegation.delegateName}</h4>
+                          {delegation.category && (
+                            <p className="text-sm text-gray-600">Categoría: {delegation.category}</p>
+                          )}
+                          <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
+                            <span>Poder: {delegation.votingPower}</span>
+                            <span>
+                              Desde: {new Date(delegation.createdAt).toLocaleDateString()}
+                            </span>
+                            {delegation.expiresAt && (
+                              <span>
+                                Expira: {new Date(delegation.expiresAt).toLocaleDateString()}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <span
+                          className={`px-4 py-2 rounded-full text-sm font-semibold ${
+                            delegation.active
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-gray-100 text-gray-800'
+                          }`}
+                        >
+                          {delegation.active ? '✓ Activa' : 'Inactiva'}
+                        </span>
+                        {delegation.active && (
+                          <button
+                            onClick={() => revokeMutation.mutate(delegation.id)}
+                            disabled={revokeMutation.isPending}
+                            className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors font-semibold disabled:opacity-50"
+                          >
+                            Revocar
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="bg-white rounded-lg shadow-lg p-12 text-center">
+                  <div className="text-6xl mb-4">📋</div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">No tienes delegaciones activas</h3>
+                  <p className="text-gray-600 mb-6">
+                    Delega tu voto en expertos para que voten en tu nombre
+                  </p>
+                  <button
+                    onClick={() => setActiveTab('delegates')}
+                    className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-semibold"
+                  >
+                    Ver Delegados Disponibles
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* How it Works */}
+          <div className="mt-12 bg-white rounded-lg shadow-lg p-8">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">¿Cómo funciona la Delegación?</h3>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="text-center">
+                <div className="text-4xl mb-3">1️⃣</div>
+                <h4 className="font-bold mb-2">Elige un Delegado</h4>
+                <p className="text-sm text-gray-600">
+                  Selecciona a alguien con experiencia en el área que te interesa
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl mb-3">2️⃣</div>
+                <h4 className="font-bold mb-2">Delega Poder</h4>
+                <p className="text-sm text-gray-600">
+                  Decide cuánto poder de voto quieres transferir
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl mb-3">3️⃣</div>
+                <h4 className="font-bold mb-2">Ellos Votan</h4>
+                <p className="text-sm text-gray-600">
+                  El delegado vota en tu nombre en las propuestas
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl mb-3">4️⃣</div>
+                <h4 className="font-bold mb-2">Puedes Revocar</h4>
+                <p className="text-sm text-gray-600">
+                  Retira la delegación en cualquier momento si cambias de opinión
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6">
+                <h4 className="font-bold text-green-900 mb-3">✓ Beneficios de Delegar</h4>
+                <ul className="text-sm text-green-800 space-y-2">
+                  <li>• Tu voz cuenta aunque no tengas tiempo de participar</li>
+                  <li>• Los expertos toman decisiones informadas</li>
+                  <li>• Puedes delegar por categorías específicas</li>
+                  <li>• Aumenta la participación en la gobernanza</li>
+                </ul>
+              </div>
+
+              <div className="bg-purple-50 border-2 border-purple-200 rounded-lg p-6">
+                <h4 className="font-bold text-purple-900 mb-3">💡 Consejos para Delegar</h4>
+                <ul className="text-sm text-purple-800 space-y-2">
+                  <li>• Revisa la reputación y tasa de éxito del delegado</li>
+                  <li>• Considera su experiencia en áreas específicas</li>
+                  <li>• Empieza con poco poder y aumenta gradualmente</li>
+                  <li>• Monitorea cómo votan tus delegados</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Delegate Modal */}
+        {selectedDelegate && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg max-w-2xl w-full p-8">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Delegar Voto</h3>
+
+              <div className="bg-gradient-to-r from-indigo-50 to-purple-50 border-2 border-indigo-200 rounded-lg p-6 mb-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full flex items-center justify-center text-white text-2xl">
+                    {selectedDelegate.avatar || '👤'}
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold text-gray-900">{selectedDelegate.userName}</h4>
+                    <p className="text-sm text-gray-600">
+                      Reputación: {selectedDelegate.reputation} • Éxito: {Math.round(selectedDelegate.successRate)}%
+                    </p>
+                  </div>
+                </div>
+
+                {selectedDelegate.expertise && selectedDelegate.expertise.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {selectedDelegate.expertise.map((exp, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-indigo-200 text-indigo-800 rounded-full text-xs font-semibold"
+                      >
+                        {exp}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-4 mb-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Categoría (opcional)
+                  </label>
+                  <select
+                    value={delegationCategory}
+                    onChange={(e) => setDelegationCategory(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  >
+                    {categories.map((category) => (
+                      <option key={category} value={category === 'Todas las Categorías' ? '' : category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Elige una categoría específica o deja en "Todas" para delegar en todo
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Poder de Voto a Delegar: {delegationPower}
+                  </label>
+                  <input
+                    type="range"
+                    min="1"
+                    max="100"
+                    value={delegationPower}
+                    onChange={(e) => setDelegationPower(parseInt(e.target.value))}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>1</span>
+                    <span>50</span>
+                    <span>100</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-6">
+                <h4 className="font-semibold text-yellow-900 mb-2">⚠️ Importante</h4>
+                <ul className="text-sm text-yellow-800 space-y-1">
+                  <li>• El delegado votará en tu nombre con el poder asignado</li>
+                  <li>• Puedes revocar la delegación en cualquier momento</li>
+                  <li>• La delegación se mantiene hasta que la revoque</li>
+                  <li>• Puedes tener múltiples delegaciones activas</li>
+                </ul>
+              </div>
+
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setSelectedDelegate(null)}
+                  className="flex-1 py-3 px-4 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-semibold"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() =>
+                    delegateMutation.mutate({
+                      delegateId: selectedDelegate.id,
+                      category: delegationCategory || undefined,
+                      votingPower: delegationPower,
+                    })
+                  }
+                  disabled={delegateMutation.isPending}
+                  className="flex-1 py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-colors font-semibold disabled:opacity-50"
+                >
+                  {delegateMutation.isPending ? 'Delegando...' : '🗳️ Confirmar Delegación'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </Layout>
+  );
+}
+
+export { getI18nProps as getStaticProps };

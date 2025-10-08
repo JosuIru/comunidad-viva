@@ -1,0 +1,2054 @@
+// packages/backend/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============= USERS & AUTH =============
+model User {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  phone           String?   @unique
+  password        String
+  name            String
+  bio             String?
+  avatar          String?
+  role            UserRole  @default(CITIZEN)
+  emailVerified   Boolean   @default(false)
+  phoneVerified   Boolean   @default(false)
+
+  // Community
+  communityId     String?
+
+  // Location
+  lat             Float?
+  lng             Float?
+  address         String?
+  neighborhood    String?
+  searchRadius    Int       @default(5) // km
+  
+  // Gamification
+  credits         Int       @default(0)
+  level           Int       @default(1)
+  experience      Int       @default(0)
+  activeStreak    Int       @default(0)
+  lastActiveAt    DateTime  @default(now())
+  
+  // Stats
+  totalSaved      Float     @default(0)
+  hoursShared     Float     @default(0)
+  hoursReceived   Float     @default(0)
+  co2Avoided      Float     @default(0)
+  peopleHelped    Int       @default(0)
+  peopleHelpedBy  Int       @default(0)
+  connectionsCount Int      @default(0)
+  
+  // Preferences
+  language        String    @default("es")
+  notificationPreferences Json @default("{}")
+  privacy         Json      @default("{}")
+  interests       String[]
+  weeklyMood      WeeklyMood?
+  dailySeeds      Boolean   @default(true)
+
+  // Sistema Híbrido: Capa de Realidad Económica
+  economicLayer   EconomicLayer @default(TRADITIONAL)
+  layerConfig     Json      @default("{}")  // Configuración específica de la capa
+  layerMigrations LayerMigration[]
+  softCredits     Int?                      // Créditos opcionales para capa transicional
+  lastLayerChange DateTime?
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+  
+  // Relations
+  community       Community? @relation("CommunityMembers", fields: [communityId], references: [id])
+  skills          Skill[]
+  badges          UserBadge[]
+  offers          Offer[]
+  orders          Order[]
+  posts           Post[]
+  comments        Comment[]
+  reactions       Reaction[]
+  notifications   Notification[]
+  creditLedger    CreditTransaction[]
+  timeBankGiven   TimeBankTransaction[] @relation("Provider")
+  timeBankReceived TimeBankTransaction[] @relation("Requester")
+  events          EventAttendee[]
+  eventsOrganized Event[] @relation("Organizer")
+  groupBuyParticipations GroupBuyParticipant[]
+  reviewsGiven    Review[] @relation("ReviewsGiven")
+  connections     Connection[] @relation("User")
+  connectedTo     Connection[] @relation("ConnectedUser")
+  merchant        Merchant?
+  reports         Report[] @relation("Reporter")
+  reportedContent Report[] @relation("ReportedUser")
+  messages        Message[] @relation("Sender")
+  messagesReceived Message[] @relation("Receiver")
+  helpChains      HelpChain[] @relation("Initiator")
+  chainLinks      ChainLink[] @relation("FromUser")
+  chainLinksTo    ChainLink[] @relation("ToUser")
+  dailySeedCompletions UserDailySeedCompletion[]
+  offerInterests  OfferInterest[]
+
+  // Consensus & Governance
+  trustBlocks     TrustBlock[] @relation("TrustBlockActor")
+  blockValidations BlockValidation[] @relation("BlockValidator")
+  proposalsCreated Proposal[] @relation("ProposalAuthor")
+  proposalVotes   ProposalVote[] @relation("ProposalVoter")
+  proposalComments ProposalComment[] @relation("ProposalCommentAuthor")
+  moderationReports ModerationDAO[] @relation("ModerationReporter")
+  moderationVotes ModerationVote[] @relation("ModerationVoter")
+  voteCredits     Int       @default(10) // Credits for quadratic voting
+
+  // Flow Economics
+  generosityScore Float     @default(0.0) // Measures giving behavior
+  flowPower       Float     @default(1.0) // Voting power based on generosity
+  lastDemurrageAt DateTime  @default(now()) // Last time demurrage was applied
+  flowTransactionsFrom FlowTransaction[] @relation("FlowFrom")
+  flowTransactionsTo   FlowTransaction[] @relation("FlowTo")
+  poolContributions    PoolContribution[]
+  poolRequests         PoolRequest[] @relation("PoolRequestUser")
+  poolRequestVotes     PoolRequestVote[] @relation("PoolRequestVoter")
+
+  // Viral Engagement Features
+  flashDealRedemptions FlashDealRedemption[]
+  stories              Story[]
+  storyReactions       StoryReaction[]
+  storyViews           StoryView[]
+  swipes               Swipe[]
+  matchesAsUser1       Match[] @relation("MatchUser1")
+  matchesAsUser2       Match[] @relation("MatchUser2")
+  challengeParticipations ChallengeParticipant[]
+  referralCodes        ReferralCode[] @relation("ReferralCodeOwner")
+  referredBy           Referral[] @relation("ReferralReferred")
+  liveEventParticipations LiveEventParticipant[]
+  microActions         MicroAction[]
+  featureUnlocks       UserFeatureUnlock[]
+  onboardingProgress   OnboardingProgress?
+  dailyActions         Int       @default(0)
+
+  @@index([email])
+  @@index([phone])
+  @@index([neighborhood])
+  @@index([lat, lng])
+  @@index([lastActiveAt])
+  @@index([generosityScore])
+  @@index([communityId])
+}
+
+// ============= COMMUNITIES =============
+model Community {
+  id                String              @id @default(uuid())
+  slug              String              @unique  // URL-friendly identifier: "barrio-gracia"
+  name              String                       // Display name: "Barrio de Gracia"
+  description       String?
+  logo              String?
+  bannerImage       String?
+
+  // Location
+  location          String?                      // "Barcelona, España"
+  lat               Float?
+  lng               Float?
+  radiusKm          Float?                       // Geographic radius of operation
+
+  // Configuration
+  type              CommunityType
+  visibility        CommunityVisibility
+  requiresApproval  Boolean             @default(false) // Manual approval for new members
+  allowExternalOffers Boolean           @default(false) // Can see offers from connected communities
+
+  // Branding & Customization
+  primaryColor      String?
+  language          String              @default("es")
+  currency          String              @default("EUR")
+
+  // Stats
+  membersCount      Int                 @default(0)
+  activeOffersCount Int                 @default(0)
+
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  // Relations
+  users             User[]              @relation("CommunityMembers")
+  governance        CommunityGovernance?
+  offers            Offer[]
+  events            Event[]
+  connectionsOut    CommunityConnection[] @relation("SourceCommunity")
+  connectionsIn     CommunityConnection[] @relation("TargetCommunity")
+
+  @@index([slug])
+  @@index([type])
+  @@index([visibility])
+  @@index([lat, lng])
+}
+
+enum CommunityType {
+  NEIGHBORHOOD  // Barrio
+  VILLAGE       // Pueblo
+  TOWN          // Ciudad pequeña
+  COUNTY        // Comarca/Concejo
+  REGION        // Región
+  CUSTOM        // Personalizado
+}
+
+enum CommunityVisibility {
+  PRIVATE       // Solo miembros, invisible externamente
+  PUBLIC        // Visible, requiere aprobación para unirse
+  OPEN          // Visible y cualquiera puede unirse
+  FEDERATED     // Conectada con otras comunidades
+}
+
+// Gobernanza descentralizada por consenso comunitario
+model CommunityGovernance {
+  id                    String    @id @default(uuid())
+  communityId           String    @unique
+
+  // Thresholds de reputación para participar (basado en generosityScore)
+  minProposalReputation Float     @default(10.0)  // Mínimo para proponer cambios
+  minVoteReputation     Float     @default(1.0)   // Mínimo para votar
+  minModerateReputation Float     @default(5.0)   // Mínimo para moderar contenido
+
+  // Parámetros de consenso
+  quorumPercentage      Int       @default(20)    // % de miembros activos necesarios
+  approvalPercentage    Int       @default(66)    // % de votos a favor para aprobar
+  proposalDuration      Int       @default(7)     // días de discusión
+  votingDuration        Int       @default(3)     // días de votación
+
+  // Votación cuadrática
+  useQuadraticVoting    Boolean   @default(true)  // Evita plutocracias
+  maxVoteCredits        Int       @default(100)   // Máximo créditos por propuesta
+
+  // Sistema anti-trolls
+  autoModerateThreshold Int       @default(5)     // Reportes para revisión automática
+  banThreshold          Int       @default(10)    // Reportes para ban automático temporal
+
+  // Fundadores iniciales (solo para bootstrap, sin privilegios permanentes)
+  founders              String[]                  // User IDs fundadores
+  foundedAt             DateTime  @default(now())
+  bootstrapEndDate      DateTime?                 // Cuando termina período de bootstrap
+
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  community             Community @relation(fields: [communityId], references: [id])
+
+  @@index([communityId])
+}
+
+model CommunityConnection {
+  id                String           @id @default(uuid())
+  sourceCommunityId String
+  targetCommunityId String
+  status            ConnectionStatus @default(PENDING)
+  shareOffers       Boolean          @default(true)
+  shareEvents       Boolean          @default(true)
+
+  initiatedBy       String?          // User ID who initiated
+  approvedBy        String?          // User ID who approved
+
+  createdAt         DateTime         @default(now())
+  approvedAt        DateTime?
+
+  sourceCommunity   Community        @relation("SourceCommunity", fields: [sourceCommunityId], references: [id])
+  targetCommunity   Community        @relation("TargetCommunity", fields: [targetCommunityId], references: [id])
+
+  @@unique([sourceCommunityId, targetCommunityId])
+  @@index([sourceCommunityId])
+  @@index([targetCommunityId])
+  @@index([status])
+}
+
+enum ConnectionStatus {
+  PENDING     // Solicitud pendiente
+  APPROVED    // Conexión aprobada
+  REJECTED    // Solicitud rechazada
+  SUSPENDED   // Conexión suspendida temporalmente
+}
+
+enum UserRole {
+  CITIZEN
+  MERCHANT
+  ADMIN
+  MODERATOR
+  PUBLIC_ENTITY
+}
+
+enum WeeklyMood {
+  AVAILABLE    // Disponible para ayudar
+  LEARNING     // Buscando aprender
+  ORGANIZING   // Organizando actividad
+  RESTING      // Descansando
+}
+
+enum EconomicLayer {
+  TRADITIONAL   // Capa 1: Sistema tradicional con créditos, medición completa
+  TRANSITIONAL  // Capa 2: Sistema transicional, menos medición, más flujo
+  GIFT_PURE     // Capa 3: Regalo puro, sin medición alguna
+  CHAMELEON     // Modo especial: Se adapta a quien interactúa
+}
+
+// ============= SKILLS & REPUTATION =============
+model Skill {
+  id          String   @id @default(uuid())
+  userId      String
+  category    String
+  name        String
+  description String?
+  verified    Boolean  @default(false)
+  endorsements Int     @default(0)
+  
+  user        User     @relation(fields: [userId], references: [id])
+  timeBankOffers TimeBankOffer[]
+  
+  @@unique([userId, name])
+  @@index([category])
+}
+
+model UserBadge {
+  id          String   @id @default(uuid())
+  userId      String
+  badgeType   BadgeType
+  earnedAt    DateTime @default(now())
+  metadata    Json?
+  
+  user        User     @relation(fields: [userId], references: [id])
+  
+  @@unique([userId, badgeType])
+}
+
+enum BadgeType {
+  HELPER_10    // Ayudó 10 veces
+  HELPER_50    // Ayudó 50 veces
+  HELPER_100   // Ayudó 100 veces
+  ORGANIZER    // Organizó evento
+  ECO_WARRIOR  // Acciones ecológicas
+  CONNECTOR    // Conectó personas
+  PIONEER      // Usuario temprano
+  TEACHER      // Enseñó habilidades
+  LEARNER      // Aprendió habilidades
+  SAVER        // Ahorró 100€+
+}
+
+// ============= OFFERS & MARKETPLACE =============
+model Offer {
+  id          String    @id @default(uuid())
+  userId      String
+  communityId String?
+  type        OfferType
+  category    String
+  title       String
+  description String
+  images      String[]
+
+  priceEur    Float?
+  priceCredits Int?
+  stock       Int?
+
+  lat         Float?
+  lng         Float?
+  address     String?
+  
+  tags        String[]
+  status      OfferStatus @default(ACTIVE)
+  featured    Boolean   @default(false)
+  
+  views       Int       @default(0)
+  interested  Int       @default(0)
+  supporters  Int       @default(0)
+  shares      Int       @default(0)
+  
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  user        User      @relation(fields: [userId], references: [id])
+  community   Community? @relation(fields: [communityId], references: [id])
+  orderItems  OrderItem[]
+  posts       Post[]    @relation("OfferPosts")
+  savedBy     SavedOffer[]
+  interestedUsers OfferInterest[]
+  groupBuy    GroupBuy?
+  timeBank    TimeBankOffer?
+  event       Event?
+  swipes      Swipe[]
+  matches     Match[]
+
+  @@index([userId])
+  @@index([communityId])
+  @@index([type])
+  @@index([category])
+  @@index([status])
+  @@index([lat, lng])
+  @@index([createdAt])
+}
+
+enum OfferType {
+  PRODUCT
+  SERVICE
+  TIME_BANK
+  GROUP_BUY
+  EVENT
+}
+
+enum OfferStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+  EXPIRED
+  CANCELLED
+}
+
+model SavedOffer {
+  id        String   @id @default(uuid())
+  userId    String
+  offerId   String
+  savedAt   DateTime @default(now())
+
+  offer     Offer    @relation(fields: [offerId], references: [id])
+
+  @@unique([userId, offerId])
+  @@index([offerId])
+}
+
+model OfferInterest {
+  id           String   @id @default(uuid())
+  userId       String
+  offerId      String
+  interestedAt DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id])
+  offer        Offer    @relation(fields: [offerId], references: [id])
+
+  @@unique([userId, offerId])
+  @@index([userId])
+  @@index([offerId])
+}
+
+// ============= GROUP BUYS =============
+model GroupBuy {
+  id              String   @id @default(uuid())
+  offerId         String   @unique
+  minParticipants Int
+  maxParticipants Int
+  currentParticipants Int  @default(0)
+  deadline        DateTime
+  pickupLat       Float
+  pickupLng       Float
+  pickupAddress   String
+  status          GroupBuyStatus @default(ACTIVE)
+  createdAt       DateTime @default(now())
+
+  offer           Offer    @relation(fields: [offerId], references: [id])
+  priceBreaks     PriceBreak[]
+  participants    GroupBuyParticipant[]
+
+  @@index([deadline])
+  @@index([status])
+}
+
+enum GroupBuyStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  EXPIRED
+}
+
+model PriceBreak {
+  id           String   @id @default(uuid())
+  groupBuyId   String
+  minQuantity  Int
+  pricePerUnit Float
+  savings      Float    // percentage
+  
+  groupBuy     GroupBuy @relation(fields: [groupBuyId], references: [id])
+  
+  @@index([groupBuyId])
+}
+
+model GroupBuyParticipant {
+  id          String   @id @default(uuid())
+  groupBuyId  String
+  userId      String
+  quantity    Int
+  committed   Boolean  @default(false)
+  joinedAt    DateTime @default(now())
+
+  groupBuy    GroupBuy @relation(fields: [groupBuyId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@unique([groupBuyId, userId])
+  @@index([userId])
+}
+
+// ============= TIME BANK =============
+model TimeBankOffer {
+  id              String   @id @default(uuid())
+  offerId         String   @unique
+  skillId         String?
+  estimatedHours  Float
+  canTeach        Boolean  @default(false)
+  maxStudents     Int?
+  experienceLevel ExperienceLevel
+  toolsNeeded     String[]
+  
+  offer           Offer    @relation(fields: [offerId], references: [id])
+  skill           Skill?   @relation(fields: [skillId], references: [id])
+  transactions    TimeBankTransaction[]
+}
+
+enum ExperienceLevel {
+  BEGINNER
+  INTERMEDIATE
+  EXPERT
+}
+
+model TimeBankTransaction {
+  id            String   @id @default(uuid())
+  requesterId   String
+  providerId    String
+  offerId       String?
+  description   String
+  hours         Float
+  credits       Int
+  
+  scheduledFor  DateTime
+  completedAt   DateTime?
+  status        TransactionStatus
+  
+  requesterRating Int?
+  requesterComment String?
+  providerRating  Int?
+  providerComment String?
+  
+  impactStory   String?  // "Lo mejor de este intercambio"
+  chainedFavor  Boolean  @default(false)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  requester     User     @relation("Requester", fields: [requesterId], references: [id])
+  provider      User     @relation("Provider", fields: [providerId], references: [id])
+  timeBankOffer TimeBankOffer? @relation(fields: [offerId], references: [id])
+  
+  @@index([requesterId])
+  @@index([providerId])
+  @@index([status])
+  @@index([scheduledFor])
+}
+
+enum TransactionStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  DISPUTED
+}
+
+// ============= ORDERS & PAYMENTS =============
+model Order {
+  id            String   @id @default(uuid())
+  buyerId       String
+  totalEur      Float
+  totalCredits  Int
+  paymentMethod PaymentMethod
+  
+  pickupLat     Float?
+  pickupLng     Float?
+  pickupAddress String?
+  pickupTime    DateTime?
+  
+  status        OrderStatus
+  notes         String?
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  completedAt   DateTime?
+  
+  buyer         User     @relation(fields: [buyerId], references: [id])
+  items         OrderItem[]
+  payment       Payment?
+  
+  @@index([buyerId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id           String   @id @default(uuid())
+  orderId      String
+  offerId      String
+  quantity     Int
+  priceEur     Float
+  priceCredits Int
+  notes        String?
+  
+  order        Order    @relation(fields: [orderId], references: [id])
+  offer        Offer    @relation(fields: [offerId], references: [id])
+  
+  @@index([orderId])
+  @@index([offerId])
+}
+
+model Payment {
+  id            String   @id @default(uuid())
+  orderId       String   @unique
+  amount        Float
+  currency      String   @default("EUR")
+  method        PaymentMethod
+  status        PaymentStatus
+  stripeId      String?
+  metadata      Json?
+  
+  createdAt     DateTime @default(now())
+  
+  order         Order    @relation(fields: [orderId], references: [id])
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  CREDITS
+  MIXED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PREPARING
+  READY
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+// ============= CREDITS SYSTEM =============
+model CreditTransaction {
+  id          String   @id @default(uuid())
+  userId      String
+  amount      Int      // positive = earned, negative = spent
+  balance     Int      // balance after transaction
+  reason      CreditReason
+  description String?
+  relatedId   String?  // ID of related entity
+  metadata    Json?
+  
+  expiresAt   DateTime?
+  createdAt   DateTime @default(now())
+  
+  user        User     @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+  @@index([reason])
+  @@index([createdAt])
+}
+
+enum CreditReason {
+  TIME_BANK_HOUR
+  LOCAL_PURCHASE
+  EVENT_ATTENDANCE
+  REFERRAL
+  ECO_ACTION
+  COMMUNITY_HELP
+  DAILY_SEED
+  SUPPORT_POST    // Apoyar publicación
+  ADMIN_GRANT
+  ADMIN_DEDUCT
+  EXPIRATION
+  OFFER_CREATED
+  REVIEW
+  PURCHASE
+  DISCOUNT
+  SERVICE
+  EVENT_ACCESS
+  ADJUSTMENT
+  SYSTEM_REWARD   // Recompensas automáticas del sistema
+}
+
+// ============= EVENTS =============
+model Event {
+  id          String   @id @default(uuid())
+  offerId     String?  @unique
+  organizerId String
+  communityId String?
+  title       String
+  description String
+  image       String?
+
+  lat         Float
+  lng         Float
+  address     String
+
+  startsAt    DateTime
+  endsAt      DateTime
+  capacity    Int?
+
+  creditsReward Int    @default(0)
+  tags        String[]
+  type        EventType
+  requirements String[]
+
+  qrCode      String?  @unique
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  organizer   User     @relation("Organizer", fields: [organizerId], references: [id])
+  community   Community? @relation(fields: [communityId], references: [id])
+  offer       Offer?   @relation(fields: [offerId], references: [id])
+  attendees   EventAttendee[]
+
+  @@index([organizerId])
+  @@index([communityId])
+  @@index([startsAt])
+  @@index([type])
+}
+
+model EventAttendee {
+  id           String   @id @default(uuid())
+  eventId      String
+  userId       String
+  role         AttendeeRole @default(PARTICIPANT)
+  registeredAt DateTime @default(now())
+  checkedInAt  DateTime?
+  feedback     String?
+  creditsEarned Int     @default(0)
+  
+  event        Event    @relation(fields: [eventId], references: [id])
+  user         User     @relation(fields: [userId], references: [id])
+  
+  @@unique([eventId, userId])
+}
+
+enum EventType {
+  WORKSHOP
+  CLEANUP
+  MARKET
+  SOCIAL
+  REPAIR_CAFE
+  COMMUNITY_MEAL
+  SKILLSHARE
+}
+
+enum AttendeeRole {
+  PARTICIPANT
+  VOLUNTEER
+  ORGANIZER
+  SPEAKER
+}
+
+// ============= SOCIAL FEATURES =============
+model Post {
+  id          String   @id @default(uuid())
+  authorId    String
+  content     String
+  images      String[]
+  
+  lat         Float?
+  lng         Float?
+  
+  type        PostType
+  visibility  Visibility
+  tags        String[]
+  mentions    String[]
+  
+  relatedOfferId String?
+  
+  thanksCount Int      @default(0)
+  supportsCount Int    @default(0)
+  commentsCount Int    @default(0)
+  sharesCount Int      @default(0)
+  helpedCount Int      @default(0)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  editedAt    DateTime?
+  
+  author      User     @relation(fields: [authorId], references: [id])
+  relatedOffer Offer?  @relation("OfferPosts", fields: [relatedOfferId], references: [id])
+  comments    Comment[]
+  reactions   Reaction[]
+  
+  @@index([authorId])
+  @@index([type])
+  @@index([visibility])
+  @@index([createdAt])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  postId    String
+  authorId  String
+  content   String
+  
+  createdAt DateTime @default(now())
+  editedAt  DateTime?
+  
+  post      Post     @relation(fields: [postId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id])
+  
+  @@index([postId])
+  @@index([authorId])
+}
+
+model Reaction {
+  id        String   @id @default(uuid())
+  postId    String
+  userId    String
+  type      ReactionType
+  
+  createdAt DateTime @default(now())
+  
+  post      Post     @relation(fields: [postId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  
+  @@unique([postId, userId, type])
+}
+
+enum PostType {
+  STORY
+  NEED
+  OFFER
+  THANKS
+  ACHIEVEMENT
+  MILESTONE
+  TIP
+}
+
+enum Visibility {
+  PUBLIC
+  NEIGHBORS
+  FRIENDS
+  PRIVATE
+}
+
+enum ReactionType {
+  THANKS      // Gracias
+  SUPPORT     // Apoyo (con crédito)
+  HELPED      // Me ayudó
+  CELEBRATE   // Celebrar
+}
+
+// ============= CONNECTIONS & MESSAGES =============
+model Connection {
+  id           String   @id @default(uuid())
+  userId       String
+  connectedId  String
+  type         ConnectionType
+  strength     Int      @default(1) // interacciones count
+  
+  createdAt    DateTime @default(now())
+  lastInteraction DateTime @default(now())
+  
+  user         User     @relation("User", fields: [userId], references: [id])
+  connectedUser User    @relation("ConnectedUser", fields: [connectedId], references: [id])
+  
+  @@unique([userId, connectedId])
+  @@index([strength])
+}
+
+enum ConnectionType {
+  NEIGHBOR
+  HELPER
+  HELPED_BY
+  FRIEND
+  BLOCKED
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  senderId   String
+  receiverId String
+  content    String
+  read       Boolean  @default(false)
+  metadata   Json?
+  
+  createdAt  DateTime @default(now())
+  readAt     DateTime?
+  
+  sender     User     @relation("Sender", fields: [senderId], references: [id])
+  receiver   User     @relation("Receiver", fields: [receiverId], references: [id])
+  
+  @@index([senderId, receiverId])
+  @@index([createdAt])
+}
+
+// ============= MERCHANTS =============
+model Merchant {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  businessName    String
+  nif             String   @unique
+  category        String
+  description     String
+  logo            String?
+  images          String[]
+  
+  lat             Float
+  lng             Float
+  address         String
+  
+  phone           String?
+  email           String?
+  website         String?
+  
+  schedule        Json     // WeeklySchedule
+  acceptsCredits  Boolean  @default(false)
+  creditDiscount  Int      @default(20) // % max
+  
+  supporters      Int      @default(0)
+  sustainabilityScore Float?
+  certifications  String[]
+  
+  verified        Boolean  @default(false)
+  featured        Boolean  @default(false)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  user            User     @relation(fields: [userId], references: [id])
+  impacts         MerchantImpact[]
+  flashDeals      FlashDeal[]
+
+  @@index([category])
+  @@index([lat, lng])
+}
+
+model MerchantImpact {
+  id              String   @id @default(uuid())
+  merchantId      String
+  month           String   // "2024-01"
+  localPurchases  Float
+  creditsAccepted Int
+  jobsCreated     Int      @default(0)
+  localSuppliers  Int      @default(0)
+  wasteReduced    Float    @default(0)
+  communityEvents Int      @default(0)
+  
+  merchant        Merchant @relation(fields: [merchantId], references: [id])
+  
+  @@unique([merchantId, month])
+  @@index([month])
+}
+
+// ============= HELP CHAINS =============
+model HelpChain {
+  id          String   @id @default(uuid())
+  initiatorId String
+  status      ChainStatus
+  story       String?
+  
+  createdAt   DateTime @default(now())
+  completedAt DateTime?
+  
+  initiator   User     @relation("Initiator", fields: [initiatorId], references: [id])
+  links       ChainLink[]
+  
+  @@index([status])
+}
+
+model ChainLink {
+  id          String   @id @default(uuid())
+  chainId     String
+  fromUserId  String
+  toUserId    String
+  action      String
+  message     String?
+  
+  timestamp   DateTime @default(now())
+  
+  chain       HelpChain @relation(fields: [chainId], references: [id])
+  fromUser    User     @relation("FromUser", fields: [fromUserId], references: [id])
+  toUser      User     @relation("ToUser", fields: [toUserId], references: [id])
+  
+  @@index([chainId])
+}
+
+enum ChainStatus {
+  ACTIVE
+  COMPLETED
+  BROKEN
+}
+
+// ============= GAMIFICATION =============
+model DailySeed {
+  id              String   @id @default(uuid())
+  date            DateTime @unique
+  type            SeedType
+  challenge       String
+  description     String
+  creditsReward   Int
+  participantsCount Int    @default(0)
+
+  createdAt       DateTime @default(now())
+  completions     UserDailySeedCompletion[]
+}
+
+model UserDailySeedCompletion {
+  id              String   @id @default(uuid())
+  userId          String
+  dailySeedId     String
+  completedAt     DateTime @default(now())
+  creditsAwarded  Int
+
+  user            User     @relation(fields: [userId], references: [id])
+  dailySeed       DailySeed @relation(fields: [dailySeedId], references: [id])
+
+  @@unique([userId, dailySeedId])
+  @@index([userId])
+  @@index([dailySeedId])
+}
+
+enum SeedType {
+  GREETING    // Saluda a un vecino
+  SHARING     // Comparte algo
+  HELPING     // Ayuda a alguien
+  LEARNING    // Aprende algo nuevo
+  CONNECTING  // Conecta a dos personas
+  ECO_ACTION  // Acción ecológica
+}
+
+// ============= NOTIFICATIONS =============
+model Notification {
+  id         String   @id @default(uuid())
+  userId     String
+  type       NotificationType
+  title      String
+  body       String
+  data       Json?
+  read       Boolean  @default(false)
+  actionUrl  String?
+  link       String?  // URL de acción (alias de actionUrl)
+
+  createdAt  DateTime @default(now())
+  readAt     DateTime?
+
+  user       User     @relation(fields: [userId], references: [id])
+
+  @@index([userId, read])
+  @@index([type])
+  @@index([createdAt])
+}
+
+enum NotificationType {
+  HELP_REQUEST
+  HELP_OFFERED
+  TRANSACTION_COMPLETED
+  GROUP_BUY_CLOSING
+  EVENT_REMINDER
+  CREDITS_EARNED
+  CREDITS_EXPIRING
+  COMMUNITY_MILESTONE
+  NEIGHBOR_NEEDS
+  WEEKLY_IMPACT
+  BURNOUT_CARE
+  CONNECTION_SUGGESTION
+  NEW_MESSAGE
+  POST_MENTION
+  POST_SUPPORT
+  FEATURE_UNLOCK      // Nueva característica desbloqueada
+  BADGE_EARNED        // Insignia ganada
+  LEVEL_UP            // Subida de nivel
+  NEARBY_DEAL         // Oferta cercana
+  HAPPY_HOUR          // Happy hour activo
+  WEEKLY_CHALLENGE    // Reto semanal
+  ANNOUNCEMENT        // Anuncio general
+}
+
+// ============= REPORTING & MODERATION =============
+model Report {
+  id           String   @id @default(uuid())
+  reporterId   String
+  reportedId   String   // userId or contentId
+  reportedType ReportedType
+  reason       ReportReason
+  description  String?
+  status       ReportStatus @default(PENDING)
+  resolution   String?
+  
+  createdAt    DateTime @default(now())
+  resolvedAt   DateTime?
+  
+  reporter     User     @relation("Reporter", fields: [reporterId], references: [id])
+  reportedUser User?    @relation("ReportedUser", fields: [reportedId], references: [id])
+  
+  @@index([status])
+  @@index([reportedType])
+}
+
+enum ReportedType {
+  USER
+  POST
+  OFFER
+  MESSAGE
+  TRANSACTION
+}
+
+enum ReportReason {
+  SPAM
+  INAPPROPRIATE
+  SCAM
+  HARASSMENT
+  FALSE_INFO
+  OTHER
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWING
+  RESOLVED
+  DISMISSED
+}
+
+enum ReviewType {
+  OFFER
+  USER
+  EVENT
+}
+
+// ============= REVIEWS =============
+model Review {
+  id                String     @id @default(uuid())
+  reviewerId        String
+  reviewType        ReviewType
+  reviewedEntityId  String
+  rating            Int        // 1-5
+  comment           String?
+  transactionId     String?
+
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  reviewer          User       @relation("ReviewsGiven", fields: [reviewerId], references: [id])
+
+  @@unique([reviewerId, reviewType, reviewedEntityId])
+  @@index([reviewType, reviewedEntityId])
+  @@index([reviewerId])
+}
+
+// ============= ANALYTICS =============
+model CommunityMetrics {
+  id               String   @id @default(uuid())
+  date             DateTime
+  area             String   // neighborhood/city
+  
+  activeUsers      Int
+  newUsers         Int
+  newConnections   Int
+  
+  hoursExchanged   Float
+  eurosSaved       Float
+  creditsCirculated Int
+  
+  co2Avoided       Float
+  wasteReduced     Float
+  
+  eventsHeld       Int
+  groupBuysCompleted Int
+  
+  helpChains       Int
+  averageResponseTime Float // hours
+  satisfactionScore Float  // 0-5
+  
+  weeklyHighlight  String?
+  
+  createdAt        DateTime @default(now())
+  
+  @@unique([date, area])
+  @@index([date])
+  @@index([area])
+}
+
+// ============= SYSTEM =============
+model SystemConfig {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       Json
+  description String?
+  updatedAt   DateTime @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  action     String
+  entity     String
+  entityId   String?
+  oldData    Json?
+  newData    Json?
+  ip         String?
+  userAgent  String?
+
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([entity, entityId])
+  @@index([createdAt])
+}
+
+// ============= CONSENSUS & GOVERNANCE (Proof of Help) =============
+
+// Trust Block: Core blockchain structure for community consensus
+model TrustBlock {
+  id           String      @id @default(uuid())
+  height       Int         @unique
+  hash         String      @unique
+  previousHash String
+  type         BlockType
+  actorId      String
+  content      Json
+  nonce        Int
+  difficulty   Int
+  timestamp    DateTime
+  status       BlockStatus @default(PENDING)
+
+  actor        User        @relation("TrustBlockActor", fields: [actorId], references: [id])
+  validations  BlockValidation[]
+  proposal     Proposal?
+
+  @@index([height])
+  @@index([status])
+  @@index([timestamp])
+  @@index([actorId])
+}
+
+enum BlockType {
+  HELP         // Time bank transaction
+  PROPOSAL     // Community improvement proposal
+  VALIDATION   // Meta-validation
+  DISPUTE      // Dispute resolution
+}
+
+enum BlockStatus {
+  PENDING      // Waiting for validation
+  APPROVED     // Consensus reached - approved
+  REJECTED     // Consensus reached - rejected
+}
+
+// Block Validation: Consensus voting by community members
+model BlockValidation {
+  id          String             @id @default(uuid())
+  blockId     String
+  validatorId String
+  decision    ValidationDecision
+  reason      String?
+  stake       Int                // Reputation at stake
+  createdAt   DateTime           @default(now())
+
+  block       TrustBlock         @relation(fields: [blockId], references: [id])
+  validator   User               @relation("BlockValidator", fields: [validatorId], references: [id])
+
+  @@unique([blockId, validatorId])
+  @@index([blockId])
+  @@index([validatorId])
+}
+
+enum ValidationDecision {
+  APPROVE
+  REJECT
+}
+
+// Proposal: Community Improvement Proposals (CIPs)
+model Proposal {
+  id                 String         @id @default(uuid())
+  blockId            String         @unique
+  authorId           String
+  type               ProposalType
+  title              String
+  description        String         @db.Text
+  requiredBudget     Float?
+  implementationPlan String?        @db.Text
+  status             ProposalStatus @default(DISCUSSION)
+  discussionDeadline DateTime
+  votingDeadline     DateTime
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  block              TrustBlock     @relation(fields: [blockId], references: [id])
+  author             User           @relation("ProposalAuthor", fields: [authorId], references: [id])
+  votes              ProposalVote[]
+  comments           ProposalComment[]
+
+  @@index([status])
+  @@index([authorId])
+  @@index([votingDeadline])
+}
+
+enum ProposalType {
+  FEATURE          // New functionality
+  RULE_CHANGE      // Change in community rules
+  FUND_ALLOCATION  // Budget allocation
+  PARTNERSHIP      // Partnership with external entity
+}
+
+enum ProposalStatus {
+  DISCUSSION  // Open for discussion
+  VOTING      // In voting phase
+  APPROVED    // Approved by community
+  REJECTED    // Rejected by community
+  IMPLEMENTED // Implementation completed
+}
+
+// Proposal Vote: Quadratic voting system
+model ProposalVote {
+  id         String   @id @default(uuid())
+  proposalId String
+  voterId    String
+  points     Int      // Points assigned (quadratic cost)
+  cost       Int      // Credits cost (points²)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  proposal   Proposal @relation(fields: [proposalId], references: [id])
+  voter      User     @relation("ProposalVoter", fields: [voterId], references: [id])
+
+  @@unique([proposalId, voterId])
+  @@index([proposalId])
+  @@index([voterId])
+}
+
+// Proposal Comment: Discussion threads
+model ProposalComment {
+  id          String   @id @default(uuid())
+  proposalId  String
+  authorId    String
+  content     String   @db.Text
+  parentId    String?  // For threaded discussions
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  proposal    Proposal @relation(fields: [proposalId], references: [id])
+  author      User     @relation("ProposalCommentAuthor", fields: [authorId], references: [id])
+  parent      ProposalComment? @relation("CommentReplies", fields: [parentId], references: [id])
+  replies     ProposalComment[] @relation("CommentReplies")
+
+  @@index([proposalId])
+  @@index([authorId])
+  @@index([parentId])
+}
+
+// Moderation DAO: Decentralized content moderation
+model ModerationDAO {
+  id            String    @id @default(uuid())
+  contentId     String
+  contentType   ContentType
+  reportReason  String?
+  reporterId    String?
+  status        DAOStatus @default(VOTING)
+  quorum        Int       @default(5)
+  deadline      DateTime
+  finalDecision String?
+  executedAt    DateTime?
+  createdAt     DateTime  @default(now())
+
+  reporter      User?     @relation("ModerationReporter", fields: [reporterId], references: [id])
+  votes         ModerationVote[]
+
+  @@index([status])
+  @@index([deadline])
+  @@index([contentType, contentId])
+}
+
+enum ContentType {
+  POST
+  OFFER
+  COMMENT
+  MESSAGE
+  REVIEW
+}
+
+enum DAOStatus {
+  VOTING    // In voting phase
+  EXECUTED  // Decision executed
+  CANCELLED // Cancelled (e.g., content removed by author)
+}
+
+// Moderation Vote: Jury decision on content
+model ModerationVote {
+  id       String        @id @default(uuid())
+  daoId    String
+  voterId  String
+  decision ModerationDecision
+  reason   String?       @db.Text
+  weight   Float         // Weight based on reputation
+  createdAt DateTime     @default(now())
+
+  dao      ModerationDAO @relation(fields: [daoId], references: [id])
+  voter    User          @relation("ModerationVoter", fields: [voterId], references: [id])
+
+  @@unique([daoId, voterId])
+  @@index([daoId])
+  @@index([voterId])
+}
+
+enum ModerationDecision {
+  KEEP    // Keep content as is
+  REMOVE  // Remove content
+  WARN    // Issue warning to author
+}
+
+// ============= FLOW ECONOMICS =============
+
+// Flow Transaction: Tracks value creation through circulation
+model FlowTransaction {
+  id              String      @id @default(uuid())
+  fromUserId      String
+  toUserId        String
+  baseAmount      Int         // Original credit amount
+  flowMultiplier  Float       @default(1.0) // Value multiplier based on flow
+  totalValue      Int         // baseAmount * flowMultiplier
+  type            FlowType
+  description     String?
+  reason          CreditReason
+  relatedId       String?
+  metadata        Json?
+
+  // Flow mechanics
+  fromBalance     Int         // From user balance before transaction
+  toBalance       Int         // To user balance before transaction
+  poolContribution Int       @default(0) // Amount contributed to community pool
+
+  createdAt       DateTime    @default(now())
+
+  fromUser        User        @relation("FlowFrom", fields: [fromUserId], references: [id])
+  toUser          User        @relation("FlowTo", fields: [toUserId], references: [id])
+
+  @@index([fromUserId])
+  @@index([toUserId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+enum FlowType {
+  PEER_TO_PEER      // Direct transaction between users
+  COMMUNITY_POOL    // Contribution to pool
+  POOL_DISTRIBUTION // Distribution from pool
+  DEMURRAGE         // Token decay/oxidation
+  FLOW_BONUS        // Extra value from flow multiplier
+}
+
+// Community Pool: Collective resources for different purposes
+model CommunityPool {
+  id              String      @id @default(uuid())
+  type            PoolType
+  balance         Int         @default(0)
+  totalReceived   Int         @default(0)
+  totalDistributed Int        @default(0)
+  description     String?
+
+  lastDistribution DateTime?
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  contributions   PoolContribution[]
+  requests        PoolRequest[]
+
+  @@unique([type])
+}
+
+enum PoolType {
+  NEEDS         // Emergency needs and basic support
+  PROJECTS      // Community projects and initiatives
+  EMERGENCY     // Urgent community needs
+  CELEBRATION   // Community events and celebrations
+  EQUALITY      // Redistribution for economic equality
+}
+
+// Pool Contribution: Track individual contributions
+model PoolContribution {
+  id          String        @id @default(uuid())
+  userId      String
+  poolId      String
+  amount      Int
+  reason      String?
+
+  createdAt   DateTime      @default(now())
+
+  user        User          @relation(fields: [userId], references: [id])
+  pool        CommunityPool @relation(fields: [poolId], references: [id])
+
+  @@index([userId])
+  @@index([poolId])
+  @@index([createdAt])
+}
+
+// Pool Request Status
+enum RequestStatus {
+  PENDING       // Waiting for community review
+  APPROVED      // Approved by community/admin
+  REJECTED      // Rejected by community/admin
+  DISTRIBUTED   // Funds distributed to recipient
+  CANCELLED     // Cancelled by requester
+}
+
+// Pool Request: Request for support from community pools
+model PoolRequest {
+  id            String         @id @default(uuid())
+  userId        String         // User requesting support
+  poolId        String         // Pool being requested from
+  amount        Int            // Amount requested
+  reason        String         // Justification for request
+  status        RequestStatus  @default(PENDING)
+
+  // Approval tracking
+  approvedBy    String?        // User ID who approved (if manual)
+  approvedAt    DateTime?
+  rejectedBy    String?
+  rejectedAt    DateTime?
+  distributedAt DateTime?
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  user          User           @relation("PoolRequestUser", fields: [userId], references: [id])
+  pool          CommunityPool  @relation(fields: [poolId], references: [id])
+  votes         PoolRequestVote[]
+
+  @@index([userId])
+  @@index([poolId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// Pool Request Vote: Community voting on pool requests
+model PoolRequestVote {
+  id          String      @id @default(uuid())
+  requestId   String
+  voterId     String
+  vote        Boolean     // true = approve, false = reject
+  comment     String?     // Optional comment explaining vote
+
+  createdAt   DateTime    @default(now())
+
+  request     PoolRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  voter       User        @relation("PoolRequestVoter", fields: [voterId], references: [id])
+
+  @@unique([requestId, voterId]) // One vote per user per request
+  @@index([requestId])
+  @@index([voterId])
+  @@index([createdAt])
+}
+
+// Economic Metrics: Track system health and equality over time
+model EconomicMetrics {
+  id                    String   @id @default(uuid())
+  date                  DateTime @unique
+
+  // Equality metrics
+  giniIndex             Float    // 0 (perfect equality) to 1 (perfect inequality)
+  medianBalance         Int
+  meanBalance           Int
+  wealthConcentration   Float    // % held by top 10%
+
+  // Flow metrics
+  transactionsCount     Int
+  averageFlowMultiplier Float
+  totalValueGenerated   Int      // Extra value from flow multipliers
+
+  // Pool metrics
+  totalPoolBalance      Int
+  poolDistributions     Int
+
+  // Activity metrics
+  activeUsers           Int
+  generousUsers         Int      // Users with positive generosity score
+
+  createdAt             DateTime @default(now())
+
+  @@index([date])
+  @@index([giniIndex])
+}
+
+// ============================================
+// VIRAL ENGAGEMENT FEATURES
+// ============================================
+
+// Flash Deal Status
+enum FlashDealStatus {
+  ACTIVE
+  EXPIRED
+  SOLD_OUT
+}
+
+// Story Type
+enum StoryType {
+  HELP_REQUEST
+  ACHIEVEMENT
+  DEAL
+  EVENT
+  GENERAL
+}
+
+// Swipe Direction
+enum SwipeDirection {
+  LEFT      // Not interested
+  RIGHT     // Interested
+  SUPER     // Super interested
+}
+
+// Live Event Status
+enum LiveEventStatus {
+  ANNOUNCED
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+// Flash Deals: Limited-time offers that create FOMO
+model FlashDeal {
+  id              String          @id @default(uuid())
+  merchantId      String
+  title           String          // Título del deal
+  discount        Int             // Percentage discount
+  originalPrice   Int?
+  finalPrice      Int?
+  product         String
+  description     String?
+  maxRedemptions  Int
+  currentRedemptions Int          @default(0)
+  status          FlashDealStatus @default(ACTIVE)
+
+  expiresAt       DateTime
+  createdAt       DateTime        @default(now())
+
+  merchant        Merchant        @relation(fields: [merchantId], references: [id])
+  redemptions     FlashDealRedemption[]
+
+  @@index([merchantId])
+  @@index([status])
+  @@index([expiresAt])
+}
+
+// Flash Deal Redemptions
+model FlashDealRedemption {
+  id          String    @id @default(uuid())
+  dealId      String
+  userId      String
+  redeemedAt  DateTime  @default(now())
+
+  deal        FlashDeal @relation(fields: [dealId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
+
+  @@index([dealId])
+  @@index([userId])
+}
+
+// Stories: 24-hour content like Instagram
+model Story {
+  id          String      @id @default(uuid())
+  userId      String
+  type        StoryType
+  content     String
+  media       String?     // Image or video URL
+  cta         Json?       // Call-to-action button
+
+  views       Int         @default(0)
+  expiresAt   DateTime
+  createdAt   DateTime    @default(now())
+
+  user        User        @relation(fields: [userId], references: [id])
+  reactions   StoryReaction[]
+  viewers     StoryView[]
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@index([createdAt])
+}
+
+// Story Reactions
+model StoryReaction {
+  id          String    @id @default(uuid())
+  storyId     String
+  userId      String
+  reaction    String    // Emoji
+  createdAt   DateTime  @default(now())
+
+  story       Story     @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id])
+
+  @@unique([storyId, userId])
+  @@index([storyId])
+  @@index([userId])
+}
+
+// Story Views
+model StoryView {
+  id          String    @id @default(uuid())
+  storyId     String
+  userId      String
+  viewedAt    DateTime  @default(now())
+
+  story       Story     @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id])
+
+  @@unique([storyId, userId])
+  @@index([storyId])
+}
+
+// Swipes: Tinder-style matchmaking for offers
+model Swipe {
+  id          String          @id @default(uuid())
+  userId      String
+  offerId     String
+  direction   SwipeDirection
+  createdAt   DateTime        @default(now())
+
+  user        User            @relation(fields: [userId], references: [id])
+  offer       Offer           @relation(fields: [offerId], references: [id])
+
+  @@unique([userId, offerId])
+  @@index([userId])
+  @@index([offerId])
+  @@index([createdAt])
+}
+
+// Matches: Mutual interest between users
+model Match {
+  id          String    @id @default(uuid())
+  user1Id     String
+  user2Id     String
+  offerId     String?
+  isSuper     Boolean   @default(false)
+  chatOpened  Boolean   @default(false)
+
+  createdAt   DateTime  @default(now())
+
+  user1       User      @relation("MatchUser1", fields: [user1Id], references: [id])
+  user2       User      @relation("MatchUser2", fields: [user2Id], references: [id])
+  offer       Offer?    @relation(fields: [offerId], references: [id])
+
+  @@unique([user1Id, user2Id])
+  @@index([user1Id])
+  @@index([user2Id])
+}
+
+// Weekly Challenges
+model WeeklyChallenge {
+  id          String    @id @default(uuid())
+  type        String    // HELP_STREAK, ECO_WARRIOR, CONNECTOR
+  title       String
+  description String
+  targetValue Int       // Target value to complete the challenge
+  reward      Int       // Credits reward
+  bonusFirst  Int       // Bonus for top 3
+
+  participants Int      @default(0)
+  startsAt    DateTime
+  endsAt      DateTime
+  createdAt   DateTime  @default(now())
+
+  participations ChallengeParticipant[]
+
+  @@index([startsAt])
+  @@index([endsAt])
+}
+
+// Challenge Participants
+model ChallengeParticipant {
+  id            String          @id @default(uuid())
+  challengeId   String
+  userId        String
+  progress      Int             @default(0)
+  completed     Boolean         @default(false)
+  completedAt   DateTime?
+
+  createdAt     DateTime        @default(now())
+
+  challenge     WeeklyChallenge @relation(fields: [challengeId], references: [id])
+  user          User            @relation(fields: [userId], references: [id])
+
+  @@unique([challengeId, userId])
+  @@index([challengeId])
+  @@index([userId])
+}
+
+// Referral Codes
+model ReferralCode {
+  id                      String    @id @default(uuid())
+  userId                  String
+  code                    String    @unique
+  rewardForReferrer       Int
+  rewardForReferred       Int
+  bonusOnFirstTransaction Int
+
+  usedCount               Int       @default(0)
+  maxUses                 Int?
+  expiresAt               DateTime?
+  createdAt               DateTime  @default(now())
+
+  user                    User      @relation("ReferralCodeOwner", fields: [userId], references: [id])
+  referrals               Referral[]
+
+  @@index([userId])
+  @@index([code])
+}
+
+// Referrals
+model Referral {
+  id              String        @id @default(uuid())
+  codeId          String
+  referredUserId  String
+  rewardGranted   Boolean       @default(false)
+  bonusGranted    Boolean       @default(false)
+
+  createdAt       DateTime      @default(now())
+
+  code            ReferralCode  @relation(fields: [codeId], references: [id])
+  referredUser    User          @relation("ReferralReferred", fields: [referredUserId], references: [id])
+
+  @@index([codeId])
+  @@index([referredUserId])
+}
+
+// Live Events
+model LiveEvent {
+  id          String          @id @default(uuid())
+  type        String          // AUCTION, FLASH_MOB, COMMUNITY_VOTE, TREASURE_HUNT
+  title       String
+  description String?
+  prizes      Json
+
+  status      LiveEventStatus @default(ANNOUNCED)
+  participants Int            @default(0)
+
+  startsAt    DateTime
+  endsAt      DateTime
+  createdAt   DateTime        @default(now())
+
+  participations LiveEventParticipant[]
+
+  @@index([status])
+  @@index([startsAt])
+}
+
+// Live Event Participants
+model LiveEventParticipant {
+  id          String    @id @default(uuid())
+  eventId     String
+  userId      String
+  joinedAt    DateTime  @default(now())
+  score       Int?
+  won         Boolean   @default(false)
+
+  event       LiveEvent @relation(fields: [eventId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
+
+  @@unique([eventId, userId])
+  @@index([eventId])
+  @@index([userId])
+}
+
+// Micro Actions Tracking
+model MicroAction {
+  id          String    @id @default(uuid())
+  userId      String
+  action      String    // OPEN_APP, CHECK_MAP, VIEW_OFFER, etc.
+  reward      Int
+  metadata    Json?
+
+  createdAt   DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+// Feature Unlocks
+model UserFeatureUnlock {
+  id          String    @id @default(uuid())
+  userId      String
+  feature     String    // MAPA_LOCAL, PRIMERA_OFERTA, STORIES, etc.
+  unlockedAt  DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [id])
+
+  @@unique([userId, feature])
+  @@index([userId])
+}
+
+// Onboarding Progress
+model OnboardingProgress {
+  id              String    @id @default(uuid())
+  userId          String    @unique
+  currentStep     Int       @default(1)
+  completed       Boolean   @default(false)
+  completedSteps  Json      @default("[]")
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  completedAt     DateTime?
+
+  user            User      @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([completed])
+}
+// ============= SISTEMA HÍBRIDO DE CAPAS ECONÓMICAS =============
+
+// Historial de migraciones entre capas económicas
+model LayerMigration {
+  id               String        @id @default(uuid())
+  userId           String
+  fromLayer        EconomicLayer
+  toLayer          EconomicLayer
+  reason           String?
+  creditsConverted Int?          // Créditos donados/convertidos al migrar
+  migratedAt       DateTime      @default(now())
+
+  user             User          @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([migratedAt])
+}
+
+// Eventos puente que facilitan experimentar con otras capas
+model BridgeEvent {
+  id                String           @id @default(uuid())
+  communityId       String?
+  type              BridgeEventType
+  title             String
+  description       String
+
+  // Durante el evento, todos funcionan en esta capa
+  forceLayer        EconomicLayer?
+
+  startsAt          DateTime
+  endsAt            DateTime
+  recurring         Boolean          @default(false)
+  frequency         String?          // "FIRST_SUNDAY", "EQUINOX", etc
+
+  participantsCount Int              @default(0)
+
+  createdAt         DateTime         @default(now())
+
+  @@index([communityId])
+  @@index([type])
+  @@index([startsAt])
+}
+
+enum BridgeEventType {
+  GIFT_DAY         // Día de regalo: todo gratis
+  DEBT_AMNESTY     // Amnistía de deudas
+  ABUNDANCE_FEST   // Festival de abundancia de un recurso
+  LAYER_EXPERIMENT // Experimento temporal de otra capa
+}
+
+// Anuncios de abundancia (para capa regalo y transicional)
+model AbundanceAnnouncement {
+  id           String    @id @default(uuid())
+  communityId  String?
+
+  // En regalo puro, NO se registra quién da
+  providerId   String?
+
+  what         String    // "Tomates", "Tiempo libre", "Herramientas"
+  quantity     String?   // "Muchos", "Algunos", o número si es tradicional
+  where        String    // "Punto común", "Casa azul", coords
+  lat          Float?
+  lng          Float?
+
+  availableUntil DateTime?
+
+  // Visibilidad según capa
+  visibleToLayers String[] // Array de EconomicLayer
+
+  takenBy      String[]  // IDs de quienes recibieron (solo si no es regalo puro)
+
+  createdAt    DateTime  @default(now())
+  expiresAt    DateTime?
+
+  @@index([communityId])
+  @@index([createdAt])
+}
+
+// Expresiones de necesidad (para capa regalo)
+model NeedExpression {
+  id           String    @id @default(uuid())
+  communityId  String?
+
+  // En regalo puro, puede ser anónimo
+  requesterId  String?
+
+  what         String
+  why          String?   // Contexto, no obligatorio
+  where        String?   // Área general, no específica
+  urgency      String?   // "URGENT", "SOON", "WHENEVER"
+
+  // Visibilidad
+  visibleToLayers String[] // Array de EconomicLayer
+
+  fulfilledBy  String[]  // IDs de quienes ayudaron
+  fulfilledAt  DateTime?
+
+  createdAt    DateTime  @default(now())
+  expiresAt    DateTime?
+
+  @@index([communityId])
+  @@index([createdAt])
+}
+
+// Celebraciones anónimas (para regalo puro y transicional)
+model AnonymousCelebration {
+  id           String    @id @default(uuid())
+  communityId  String?
+
+  event        String    // "Una necesidad se encontró con abundancia"
+  description  String?
+  emoji        String?   // 🎉, ✨, 💝
+
+  // NO registra quiénes participaron específicamente
+  approximateParticipants Int?
+
+  createdAt    DateTime  @default(now())
+
+  @@index([communityId])
+  @@index([createdAt])
+}
+
+// Configuración de capa a nivel comunidad
+model CommunityLayerConfig {
+  id                String        @id @default(uuid())
+  communityId       String        @unique
+
+  // Capa por defecto para nuevos miembros
+  defaultLayer      EconomicLayer @default(TRADITIONAL)
+
+  // ¿Permite modo mixto?
+  allowMixedMode    Boolean       @default(true)
+
+  // Distribución actual de usuarios por capa
+  traditionalCount  Int           @default(0)
+  transitionalCount Int           @default(0)
+  giftCount         Int           @default(0)
+  chameleonCount    Int           @default(0)
+
+  // Eventos puente automáticos
+  autoGiftDays      Boolean       @default(true)
+  autoDebtAmnesty   Boolean       @default(true)
+
+  // Umbrales para proponer migración comunitaria
+  giftThreshold     Int           @default(60) // % para proponer migración a regalo
+
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  @@index([communityId])
+}

@@ -1,0 +1,912 @@
+// packages/backend/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============= USERS & AUTH =============
+model User {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  phone           String?   @unique
+  password        String
+  name            String
+  bio             String?
+  avatar          String?
+  role            UserRole  @default(CITIZEN)
+  emailVerified   Boolean   @default(false)
+  phoneVerified   Boolean   @default(false)
+  
+  // Location
+  lat             Float?
+  lng             Float?
+  address         String?
+  neighborhood    String?
+  searchRadius    Int       @default(5) // km
+  
+  // Gamification
+  credits         Int       @default(0)
+  level           Int       @default(1)
+  experience      Int       @default(0)
+  activeStreak    Int       @default(0)
+  lastActiveAt    DateTime  @default(now())
+  
+  // Stats
+  totalSaved      Float     @default(0)
+  hoursShared     Float     @default(0)
+  hoursReceived   Float     @default(0)
+  co2Avoided      Float     @default(0)
+  peopleHelped    Int       @default(0)
+  peopleHelpedBy  Int       @default(0)
+  connectionsCount Int      @default(0)
+  
+  // Preferences
+  language        String    @default("es")
+  notifications   Json      @default("{}")
+  privacy         Json      @default("{}")
+  interests       String[]
+  weeklyMood      WeeklyMood?
+  dailySeeds      Boolean   @default(true)
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+  
+  // Relations
+  skills          Skill[]
+  badges          UserBadge[]
+  offers          Offer[]
+  orders          Order[]
+  posts           Post[]
+  comments        Comment[]
+  reactions       Reaction[]
+  notifications   Notification[]
+  creditLedger    CreditTransaction[]
+  timeBankGiven   TimeBankTransaction[] @relation("Provider")
+  timeBankReceived TimeBankTransaction[] @relation("Requester")
+  events          EventAttendee[]
+  eventsOrganized Event[] @relation("Organizer")
+  connections     Connection[] @relation("User")
+  connectedTo     Connection[] @relation("ConnectedUser")
+  merchant        Merchant?
+  reports         Report[] @relation("Reporter")
+  reportedContent Report[] @relation("ReportedUser")
+  messages        Message[] @relation("Sender")
+  messagesReceived Message[] @relation("Receiver")
+  helpChains      HelpChain[] @relation("Initiator")
+  chainLinks      ChainLink[] @relation("FromUser")
+  chainLinksTo    ChainLink[] @relation("ToUser")
+  
+  @@index([email])
+  @@index([phone])
+  @@index([neighborhood])
+  @@index([lat, lng])
+  @@index([lastActiveAt])
+}
+
+enum UserRole {
+  CITIZEN
+  MERCHANT
+  ADMIN
+  MODERATOR
+  PUBLIC_ENTITY
+}
+
+enum WeeklyMood {
+  AVAILABLE    // Disponible para ayudar
+  LEARNING     // Buscando aprender
+  ORGANIZING   // Organizando actividad
+  RESTING      // Descansando
+}
+
+// ============= SKILLS & REPUTATION =============
+model Skill {
+  id          String   @id @default(uuid())
+  userId      String
+  category    String
+  name        String
+  description String?
+  verified    Boolean  @default(false)
+  endorsements Int     @default(0)
+  
+  user        User     @relation(fields: [userId], references: [id])
+  timeBankOffers TimeBankOffer[]
+  
+  @@unique([userId, name])
+  @@index([category])
+}
+
+model UserBadge {
+  id          String   @id @default(uuid())
+  userId      String
+  badgeType   BadgeType
+  earnedAt    DateTime @default(now())
+  metadata    Json?
+  
+  user        User     @relation(fields: [userId], references: [id])
+  
+  @@unique([userId, badgeType])
+}
+
+enum BadgeType {
+  HELPER_10    // Ayudó 10 veces
+  HELPER_50    // Ayudó 50 veces
+  HELPER_100   // Ayudó 100 veces
+  ORGANIZER    // Organizó evento
+  ECO_WARRIOR  // Acciones ecológicas
+  CONNECTOR    // Conectó personas
+  PIONEER      // Usuario temprano
+  TEACHER      // Enseñó habilidades
+  LEARNER      // Aprendió habilidades
+  SAVER        // Ahorró 100€+
+}
+
+// ============= OFFERS & MARKETPLACE =============
+model Offer {
+  id          String    @id @default(uuid())
+  userId      String
+  type        OfferType
+  category    String
+  title       String
+  description String
+  images      String[]
+  
+  priceEur    Float?
+  priceCredits Int?
+  stock       Int?
+  
+  lat         Float?
+  lng         Float?
+  address     String?
+  
+  tags        String[]
+  status      OfferStatus @default(ACTIVE)
+  featured    Boolean   @default(false)
+  
+  views       Int       @default(0)
+  interested  Int       @default(0)
+  supporters  Int       @default(0)
+  shares      Int       @default(0)
+  
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  user        User      @relation(fields: [userId], references: [id])
+  orderItems  OrderItem[]
+  posts       Post[]    @relation("OfferPosts")
+  savedBy     SavedOffer[]
+  groupBuy    GroupBuy?
+  timeBank    TimeBankOffer?
+  event       Event?
+  
+  @@index([userId])
+  @@index([type])
+  @@index([category])
+  @@index([status])
+  @@index([lat, lng])
+  @@index([createdAt])
+}
+
+enum OfferType {
+  PRODUCT
+  SERVICE
+  TIME_BANK
+  GROUP_BUY
+  EVENT
+}
+
+enum OfferStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+  EXPIRED
+  CANCELLED
+}
+
+model SavedOffer {
+  id        String   @id @default(uuid())
+  userId    String
+  offerId   String
+  savedAt   DateTime @default(now())
+  
+  @@unique([userId, offerId])
+}
+
+// ============= GROUP BUYS =============
+model GroupBuy {
+  id              String   @id @default(uuid())
+  offerId         String   @unique
+  minParticipants Int
+  maxParticipants Int
+  currentParticipants Int  @default(0)
+  deadline        DateTime
+  pickupLat       Float
+  pickupLng       Float
+  pickupAddress   String
+  
+  offer           Offer    @relation(fields: [offerId], references: [id])
+  priceBreaks     PriceBreak[]
+  participants    GroupBuyParticipant[]
+  
+  @@index([deadline])
+}
+
+model PriceBreak {
+  id           String   @id @default(uuid())
+  groupBuyId   String
+  minQuantity  Int
+  pricePerUnit Float
+  savings      Float    // percentage
+  
+  groupBuy     GroupBuy @relation(fields: [groupBuyId], references: [id])
+  
+  @@index([groupBuyId])
+}
+
+model GroupBuyParticipant {
+  id          String   @id @default(uuid())
+  groupBuyId  String
+  userId      String
+  quantity    Int
+  committed   Boolean  @default(false)
+  joinedAt    DateTime @default(now())
+  
+  groupBuy    GroupBuy @relation(fields: [groupBuyId], references: [id])
+  
+  @@unique([groupBuyId, userId])
+}
+
+// ============= TIME BANK =============
+model TimeBankOffer {
+  id              String   @id @default(uuid())
+  offerId         String   @unique
+  skillId         String?
+  estimatedHours  Float
+  canTeach        Boolean  @default(false)
+  maxStudents     Int?
+  experienceLevel ExperienceLevel
+  toolsNeeded     String[]
+  
+  offer           Offer    @relation(fields: [offerId], references: [id])
+  skill           Skill?   @relation(fields: [skillId], references: [id])
+  transactions    TimeBankTransaction[]
+}
+
+enum ExperienceLevel {
+  BEGINNER
+  INTERMEDIATE
+  EXPERT
+}
+
+model TimeBankTransaction {
+  id            String   @id @default(uuid())
+  requesterId   String
+  providerId    String
+  offerId       String?
+  description   String
+  hours         Float
+  credits       Int
+  
+  scheduledFor  DateTime
+  completedAt   DateTime?
+  status        TransactionStatus
+  
+  requesterRating Int?
+  requesterComment String?
+  providerRating  Int?
+  providerComment String?
+  
+  impactStory   String?  // "Lo mejor de este intercambio"
+  chainedFavor  Boolean  @default(false)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  requester     User     @relation("Requester", fields: [requesterId], references: [id])
+  provider      User     @relation("Provider", fields: [providerId], references: [id])
+  timeBankOffer TimeBankOffer? @relation(fields: [offerId], references: [id])
+  
+  @@index([requesterId])
+  @@index([providerId])
+  @@index([status])
+  @@index([scheduledFor])
+}
+
+enum TransactionStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  DISPUTED
+}
+
+// ============= ORDERS & PAYMENTS =============
+model Order {
+  id            String   @id @default(uuid())
+  buyerId       String
+  totalEur      Float
+  totalCredits  Int
+  paymentMethod PaymentMethod
+  
+  pickupLat     Float?
+  pickupLng     Float?
+  pickupAddress String?
+  pickupTime    DateTime?
+  
+  status        OrderStatus
+  notes         String?
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  completedAt   DateTime?
+  
+  buyer         User     @relation(fields: [buyerId], references: [id])
+  items         OrderItem[]
+  payment       Payment?
+  
+  @@index([buyerId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id           String   @id @default(uuid())
+  orderId      String
+  offerId      String
+  quantity     Int
+  priceEur     Float
+  priceCredits Int
+  notes        String?
+  
+  order        Order    @relation(fields: [orderId], references: [id])
+  offer        Offer    @relation(fields: [offerId], references: [id])
+  
+  @@index([orderId])
+  @@index([offerId])
+}
+
+model Payment {
+  id            String   @id @default(uuid())
+  orderId       String   @unique
+  amount        Float
+  currency      String   @default("EUR")
+  method        PaymentMethod
+  status        PaymentStatus
+  stripeId      String?
+  metadata      Json?
+  
+  createdAt     DateTime @default(now())
+  
+  order         Order    @relation(fields: [orderId], references: [id])
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  CREDITS
+  MIXED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PREPARING
+  READY
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+// ============= CREDITS SYSTEM =============
+model CreditTransaction {
+  id          String   @id @default(uuid())
+  userId      String
+  amount      Int      // positive = earned, negative = spent
+  balance     Int      // balance after transaction
+  reason      CreditReason
+  description String?
+  relatedId   String?  // ID of related entity
+  metadata    Json?
+  
+  expiresAt   DateTime?
+  createdAt   DateTime @default(now())
+  
+  user        User     @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+  @@index([reason])
+  @@index([createdAt])
+}
+
+enum CreditReason {
+  TIME_BANK_HOUR
+  LOCAL_PURCHASE
+  EVENT_ATTENDANCE
+  REFERRAL
+  ECO_ACTION
+  COMMUNITY_HELP
+  DAILY_SEED
+  SUPPORT_POST    // Apoyar publicación
+  ADMIN_GRANT
+  ADMIN_DEDUCT
+  EXPIRATION
+}
+
+// ============= EVENTS =============
+model Event {
+  id          String   @id @default(uuid())
+  offerId     String?  @unique
+  organizerId String
+  title       String
+  description String
+  image       String?
+  
+  lat         Float
+  lng         Float
+  address     String
+  
+  startsAt    DateTime
+  endsAt      DateTime
+  capacity    Int?
+  
+  creditsReward Int    @default(0)
+  tags        String[]
+  type        EventType
+  requirements String[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  organizer   User     @relation("Organizer", fields: [organizerId], references: [id])
+  offer       Offer?   @relation(fields: [offerId], references: [id])
+  attendees   EventAttendee[]
+  
+  @@index([organizerId])
+  @@index([startsAt])
+  @@index([type])
+}
+
+model EventAttendee {
+  id           String   @id @default(uuid())
+  eventId      String
+  userId       String
+  role         AttendeeRole @default(PARTICIPANT)
+  registeredAt DateTime @default(now())
+  checkedInAt  DateTime?
+  feedback     String?
+  creditsEarned Int     @default(0)
+  
+  event        Event    @relation(fields: [eventId], references: [id])
+  user         User     @relation(fields: [userId], references: [id])
+  
+  @@unique([eventId, userId])
+}
+
+enum EventType {
+  WORKSHOP
+  CLEANUP
+  MARKET
+  SOCIAL
+  REPAIR_CAFE
+  COMMUNITY_MEAL
+  SKILLSHARE
+}
+
+enum AttendeeRole {
+  PARTICIPANT
+  VOLUNTEER
+  ORGANIZER
+  SPEAKER
+}
+
+// ============= SOCIAL FEATURES =============
+model Post {
+  id          String   @id @default(uuid())
+  authorId    String
+  content     String
+  images      String[]
+  
+  lat         Float?
+  lng         Float?
+  
+  type        PostType
+  visibility  Visibility
+  tags        String[]
+  mentions    String[]
+  
+  relatedOfferId String?
+  
+  thanksCount Int      @default(0)
+  supportsCount Int    @default(0)
+  commentsCount Int    @default(0)
+  sharesCount Int      @default(0)
+  helpedCount Int      @default(0)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  editedAt    DateTime?
+  
+  author      User     @relation(fields: [authorId], references: [id])
+  relatedOffer Offer?  @relation("OfferPosts", fields: [relatedOfferId], references: [id])
+  comments    Comment[]
+  reactions   Reaction[]
+  
+  @@index([authorId])
+  @@index([type])
+  @@index([visibility])
+  @@index([createdAt])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  postId    String
+  authorId  String
+  content   String
+  
+  createdAt DateTime @default(now())
+  editedAt  DateTime?
+  
+  post      Post     @relation(fields: [postId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id])
+  
+  @@index([postId])
+  @@index([authorId])
+}
+
+model Reaction {
+  id        String   @id @default(uuid())
+  postId    String
+  userId    String
+  type      ReactionType
+  
+  createdAt DateTime @default(now())
+  
+  post      Post     @relation(fields: [postId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  
+  @@unique([postId, userId, type])
+}
+
+enum PostType {
+  STORY
+  NEED
+  OFFER
+  THANKS
+  ACHIEVEMENT
+  MILESTONE
+  TIP
+}
+
+enum Visibility {
+  PUBLIC
+  NEIGHBORS
+  FRIENDS
+  PRIVATE
+}
+
+enum ReactionType {
+  THANKS      // Gracias
+  SUPPORT     // Apoyo (con crédito)
+  HELPED      // Me ayudó
+  CELEBRATE   // Celebrar
+}
+
+// ============= CONNECTIONS & MESSAGES =============
+model Connection {
+  id           String   @id @default(uuid())
+  userId       String
+  connectedId  String
+  type         ConnectionType
+  strength     Int      @default(1) // interacciones count
+  
+  createdAt    DateTime @default(now())
+  lastInteraction DateTime @default(now())
+  
+  user         User     @relation("User", fields: [userId], references: [id])
+  connectedUser User    @relation("ConnectedUser", fields: [connectedId], references: [id])
+  
+  @@unique([userId, connectedId])
+  @@index([strength])
+}
+
+enum ConnectionType {
+  NEIGHBOR
+  HELPER
+  HELPED_BY
+  FRIEND
+  BLOCKED
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  senderId   String
+  receiverId String
+  content    String
+  read       Boolean  @default(false)
+  metadata   Json?
+  
+  createdAt  DateTime @default(now())
+  readAt     DateTime?
+  
+  sender     User     @relation("Sender", fields: [senderId], references: [id])
+  receiver   User     @relation("Receiver", fields: [receiverId], references: [id])
+  
+  @@index([senderId, receiverId])
+  @@index([createdAt])
+}
+
+// ============= MERCHANTS =============
+model Merchant {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  businessName    String
+  nif             String   @unique
+  category        String
+  description     String
+  logo            String?
+  images          String[]
+  
+  lat             Float
+  lng             Float
+  address         String
+  
+  phone           String?
+  email           String?
+  website         String?
+  
+  schedule        Json     // WeeklySchedule
+  acceptsCredits  Boolean  @default(false)
+  creditDiscount  Int      @default(20) // % max
+  
+  supporters      Int      @default(0)
+  sustainabilityScore Float?
+  certifications  String[]
+  
+  verified        Boolean  @default(false)
+  featured        Boolean  @default(false)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  user            User     @relation(fields: [userId], references: [id])
+  impacts         MerchantImpact[]
+  
+  @@index([category])
+  @@index([lat, lng])
+}
+
+model MerchantImpact {
+  id              String   @id @default(uuid())
+  merchantId      String
+  month           String   // "2024-01"
+  localPurchases  Float
+  creditsAccepted Int
+  jobsCreated     Int      @default(0)
+  localSuppliers  Int      @default(0)
+  wasteReduced    Float    @default(0)
+  communityEvents Int      @default(0)
+  
+  merchant        Merchant @relation(fields: [merchantId], references: [id])
+  
+  @@unique([merchantId, month])
+  @@index([month])
+}
+
+// ============= HELP CHAINS =============
+model HelpChain {
+  id          String   @id @default(uuid())
+  initiatorId String
+  status      ChainStatus
+  story       String?
+  
+  createdAt   DateTime @default(now())
+  completedAt DateTime?
+  
+  initiator   User     @relation("Initiator", fields: [initiatorId], references: [id])
+  links       ChainLink[]
+  
+  @@index([status])
+}
+
+model ChainLink {
+  id          String   @id @default(uuid())
+  chainId     String
+  fromUserId  String
+  toUserId    String
+  action      String
+  message     String?
+  
+  timestamp   DateTime @default(now())
+  
+  chain       HelpChain @relation(fields: [chainId], references: [id])
+  fromUser    User     @relation("FromUser", fields: [fromUserId], references: [id])
+  toUser      User     @relation("ToUser", fields: [toUserId], references: [id])
+  
+  @@index([chainId])
+}
+
+enum ChainStatus {
+  ACTIVE
+  COMPLETED
+  BROKEN
+}
+
+// ============= GAMIFICATION =============
+model DailySeed {
+  id              String   @id @default(uuid())
+  date            DateTime @unique
+  type            SeedType
+  challenge       String
+  description     String
+  creditsReward   Int
+  participantsCount Int    @default(0)
+  
+  createdAt       DateTime @default(now())
+}
+
+enum SeedType {
+  GREETING    // Saluda a un vecino
+  SHARING     // Comparte algo
+  HELPING     // Ayuda a alguien
+  LEARNING    // Aprende algo nuevo
+  CONNECTING  // Conecta a dos personas
+  ECO_ACTION  // Acción ecológica
+}
+
+// ============= NOTIFICATIONS =============
+model Notification {
+  id         String   @id @default(uuid())
+  userId     String
+  type       NotificationType
+  title      String
+  body       String
+  data       Json?
+  read       Boolean  @default(false)
+  actionUrl  String?
+  
+  createdAt  DateTime @default(now())
+  readAt     DateTime?
+  
+  user       User     @relation(fields: [userId], references: [id])
+  
+  @@index([userId, read])
+  @@index([type])
+  @@index([createdAt])
+}
+
+enum NotificationType {
+  HELP_REQUEST
+  HELP_OFFERED
+  TRANSACTION_COMPLETED
+  GROUP_BUY_CLOSING
+  EVENT_REMINDER
+  CREDITS_EARNED
+  CREDITS_EXPIRING
+  COMMUNITY_MILESTONE
+  NEIGHBOR_NEEDS
+  WEEKLY_IMPACT
+  BURNOUT_CARE
+  CONNECTION_SUGGESTION
+  NEW_MESSAGE
+  POST_MENTION
+  POST_SUPPORT
+}
+
+// ============= REPORTING & MODERATION =============
+model Report {
+  id           String   @id @default(uuid())
+  reporterId   String
+  reportedId   String   // userId or contentId
+  reportedType ReportedType
+  reason       ReportReason
+  description  String?
+  status       ReportStatus @default(PENDING)
+  resolution   String?
+  
+  createdAt    DateTime @default(now())
+  resolvedAt   DateTime?
+  
+  reporter     User     @relation("Reporter", fields: [reporterId], references: [id])
+  reportedUser User?    @relation("ReportedUser", fields: [reportedId], references: [id])
+  
+  @@index([status])
+  @@index([reportedType])
+}
+
+enum ReportedType {
+  USER
+  POST
+  OFFER
+  MESSAGE
+  TRANSACTION
+}
+
+enum ReportReason {
+  SPAM
+  INAPPROPRIATE
+  SCAM
+  HARASSMENT
+  FALSE_INFO
+  OTHER
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWING
+  RESOLVED
+  DISMISSED
+}
+
+// ============= ANALYTICS =============
+model CommunityMetrics {
+  id               String   @id @default(uuid())
+  date             DateTime
+  area             String   // neighborhood/city
+  
+  activeUsers      Int
+  newUsers         Int
+  newConnections   Int
+  
+  hoursExchanged   Float
+  eurosSaved       Float
+  creditsCirculated Int
+  
+  co2Avoided       Float
+  wasteReduced     Float
+  
+  eventsHeld       Int
+  groupBuysCompleted Int
+  
+  helpChains       Int
+  averageResponseTime Float // hours
+  satisfactionScore Float  // 0-5
+  
+  weeklyHighlight  String?
+  
+  createdAt        DateTime @default(now())
+  
+  @@unique([date, area])
+  @@index([date])
+  @@index([area])
+}
+
+// ============= SYSTEM =============
+model SystemConfig {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       Json
+  description String?
+  updatedAt   DateTime @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  action     String
+  entity     String
+  entityId   String?
+  oldData    Json?
+  newData    Json?
+  ip         String?
+  userAgent  String?
+  
+  createdAt  DateTime @default(now())
+  
+  @@index([userId])
+  @@index([entity, entityId])
+  @@index([createdAt])
+}
