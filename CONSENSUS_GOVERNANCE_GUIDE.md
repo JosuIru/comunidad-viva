@@ -350,6 +350,46 @@ Validar un bloque (requiere nivel adecuado).
 
 ---
 
+```http
+GET /consensus/blocks/pending
+```
+
+Obtener bloques pendientes de validación para el usuario actual.
+
+**Response:**
+```json
+{
+  "reputation": 127,
+  "level": "EXPERIENCED",
+  "validatorLevel": 2,
+  "blocks": [
+    {
+      "id": "block-uuid",
+      "type": "HELP",
+      "actorId": "user-uuid",
+      "status": "PENDING",
+      "timestamp": "2025-10-10T10:00:00Z",
+      "actor": {
+        "id": "user-uuid",
+        "name": "María",
+        "avatar": "url"
+      },
+      "progress": {
+        "current": 2,
+        "required": 3,
+        "approvals": 2,
+        "rejections": 0,
+        "percentage": 66
+      },
+      "canValidate": true
+    }
+  ],
+  "totalPending": 5
+}
+```
+
+---
+
 #### 📝 Propuestas (CIPs)
 
 ```http
@@ -394,7 +434,106 @@ Listar propuestas.
 
 **Query:**
 - `status`: DISCUSSION | VOTING | APPROVED | REJECTED
+- `type`: FEATURE | RULE_CHANGE | FUND_ALLOCATION | PARTNERSHIP
 - `limit`: number
+
+---
+
+```http
+GET /consensus/proposals/:proposalId
+```
+
+Obtener detalles de una propuesta específica.
+
+**Response:**
+```json
+{
+  "id": "proposal-uuid",
+  "type": "FEATURE",
+  "title": "Mercadillo mensual",
+  "description": "...",
+  "authorId": "user-uuid",
+  "status": "VOTING",
+  "createdAt": "2025-10-08T10:00:00Z",
+  "votes": [
+    {
+      "userId": "user-uuid",
+      "points": 5,
+      "creditsSpent": 25
+    }
+  ],
+  "totalPoints": 125,
+  "votesCount": 15
+}
+```
+
+---
+
+```http
+POST /consensus/proposals/:proposalId/comments
+```
+
+Crear comentario en una propuesta.
+
+**Body:**
+```json
+{
+  "content": "Me parece una excelente idea",
+  "parentId": "comment-uuid" // Opcional, para respuestas
+}
+```
+
+**Response:**
+```json
+{
+  "id": "comment-uuid",
+  "content": "Me parece una excelente idea",
+  "authorId": "user-uuid",
+  "author": {
+    "id": "user-uuid",
+    "name": "Pedro",
+    "avatar": "url",
+    "generosityScore": 150
+  },
+  "createdAt": "2025-10-10T10:00:00Z",
+  "parentId": null
+}
+```
+
+---
+
+```http
+GET /consensus/proposals/:proposalId/comments
+```
+
+Obtener comentarios de una propuesta (anidados).
+
+**Response:**
+```json
+{
+  "comments": [
+    {
+      "id": "comment-uuid",
+      "content": "Me parece una excelente idea",
+      "author": {
+        "id": "user-uuid",
+        "name": "Pedro",
+        "avatar": "url"
+      },
+      "createdAt": "2025-10-10T10:00:00Z",
+      "replies": [
+        {
+          "id": "reply-uuid",
+          "content": "Estoy de acuerdo",
+          "author": {...},
+          "createdAt": "2025-10-10T11:00:00Z",
+          "replies": []
+        }
+      ]
+    }
+  ]
+}
+```
 
 ---
 
@@ -428,6 +567,90 @@ Votar en moderación.
 {
   "decision": "KEEP" | "REMOVE" | "WARN",
   "reason": "string"
+}
+```
+
+---
+
+```http
+GET /consensus/moderation/pending
+```
+
+Obtener casos de moderación pendientes donde el usuario es parte del jurado.
+
+**Response:**
+```json
+[
+  {
+    "id": "dao-uuid",
+    "contentId": "content-uuid",
+    "contentType": "POST",
+    "reason": "Contenido inapropiado",
+    "reporterId": "user-uuid",
+    "status": "PENDING",
+    "createdAt": "2025-10-10T10:00:00Z",
+    "jury": ["user1-uuid", "user2-uuid", "user3-uuid"],
+    "votes": [
+      {
+        "userId": "user1-uuid",
+        "decision": "REMOVE",
+        "reason": "Incumple normas de la comunidad"
+      }
+    ],
+    "votesCount": {
+      "KEEP": 0,
+      "REMOVE": 1,
+      "WARN": 0
+    }
+  }
+]
+```
+
+---
+
+#### 📊 Dashboard
+
+```http
+GET /consensus/dashboard
+```
+
+Obtener estadísticas del sistema de gobernanza.
+
+**Response:**
+```json
+{
+  "overview": {
+    "totalBlocks": 1250,
+    "totalProposals": 45,
+    "activeProposals": 8,
+    "totalValidators": 127,
+    "totalModerationCases": 12,
+    "activeModerationCases": 3
+  },
+  "topValidators": [
+    {
+      "userId": "user-uuid",
+      "name": "María",
+      "avatar": "url",
+      "validationCount": 89,
+      "reputation": 142,
+      "level": "EXPERT"
+    }
+  ],
+  "recentActivity": [
+    {
+      "id": "block-uuid",
+      "type": "PROPOSAL",
+      "actorName": "Juan",
+      "timestamp": "2025-10-10T10:00:00Z",
+      "status": "VALIDATED"
+    }
+  ],
+  "participationRate": {
+    "validationRate": 0.78,
+    "votingRate": 0.65,
+    "moderationRate": 0.82
+  }
 }
 ```
 

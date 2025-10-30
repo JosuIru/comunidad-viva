@@ -263,7 +263,7 @@ function LeaderboardEntry({
 }
 
 function getChallengeInstructions(type: string): string[] {
-  const instructions = {
+  const instructions: { [key: string]: string[] } = {
     'HELP_STREAK': [
       'Completa intercambios o servicios con diferentes personas',
       'Cada persona diferente cuenta como 1 punto',

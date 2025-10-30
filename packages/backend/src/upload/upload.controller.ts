@@ -1,13 +1,14 @@
-import { Controller, Post, UseInterceptors, UploadedFile, UploadedFiles, UseGuards } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFile, UploadedFiles, UseGuards, Get } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { UploadService } from './upload.service';
+import { memoryStorage } from 'multer';
 
 @ApiTags('upload')
 @Controller('upload')
 export class UploadController {
+  constructor(private uploadService: UploadService) {}
   @ApiOperation({ summary: 'Upload single image' })
   @ApiResponse({ status: 201, description: 'Image uploaded successfully' })
   @ApiResponse({ status: 400, description: 'Bad request' })
@@ -17,14 +18,7 @@ export class UploadController {
   @Post('image')
   @UseInterceptors(
     FileInterceptor('file', {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: (req, file, callback) => {
-          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-          const ext = extname(file.originalname);
-          callback(null, `${uniqueSuffix}${ext}`);
-        },
-      }),
+      storage: memoryStorage(),
       fileFilter: (req, file, callback) => {
         if (!file.mimetype.match(/\/(jpg|jpeg|png|gif|webp)$/)) {
           return callback(new Error('Only image files are allowed!'), false);
@@ -37,13 +31,7 @@ export class UploadController {
     }),
   )
   async uploadImage(@UploadedFile() file: Express.Multer.File) {
-    const baseUrl = process.env.API_URL || 'http://localhost:4000';
-    return {
-      url: `${baseUrl}/uploads/${file.filename}`,
-      filename: file.filename,
-      mimetype: file.mimetype,
-      size: file.size,
-    };
+    return await this.uploadService.uploadFile(file, 'images');
   }
 
   @ApiOperation({ summary: 'Upload multiple images' })
@@ -55,14 +43,7 @@ export class UploadController {
   @Post('images')
   @UseInterceptors(
     FilesInterceptor('files', 10, {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: (req, file, callback) => {
-          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-          const ext = extname(file.originalname);
-          callback(null, `${uniqueSuffix}${ext}`);
-        },
-      }),
+      storage: memoryStorage(),
       fileFilter: (req, file, callback) => {
         if (!file.mimetype.match(/\/(jpg|jpeg|png|gif|webp)$/)) {
           return callback(new Error('Only image files are allowed!'), false);
@@ -75,14 +56,14 @@ export class UploadController {
     }),
   )
   async uploadImages(@UploadedFiles() files: Express.Multer.File[]) {
-    const baseUrl = process.env.API_URL || 'http://localhost:4000';
-    return {
-      files: files.map(file => ({
-        url: `${baseUrl}/uploads/${file.filename}`,
-        filename: file.filename,
-        mimetype: file.mimetype,
-        size: file.size,
-      })),
-    };
+    const uploadedFiles = await this.uploadService.uploadFiles(files, 'images');
+    return { files: uploadedFiles };
+  }
+
+  @ApiOperation({ summary: 'Get storage info' })
+  @ApiResponse({ status: 200, description: 'Storage configuration info' })
+  @Get('storage-info')
+  getStorageInfo() {
+    return this.uploadService.getStorageInfo();
   }
 }

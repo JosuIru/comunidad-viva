@@ -48,7 +48,7 @@ export default function MyTimeBank() {
     },
   });
 
-  const { data: transactions = [], isLoading: transactionsLoading } = useQuery<Transaction[]>({
+  const { data: transactionsData, isLoading: transactionsLoading } = useQuery({
     queryKey: ['my-timebank-transactions'],
     queryFn: async () => {
       const { data } = await api.get('/timebank/transactions');
@@ -56,8 +56,10 @@ export default function MyTimeBank() {
     },
   });
 
+  const transactions = transactionsData?.transactions || [];
+
   const getExperienceBadge = (level: string) => {
-    const badges = {
+    const badges: { [key: string]: string } = {
       BEGINNER: 'bg-green-100 text-green-800',
       INTERMEDIATE: 'bg-blue-100 text-blue-800',
       EXPERT: 'bg-purple-100 text-purple-800',
@@ -66,7 +68,7 @@ export default function MyTimeBank() {
   };
 
   const getStatusBadge = (status: string) => {
-    const badges = {
+    const badges: { [key: string]: string } = {
       PENDING: 'bg-yellow-100 text-yellow-800',
       CONFIRMED: 'bg-blue-100 text-blue-800',
       COMPLETED: 'bg-green-100 text-green-800',
@@ -131,9 +133,11 @@ export default function MyTimeBank() {
                           {offer.offer.title}
                         </h3>
                         <div className="flex items-center gap-2 mt-1">
-                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            {offer.skill.name}
-                          </span>
+                          {offer.skill && (
+                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                              {offer.skill.name}
+                            </span>
+                          )}
                           <span className={`px-2 py-1 rounded-full text-xs font-medium ${getExperienceBadge(offer.experienceLevel)}`}>
                             {offer.experienceLevel}
                           </span>
@@ -188,7 +192,7 @@ export default function MyTimeBank() {
           </div>
         ) : (
           <div className="space-y-4">
-            {transactions.map((transaction) => (
+            {transactions.map((transaction: any) => (
               <div
                 key={transaction.id}
                 className="bg-white border border-gray-200 rounded-lg p-6"
@@ -207,11 +211,11 @@ export default function MyTimeBank() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
                         <span className="text-gray-500">Solicitante:</span>
-                        <div className="font-medium">{transaction.requester.name}</div>
+                        <div className="font-medium">{transaction.requester?.name || 'N/A'}</div>
                       </div>
                       <div>
                         <span className="text-gray-500">Proveedor:</span>
-                        <div className="font-medium">{transaction.provider.name}</div>
+                        <div className="font-medium">{transaction.provider?.name || 'N/A'}</div>
                       </div>
                       <div>
                         <span className="text-gray-500">Duración:</span>

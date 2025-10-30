@@ -7,7 +7,7 @@ interface NotificationBellProps {
 }
 
 export default function NotificationBell({ userId }: NotificationBellProps) {
-  const { notifications, clearNotifications, isConnected } = useSocket(userId);
+  const { notifications, clearNotifications, isConnected } = useSocket();
   const [isOpen, setIsOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
 

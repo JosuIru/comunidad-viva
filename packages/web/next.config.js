@@ -8,7 +8,23 @@ const nextConfig = {
     localeDetection: true,
   },
   images: {
-    domains: ['localhost'],
+    domains: [
+      'localhost',
+      'images.unsplash.com',
+      'i.pravatar.cc',
+      'raw.githubusercontent.com',
+      'cdnjs.cloudflare.com',
+    ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.pravatar.cc',
+      },
+    ],
   },
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000',

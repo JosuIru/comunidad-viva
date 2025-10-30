@@ -1,0 +1,22 @@
+{
+  "name": "wsemilla-contracts",
+  "version": "1.0.0",
+  "description": "Smart contracts for Wrapped SEMILLA on Polygon",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:mumbai": "hardhat run deploy.js --network mumbai",
+    "deploy:polygon": "hardhat run deploy.js --network polygon",
+    "verify": "hardhat verify --network mumbai",
+    "console:mumbai": "hardhat console --network mumbai",
+    "console:polygon": "hardhat console --network polygon"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@openzeppelin/contracts": "^5.0.0",
+    "hardhat": "^2.19.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  }
+}

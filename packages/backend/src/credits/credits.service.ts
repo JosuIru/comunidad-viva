@@ -104,6 +104,10 @@ export class CreditsService {
     const oldLevel = this.getUserLevel(user.credits);
     const newLevel = this.getUserLevel(newBalance);
 
+    // Calculate expiration date (12 months from now)
+    const expiresAt = new Date();
+    expiresAt.setMonth(expiresAt.getMonth() + 12);
+
     const result = await this.prisma.$transaction([
       this.prisma.user.update({
         where: { id: userId },
@@ -117,6 +121,7 @@ export class CreditsService {
           reason,
           relatedId,
           description: description || this.getEarningRule(reason).description,
+          expiresAt, // Agregar fecha de expiración
         },
       }),
     ]);

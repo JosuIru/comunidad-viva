@@ -29,11 +29,14 @@ export const icons = {
   event: createIcon('orange'),
   user: createIcon('violet'),
   merchant: createIcon('red'),
+  need: createIcon('yellow'),
+  project: createIcon('gold'),
+  housing: createIcon('grey'),
 };
 
 interface MapPin {
   id: string;
-  type: 'offer' | 'service' | 'event' | 'user' | 'merchant';
+  type: 'offer' | 'service' | 'event' | 'user' | 'merchant' | 'need' | 'project' | 'housing';
   position: [number, number];
   title: string;
   description?: string;
@@ -58,7 +61,7 @@ function ChangeView({ center, zoom }: { center: [number, number]; zoom: number }
 }
 
 export default function Map({
-  center = [40.4168, -3.7038],
+  center = [42.8125, -1.6458], // Navarra (Pamplona)
   zoom = 13,
   pins = [],
   height = '500px',
@@ -109,14 +112,21 @@ export default function Map({
               },
             }}
           >
-            <Popup>
-              <div className="p-2 min-w-[200px]">
+            <Popup maxWidth={300} minWidth={250}>
+              <div className="p-2">
                 {pin.image && (
-                  <img
-                    src={pin.image}
-                    alt={pin.title}
-                    className="w-full h-32 object-cover rounded mb-2"
-                  />
+                  <div className="mb-2">
+                    <img
+                      src={pin.image}
+                      alt={pin.title}
+                      className="w-full h-32 object-cover rounded"
+                      style={{ maxWidth: '100%', display: 'block' }}
+                      onError={(e) => {
+                        console.error('Error loading image:', pin.image);
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
+                  </div>
                 )}
                 <h3 className="font-semibold text-gray-900 mb-1">{pin.title}</h3>
                 {pin.description && (
@@ -125,7 +135,7 @@ export default function Map({
                 {pin.link && (
                   <a
                     href={pin.link}
-                    className="text-sm text-green-600 hover:underline"
+                    className="text-sm text-green-600 hover:underline inline-block"
                     onClick={(e) => e.stopPropagation()}
                   >
                     Ver detalles →

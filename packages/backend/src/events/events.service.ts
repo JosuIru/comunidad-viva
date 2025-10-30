@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreditsService } from '../credits/credits.service';
+import { EmailService } from '../notifications/email.service';
 import { CreditReason } from '@prisma/client';
 import { randomBytes } from 'crypto';
 import { LoggerService } from '../common/logger.service';
+import { AchievementsService } from '../achievements/achievements.service';
 
 @Injectable()
 export class EventsService {
@@ -12,6 +14,8 @@ export class EventsService {
   constructor(
     private prisma: PrismaService,
     private creditsService: CreditsService,
+    private emailService: EmailService,
+    private achievementsService: AchievementsService,
   ) {}
 
   /**
@@ -37,6 +41,11 @@ export class EventsService {
           select: { id: true, name: true, avatar: true },
         },
       },
+    });
+
+    // Check achievements for event organizer
+    this.achievementsService.checkAchievements(organizerId).catch(err => {
+      this.logger.error('Error checking achievements after event creation', err);
     });
 
     return event;
@@ -167,12 +176,20 @@ export class EventsService {
       },
       include: {
         user: {
-          select: { id: true, name: true, avatar: true },
+          select: { id: true, name: true, avatar: true, email: true },
         },
       },
     });
 
-    // TODO: Send notification
+    // Send email notification
+    if (attendee.user.email) {
+      await this.emailService.sendEventRegistrationConfirmation(
+        attendee.user.email,
+        event.title,
+        event.startsAt,
+        event.address || 'Por determinar',
+      );
+    }
 
     return attendee;
   }
@@ -299,6 +316,11 @@ export class EventsService {
         error instanceof Error ? error.stack : String(error),
       );
     }
+
+    // Check achievements for event attendance
+    this.achievementsService.checkAchievements(userId).catch(err => {
+      this.logger.error('Error checking achievements after event check-in', err);
+    });
 
     return {
       ...updated,

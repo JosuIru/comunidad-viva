@@ -9,6 +9,12 @@ import { join } from 'path';
 import { LoggerService } from './common/logger.service';
 import { AllExceptionsFilter } from './common/http-exception.filter';
 import { EnvironmentValidator } from './common/env-validation';
+import { webcrypto } from 'crypto';
+
+// Polyfill for crypto - needed for @nestjs/schedule
+if (!(global as any).crypto) {
+  (global as any).crypto = webcrypto;
+}
 
 async function bootstrap() {
   const logger = new LoggerService('Bootstrap');
@@ -33,18 +39,35 @@ async function bootstrap() {
     prefix: '/uploads/',
   });
 
-  // Security
+  // Security Headers with Helmet
   app.use(helmet({
-    contentSecurityPolicy: process.env.NODE_ENV === 'production' ? undefined : false,
+    contentSecurityPolicy: process.env.NODE_ENV === 'production' ? {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'"],
+        imgSrc: ["'self'", 'data:', 'https:'],
+      },
+    } : false,
+    hsts: {
+      maxAge: 31536000, // 1 year in seconds
+      includeSubDomains: true,
+      preload: true,
+    },
+    frameguard: {
+      action: 'deny',
+    },
+    noSniff: true,
+    xssFilter: true,
   }));
 
   // CORS - Allow multiple origins in production
   const allowedOrigins = process.env.FRONTEND_URL
     ? process.env.FRONTEND_URL.split(',')
-    : ['http://localhost:3000'];
+    : ['http://localhost:3000', 'http://localhost:3001'];
 
   app.enableCors({
-    origin: allowedOrigins,
+    origin: true,  // Allow all origins in development
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],

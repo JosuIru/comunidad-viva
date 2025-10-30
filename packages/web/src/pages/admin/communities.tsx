@@ -129,6 +129,34 @@ export default function CommunitiesAdminPage() {
     setFormData((prev) => ({ ...prev, slug }));
   };
 
+  const geocodeLocation = async () => {
+    if (!formData.location) {
+      toast.error('Por favor ingresa una ubicación primero');
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(formData.location)}&limit=1`
+      );
+      const data = await response.json();
+
+      if (data && data.length > 0) {
+        const { lat, lon } = data[0];
+        setFormData(prev => ({
+          ...prev,
+          lat: parseFloat(lat),
+          lng: parseFloat(lon),
+        }));
+        toast.success('Coordenadas obtenidas correctamente');
+      } else {
+        toast.error('No se encontraron coordenadas para esta ubicación');
+      }
+    } catch (error) {
+      toast.error('Error al obtener coordenadas');
+    }
+  };
+
   if (isLoading) {
     return (
       <Layout title="Admin - Comunidades">
@@ -226,14 +254,23 @@ export default function CommunitiesAdminPage() {
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Ubicación
                     </label>
-                    <input
-                      type="text"
-                      name="location"
-                      value={formData.location}
-                      onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Barcelona, España"
-                    />
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        name="location"
+                        value={formData.location}
+                        onChange={handleChange}
+                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Barcelona, España"
+                      />
+                      <button
+                        type="button"
+                        onClick={geocodeLocation}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm font-medium whitespace-nowrap"
+                      >
+                        📍 Obtener coordenadas
+                      </button>
+                    </div>
                   </div>
 
                   <div>
@@ -254,7 +291,7 @@ export default function CommunitiesAdminPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Latitud
+                      Latitud {formData.lat && <span className="text-xs text-green-600">✓ Auto-completado</span>}
                     </label>
                     <input
                       type="number"
@@ -262,14 +299,16 @@ export default function CommunitiesAdminPage() {
                       value={formData.lat || ''}
                       onChange={handleChange}
                       step="0.0001"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                        formData.lat ? 'bg-green-50' : ''
+                      }`}
                       placeholder="41.4036"
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Longitud
+                      Longitud {formData.lng && <span className="text-xs text-green-600">✓ Auto-completado</span>}
                     </label>
                     <input
                       type="number"
@@ -277,7 +316,9 @@ export default function CommunitiesAdminPage() {
                       value={formData.lng || ''}
                       onChange={handleChange}
                       step="0.0001"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                        formData.lng ? 'bg-green-50' : ''
+                      }`}
                       placeholder="2.1589"
                     />
                   </div>

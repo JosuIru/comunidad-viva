@@ -1,7 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 import { PrismaModule } from './prisma/prisma.module';
+import { RequestLoggerMiddleware } from './common/request-logger.middleware';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { CommunitiesModule } from './communities/communities.module';
@@ -24,11 +28,29 @@ import { ChallengesModule } from './challenges/challenges.module';
 import { FlowEconomicsModule } from './economy/flow-economics.module';
 import { ViralFeaturesModule } from './engagement/viral-features.module';
 import { HybridLayerModule } from './hybrid/hybrid-layer.module';
+import { HousingModule } from './housing/housing.module';
+import { MutualAidModule } from './mutual-aid/mutual-aid.module';
+import { FederationModule } from './federation/federation.module';
+import { WebSocketModule } from './websocket/websocket.module';
+import { AchievementsModule } from './achievements/achievements.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    // ScheduleModule.forRoot(),  // Disabled - causes crypto error with cron jobs
+    EventEmitterModule.forRoot(),
+    ScheduleModule.forRoot(),  // Re-enabled - testing if crypto error is resolved
+    ThrottlerModule.forRoot([
+      {
+        name: 'default',
+        ttl: 60000, // 60 seconds
+        limit: 100, // 100 requests per minute (global default)
+      },
+      {
+        name: 'strict',
+        ttl: 60000, // 60 seconds
+        limit: 10, // 10 requests per minute (for auth endpoints)
+      },
+    ]),
     PrismaModule,
     HealthModule,
     AuthModule,
@@ -52,6 +74,23 @@ import { HybridLayerModule } from './hybrid/hybrid-layer.module';
     FlowEconomicsModule,
     ViralFeaturesModule,  // Has admin endpoints for manual cron job triggers
     HybridLayerModule,
+    HousingModule,
+    MutualAidModule,
+    FederationModule,  // Gailu Labs Federation: DID, SEMILLA, ActivityPub, Círculos
+    WebSocketModule,  // Real-time notifications and live updates
+    AchievementsModule,  // Sistema completo de achievements/badges con 70+ badges
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(RequestLoggerMiddleware)
+      .forRoutes('*'); // Apply to all routes
+  }
+}

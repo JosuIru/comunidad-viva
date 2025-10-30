@@ -5,10 +5,7 @@ import { ProofOfHelpService } from './proof-of-help.service';
 import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
-  imports: [
-    PrismaModule,
-    EventEmitterModule.forRoot(),
-  ],
+  imports: [PrismaModule, EventEmitterModule],
   controllers: [ConsensusController],
   providers: [ProofOfHelpService],
   exports: [ProofOfHelpService],

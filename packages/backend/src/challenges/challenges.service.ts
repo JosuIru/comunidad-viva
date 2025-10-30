@@ -1,10 +1,14 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { SeedType, CreditReason } from '@prisma/client';
+import { ViralFeaturesService } from '../engagement/viral-features.service';
 
 @Injectable()
 export class ChallengesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private viralFeaturesService: ViralFeaturesService,
+  ) {}
 
   async getTodayChallenge() {
     const today = new Date();
@@ -148,10 +152,14 @@ export class ChallengesService {
       }),
     ]);
 
+    // Check for level up
+    const levelUp = await this.viralFeaturesService.checkLevelUp(userId);
+
     return {
       success: true,
       creditsAwarded: challenge.creditsReward,
       message: `¡Felicidades! Has ganado ${challenge.creditsReward} créditos`,
+      levelUp,
     };
   }
 

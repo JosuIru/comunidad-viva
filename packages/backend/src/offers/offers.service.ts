@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { EmailService } from '../notifications/email.service';
 import { OfferType, OfferStatus } from '@prisma/client';
 
 @Injectable()
 export class OffersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private emailService: EmailService,
+  ) {}
 
   async create(userId: string, data: any) {
     return this.prisma.offer.create({
@@ -119,6 +123,22 @@ export class OffersService {
 
       return { interested: false };
     } else {
+      // Fetch offer and user data for notifications
+      const [offer, user] = await Promise.all([
+        this.prisma.offer.findUnique({
+          where: { id: offerId },
+          include: {
+            user: {
+              select: { id: true, name: true, email: true },
+            },
+          },
+        }),
+        this.prisma.user.findUnique({
+          where: { id: userId },
+          select: { id: true, name: true, email: true },
+        }),
+      ]);
+
       // Add interest
       await this.prisma.$transaction([
         this.prisma.offerInterest.create({
@@ -136,6 +156,16 @@ export class OffersService {
           },
         }),
       ]);
+
+      // Send email notification to offer owner
+      if (offer && user && offer.user.email && offer.userId !== userId) {
+        await this.emailService.sendOfferInterest(
+          offer.user.email,
+          user.name,
+          user.email,
+          offer.title,
+        );
+      }
 
       return { interested: true };
     }

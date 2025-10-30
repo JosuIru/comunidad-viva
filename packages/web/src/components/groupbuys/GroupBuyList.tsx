@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
 import GroupBuyCard from './GroupBuyCard';
 import JoinGroupBuyModal from './JoinGroupBuyModal';
 
@@ -13,6 +14,7 @@ interface GroupBuyListProps {
 }
 
 export default function GroupBuyList({ category, userLocation }: GroupBuyListProps) {
+  const router = useRouter();
   const [selectedGroupBuy, setSelectedGroupBuy] = useState<any>(null);
   const [showJoinModal, setShowJoinModal] = useState(false);
 
@@ -39,8 +41,7 @@ export default function GroupBuyList({ category, userLocation }: GroupBuyListPro
   };
 
   const handleViewDetails = (groupBuyId: string) => {
-    // TODO: Navigate to detail page or open detail modal
-    console.log('View details:', groupBuyId);
+    router.push(`/groupbuys/${groupBuyId}`);
   };
 
   if (isLoading) {

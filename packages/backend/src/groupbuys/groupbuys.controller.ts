@@ -21,19 +21,19 @@ export class GroupBuysController {
   @Get()
   async getActiveGroupBuys(
     @Query('category') category?: string,
-    @Query('limit') limit?: number,
-    @Query('offset') offset?: number,
-    @Query('nearLat') nearLat?: number,
-    @Query('nearLng') nearLng?: number,
-    @Query('maxDistance') maxDistance?: number,
+    @Query('limit') limit?: string,
+    @Query('offset') offset?: string,
+    @Query('nearLat') nearLat?: string,
+    @Query('nearLng') nearLng?: string,
+    @Query('maxDistance') maxDistance?: string,
   ) {
     return this.groupBuysService.getActiveGroupBuys({
       category,
-      limit,
-      offset,
-      nearLat,
-      nearLng,
-      maxDistance,
+      limit: limit ? parseInt(limit, 10) : undefined,
+      offset: offset ? parseInt(offset, 10) : undefined,
+      nearLat: nearLat ? parseFloat(nearLat) : undefined,
+      nearLng: nearLng ? parseFloat(nearLng) : undefined,
+      maxDistance: maxDistance ? parseFloat(maxDistance) : undefined,
     });
   }
 

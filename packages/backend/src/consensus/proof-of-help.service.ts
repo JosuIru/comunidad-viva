@@ -195,7 +195,7 @@ export class ProofOfHelpService {
    */
   async moderateContent(
     contentId: string,
-    contentType: 'POST' | 'OFFER' | 'COMMENT' | 'MESSAGE' | 'REVIEW',
+    contentType: 'POST' | 'OFFER' | 'COMMENT' | 'MESSAGE' | 'REVIEW' | 'COMMUNITY' | 'EVENT' | 'TIMEBANK',
     reportReason: string,
     reporterId: string,
   ) {
@@ -286,6 +286,164 @@ export class ProofOfHelpService {
     return vote;
   }
 
+  /**
+   * Obtener moderaciones pendientes donde el usuario es jurado
+   */
+  async getPendingModerations(userId: string) {
+    // Buscar notificaciones de moderación del usuario
+    const moderationNotifications = await this.prisma.notification.findMany({
+      where: {
+        userId,
+        type: 'HELP_REQUEST',
+      },
+      select: {
+        data: true,
+      },
+    });
+
+    // Extraer DAOIds de las notificaciones
+    const daoIds = moderationNotifications
+      .map(n => (n.data as any)?.daoId)
+      .filter(id => id);
+
+    if (daoIds.length === 0) {
+      return [];
+    }
+
+    // Buscar DAOs de moderación activas
+    const moderations = await this.prisma.moderationDAO.findMany({
+      where: {
+        id: {
+          in: daoIds,
+        },
+        status: 'VOTING',
+        deadline: {
+          gte: new Date(), // Solo moderaciones activas
+        },
+      },
+      include: {
+        votes: {
+          include: {
+            voter: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+              },
+            },
+          },
+        },
+        reporter: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+      },
+      orderBy: {
+        deadline: 'asc', // Más urgentes primero
+      },
+    });
+
+    // Filtrar solo las que el usuario no ha votado todavía
+    const pending = moderations.filter(dao => {
+      const hasVoted = dao.votes.some(vote => vote.voterId === userId);
+      return !hasVoted;
+    });
+
+    // Agregar información del contenido
+    const moderationsWithContent = await Promise.all(
+      pending.map(async (dao) => {
+        let contentInfo: any = null;
+
+        try {
+          switch (dao.contentType) {
+            case 'POST':
+              contentInfo = await this.prisma.post.findUnique({
+                where: { id: dao.contentId },
+                select: {
+                  content: true,
+                  author: {
+                    select: { id: true, name: true, avatar: true },
+                  },
+                },
+              });
+              break;
+            case 'OFFER':
+              contentInfo = await this.prisma.offer.findUnique({
+                where: { id: dao.contentId },
+                select: {
+                  title: true,
+                  description: true,
+                  user: {
+                    select: { id: true, name: true, avatar: true },
+                  },
+                },
+              });
+              break;
+            case 'COMMUNITY':
+              contentInfo = await this.prisma.community.findUnique({
+                where: { id: dao.contentId },
+                select: {
+                  name: true,
+                  description: true,
+                  type: true,
+                },
+              });
+              break;
+            case 'EVENT':
+              contentInfo = await this.prisma.event.findUnique({
+                where: { id: dao.contentId },
+                select: {
+                  title: true,
+                  description: true,
+                  organizer: {
+                    select: { id: true, name: true, avatar: true },
+                  },
+                },
+              });
+              break;
+            case 'TIMEBANK':
+              contentInfo = await this.prisma.timeBankTransaction.findUnique({
+                where: { id: dao.contentId },
+                select: {
+                  description: true,
+                  hours: true,
+                  requester: {
+                    select: { id: true, name: true, avatar: true },
+                  },
+                },
+              });
+              break;
+          }
+        } catch (error) {
+          this.logger.error(`Error fetching content for DAO ${dao.id}: ${error.message}`);
+        }
+
+        // Calcular estadísticas de votación
+        const voteStats = {
+          keep: dao.votes.filter(v => v.decision === 'KEEP').length,
+          remove: dao.votes.filter(v => v.decision === 'REMOVE').length,
+          warn: dao.votes.filter(v => v.decision === 'WARN').length,
+          total: dao.votes.length,
+          quorum: dao.quorum,
+          hoursRemaining: Math.ceil(
+            (dao.deadline.getTime() - Date.now()) / (1000 * 60 * 60)
+          ),
+        };
+
+        return {
+          ...dao,
+          content: contentInfo,
+          stats: voteStats,
+        };
+      })
+    );
+
+    return moderationsWithContent;
+  }
+
   // ============================================
   // PROPUESTAS COMUNITARIAS (CIPs)
   // ============================================
@@ -295,11 +453,16 @@ export class ProofOfHelpService {
    */
   async createProposal(data: {
     authorId: string;
-    type: 'FEATURE' | 'RULE_CHANGE' | 'FUND_ALLOCATION' | 'PARTNERSHIP';
+    type: 'FEATURE' | 'RULE_CHANGE' | 'FUND_ALLOCATION' | 'PARTNERSHIP' | 'COMMUNITY_UPDATE' | 'COMMUNITY_DISSOLUTION';
     title: string;
     description: string;
     requiredBudget?: number;
     implementationPlan?: string;
+    communityId?: string;
+    updates?: any;
+    governanceUpdates?: any;
+    recipientId?: string;
+    amount?: number;
   }) {
     this.logger.log(`Creating proposal: type=${data.type}, author=${data.authorId}`);
 
@@ -420,6 +583,176 @@ export class ProofOfHelpService {
     return vote;
   }
 
+  /**
+   * Listar propuestas con filtros
+   */
+  async listProposals(filters?: {
+    status?: string;
+    type?: string;
+    limit?: number;
+  }) {
+    const where: any = {};
+
+    if (filters?.status) {
+      where.status = filters.status;
+    }
+
+    if (filters?.type) {
+      where.type = filters.type;
+    }
+
+    const proposals = await this.prisma.proposal.findMany({
+      where,
+      take: filters?.limit || 50,
+      orderBy: [
+        { status: 'asc' }, // VOTING primero
+        { votingDeadline: 'asc' },
+      ],
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+            generosityScore: true,
+          },
+        },
+        votes: {
+          include: {
+            voter: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+              },
+            },
+          },
+        },
+        _count: {
+          select: {
+            votes: true,
+            comments: true,
+          },
+        },
+      },
+    });
+
+    // Calcular totales de votos para cada propuesta
+    const proposalsWithStats = proposals.map(proposal => {
+      const totalPoints = proposal.votes.reduce((sum, vote) => sum + vote.points, 0);
+      const totalVoters = proposal.votes.length;
+
+      return {
+        ...proposal,
+        stats: {
+          totalPoints,
+          totalVoters,
+          daysRemaining: Math.ceil(
+            (proposal.votingDeadline.getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+          ),
+        },
+      };
+    });
+
+    return proposalsWithStats;
+  }
+
+  /**
+   * Obtener detalles de una propuesta específica
+   */
+  async getProposalDetails(proposalId: string) {
+    const proposal = await this.prisma.proposal.findUnique({
+      where: { id: proposalId },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+            bio: true,
+            generosityScore: true,
+          },
+        },
+        block: true,
+        votes: {
+          include: {
+            voter: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+                generosityScore: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+        comments: {
+          where: {
+            parentId: null, // Solo comentarios de nivel superior
+          },
+          include: {
+            author: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+              },
+            },
+            replies: {
+              include: {
+                author: {
+                  select: {
+                    id: true,
+                    name: true,
+                    avatar: true,
+                  },
+                },
+              },
+            },
+          },
+          orderBy: {
+            createdAt: 'asc',
+          },
+        },
+      },
+    });
+
+    if (!proposal) {
+      throw new NotFoundException('Propuesta no encontrada');
+    }
+
+    // Calcular estadísticas
+    const totalPoints = proposal.votes.reduce((sum, vote) => sum + vote.points, 0);
+    const totalCost = proposal.votes.reduce((sum, vote) => sum + vote.cost, 0);
+    const uniqueVoters = proposal.votes.length;
+
+    // Distribución de votos por rango
+    const voteDistribution = {
+      low: proposal.votes.filter(v => v.points <= 3).length,
+      medium: proposal.votes.filter(v => v.points > 3 && v.points <= 7).length,
+      high: proposal.votes.filter(v => v.points > 7).length,
+    };
+
+    return {
+      ...proposal,
+      stats: {
+        totalPoints,
+        totalCost,
+        uniqueVoters,
+        voteDistribution,
+        daysRemaining: Math.ceil(
+          (proposal.votingDeadline.getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+        ),
+        hoursRemaining: Math.ceil(
+          (proposal.votingDeadline.getTime() - Date.now()) / (1000 * 60 * 60)
+        ),
+      },
+    };
+  }
+
   // ============================================
   // SISTEMA DE REPUTACIÓN
   // ============================================
@@ -485,6 +818,377 @@ export class ProofOfHelpService {
     reputation += validations * 3;
 
     return Math.floor(reputation);
+  }
+
+  /**
+   * Obtener bloques pendientes de validación para un usuario
+   */
+  async getPendingBlocks(userId: string) {
+    const reputation = await this.calculateReputation(userId);
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { peopleHelped: true },
+    });
+    const userLevel = this.getValidatorLevel(user || { peopleHelped: 0 });
+
+    // Buscar bloques pendientes donde el usuario puede ser validador
+    const pendingBlocks = await this.prisma.trustBlock.findMany({
+      where: {
+        status: 'PENDING',
+        actorId: { not: userId }, // No puede validar sus propios bloques
+      },
+      include: {
+        actor: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+            peopleHelped: true,
+          },
+        },
+        validations: {
+          include: {
+            validator: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+              },
+            },
+          },
+        },
+        _count: {
+          select: {
+            validations: true,
+          },
+        },
+      },
+      orderBy: {
+        timestamp: 'asc',
+      },
+      take: 50,
+    });
+
+    // Filtrar bloques que el usuario puede validar según su nivel
+    const validatableBlocks = pendingBlocks.filter(block => {
+      const requiredLevel = this.getRequiredValidatorLevel(block.type);
+      const hasAlreadyValidated = block.validations.some(v => v.validatorId === userId);
+      return userLevel >= requiredLevel && !hasAlreadyValidated;
+    });
+
+    // Agregar información de progreso de validación
+    const blocksWithProgress = validatableBlocks.map(block => {
+      const requiredValidations = this.getRequiredValidations(block.type);
+      const currentValidations = block._count.validations;
+      const approvals = block.validations.filter(v => v.decision === 'APPROVE').length;
+      const rejections = block.validations.filter(v => v.decision === 'REJECT').length;
+
+      return {
+        ...block,
+        progress: {
+          current: currentValidations,
+          required: requiredValidations,
+          approvals,
+          rejections,
+          percentage: Math.floor((currentValidations / requiredValidations) * 100),
+        },
+        canValidate: true,
+      };
+    });
+
+    return {
+      reputation,
+      level: this.getLevel(reputation),
+      validatorLevel: userLevel,
+      blocks: blocksWithProgress,
+      totalPending: blocksWithProgress.length,
+    };
+  }
+
+  private getLevel(reputation: number): string {
+    if (reputation >= 100) return 'EXPERT';
+    if (reputation >= 50) return 'EXPERIENCED';
+    if (reputation >= 20) return 'CONTRIBUTOR';
+    if (reputation >= 10) return 'ACTIVE';
+    return 'NEWCOMER';
+  }
+
+  /**
+   * Crear comentario en propuesta
+   */
+  async createProposalComment(data: {
+    proposalId: string;
+    authorId: string;
+    content: string;
+    parentId?: string;
+  }) {
+    // Verificar que la propuesta existe
+    const proposal = await this.prisma.proposal.findUnique({
+      where: { id: data.proposalId },
+    });
+
+    if (!proposal) {
+      throw new NotFoundException('Propuesta no encontrada');
+    }
+
+    // Si es una respuesta, verificar que el comentario padre existe
+    if (data.parentId) {
+      const parentComment = await this.prisma.proposalComment.findUnique({
+        where: { id: data.parentId },
+      });
+
+      if (!parentComment || parentComment.proposalId !== data.proposalId) {
+        throw new BadRequestException('Comentario padre no válido');
+      }
+    }
+
+    const comment = await this.prisma.proposalComment.create({
+      data: {
+        proposalId: data.proposalId,
+        authorId: data.authorId,
+        content: data.content,
+        parentId: data.parentId,
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+            generosityScore: true,
+          },
+        },
+      },
+    });
+
+    // Notificar al autor de la propuesta (si no es el mismo)
+    if (proposal.authorId !== data.authorId) {
+      await this.prisma.notification.create({
+        data: {
+          userId: proposal.authorId,
+          type: 'POST_MENTION',
+          title: 'Nuevo comentario en tu propuesta',
+          body: `${comment.author.name} comentó en "${proposal.title}"`,
+          data: { proposalId: data.proposalId, commentId: comment.id },
+          link: `/consensus/proposals/${data.proposalId}`,
+        },
+      });
+    }
+
+    // Si es una respuesta, notificar al autor del comentario padre
+    if (data.parentId) {
+      const parentComment = await this.prisma.proposalComment.findUnique({
+        where: { id: data.parentId },
+        select: { authorId: true },
+      });
+
+      if (parentComment && parentComment.authorId !== data.authorId) {
+        await this.prisma.notification.create({
+          data: {
+            userId: parentComment.authorId,
+            type: 'POST_MENTION',
+            title: 'Nueva respuesta a tu comentario',
+            body: `${comment.author.name} respondió a tu comentario`,
+            data: { proposalId: data.proposalId, commentId: comment.id },
+            link: `/consensus/proposals/${data.proposalId}`,
+          },
+        });
+      }
+    }
+
+    return comment;
+  }
+
+  /**
+   * Obtener comentarios de una propuesta
+   */
+  async getProposalComments(proposalId: string) {
+    const comments = await this.prisma.proposalComment.findMany({
+      where: {
+        proposalId,
+        parentId: null, // Solo comentarios de nivel superior
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+            generosityScore: true,
+          },
+        },
+        replies: {
+          include: {
+            author: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+                generosityScore: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: 'asc',
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+    });
+
+    return comments;
+  }
+
+  /**
+   * Dashboard de gobernanza con estadísticas
+   */
+  async getGovernanceDashboard() {
+    const now = new Date();
+    const last30Days = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    const last7Days = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+    // Estadísticas de propuestas
+    const [
+      totalProposals,
+      activeProposals,
+      approvedProposals,
+      recentProposals,
+      proposalsByType,
+    ] = await Promise.all([
+      this.prisma.proposal.count(),
+      this.prisma.proposal.count({ where: { status: { in: ['DISCUSSION', 'VOTING'] } } }),
+      this.prisma.proposal.count({ where: { status: 'APPROVED' } }),
+      this.prisma.proposal.count({ where: { createdAt: { gte: last30Days } } }),
+      this.prisma.proposal.groupBy({
+        by: ['type'],
+        _count: true,
+      }),
+    ]);
+
+    // Estadísticas de bloques
+    const [
+      totalBlocks,
+      pendingBlocks,
+      approvedBlocks,
+    ] = await Promise.all([
+      this.prisma.trustBlock.count(),
+      this.prisma.trustBlock.count({ where: { status: 'PENDING' } }),
+      this.prisma.trustBlock.count({ where: { status: 'APPROVED' } }),
+    ]);
+
+    // Estadísticas de moderación
+    const [
+      totalModerations,
+      activeModerations,
+      resolvedModerations,
+    ] = await Promise.all([
+      this.prisma.moderationDAO.count(),
+      this.prisma.moderationDAO.count({ where: { status: 'VOTING' } }),
+      this.prisma.moderationDAO.count({ where: { status: 'EXECUTED' } }),
+    ]);
+
+    // Usuarios más activos (por validaciones)
+    const topValidators = await this.prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        avatar: true,
+        generosityScore: true,
+        _count: {
+          select: {
+            blockValidations: true,
+            proposalVotes: true,
+            moderationVotes: true,
+          },
+        },
+      },
+      orderBy: {
+        generosityScore: 'desc',
+      },
+      take: 10,
+    });
+
+    // Propuestas recientes
+    const recentProposalsList = await this.prisma.proposal.findMany({
+      take: 5,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+        _count: {
+          select: {
+            votes: true,
+            comments: true,
+          },
+        },
+      },
+    });
+
+    // Actividad reciente (últimos 7 días)
+    const [
+      proposalsLast7Days,
+      validationsLast7Days,
+      votesLast7Days,
+    ] = await Promise.all([
+      this.prisma.proposal.count({ where: { createdAt: { gte: last7Days } } }),
+      this.prisma.blockValidation.count({ where: { createdAt: { gte: last7Days } } }),
+      this.prisma.proposalVote.count({ where: { createdAt: { gte: last7Days } } }),
+    ]);
+
+    // Tasa de participación
+    const totalUsers = await this.prisma.user.count();
+    const activeValidators = await this.prisma.user.count({
+      where: {
+        blockValidations: {
+          some: {
+            createdAt: { gte: last30Days },
+          },
+        },
+      },
+    });
+
+    const participationRate = totalUsers > 0 ? (activeValidators / totalUsers) * 100 : 0;
+
+    return {
+      overview: {
+        totalProposals,
+        activeProposals,
+        approvedProposals,
+        recentProposals,
+        totalBlocks,
+        pendingBlocks,
+        approvedBlocks,
+        totalModerations,
+        activeModerations,
+        resolvedModerations,
+      },
+      proposalsByType: proposalsByType.map(pt => ({
+        type: pt.type,
+        count: pt._count,
+      })),
+      topValidators: topValidators.map(v => ({
+        ...v,
+        totalParticipations: v._count.blockValidations + v._count.proposalVotes + v._count.moderationVotes,
+      })),
+      recentActivity: {
+        proposals: proposalsLast7Days,
+        validations: validationsLast7Days,
+        votes: votesLast7Days,
+      },
+      participation: {
+        totalUsers,
+        activeValidators,
+        rate: Math.round(participationRate),
+      },
+      recentProposals: recentProposalsList,
+    };
   }
 
   // ============================================
@@ -695,8 +1399,199 @@ export class ProofOfHelpService {
 
       this.logger.log(`Proposal approved: proposalId=${proposalId}, support=${totalSupport}, threshold=${threshold}`);
 
-      // Implementar la propuesta
+      // Ejecutar la propuesta automáticamente
+      await this.executeProposal(proposalId);
+
+      // Emitir evento para notificaciones
       this.eventEmitter.emit('proposal.approved', proposal);
+    }
+  }
+
+  /**
+   * Ejecutar propuesta aprobada
+   */
+  private async executeProposal(proposalId: string) {
+    const proposal = await this.prisma.proposal.findUnique({
+      where: { id: proposalId },
+      include: {
+        block: true,
+        author: true,
+      },
+    });
+
+    if (!proposal || proposal.status !== 'APPROVED') {
+      return;
+    }
+
+    this.logger.log(`Executing proposal: ${proposalId}, type=${proposal.type}`);
+
+    try {
+      const content = proposal.block.content as any;
+
+      switch (proposal.type) {
+        case 'COMMUNITY_UPDATE':
+          // Ejecutar actualización de comunidad
+          if (content.communityId && content.updates) {
+            // Obtener datos actuales para audit log
+            const oldData = await this.prisma.community.findUnique({
+              where: { id: content.communityId },
+              select: {
+                name: true,
+                description: true,
+                logo: true,
+                bannerImage: true,
+                location: true,
+                lat: true,
+                lng: true,
+                radiusKm: true,
+                type: true,
+                visibility: true,
+                requiresApproval: true,
+                allowExternalOffers: true,
+                primaryColor: true,
+                language: true,
+                currency: true,
+              },
+            });
+
+            await this.prisma.community.update({
+              where: { id: content.communityId },
+              data: content.updates,
+            });
+
+            // Registrar en audit log
+            await this.prisma.auditLog.create({
+              data: {
+                userId: proposal.authorId,
+                action: 'COMMUNITY_UPDATE_PROPOSAL',
+                entity: 'Community',
+                entityId: content.communityId,
+                oldData: oldData as any,
+                newData: content.updates,
+              },
+            });
+
+            this.logger.log(`Community updated: ${content.communityId}`);
+          }
+          break;
+
+        case 'COMMUNITY_DISSOLUTION':
+          // Eliminar comunidad
+          if (content.communityId) {
+            // Obtener información de la comunidad antes de eliminar
+            const communityData = await this.prisma.community.findUnique({
+              where: { id: content.communityId },
+            });
+
+            // Primero eliminar a todos los usuarios de la comunidad
+            await this.prisma.user.updateMany({
+              where: { communityId: content.communityId },
+              data: { communityId: null },
+            });
+
+            // Luego eliminar la comunidad
+            await this.prisma.community.delete({
+              where: { id: content.communityId },
+            });
+
+            // Registrar en audit log
+            await this.prisma.auditLog.create({
+              data: {
+                userId: proposal.authorId,
+                action: 'COMMUNITY_DISSOLUTION',
+                entity: 'Community',
+                entityId: content.communityId,
+                oldData: communityData as any,
+                newData: { deleted: true },
+              },
+            });
+
+            this.logger.log(`Community dissolved: ${content.communityId}`);
+          }
+          break;
+
+        case 'FUND_ALLOCATION':
+          // Asignar fondos/créditos
+          if (content.recipientId && content.amount) {
+            await this.prisma.user.update({
+              where: { id: content.recipientId },
+              data: {
+                credits: { increment: content.amount },
+              },
+            });
+            this.logger.log(`Funds allocated: ${content.amount} credits to ${content.recipientId}`);
+          }
+          break;
+
+        case 'RULE_CHANGE':
+          // Cambios en reglas de gobernanza
+          if (content.communityId && content.governanceUpdates) {
+            // Obtener reglas actuales para audit log
+            const oldGovernance = await this.prisma.communityGovernance.findUnique({
+              where: { communityId: content.communityId },
+            });
+
+            await this.prisma.communityGovernance.update({
+              where: { communityId: content.communityId },
+              data: content.governanceUpdates,
+            });
+
+            // Registrar en audit log
+            await this.prisma.auditLog.create({
+              data: {
+                userId: proposal.authorId,
+                action: 'GOVERNANCE_RULE_CHANGE',
+                entity: 'CommunityGovernance',
+                entityId: content.communityId,
+                oldData: oldGovernance as any,
+                newData: content.governanceUpdates,
+              },
+            });
+
+            this.logger.log(`Governance rules updated for community: ${content.communityId}`);
+          }
+          break;
+
+        case 'FEATURE':
+        case 'PARTNERSHIP':
+          // Estas requieren implementación manual
+          // Solo registramos que fueron aprobadas
+          this.logger.log(`Proposal of type ${proposal.type} approved, requires manual implementation`);
+          break;
+      }
+
+      // Marcar como implementada
+      await this.prisma.proposal.update({
+        where: { id: proposalId },
+        data: {
+          status: 'IMPLEMENTED',
+        },
+      });
+
+      // Notificar al autor
+      await this.prisma.notification.create({
+        data: {
+          userId: proposal.authorId,
+          type: 'COMMUNITY_MILESTONE',
+          title: 'Propuesta implementada',
+          body: `Tu propuesta "${proposal.title}" ha sido aprobada e implementada exitosamente`,
+          data: { proposalId },
+        },
+      });
+
+    } catch (error) {
+      this.logger.error(`Error executing proposal ${proposalId}: ${error.message}`);
+
+      // Notificar error al autor
+      await this.prisma.notification.create({
+        data: {
+          userId: proposal.authorId,
+          type: 'COMMUNITY_MILESTONE',
+          title: 'Error en implementación',
+          body: `Hubo un error al implementar tu propuesta "${proposal.title}"`,
+          data: { proposalId, error: error.message },
+        },
+      });
     }
   }
 
@@ -710,6 +1605,29 @@ export class ProofOfHelpService {
         break;
       case 'OFFER':
         await this.prisma.offer.update({
+          where: { id: contentId },
+          data: { status: 'CANCELLED' },
+        });
+        break;
+      case 'COMMUNITY':
+        // Soft delete - mark community as deleted
+        await this.prisma.community.update({
+          where: { id: contentId },
+          data: {
+            visibility: 'PRIVATE',
+            requiresApproval: true,
+            description: '[COMUNIDAD REMOVIDA POR DECISIÓN COMUNITARIA]'
+          },
+        });
+        break;
+      case 'EVENT':
+        await this.prisma.event.update({
+          where: { id: contentId },
+          data: { status: 'CANCELLED' },
+        });
+        break;
+      case 'TIMEBANK':
+        await this.prisma.timeBankTransaction.update({
           where: { id: contentId },
           data: { status: 'CANCELLED' },
         });
@@ -736,6 +1654,26 @@ export class ProofOfHelpService {
           where: { id: contentId },
         });
         authorId = offer?.userId || null;
+        break;
+      case 'COMMUNITY':
+        const community = await this.prisma.community.findUnique({
+          where: { id: contentId },
+          include: { governance: true },
+        });
+        // Notify first founder
+        authorId = community?.governance?.founders[0] || null;
+        break;
+      case 'EVENT':
+        const event = await this.prisma.event.findUnique({
+          where: { id: contentId },
+        });
+        authorId = event?.organizerId || null;
+        break;
+      case 'TIMEBANK':
+        const timebank = await this.prisma.timeBankTransaction.findUnique({
+          where: { id: contentId },
+        });
+        authorId = timebank?.requesterId || null;
         break;
     }
 

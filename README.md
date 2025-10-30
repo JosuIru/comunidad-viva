@@ -7,11 +7,20 @@
 *Red social innovadora con sistema híbrido revolucionario de capas económicas*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/JosuIru/comunidad-viva?style=social)](https://github.com/JosuIru/comunidad-viva/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/JosuIru/comunidad-viva?style=social)](https://github.com/JosuIru/comunidad-viva/network/members)
+
+[![CI/CD](https://github.com/JosuIru/comunidad-viva/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/JosuIru/comunidad-viva/actions)
+[![GitHub issues](https://img.shields.io/github/issues/JosuIru/comunidad-viva)](https://github.com/JosuIru/comunidad-viva/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/JosuIru/comunidad-viva)](https://github.com/JosuIru/comunidad-viva/pulls)
+[![Last commit](https://img.shields.io/github/last-commit/JosuIru/comunidad-viva)](https://github.com/JosuIru/comunidad-viva/commits/main)
+
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
 [![NestJS](https://img.shields.io/badge/NestJS-10-red.svg)](https://nestjs.com/)
 [![Next.js](https://img.shields.io/badge/Next.js-14-black.svg)](https://nextjs.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
 [Características](#-características-principales) •
 [Instalación](#️-instalación) •
@@ -71,14 +80,53 @@ Comunidad Viva es una plataforma innovadora que reimagina la economía local, pe
 
 ## 📚 Documentación
 
+### 📖 Documentación Principal
+
+| Documento | Descripción | Audiencia |
+|-----------|-------------|-----------|
+| [📋 **Índice de Documentación**](DOCUMENTATION_INDEX.md) | **Índice maestro de toda la documentación** | Todos |
+| [📊 **Estado del Desarrollo**](DEVELOPMENT_STATUS.md) 🆕 | **Análisis completo: qué está hecho y qué falta (74.2%)** | Devs, PMs, CTOs |
+| [📖 Quick Start](QUICK_START.md) | Empieza en 5 minutos | Desarrolladores |
+| [📖 Whitepaper](WHITEPAPER.md) | Documento técnico principal (~21,000 palabras) | Inversores, Equipos técnicos |
+| [📖 Resumen Ejecutivo](EXECUTIVE_SUMMARY.md) | Resumen de 2-3 páginas | General, Inversores |
+| [📖 API Reference](API_REFERENCE.md) | Referencia completa de ~120 endpoints | Desarrolladores |
+| [📖 Changelog](CHANGELOG.md) | Historial de implementaciones | Todos |
+
+### 🌉 Blockchain y Web3
+
 | Documento | Descripción |
 |-----------|-------------|
-| [📖 Quick Start](QUICK_START.md) | Empieza en 5 minutos |
-| [📖 API Reference](API_REFERENCE.md) | Referencia completa de ~120 endpoints |
-| [📖 Changelog](CHANGELOG.md) | Historial de implementaciones |
-| [📖 Sistema Híbrido](packages/backend/src/hybrid/README.md) | Guía del sistema de capas económicas |
-| [📖 Gobernanza](CONSENSUS_GOVERNANCE_GUIDE.md) | Proof of Help y consenso descentralizado |
-| [📖 Multilenguaje](packages/web/MULTILENGUAJE.md) | Sistema i18n (ES/EU) |
+| [🌉 Bridge README](BRIDGE_README.md) | Sistema de bridges multi-cadena (Polygon, Solana) |
+| [📋 Bridge Summary](BRIDGE_SUMMARY.md) | Resumen ejecutivo técnico del sistema bridges |
+| [🚀 Bridge Quick Start](BRIDGE_QUICK_START.md) | Guía práctica paso a paso |
+| [📖 Bridge Deployment](BRIDGE_DEPLOYMENT_GUIDE.md) | Guía de deployment en producción |
+| [🧩 Blockchain Guide](BLOCKCHAIN_BRIDGE_GUIDE.md) | Conceptos y arquitectura de bridges |
+
+### 💡 Características Avanzadas
+
+| Documento | Descripción |
+|-----------|-------------|
+| [🔄 Sistema Híbrido](packages/backend/src/hybrid/README.md) | Guía del sistema de 3 capas económicas |
+| [🏛️ Gobernanza](CONSENSUS_GOVERNANCE_GUIDE.md) | Proof of Help y consenso descentralizado |
+| [🎁 Economía de Regalo](GIFT_ECONOMY_GOVERNANCE.md) | Gobernanza avanzada y economía del regalo |
+| [🔧 Módulos Técnicos](TECHNICAL_MODULES.md) | Documentación de módulos complementarios |
+| [🌐 Multilenguaje](packages/web/MULTILENGUAJE.md) | Sistema i18n (ES/EU) |
+
+### 🎯 Estado Actual (Octubre 2025)
+
+**Completitud Global**: 74.2% ✅
+
+**Módulos Implementados**:
+- ✅ Vivienda Comunitaria (80%)
+- ✅ Ayuda Mutua (85%)
+- ✅ Sistema Híbrido EUR/Credits/Hours (70%)
+- ✅ Gamificación (75%)
+- ✅ Gobernanza y Consenso (75%)
+- ✅ Blockchain Bridges Multi-Cadena (70% - pendiente testnet)
+- ✅ Red Social Integrada (75%)
+- ✅ Usuarios y Autenticación (85%)
+
+**Próximos Hitos**: Ver [DEVELOPMENT_STATUS.md](DEVELOPMENT_STATUS.md)
 
 ## 🌟 Características Principales
 
@@ -304,11 +352,14 @@ Ventaja: Promueve consenso amplio vs dictadura de mayorías
 ### 📊 Estadísticas del Proyecto
 
 - **Total Endpoints:** ~120
-- **Módulos Backend:** 20+
-- **Paradigmas Económicos:** 3
+- **Módulos Backend:** 30+
+- **Páginas Frontend:** 72
+- **Paradigmas Económicos:** 3 (EUR + Credits + Hours)
+- **Blockchains Soportadas:** 2 (Polygon + Solana)
 - **Niveles de Gamificación:** 10
 - **Tipos de Bloques PoH:** 4
-- **Líneas de Documentación:** 2000+
+- **Documentos Completos:** 13 (~90,000 palabras)
+- **Completitud del Proyecto:** 74.2%
 
 ## 🚀 Estructura del Proyecto
 

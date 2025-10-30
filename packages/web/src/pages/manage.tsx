@@ -6,7 +6,6 @@ import Layout from '@/components/Layout';
 import MyOffers from '@/components/manage/MyOffers';
 import MyEvents from '@/components/manage/MyEvents';
 import MyTimeBank from '@/components/manage/MyTimeBank';
-import EditProfile from '@/components/manage/EditProfile';
 
 export default function ManagePage() {
   const t = useTranslations('manage');
@@ -30,7 +29,6 @@ export default function ManagePage() {
     { id: 'offers', label: t('myOffers'), icon: '🎁' },
     { id: 'events', label: t('myEvents'), icon: '📅' },
     { id: 'timebank', label: t('timeBank'), icon: '⏰' },
-    { id: 'profile', label: t('myProfile'), icon: '👤' },
   ];
 
   return (
@@ -77,7 +75,6 @@ export default function ManagePage() {
             {activeTab === 'offers' && <MyOffers />}
             {activeTab === 'events' && <MyEvents />}
             {activeTab === 'timebank' && <MyTimeBank />}
-            {activeTab === 'profile' && <EditProfile />}
           </div>
         </div>
       </div>

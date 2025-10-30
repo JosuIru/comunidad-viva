@@ -886,7 +886,7 @@ export class ViralFeaturesService {
    * Create Flash Deals automatically
    * Runs at 10am, 2pm, 8pm daily
    */
-  // @Cron('0 10,14,20 * * *')  // Temporarily disabled
+  @Cron('0 10,14,20 * * *')
   async createFlashDeals() {
     this.logger.log('Creating Flash Deals...');
 
@@ -946,7 +946,7 @@ export class ViralFeaturesService {
    * Activate Happy Hour
    * Runs at 6pm daily
    */
-  // @Cron('0 18 * * *')  // Temporarily disabled
+  @Cron('0 18 * * *')
   async activateHappyHour() {
     this.logger.log('Activating Happy Hour...');
 
@@ -986,7 +986,7 @@ export class ViralFeaturesService {
    * Create Weekly Challenge
    * Runs every Monday at midnight
    */
-  // @Cron('0 0 * * 1')  // Temporarily disabled
+  @Cron('0 0 * * 1')
   async createWeeklyChallenge() {
     this.logger.log('Creating Weekly Challenge...');
 

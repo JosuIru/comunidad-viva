@@ -51,7 +51,7 @@ export default function MyOffers() {
   });
 
   const getStatusBadge = (status: string) => {
-    const badges = {
+    const badges: { [key: string]: string } = {
       ACTIVE: 'bg-green-100 text-green-800',
       COMPLETED: 'bg-blue-100 text-blue-800',
       CANCELLED: 'bg-gray-100 text-gray-800',
@@ -60,7 +60,7 @@ export default function MyOffers() {
   };
 
   const getTypeIcon = (type: string) => {
-    const icons = {
+    const icons: { [key: string]: string } = {
       OFFER: '🎁',
       REQUEST: '🙏',
     };

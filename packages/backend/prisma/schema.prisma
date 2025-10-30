@@ -22,6 +22,16 @@ model User {
   emailVerified   Boolean   @default(false)
   phoneVerified   Boolean   @default(false)
 
+  // Two-Factor Authentication
+  twoFactorEnabled Boolean   @default(false)
+  twoFactorSecret  String?   // TOTP secret (encrypted)
+  backupCodes      String[]  @default([]) // Backup recovery codes (hashed)
+
+  // Web3 Wallet Authentication
+  walletAddress    String?   @unique       // Ethereum or Solana wallet address
+  walletType       String?                 // METAMASK, PHANTOM, WALLETCONNECT
+  isEmailVerified  Boolean   @default(false) // Separate from emailVerified for wallet users
+
   // Community
   communityId     String?
 
@@ -62,7 +72,14 @@ model User {
   layerMigrations LayerMigration[]
   softCredits     Int?                      // Créditos opcionales para capa transicional
   lastLayerChange DateTime?
-  
+
+  // Gailu Labs Federation
+  gailuDID        String?   @unique         // Decentralized Identifier: did:gailu:nodeId:user:uuid
+  gailuNodeId     String?                   // ID del nodo en la federación
+  semillaBalance  Float     @default(0)     // Balance de tokens SEMILLA
+  proofOfHelpScore Float    @default(0)     // Puntuación de Prueba de Ayuda
+  consciousnessLevel Int    @default(1)     // Nivel de conciencia (1-7)
+
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   deletedAt       DateTime?
@@ -83,6 +100,7 @@ model User {
   events          EventAttendee[]
   eventsOrganized Event[] @relation("Organizer")
   groupBuyParticipations GroupBuyParticipant[]
+  groupBuyOrders  GroupBuyOrder[]
   reviewsGiven    Review[] @relation("ReviewsGiven")
   connections     Connection[] @relation("User")
   connectedTo     Connection[] @relation("ConnectedUser")
@@ -134,6 +152,34 @@ model User {
   onboardingProgress   OnboardingProgress?
   dailyActions         Int       @default(0)
 
+  // Housing & Spaces
+  spacesOffered        SpaceBank[] @relation("SpaceOwner")
+  spaceBookings        SpaceBooking[] @relation("SpaceBooker")
+  housingOffered       TemporaryHousing[] @relation("HousingHost")
+  housingBookings      HousingBooking[] @relation("HousingGuest")
+  housingCoopMemberships HousingCoopMember[] @relation("CoopMember")
+  housingCoopProposals HousingCoopProposal[] @relation("ProposalCreator")
+  housingCoopVotes     HousingCoopVote[] @relation("CoopVoter")
+  communityGuarantees  CommunityGuarantee[] @relation("GuaranteedPerson")
+  guaranteesGiven      GuaranteeSupporter[] @relation("Guarantor")
+
+  // Needs & Community Projects
+  needsCreated         Need[] @relation("NeedCreator")
+  projectsCreated      CommunityProject[] @relation("ProjectCreator")
+  contributions        Contribution[] @relation("Contributor")
+  projectUpdates       ProjectUpdate[] @relation("UpdateAuthor")
+  impactReports        ImpactReport[] @relation("ReportAuthor")
+
+  // Gailu Labs Federation Relations
+  semillaTransactionsSent     SemillaTransaction[] @relation("SemillaSender")
+  semillaTransactionsReceived SemillaTransaction[] @relation("SemillaReceiver")
+  bridgeTransactions          BridgeTransaction[] @relation("BridgeUser")
+  circuloParticipations       CirculoParticipacion[]
+  federatedActivitiesPublished FederatedActivity[] @relation("ActivityPublisher")
+
+  // Authentication
+  refreshTokens               RefreshToken[]
+
   @@index([email])
   @@index([phone])
   @@index([neighborhood])
@@ -141,6 +187,22 @@ model User {
   @@index([lastActiveAt])
   @@index([generosityScore])
   @@index([communityId])
+}
+
+// ============= AUTHENTICATION =============
+model RefreshToken {
+  id           String    @id @default(uuid())
+  token        String    @unique  // Hashed refresh token
+  userId       String
+  expiresAt    DateTime
+  createdAt    DateTime  @default(now())
+  revokedAt    DateTime?
+
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
 }
 
 // ============= COMMUNITIES =============
@@ -183,6 +245,14 @@ model Community {
   events            Event[]
   connectionsOut    CommunityConnection[] @relation("SourceCommunity")
   connectionsIn     CommunityConnection[] @relation("TargetCommunity")
+  membershipRequests MembershipRequest[] @relation("CommunityMembershipRequests")
+  spaces            SpaceBank[]
+  housing           TemporaryHousing[]
+  housingCoops      HousingCoop[]
+  communityGuarantees CommunityGuarantee[]
+  needs             Need[] @relation("CommunityNeeds")
+  projects          CommunityProject[] @relation("CommunityProjects")
+  projectContributions Contribution[] @relation("CommunityContributions")
 
   @@index([slug])
   @@index([type])
@@ -266,6 +336,34 @@ model CommunityConnection {
   @@index([status])
 }
 
+// Membership requests for communities that require approval
+model MembershipRequest {
+  id          String              @id @default(uuid())
+  communityId String
+  userId      String
+  status      MembershipRequestStatus @default(PENDING)
+  message     String?             // Optional message from requester
+
+  reviewedBy  String?             // User ID who reviewed the request
+  reviewNote  String?             // Optional note from reviewer
+
+  createdAt   DateTime            @default(now())
+  reviewedAt  DateTime?
+
+  community   Community           @relation("CommunityMembershipRequests", fields: [communityId], references: [id])
+
+  @@unique([communityId, userId])
+  @@index([communityId])
+  @@index([userId])
+  @@index([status])
+}
+
+enum MembershipRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 enum ConnectionStatus {
   PENDING     // Solicitud pendiente
   APPROVED    // Conexión aprobada
@@ -317,24 +415,131 @@ model UserBadge {
   userId      String
   badgeType   BadgeType
   earnedAt    DateTime @default(now())
-  metadata    Json?
-  
+  metadata    Json?    // Información adicional: progreso, tier, etc.
+  progress    Int      @default(0) // Progreso actual hacia siguiente tier
+  isNew       Boolean  @default(true) // Marca si el badge es nuevo (para animación)
+
   user        User     @relation(fields: [userId], references: [id])
-  
+
   @@unique([userId, badgeType])
+  @@index([userId])
 }
 
+// Sistema Completo de Achievements/Badges
 enum BadgeType {
-  HELPER_10    // Ayudó 10 veces
-  HELPER_50    // Ayudó 50 veces
-  HELPER_100   // Ayudó 100 veces
-  ORGANIZER    // Organizó evento
-  ECO_WARRIOR  // Acciones ecológicas
-  CONNECTOR    // Conectó personas
-  PIONEER      // Usuario temprano
-  TEACHER      // Enseñó habilidades
-  LEARNER      // Aprendió habilidades
-  SAVER        // Ahorró 100€+
+  // === AYUDA MUTUA === (Progresión: 10, 50, 100, 500, 1000)
+  HELPER_10           // Ayudó a 10 personas
+  HELPER_50           // Ayudó a 50 personas
+  HELPER_100          // Ayudó a 100 personas
+  HELPER_500          // Ayudó a 500 personas - "Ángel de la Comunidad"
+  HELPER_1000         // Ayudó a 1000 personas - "Santo Patrono"
+
+  // === TIEMPO COMPARTIDO === (horas: 10, 50, 100, 500, 1000)
+  TIME_GIVER_10       // Compartió 10 horas
+  TIME_GIVER_50       // Compartió 50 horas
+  TIME_GIVER_100      // Compartió 100 horas
+  TIME_GIVER_500      // Compartió 500 horas - "Maestro del Tiempo"
+  TIME_GIVER_1000     // Compartió 1000 horas - "Crononauta"
+
+  // === ORGANIZACIÓN DE EVENTOS ===
+  ORGANIZER_FIRST     // Organizó su primer evento
+  ORGANIZER_5         // Organizó 5 eventos
+  ORGANIZER_20        // Organizó 20 eventos
+  ORGANIZER_50        // Organizó 50 eventos - "Maestro de Ceremonias"
+
+  // === ECO-SOSTENIBILIDAD ===
+  ECO_STARTER         // Ahorró 10kg CO2
+  ECO_WARRIOR         // Ahorró 100kg CO2
+  ECO_CHAMPION        // Ahorró 500kg CO2
+  ECO_LEGEND          // Ahorró 1 tonelada CO2 - "Guardián del Planeta"
+
+  // === CONEXIONES SOCIALES ===
+  CONNECTOR_10        // Conectó a 10 personas
+  CONNECTOR_50        // Conectó a 50 personas
+  CONNECTOR_100       // Conectó a 100 personas - "Tejedor Social"
+
+  // === APRENDIZAJE ===
+  LEARNER_FIRST       // Aprendió su primera habilidad
+  LEARNER_5           // Aprendió 5 habilidades
+  LEARNER_20          // Aprendió 20 habilidades - "Polímata"
+
+  // === ENSEÑANZA ===
+  TEACHER_FIRST       // Enseñó su primera habilidad
+  TEACHER_10          // Enseñó a 10 personas
+  TEACHER_50          // Enseñó a 50 personas - "Mentor"
+  TEACHER_100         // Enseñó a 100 personas - "Gurú"
+
+  // === AHORRO ECONÓMICO ===
+  SAVER_100           // Ahorró 100€
+  SAVER_500           // Ahorró 500€
+  SAVER_1000          // Ahorró 1000€
+  SAVER_5000          // Ahorró 5000€ - "Maestro del Ahorro"
+
+  // === PARTICIPACIÓN COMUNITARIA ===
+  PIONEER             // Usuario de los primeros 100
+  VETERAN             // Usuario activo 1 año
+  LEGEND              // Usuario activo 3 años
+
+  // === GOBERNANZA ===
+  VOTER_FIRST         // Participó en su primera votación
+  VOTER_10            // Participó en 10 votaciones
+  VOTER_50            // Participó en 50 votaciones - "Demócrata Activo"
+  PROPOSER_FIRST      // Creó su primera propuesta
+  PROPOSER_APPROVED   // Propuesta aprobada por la comunidad
+
+  // === MODERACIÓN ===
+  MODERATOR_FAIR      // 100 moderaciones justas
+  MODERATOR_TRUSTED   // 500 moderaciones justas - "Guardián de la Paz"
+
+  // === SOCIAL MEDIA ===
+  INFLUENCER_100      // 100 reacciones en posts
+  INFLUENCER_1000     // 1000 reacciones en posts - "Voz de la Comunidad"
+  STORYTELLER         // 50 posts creados
+
+  // === ECONOMÍA DE REGALO ===
+  GIFT_GIVER_FIRST    // Primera contribución en capa GIFT
+  GIFT_GIVER_100      // 100 contribuciones en capa GIFT
+  GIFT_RECEIVER       // Recibió regalo en capa GIFT
+  ABUNDANCE_SHARER    // Compartió abundancia 20 veces
+
+  // === VIVIENDA COMUNITARIA ===
+  HOST_FIRST          // Ofreció alojamiento por primera vez
+  HOST_10             // Alojó a 10 personas
+  HOST_50             // Alojó a 50 personas - "Hogar de Todos"
+  TRAVELER            // Usó alojamiento comunitario 10 veces
+
+  // === COMPRAS GRUPALES ===
+  GROUPBUY_FIRST      // Participó en primera compra grupal
+  GROUPBUY_ORGANIZER  // Organizó compra grupal
+  GROUPBUY_VETERAN    // 20 compras grupales
+
+  // === CHALLENGES Y GAMIFICACIÓN ===
+  CHALLENGER          // Completó 10 challenges
+  CHALLENGER_MASTER   // Completó 100 challenges
+  STREAK_7            // Racha de 7 días
+  STREAK_30           // Racha de 30 días
+  STREAK_100          // Racha de 100 días - "Imparable"
+  EARLY_BIRD          // Activo antes de las 7am 10 veces
+  NIGHT_OWL           // Activo después de las 11pm 10 veces
+
+  // === REFERIDOS ===
+  REFERRER_FIRST      // Refirió a su primer amigo
+  REFERRER_10         // Refirió a 10 amigos
+  REFERRER_50         // Refirió a 50 amigos - "Embajador"
+
+  // === ESPECIALES / SECRETOS ===
+  UNICORN             // Badge secreto - descubre cómo desbloquearlo
+  PHILOSOPHER         // Completó perfil filosófico
+  RAINBOW             // Usó todas las capas económicas
+  SHAPESHIFTER        // Migró entre capas 10 veces
+  CONSENSUS_PIONEER   // Participó en primer consenso
+  BLOCKCHAIN_BRIDGE   // Usó bridge Polygon/Solana
+
+  // === NIVELES MAESTROS ===
+  LEVEL_10            // Alcanzó nivel 10
+  LEVEL_25            // Alcanzó nivel 25
+  LEVEL_50            // Alcanzó nivel 50 - "Maestro"
+  LEVEL_100           // Alcanzó nivel 100 - "Gran Maestro"
 }
 
 // ============= OFFERS & MARKETPLACE =============
@@ -449,6 +654,7 @@ model GroupBuy {
   offer           Offer    @relation(fields: [offerId], references: [id])
   priceBreaks     PriceBreak[]
   participants    GroupBuyParticipant[]
+  orders          GroupBuyOrder[]
 
   @@index([deadline])
   @@index([status])
@@ -486,6 +692,38 @@ model GroupBuyParticipant {
 
   @@unique([groupBuyId, userId])
   @@index([userId])
+}
+
+model GroupBuyOrder {
+  id              String             @id @default(uuid())
+  groupBuyId      String
+  userId          String
+  quantity        Int
+  pricePerUnit    Float
+  totalAmount     Float
+  status          GroupBuyOrderStatus @default(PENDING)
+
+  // Delivery information
+  pickupScheduled DateTime?
+  pickedUpAt      DateTime?
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  groupBuy        GroupBuy    @relation(fields: [groupBuyId], references: [id])
+  user            User        @relation(fields: [userId], references: [id])
+
+  @@unique([groupBuyId, userId])
+  @@index([userId])
+  @@index([status])
+}
+
+enum GroupBuyOrderStatus {
+  PENDING
+  CONFIRMED
+  READY_FOR_PICKUP
+  PICKED_UP
+  CANCELLED
 }
 
 // ============= TIME BANK =============
@@ -702,6 +940,7 @@ model Event {
   tags        String[]
   type        EventType
   requirements String[]
+  status      EventStatus @default(ACTIVE)
 
   qrCode      String?  @unique
 
@@ -743,6 +982,12 @@ enum EventType {
   REPAIR_CAFE
   COMMUNITY_MEAL
   SKILLSHARE
+}
+
+enum EventStatus {
+  ACTIVE
+  CANCELLED
+  COMPLETED
 }
 
 enum AttendeeRole {
@@ -1290,10 +1535,12 @@ model Proposal {
 }
 
 enum ProposalType {
-  FEATURE          // New functionality
-  RULE_CHANGE      // Change in community rules
-  FUND_ALLOCATION  // Budget allocation
-  PARTNERSHIP      // Partnership with external entity
+  FEATURE             // New functionality
+  RULE_CHANGE         // Change in community rules
+  FUND_ALLOCATION     // Budget allocation
+  PARTNERSHIP         // Partnership with external entity
+  COMMUNITY_UPDATE    // Update community settings (name, type, visibility, etc)
+  COMMUNITY_DISSOLUTION // Dissolve a community with members
 }
 
 enum ProposalStatus {
@@ -1370,6 +1617,9 @@ enum ContentType {
   COMMENT
   MESSAGE
   REVIEW
+  COMMUNITY
+  EVENT
+  TIMEBANK
 }
 
 enum DAOStatus {
@@ -2051,4 +2301,1363 @@ model CommunityLayerConfig {
   updatedAt         DateTime      @updatedAt
 
   @@index([communityId])
+}
+
+// ============= HOUSING & COLLABORATIVE SPACES =============
+
+// Banco de Espacios: Compartir espacios físicos por tiempo
+model SpaceBank {
+  id            String    @id @default(uuid())
+  ownerId       String
+  communityId   String?
+
+  // Space Details
+  type          SpaceType
+  title         String
+  description   String
+  images        String[]
+
+  // Location
+  address       String?
+  lat           Float?
+  lng           Float?
+  accessInstructions String?
+
+  // Capacity & Features
+  capacity      Int?      // personas/items que caben
+  squareMeters  Float?
+  features      String[]  // ["wifi", "luz natural", "calefacción", etc]
+  equipment     String[]  // herramientas/equipamiento disponible
+
+  // Availability
+  availableDays String[]  // ["monday", "tuesday", etc]
+  availableHours Json     // {start: "09:00", end: "18:00"}
+  minBookingHours Float   @default(1)
+  maxBookingHours Float?
+
+  // Exchange (3 capas económicas)
+  exchangeType  ExchangeType
+  pricePerHour  Float?    // EUR
+  creditsPerHour Int?     // Credits
+  hoursPerHour  Float?    // Time credits (1:1 normalmente)
+  isFree        Boolean   @default(false) // Gift economy
+
+  // Requirements
+  minReputation Int       @default(0)
+  requiresApproval Boolean @default(false)
+
+  // Rules
+  rules         String[]
+
+  status        SpaceStatus @default(ACTIVE)
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  owner         User      @relation("SpaceOwner", fields: [ownerId], references: [id])
+  community     Community? @relation(fields: [communityId], references: [id])
+  bookings      SpaceBooking[]
+
+  @@index([ownerId])
+  @@index([communityId])
+  @@index([type])
+  @@index([status])
+  @@index([lat, lng])
+}
+
+model SpaceBooking {
+  id          String    @id @default(uuid())
+  spaceId     String
+  bookerId    String
+
+  startTime   DateTime
+  endTime     DateTime
+  hours       Float
+
+  // Payment
+  paidEur     Float?
+  paidCredits Int?
+  paidHours   Float?
+
+  status      BookingStatus @default(PENDING)
+
+  // Validation (Proof of Help)
+  validated   Boolean   @default(false)
+  witnessIds  String[]
+  validatedAt DateTime?
+
+  // Review
+  rating      Int?      // 1-5
+  review      String?
+
+  canceledAt  DateTime?
+  cancelReason String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  space       SpaceBank @relation(fields: [spaceId], references: [id])
+  booker      User      @relation("SpaceBooker", fields: [bookerId], references: [id])
+
+  @@index([spaceId])
+  @@index([bookerId])
+  @@index([startTime])
+  @@index([status])
+}
+
+// Hospedaje Temporal: Vivienda de corta duración
+model TemporaryHousing {
+  id            String    @id @default(uuid())
+  hostId        String
+  communityId   String?
+
+  type          HousingType
+  title         String
+  description   String
+  images        String[]
+
+  // Location
+  address       String?
+  lat           Float?
+  lng           Float?
+  accessInstructions String?
+
+  // Space details
+  accommodationType AccommodationType // PRIVATE_ROOM, SHARED_ROOM, ENTIRE_PLACE
+  beds          Int       @default(1)
+  bathrooms     Float     @default(1)
+  squareMeters  Float?
+
+  // Amenities
+  amenities     String[]  // ["wifi", "kitchen", "washing_machine", etc]
+  houseRules    String[]
+
+  // Availability
+  availableFrom DateTime
+  availableTo   DateTime
+  minNights     Int       @default(1)
+  maxNights     Int?
+
+  // Exchange (3 capas económicas)
+  exchangeType  ExchangeType
+  pricePerNight Float?    // EUR
+  creditsPerNight Int?    // Credits
+  hoursPerNight Float?    // Time credits
+  isFree        Boolean   @default(false)
+
+  // Requirements
+  minReputation Int       @default(10)
+  requiresApproval Boolean @default(true)
+  maxGuests     Int       @default(1)
+
+  // Insurance/Safety
+  communityInsured Boolean @default(true) // cubierto por fondo DAO
+  emergencyContact String?
+
+  status        HousingStatus @default(ACTIVE)
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  host          User      @relation("HousingHost", fields: [hostId], references: [id])
+  community     Community? @relation(fields: [communityId], references: [id])
+  bookings      HousingBooking[]
+
+  @@index([hostId])
+  @@index([communityId])
+  @@index([type])
+  @@index([status])
+  @@index([availableFrom, availableTo])
+  @@index([lat, lng])
+}
+
+model HousingBooking {
+  id          String    @id @default(uuid())
+  housingId   String
+  guestId     String
+
+  checkIn     DateTime
+  checkOut    DateTime
+  nights      Int
+  guests      Int       @default(1)
+
+  // Payment
+  paidEur     Float?
+  paidCredits Int?
+  paidHours   Float?
+
+  status      BookingStatus @default(PENDING)
+
+  // Messages
+  guestMessage String?   // mensaje inicial del guest
+  hostResponse String?
+
+  // Validation
+  validated   Boolean   @default(false)
+  witnessIds  String[]
+  validatedAt DateTime?
+
+  // Reviews (bidirectional)
+  guestRating Int?
+  guestReview String?
+  hostRating  Int?
+  hostReview  String?
+
+  canceledAt  DateTime?
+  cancelReason String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  housing     TemporaryHousing @relation(fields: [housingId], references: [id])
+  guest       User      @relation("HousingGuest", fields: [guestId], references: [id])
+
+  @@index([housingId])
+  @@index([guestId])
+  @@index([checkIn])
+  @@index([status])
+}
+
+// Cooperativa de Vivienda: Modelo de co-housing a largo plazo
+model HousingCoop {
+  id            String    @id @default(uuid())
+  communityId   String?
+
+  name          String
+  description   String
+  vision        String    // Visión compartida de la cooperativa
+  images        String[]
+
+  type          CoopType
+
+  // Location (puede ser futura)
+  address       String?
+  lat           Float?
+  lng           Float?
+  locationConfirmed Boolean @default(false)
+
+  // Capacity
+  minMembers    Int       @default(5)
+  maxMembers    Int
+  currentMembers Int      @default(0)
+
+  // Financial
+  totalBudget   Float?    // Presupuesto total estimado
+  currentFunds  Float     @default(0)
+  monthlyContribution Float? // Contribución mensual por miembro
+
+  // Governance
+  governance    GovernanceType
+  decisionThreshold Float  @default(0.66) // % necesario para decisiones importantes
+
+  // Shared spaces
+  sharedSpaces  String[]  // ["cocina", "salón", "jardín", "taller"]
+  privateSpaces String[]  // ["habitaciones", "baños privados"]
+
+  // Rules
+  communityRules String[]
+  entryCriteria  Json     // Criterios de entrada
+
+  // Timeline
+  phase         CoopPhase @default(FORMING)
+  targetMoveIn  DateTime?
+
+  status        CoopStatus @default(OPEN)
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  community     Community? @relation(fields: [communityId], references: [id])
+  members       HousingCoopMember[]
+  proposals     HousingCoopProposal[]
+
+  @@index([communityId])
+  @@index([status])
+  @@index([phase])
+  @@index([currentMembers, maxMembers])
+}
+
+model HousingCoopMember {
+  id          String    @id @default(uuid())
+  coopId      String
+  userId      String
+
+  role        CoopMemberRole @default(MEMBER)
+  status      MemberStatus @default(PENDING)
+
+  // Financial contribution
+  monthlyContribution Float?
+  contributionType ExchangeType @default(EUR)
+  totalContributed Float   @default(0)
+
+  // Commitment
+  commitmentLevel String?  // "full-time", "part-time", "visiting"
+  skills          String[] // Habilidades que aporta
+  availability    String?
+
+  // Application
+  applicationMessage String?
+  approvedBy      String[]  // UserIds que aprobaron
+  approvalVotes   Int      @default(0)
+  rejectionVotes  Int      @default(0)
+
+  joinedAt    DateTime?
+  leftAt      DateTime?
+  leaveReason String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  coop        HousingCoop @relation(fields: [coopId], references: [id])
+  member      User      @relation("CoopMember", fields: [userId], references: [id])
+
+  @@unique([coopId, userId])
+  @@index([coopId])
+  @@index([userId])
+  @@index([status])
+}
+
+model HousingCoopProposal {
+  id          String    @id @default(uuid())
+  coopId      String
+  creatorId   String
+
+  type        CoopProposalType
+  title       String
+  description String
+
+  // Proposal details
+  budget      Float?
+  timeline    String?
+  implementation String?
+
+  // For member applications
+  applicantId String?
+
+  // Voting (Quadratic)
+  status      ProposalStatus @default(DISCUSSION)
+  votingStartsAt DateTime?
+  votingEndsAt   DateTime?
+
+  requiredVotes Int        // Votos necesarios para aprobar
+  currentVotes  Int        @default(0)
+
+  approvedAt  DateTime?
+  rejectedAt  DateTime?
+  implementedAt DateTime?
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  coop        HousingCoop @relation(fields: [coopId], references: [id])
+  creator     User      @relation("ProposalCreator", fields: [creatorId], references: [id])
+  votes       HousingCoopVote[]
+
+  @@index([coopId])
+  @@index([creatorId])
+  @@index([status])
+  @@index([type])
+}
+
+model HousingCoopVote {
+  id          String    @id @default(uuid())
+  proposalId  String
+  voterId     String
+
+  points      Int       // Quadratic voting
+  decision    VoteDecision
+  reason      String?
+
+  createdAt   DateTime  @default(now())
+
+  proposal    HousingCoopProposal @relation(fields: [proposalId], references: [id])
+  voter       User      @relation("CoopVoter", fields: [voterId], references: [id])
+
+  @@unique([proposalId, voterId])
+  @@index([proposalId])
+  @@index([voterId])
+}
+
+// Garantía Comunitaria: Aval para acceder a vivienda tradicional
+model CommunityGuarantee {
+  id            String    @id @default(uuid())
+  userId        String    // Persona avalada
+  communityId   String?
+
+  // Landlord/Property info
+  landlordName  String?
+  landlordEmail String?
+  landlordPhone String?
+  propertyAddress String
+  monthlyRent   Float
+
+  // Guarantee details
+  coverageMonths Int      @default(3) // Cuántos meses cubre
+  maxCoverage   Float     // Monto máximo que cubre
+
+  // Requirements met
+  reputation    Int       // Reputación al momento de solicitar
+  guarantors    GuaranteeSupporter[]
+
+  status        GuaranteeStatus @default(PENDING)
+
+  // DAO fund
+  fundAllocated Float?
+  fundUsed      Float     @default(0)
+
+  // Activation
+  activatedAt   DateTime?
+  expiresAt     DateTime?
+
+  // Claims
+  claimsCount   Int       @default(0)
+  lastClaimAt   DateTime?
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user          User      @relation("GuaranteedPerson", fields: [userId], references: [id])
+  community     Community? @relation(fields: [communityId], references: [id])
+
+  @@index([userId])
+  @@index([communityId])
+  @@index([status])
+}
+
+model GuaranteeSupporter {
+  id          String    @id @default(uuid())
+  guaranteeId String
+  supporterId String
+
+  // Commitment
+  monthsCommitted Int    @default(1)
+  amountCommitted Float  // Cuánto está dispuesto a aportar
+
+  status      SupportStatus @default(ACTIVE)
+
+  // If claim is made
+  amountPaid  Float     @default(0)
+  paidAt      DateTime?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  guarantee   CommunityGuarantee @relation(fields: [guaranteeId], references: [id])
+  supporter   User      @relation("Guarantor", fields: [supporterId], references: [id])
+
+  @@unique([guaranteeId, supporterId])
+  @@index([guaranteeId])
+  @@index([supporterId])
+}
+
+// ============= ENUMS FOR HOUSING =============
+
+enum SpaceType {
+  ROOM          // Habitación
+  STORAGE       // Almacén/trastero
+  WORKSHOP      // Taller
+  GARDEN        // Jardín
+  PARKING       // Parking
+  STUDIO        // Estudio
+  KITCHEN       // Cocina compartida
+  OFFICE        // Oficina
+  VENUE         // Local para eventos
+  OTHER
+}
+
+enum HousingType {
+  EMERGENCY     // Emergencia/crisis
+  TRANSITION    // Transición temporal
+  EXCHANGE      // Intercambio entre comunidades
+  NOMAD         // Nómadas digitales
+  GUEST         // Invitados
+  OTHER
+}
+
+enum AccommodationType {
+  PRIVATE_ROOM
+  SHARED_ROOM
+  ENTIRE_PLACE
+  COUCH
+}
+
+enum ExchangeType {
+  EUR           // Dinero tradicional
+  CREDITS       // Créditos internos
+  TIME_HOURS    // Horas de banco de tiempo
+  MIXED         // Combinación
+  FREE          // Economía de regalo
+}
+
+enum SpaceStatus {
+  ACTIVE
+  PAUSED
+  INACTIVE
+}
+
+enum HousingStatus {
+  ACTIVE
+  BOOKED
+  PAUSED
+  INACTIVE
+}
+
+enum BookingStatus {
+  PENDING
+  APPROVED
+  CONFIRMED
+  CHECKED_IN
+  COMPLETED
+  CANCELED
+  REJECTED
+}
+
+enum CoopType {
+  RENT_COLLECTIVE      // Alquiler colectivo
+  BUY_COLLECTIVE       // Compra colectiva
+  COMMUNITY_LAND_TRUST // CLT
+  COHOUSING           // Co-vivienda nueva construcción
+  RETROFIT            // Rehabilitación colectiva
+}
+
+enum GovernanceType {
+  CONSENSUS            // Consenso total
+  QUADRATIC_VOTING     // Votación cuadrática
+  SIMPLE_MAJORITY      // Mayoría simple
+  SUPER_MAJORITY       // Super mayoría (66%)
+  ROTATING_ADMIN       // Administración rotativa
+}
+
+enum CoopPhase {
+  FORMING       // Formación inicial
+  FUNDING       // Búsqueda de fondos
+  PROPERTY_SEARCH // Búsqueda de propiedad
+  PURCHASING    // Proceso de compra
+  BUILDING      // Construcción/reforma
+  MOVE_IN       // Mudanza
+  ESTABLISHED   // Establecida
+}
+
+enum CoopStatus {
+  OPEN          // Abierta a nuevos miembros
+  CLOSED        // Cerrada
+  FULL          // Llena
+  ACTIVE        // Activa
+  ARCHIVED      // Archivada
+}
+
+enum CoopMemberRole {
+  FOUNDER
+  COORDINATOR
+  MEMBER
+  CANDIDATE
+}
+
+enum MemberStatus {
+  PENDING       // Solicitud pendiente
+  APPROVED      // Aprobado
+  ACTIVE        // Miembro activo
+  INACTIVE      // Inactivo temporal
+  LEFT          // Se fue
+  EXPELLED      // Expulsado
+}
+
+enum CoopProposalType {
+  MEMBER_APPLICATION  // Solicitud de nuevo miembro
+  BUDGET_ALLOCATION   // Asignación de presupuesto
+  PROPERTY_SELECTION  // Selección de propiedad
+  DESIGN_DECISION     // Decisión de diseño
+  RULE_CHANGE        // Cambio de reglas
+  MAJOR_EXPENSE      // Gasto mayor
+  CONFLICT_RESOLUTION // Resolución de conflicto
+  OTHER
+}
+
+enum GuaranteeStatus {
+  PENDING
+  ACTIVE
+  CLAIMED
+  EXPIRED
+  CANCELED
+}
+
+enum SupportStatus {
+  ACTIVE
+  FULFILLED
+  WITHDRAWN
+}
+
+enum VoteDecision {
+  APPROVE
+  REJECT
+  ABSTAIN
+}
+
+// ============================================
+// NEEDS & COMMUNITY PROJECTS
+// Sistema de Necesidades y Ayuda Mutua
+// ============================================
+
+model Need {
+  id              String       @id @default(uuid())
+
+  // Ownership - puede ser personal o comunitaria
+  creatorId       String?      // Usuario que crea la necesidad
+  communityId     String?      // o Comunidad que la crea
+
+  scope           NeedScope    // PERSONAL, COMMUNITY, INTERCOMMUNITY, GLOBAL
+  category        NeedCategory // URGENT, CHRONIC, PROJECT, EMERGENCY
+  type            NeedType     // FOOD, HOUSING, HEALTH, EDUCATION, etc.
+
+  title           String
+  description     String
+  images          String[]     @default([])
+
+  // Location
+  location        String?
+  latitude        Float?
+  longitude       Float?
+  country         String?      // Para proyectos globales (ej: "India", "Ghana")
+
+  // Resource requirements
+  resourceTypes   ResourceType[] // EUR, CREDITS, TIME_HOURS, SKILLS, MATERIALS
+  targetEur       Float?
+  targetCredits   Int?
+  targetHours     Float?
+  neededSkills    String[]     @default([])  // ["carpintería", "enfermería"]
+  neededMaterials Json?        // { "cemento": "100kg", "madera": "50m" }
+
+  // Progress tracking
+  currentEur      Float        @default(0)
+  currentCredits  Int          @default(0)
+  currentHours    Float        @default(0)
+  contributorsCount Int        @default(0)
+
+  // Timeline
+  urgencyLevel    Int          @default(1)   // 1-5 scale
+  deadline        DateTime?
+
+  status          NeedStatus   @default(OPEN)
+
+  // Proof of Need
+  verificationDocs String[]    @default([])  // Documentos de verificación
+  isVerified      Boolean      @default(false)
+  verifiedBy      String?
+  verifiedAt      DateTime?
+
+  // Matching with offers
+  relatedOffers   String[]     @default([])  // IDs de ofertas que podrían ayudar
+
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  closedAt        DateTime?
+
+  // Relations
+  creator         User?        @relation("NeedCreator", fields: [creatorId], references: [id])
+  community       Community?   @relation("CommunityNeeds", fields: [communityId], references: [id])
+  contributions   Contribution[]
+
+  @@index([scope])
+  @@index([category])
+  @@index([type])
+  @@index([status])
+  @@index([creatorId])
+  @@index([communityId])
+  @@index([latitude, longitude])
+  @@index([deadline])
+}
+
+model CommunityProject {
+  id              String          @id @default(uuid())
+
+  // Ownership
+  creatorId       String
+  communityId     String?         // Comunidad principal organizadora
+
+  // Project info
+  type            ProjectType
+  title           String
+  description     String
+  vision          String          // Visión de impacto a largo plazo
+  images          String[]        @default([])
+  videoUrl        String?
+
+  // Location - puede ser global
+  location        String
+  latitude        Float?
+  longitude       Float?
+  country         String          // ej: "Ghana", "India", "España"
+  region          String?         // ej: "Navarra", "Karnataka"
+
+  // Objectives
+  beneficiaries   Int?            // Número de personas beneficiadas
+  impactGoals     String[]        @default([])  // Objetivos de impacto
+
+  // Resources
+  targetEur       Float?
+  targetCredits   Int?
+  targetHours     Float?
+  targetSkills    String[]        @default([])
+  materialNeeds   Json?
+
+  currentEur      Float           @default(0)
+  currentCredits  Int             @default(0)
+  currentHours    Float           @default(0)
+
+  // Participation
+  participatingCommunities String[] @default([])  // IDs de comunidades participantes
+  contributorsCount        Int      @default(0)
+  volunteersNeeded         Int?
+  volunteersEnrolled       Int      @default(0)
+
+  // Timeline
+  startDate       DateTime?
+  endDate         DateTime?
+  estimatedMonths Int?
+
+  status          ProjectStatus   @default(FORMING)
+  completionRate  Float           @default(0.0)  // 0.0 - 1.0
+
+  // Transparency & Verification
+  isVerified      Boolean         @default(false)
+  verifiedBy      String?
+  organizationName String?        // ONG o grupo local responsable
+  contactEmail    String?
+  websiteUrl      String?
+
+  // Tags for discovery
+  tags            String[]        @default([])  // ["education", "water", "auzolan"]
+  sdgGoals        Int[]           @default([])  // ODS de la ONU [4, 6, 11]
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  completedAt     DateTime?
+
+  // Relations
+  creator         User            @relation("ProjectCreator", fields: [creatorId], references: [id])
+  community       Community?      @relation("CommunityProjects", fields: [communityId], references: [id])
+  phases          ProjectPhase[]
+  contributions   Contribution[]
+  updates         ProjectUpdate[]
+  impactReports   ImpactReport[]
+
+  @@index([type])
+  @@index([status])
+  @@index([country])
+  @@index([creatorId])
+  @@index([communityId])
+  @@index([tags])
+}
+
+model ProjectPhase {
+  id              String          @id @default(uuid())
+  projectId       String
+
+  name            String
+  description     String
+  order           Int             // 1, 2, 3...
+
+  targetEur       Float?
+  targetCredits   Int?
+  targetHours     Float?
+
+  currentEur      Float           @default(0)
+  currentCredits  Int             @default(0)
+  currentHours    Float           @default(0)
+
+  startDate       DateTime?
+  endDate         DateTime?
+
+  status          PhaseStatus     @default(PENDING)
+  completionRate  Float           @default(0.0)
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  completedAt     DateTime?
+
+  // Relations
+  project         CommunityProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([status])
+}
+
+model Contribution {
+  id              String          @id @default(uuid())
+
+  // Contributor - puede ser usuario o comunidad
+  userId          String?
+  communityId     String?
+
+  // Target - puede ser necesidad o proyecto
+  needId          String?
+  projectId       String?
+  phaseId         String?
+
+  // Contribution type
+  contributionType ContributionType
+
+  // Amounts
+  amountEur       Float?
+  amountCredits   Int?
+  amountHours     Float?
+  skillsOffered   String[]        @default([])
+  materialsOffered Json?
+  equipmentOffered String[]       @default([])
+
+  // Details
+  message         String?
+  isAnonymous     Boolean         @default(false)
+  isRecurring     Boolean         @default(false)
+  recurringMonths Int?
+
+  // Status
+  status          ContributionStatus @default(PENDING)
+
+  // Proof & Validation
+  proofDocuments  String[]        @default([])
+  validatedAt     DateTime?
+  validatedBy     String?
+
+  // Recognition
+  recognitionPost String?         // ID del post de agradecimiento
+  impactStory     String?
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  completedAt     DateTime?
+  refundedAt      DateTime?
+
+  // Relations
+  user            User?           @relation("Contributor", fields: [userId], references: [id])
+  community       Community?      @relation("CommunityContributions", fields: [communityId], references: [id])
+  need            Need?           @relation(fields: [needId], references: [id], onDelete: Cascade)
+  project         CommunityProject? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([communityId])
+  @@index([needId])
+  @@index([projectId])
+  @@index([status])
+  @@index([contributionType])
+}
+
+model ProjectUpdate {
+  id              String          @id @default(uuid())
+  projectId       String
+  authorId        String
+
+  title           String
+  content         String
+  images          String[]        @default([])
+  videoUrl        String?
+
+  // Metrics update
+  progressUpdate  Float?          // New completion percentage
+  fundsUsed       Float?
+  beneficiariesReached Int?
+
+  // Highlights
+  milestones      String[]        @default([])
+  challenges      String?
+  nextSteps       String?
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  // Relations
+  project         CommunityProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  author          User            @relation("UpdateAuthor", fields: [authorId], references: [id])
+
+  @@index([projectId])
+  @@index([authorId])
+  @@index([createdAt])
+}
+
+model ImpactReport {
+  id              String          @id @default(uuid())
+  projectId       String
+  authorId        String
+
+  title           String
+  summary         String
+
+  // Impact metrics
+  impactLevel     ImpactLevel
+  beneficiariesReached Int
+  jobsCreated     Int?
+  co2Avoided      Float?
+  waterLitersProvided Float?
+  peopleEducated  Int?
+  customMetrics   Json?           // Métricas específicas del proyecto
+
+  // Evidence
+  photos          String[]        @default([])
+  videos          String[]        @default([])
+  testimonials    Json[]          @default([])  // { name, quote, photo }
+  documents       String[]        @default([])
+
+  // Long-term tracking
+  sustainabilityPlan String?
+  futureGoals     String[]        @default([])
+
+  // Verification
+  isVerified      Boolean         @default(false)
+  verifiedBy      String?
+  verificationDocs String[]       @default([])
+
+  publishedAt     DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  // Relations
+  project         CommunityProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  author          User            @relation("ReportAuthor", fields: [authorId], references: [id])
+
+  @@index([projectId])
+  @@index([authorId])
+  @@index([impactLevel])
+  @@index([publishedAt])
+}
+
+// ============================================
+// ENUMS for Needs & Projects
+// ============================================
+
+enum NeedScope {
+  PERSONAL          // Necesidad individual
+  COMMUNITY         // Necesidad de una comunidad
+  INTERCOMMUNITY    // Entre comunidades cercanas
+  GLOBAL            // Proyectos globales
+}
+
+enum NeedCategory {
+  URGENT            // Urgente (< 1 semana)
+  CHRONIC           // Crónica (necesidad continua)
+  PROJECT           // Proyecto con timeline
+  EMERGENCY         // Emergencia (< 24h)
+}
+
+enum NeedType {
+  FOOD              // Alimentos
+  HOUSING           // Vivienda
+  HEALTH            // Salud
+  EDUCATION         // Educación
+  INFRASTRUCTURE    // Infraestructura
+  WATER             // Agua potable
+  ENERGY            // Energía
+  SANITATION        // Saneamiento
+  LIVELIHOOD        // Medios de vida
+  ENVIRONMENT       // Medio ambiente
+  CULTURE           // Cultura
+  TECHNOLOGY        // Tecnología
+  LEGAL             // Legal
+  OTHER
+}
+
+enum ResourceType {
+  EUR               // Dinero fiduciario
+  CREDITS           // Créditos de la plataforma
+  TIME_HOURS        // Horas del banco de tiempo
+  SKILLS            // Habilidades específicas
+  MATERIALS         // Materiales de construcción, etc.
+  EQUIPMENT         // Equipamiento
+  TRANSPORTATION    // Transporte
+  LAND              // Tierra/terreno
+}
+
+enum NeedStatus {
+  OPEN              // Abierta, recibiendo ayuda
+  PARTIALLY_FILLED  // Parcialmente cubierta
+  FILLED            // Completamente cubierta
+  CLOSED            // Cerrada (ya no necesita ayuda)
+  CANCELLED         // Cancelada
+}
+
+enum ProjectType {
+  INFRASTRUCTURE    // Escuela, centro comunitario, etc.
+  WATER_SANITATION  // Pozos, purificación de agua
+  EDUCATION         // Programas educativos
+  HEALTH            // Clínicas, salud comunitaria
+  ENVIRONMENT       // Reforestación, limpieza
+  AGRICULTURE       // Huertos comunitarios, cooperativas
+  ENERGY            // Paneles solares, energía renovable
+  HOUSING           // Vivienda colectiva
+  AUZOLAN           // Trabajo comunitario tradicional
+  CULTURAL          // Proyectos culturales
+  TECHNOLOGY        // Acceso a tecnología
+  EMERGENCY_RELIEF  // Ayuda en emergencias
+  OTHER
+}
+
+enum ProjectStatus {
+  FORMING           // En formación
+  FUNDING           // Buscando fondos
+  READY             // Listo para empezar
+  EXECUTING         // En ejecución
+  COMPLETED         // Completado
+  PAUSED            // Pausado temporalmente
+  CANCELLED         // Cancelado
+}
+
+enum PhaseStatus {
+  PENDING           // Pendiente
+  ACTIVE            // En curso
+  COMPLETED         // Completada
+  SKIPPED           // Saltada
+}
+
+enum ContributionType {
+  MONETARY          // Dinero (EUR/CREDITS)
+  TIME              // Tiempo
+  SKILLS            // Habilidades
+  MATERIALS         // Materiales
+  EQUIPMENT         // Equipamiento
+  MIXED             // Combinación
+}
+
+enum ContributionStatus {
+  PENDING           // Pendiente de validación
+  ACTIVE            // Activa (para contribuciones recurrentes)
+  COMPLETED         // Completada
+  REFUNDED          // Reembolsada
+  CANCELLED         // Cancelada
+}
+
+enum ImpactLevel {
+  LOW               // Impacto bajo (< 50 personas)
+  MEDIUM            // Impacto medio (50-500 personas)
+  HIGH              // Impacto alto (500-5000 personas)
+  TRANSFORMATIVE    // Transformador (> 5000 personas)
+}
+
+// ============= GAILU LABS FEDERATION =============
+
+// Nodos federados en el ecosistema Gailu Labs
+model FederatedNode {
+  id              String   @id @default(uuid())
+  nodeId          String   @unique  // Identificador único del nodo (ej: "spiral-bank")
+  name            String              // Nombre del nodo (ej: "Spiral Bank")
+  type            NodeType            // Tipo de nodo en el ecosistema
+  url             String              // URL base del nodo (ej: "https://spiral-bank.gailu.org")
+  publicKey       String              // Clave pública para verificación de firmas
+  description     String?
+  location        String?
+  status          NodeStatus @default(ACTIVE)
+
+  // Configuración de federación
+  protocolVersion String   @default("1.0")  // Versión del protocolo Gailu Share
+  capabilities    Json     @default("{}")   // Capacidades soportadas por el nodo
+
+  // Estadísticas
+  lastSyncAt      DateTime?
+  totalUsers      Int      @default(0)
+  trustScore      Float    @default(0.5)    // Puntuación de confianza (0-1)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  activities      FederatedActivity[]
+
+  @@index([nodeId])
+  @@index([status])
+}
+
+enum NodeType {
+  GENESIS           // Nodo génesis (como Comunidad Viva)
+  CURRENCY          // Banco/Moneda (Spiral Bank)
+  MARKETPLACE       // Mercado (Mercado Espiral)
+  GOVERNANCE        // Gobernanza (Democracia Universal)
+  CARE              // Red de Cuidados
+  EDUCATION         // Academia
+  COMMUNITY         // Comunidades locales
+  PROJECT           // Proyectos específicos
+}
+
+enum NodeStatus {
+  ACTIVE            // Activo y sincronizado
+  INACTIVE          // Inactivo temporalmente
+  SUSPENDED         // Suspendido por razones de seguridad
+  MAINTENANCE       // En mantenimiento
+}
+
+// Actividades federadas compartidas entre nodos (ActivityPub)
+model FederatedActivity {
+  id              String   @id @default(uuid())
+  activityId      String   @unique  // ID global de la actividad (URI)
+  type            ActivityType       // Tipo de actividad (Create, Announce, Like, etc.)
+
+  // Origen
+  publisherDID    String              // DID del usuario que publicó
+  publisherId     String?             // ID local del usuario (si es de este nodo)
+  publisher       User?    @relation("ActivityPublisher", fields: [publisherId], references: [id])
+  nodeId          String              // ID del nodo origen
+  node            FederatedNode @relation(fields: [nodeId], references: [id])
+
+  // Contenido
+  object          Json                // Objeto ActivityPub (Post, Offer, Event, etc.)
+  content         String?             // Texto del contenido
+  metadata        Json     @default("{}")
+
+  // Visibilidad y alcance
+  visibility      ActivityVisibility @default(PUBLIC)
+  targetNodes     String[]            // Nodos a los que se envía (vacío = todos)
+
+  // Estadísticas
+  likes           Int      @default(0)
+  shares          Int      @default(0)
+  comments        Int      @default(0)
+
+  publishedAt     DateTime @default(now())
+  receivedAt      DateTime @default(now())
+
+  @@index([publisherDID])
+  @@index([nodeId])
+  @@index([type])
+  @@index([publishedAt])
+}
+
+enum ActivityType {
+  CREATE            // Crear contenido (Post, Offer, Event)
+  ANNOUNCE          // Compartir/Anunciar
+  LIKE              // Me gusta
+  FOLLOW            // Seguir
+  ACCEPT            // Aceptar (seguimiento, propuesta)
+  REJECT            // Rechazar
+  UPDATE            // Actualizar
+  DELETE            // Eliminar
+  OFFER_SERVICE     // Ofrecer servicio/producto
+  REQUEST_HELP      // Solicitar ayuda
+  COMPLETE_EXCHANGE // Completar intercambio
+}
+
+enum ActivityVisibility {
+  PUBLIC            // Visible para todos los nodos
+  FEDERATED         // Visible para nodos federados específicos
+  COMMUNITY         // Visible solo para la comunidad local
+  PRIVATE           // Privado (solo destinatarios)
+}
+
+// Transacciones de tokens SEMILLA
+model SemillaTransaction {
+  id              String   @id @default(uuid())
+
+  // Partes de la transacción
+  fromDID         String              // DID del remitente
+  fromId          String?             // ID local del remitente (si es de este nodo)
+  from            User?    @relation("SemillaSender", fields: [fromId], references: [id])
+
+  toDID           String              // DID del destinatario
+  toId            String?             // ID local del destinatario (si es de este nodo)
+  to              User?    @relation("SemillaReceiver", fields: [toId], references: [id])
+
+  // Detalles de la transacción
+  amount          Float               // Cantidad de SEMILLA transferida
+  fee             Float    @default(0) // Tarifa del nodo (1%)
+  type            SemillaTransactionType
+  reason          String              // Motivo de la transferación
+  metadata        Json     @default("{}") // Datos adicionales (ej: ID de oferta, evento)
+
+  // Estado
+  status          SemillaTransactionStatus @default(PENDING)
+  errorMessage    String?
+
+  // Trazabilidad blockchain (opcional)
+  blockchainHash  String?  @unique   // Hash en blockchain si se registra
+  blockNumber     Int?
+
+  createdAt       DateTime @default(now())
+  completedAt     DateTime?
+
+  @@index([fromDID])
+  @@index([toDID])
+  @@index([fromId])
+  @@index([toId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+enum SemillaTransactionType {
+  TRANSFER          // Transferencia directa
+  REWARD            // Recompensa por Proof-of-Help
+  PURCHASE          // Compra de producto/servicio
+  DONATION          // Donación
+  POOL_CONTRIBUTION // Contribución a fondo común
+  POOL_DISTRIBUTION // Distribución desde fondo común
+  FEE               // Tarifa de transacción
+  INITIAL_GRANT     // Grant inicial de tokens
+  BRIDGE_LOCK       // Lock para bridge a red externa
+  BRIDGE_UNLOCK     // Unlock desde red externa
+}
+
+enum SemillaTransactionStatus {
+  PENDING           // Pendiente de confirmación
+  COMPLETED         // Completada
+  FAILED            // Fallida
+  CANCELLED         // Cancelada
+}
+
+// Bridge Transactions - Puentes entre Gailu Labs y otras blockchains
+model BridgeTransaction {
+  id              String   @id @default(uuid())
+
+  // Usuario
+  userId          String
+  user            User     @relation("BridgeUser", fields: [userId], references: [id])
+  userDID         String              // DID del usuario
+
+  // Detalles de la transacción
+  amount          Float               // Cantidad de SEMILLA
+  fee             Float               // Tarifa del bridge
+  direction       BridgeDirection     // LOCK o UNLOCK
+  targetChain     BridgeChain         // Red de destino/origen
+
+  // Direcciones externas
+  externalAddress String              // Dirección en la red externa
+  externalTxHash  String?             // Hash de la transacción externa
+
+  // Transacción interna relacionada
+  internalTxId    String?             // ID de SemillaTransaction
+
+  // Estado
+  status          BridgeStatus @default(PENDING)
+  error           String?
+
+  createdAt       DateTime @default(now())
+  completedAt     DateTime?
+
+  @@index([userId])
+  @@index([userDID])
+  @@index([targetChain])
+  @@index([status])
+  @@index([externalTxHash])
+  @@index([createdAt])
+}
+
+enum BridgeDirection {
+  LOCK              // Bloquear en interno, emitir en externo
+  UNLOCK            // Quemar en externo, liberar en interno
+}
+
+enum BridgeChain {
+  POLYGON           // Polygon (MATIC) - EVM
+  SOLANA            // Solana - Alta velocidad
+  ARBITRUM          // Arbitrum - Layer 2 de Ethereum
+  OPTIMISM          // Optimism - Layer 2 de Ethereum
+  BSC               // Binance Smart Chain
+  AVALANCHE         // Avalanche C-Chain
+}
+
+enum BridgeStatus {
+  PENDING           // Esperando confirmación
+  LOCKED            // SEMILLA bloqueada en interno
+  MINTED            // Wrapped SEMILLA emitida en externo
+  BURNED            // Wrapped SEMILLA quemada en externo
+  UNLOCKED          // SEMILLA liberada en interno
+  FAILED            // Transacción fallida
+}
+
+// Círculos de Conciencia - Espacios de transformación personal y colectiva
+model CirculoConciencia {
+  id              String   @id @default(uuid())
+  name            String              // Nombre del círculo
+  description     String              // Descripción y propósito
+  level           Int                 // Nivel de conciencia (1-7)
+  type            CirculoType         // Tipo de círculo
+
+  // Configuración
+  maxParticipants Int?                // Máximo de participantes (null = ilimitado)
+  isOpen          Boolean  @default(true) // Abierto a nuevos miembros
+  requiresInvite  Boolean  @default(false) // Requiere invitación
+
+  // Facilitación
+  facilitatorDID  String              // DID del facilitador principal
+  facilitatorIds  String[]            // IDs locales de facilitadores
+
+  // Encuentros
+  schedule        Json?               // Horario de encuentros (días, hora, frecuencia)
+  location        String?             // Ubicación (física o virtual)
+  language        String   @default("es")
+
+  // Contenido
+  practices       String[]            // Prácticas compartidas (meditación, diálogo, etc.)
+  resources       Json     @default("[]") // Recursos compartidos (links, docs)
+
+  // Estado
+  status          CirculoStatus @default(ACTIVE)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  participations  CirculoParticipacion[]
+
+  @@index([level])
+  @@index([type])
+  @@index([status])
+}
+
+enum CirculoType {
+  PERSONAL          // Desarrollo personal
+  RELACIONAL        // Relaciones conscientes
+  CULTURAL          // Transformación cultural
+  ECOLOGICO         // Conciencia ecológica
+  ESPIRITUAL        // Prácticas espirituales
+  ACTIVISMO         // Activismo consciente
+  MIXTO             // Combinación de varios
+}
+
+enum CirculoStatus {
+  FORMING           // En formación
+  ACTIVE            // Activo
+  PAUSED            // Pausado temporalmente
+  COMPLETED         // Completado (ciclo finalizado)
+  ARCHIVED          // Archivado
+}
+
+// Participación de usuarios en Círculos de Conciencia
+model CirculoParticipacion {
+  id              String   @id @default(uuid())
+
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+
+  circuloId       String
+  circulo         CirculoConciencia @relation(fields: [circuloId], references: [id])
+
+  // Estado de participación
+  role            ParticipacionRole @default(MEMBER)
+  status          ParticipacionStatus @default(ACTIVE)
+
+  // Compromiso
+  attendanceRate  Float    @default(0)     // Tasa de asistencia (0-1)
+  contributionLevel Int    @default(0)     // Nivel de contribución
+
+  // Crecimiento personal
+  consciousnessGrowth Float @default(0)    // Crecimiento en conciencia
+  reflections     Json     @default("[]")  // Reflexiones personales
+
+  joinedAt        DateTime @default(now())
+  lastAttendedAt  DateTime?
+  leftAt          DateTime?
+
+  @@unique([userId, circuloId])
+  @@index([userId])
+  @@index([circuloId])
+  @@index([status])
+}
+
+enum ParticipacionRole {
+  FACILITATOR       // Facilitador
+  CO_FACILITATOR    // Co-facilitador
+  MEMBER            // Miembro
+  OBSERVER          // Observador
+}
+
+enum ParticipacionStatus {
+  INVITED           // Invitado
+  ACTIVE            // Activo
+  INACTIVE          // Inactivo temporalmente
+  LEFT              // Ha dejado el círculo
 }

@@ -12,10 +12,23 @@ export default function Navbar() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showPlatformMenu, setShowPlatformMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [userName, setUserName] = useState('Usuario');
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     setIsAuthenticated(!!token);
+
+    // Get user name from localStorage
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr);
+        setUserName(user.name || 'Usuario');
+      } catch (e) {
+        console.error('Error parsing user:', e);
+      }
+    }
   }, []);
 
   // Close mobile menu on route change
@@ -37,6 +50,9 @@ export default function Navbar() {
       const target = event.target as HTMLElement;
       if (!target.closest('.dropdown-menu')) {
         setShowPlatformMenu(false);
+      }
+      if (!target.closest('.user-dropdown')) {
+        setShowUserMenu(false);
       }
     };
 
@@ -98,29 +114,28 @@ export default function Navbar() {
               🏘️ Comunidades
             </Link>
 
-            <Link href="/features" className="text-gray-700 hover:text-blue-600">
-              ✨ Funcionalidades
+            <Link href="/docs" className="text-gray-700 hover:text-blue-600 font-medium">
+              📚 Documentación
             </Link>
 
-            {isAuthenticated && (
-              <div className="relative dropdown-menu">
-                <button
-                  onClick={() => setShowPlatformMenu(!showPlatformMenu)}
-                  className="flex items-center gap-1 text-gray-700 hover:text-blue-600 font-medium"
+            <div className="relative dropdown-menu">
+              <button
+                onClick={() => setShowPlatformMenu(!showPlatformMenu)}
+                className="flex items-center gap-1 text-gray-700 hover:text-blue-600 font-medium"
+              >
+                🚀 Plataforma
+                <svg
+                  className={`w-4 h-4 transition-transform ${showPlatformMenu ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  🚀 Plataforma
-                  <svg
-                    className={`w-4 h-4 transition-transform ${showPlatformMenu ? 'rotate-180' : ''}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
 
-                {showPlatformMenu && (
-                  <div className="absolute top-full right-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-xl py-3 z-50 dropdown-menu">
+              {showPlatformMenu && (
+                <div className="absolute top-full right-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-xl py-3 dropdown-menu" style={{ zIndex: 500 }}>
                     {/* Gamification Section */}
                     <div className="px-4 py-2">
                       <div className="text-xs font-bold text-purple-600 mb-2">🎮 GAMIFICACIÓN</div>
@@ -187,6 +202,13 @@ export default function Navbar() {
                       >
                         📊 Dashboard Económico
                       </Link>
+                      <Link
+                        href="/bridge"
+                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        🌉 Blockchain Bridges
+                      </Link>
                     </div>
 
                     <div className="border-t border-gray-200 my-2"></div>
@@ -212,34 +234,100 @@ export default function Navbar() {
 
                     <div className="border-t border-gray-200 my-2"></div>
 
-                    {/* View All */}
-                    <Link
-                      href="/features"
-                      className="block px-4 py-2 text-sm text-center text-blue-600 hover:bg-blue-50 font-semibold rounded"
-                      onClick={() => setShowPlatformMenu(false)}
-                    >
-                      ✨ Ver todas las funcionalidades →
-                    </Link>
+                    {/* Housing & Mutual Aid Section */}
+                    <div className="px-4 py-2">
+                      <div className="text-xs font-bold text-green-600 mb-2">🏠 VIVIENDA Y AYUDA</div>
+                      <Link
+                        href="/housing"
+                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 rounded"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        🏡 Vivienda Comunitaria
+                      </Link>
+                      <Link
+                        href="/mutual-aid"
+                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 rounded"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        🤝 Ayuda Mutua
+                      </Link>
+                    </div>
+
+                    <div className="border-t border-gray-200 my-2"></div>
+
+                    {/* Docs & Features */}
+                    <div className="px-4 py-2">
+                      <Link
+                        href="/features"
+                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded font-medium"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        ✨ Todas las funcionalidades
+                      </Link>
+                      <Link
+                        href="/docs"
+                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        📚 Documentación
+                      </Link>
+                    </div>
                   </div>
                 )}
               </div>
-            )}
 
             {isAuthenticated && (
-              <>
-                <Link href="/manage" className="text-gray-700 hover:text-blue-600">
-                  {t('manage')}
-                </Link>
-                <Link href="/profile" className="text-gray-700 hover:text-blue-600">
-                  {t('profile')}
-                </Link>
+              <div className="relative user-dropdown">
                 <button
-                  onClick={handleLogout}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                 >
-                  {t('logout')}
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                    {userName.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="text-gray-700 font-medium hidden lg:block">{userName}</span>
+                  <svg
+                    className={`w-4 h-4 text-gray-600 transition-transform ${showUserMenu ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
                 </button>
-              </>
+
+                {showUserMenu && (
+                  <div className="absolute top-full right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl py-2 z-50 user-dropdown">
+                    <Link
+                      href="/profile"
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                      onClick={() => setShowUserMenu(false)}
+                    >
+                      <span className="text-xl">👤</span>
+                      <span className="font-medium">Mi Perfil</span>
+                    </Link>
+                    <Link
+                      href="/manage"
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                      onClick={() => setShowUserMenu(false)}
+                    >
+                      <span className="text-xl">📝</span>
+                      <span className="font-medium">Gestionar Contenido</span>
+                    </Link>
+                    <div className="border-t border-gray-200 my-2"></div>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setShowUserMenu(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                      <span className="text-xl">🚪</span>
+                      <span className="font-medium">{t('logout')}</span>
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
 
             {!isAuthenticated && (
@@ -295,6 +383,13 @@ export default function Navbar() {
                 onClick={() => setShowMobileMenu(false)}
               >
                 🏘️ Comunidades
+              </Link>
+              <Link
+                href="/docs"
+                className="px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg font-medium"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                📚 Documentación
               </Link>
               {isAuthenticated && (
                 <>
@@ -364,6 +459,13 @@ export default function Navbar() {
                     >
                       📊 Dashboard Económico
                     </Link>
+                    <Link
+                      href="/bridge"
+                      className="px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-lg block"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      🌉 Blockchain Bridges
+                    </Link>
                   </div>
 
                   <div className="border-t border-gray-200 pt-3 mt-2">
@@ -387,28 +489,64 @@ export default function Navbar() {
                   </div>
 
                   <div className="border-t border-gray-200 pt-3 mt-2">
+                    <div className="px-4 py-2 text-xs font-bold text-green-600">
+                      🏠 VIVIENDA Y AYUDA
+                    </div>
                     <Link
-                      href="/manage"
-                      className="px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg block flex items-center gap-2"
+                      href="/housing"
+                      className="px-4 py-2 text-sm text-gray-700 hover:bg-green-50 rounded-lg block"
                       onClick={() => setShowMobileMenu(false)}
                     >
-                      ⚙️ {t('manage')}
+                      🏡 Vivienda Comunitaria
                     </Link>
                     <Link
-                      href="/profile"
-                      className="px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg block"
+                      href="/mutual-aid"
+                      className="px-4 py-2 text-sm text-gray-700 hover:bg-yellow-50 rounded-lg block"
                       onClick={() => setShowMobileMenu(false)}
                     >
-                      {t('profile')}
+                      🤝 Ayuda Mutua
+                    </Link>
+                  </div>
+
+                  <div className="border-t border-gray-200 pt-3 mt-2">
+                    {/* User Section */}
+                    <div className="px-4 py-3 mb-2">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
+                          {userName.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <p className="font-semibold text-gray-900">{userName}</p>
+                          <p className="text-xs text-gray-500">Ver perfil</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Link
+                      href="/profile"
+                      className="px-4 py-2 text-gray-700 hover:bg-blue-50 rounded-lg block flex items-center gap-2"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <span className="text-xl">👤</span>
+                      <span>Mi Perfil</span>
+                    </Link>
+                    <Link
+                      href="/manage"
+                      className="px-4 py-2 text-gray-700 hover:bg-blue-50 rounded-lg block flex items-center gap-2"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <span className="text-xl">📝</span>
+                      <span>Gestionar Contenido</span>
                     </Link>
                     <button
                       onClick={() => {
                         handleLogout();
                         setShowMobileMenu(false);
                       }}
-                      className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg"
+                      className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg flex items-center gap-2 mt-2"
                     >
-                      {t('logout')}
+                      <span className="text-xl">🚪</span>
+                      <span>{t('logout')}</span>
                     </button>
                   </div>
                 </>

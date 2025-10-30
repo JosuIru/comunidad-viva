@@ -138,4 +138,32 @@ export class SocialController {
   async removeReaction(@Param('id') postId: string, @Request() req) {
     return this.socialService.removeReaction(postId, req.user.userId);
   }
+
+  @ApiOperation({ summary: 'Search posts by hashtag' })
+  @ApiParam({ name: 'tag', description: 'Hashtag to search (without #)' })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @Get('hashtags/:tag')
+  async getPostsByHashtag(
+    @Param('tag') tag: string,
+    @Query('limit') limit?: number,
+    @Request() req?: any
+  ) {
+    const userId = req?.user?.userId;
+    return this.socialService.getPostsByHashtag(tag, userId, limit);
+  }
+
+  @ApiOperation({ summary: 'Get trending hashtags' })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @Get('hashtags')
+  async getTrendingHashtags(@Query('limit') limit?: number) {
+    return this.socialService.getTrendingHashtags(limit);
+  }
+
+  @ApiOperation({ summary: 'Get posts where user is mentioned' })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get('mentions')
+  async getMentions(@Request() req, @Query('limit') limit?: number) {
+    return this.socialService.getMentions(req.user.userId, limit);
+  }
 }

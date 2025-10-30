@@ -100,7 +100,7 @@ export default function EventDetailPage() {
     }
 
     if (eventData.isAttending) {
-      toast.info('Ya estás registrado en este evento');
+      toast('Ya estás registrado en este evento', { icon: 'ℹ️' });
       return;
     }
 

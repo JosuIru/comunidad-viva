@@ -1,12 +1,16 @@
 import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { EmailService } from '../notifications/email.service';
 import { CreateGroupBuyDto } from './dto/create-groupbuy.dto';
 import { JoinGroupBuyDto } from './dto/join-groupbuy.dto';
 import { UpdateParticipationDto } from './dto/update-participation.dto';
 
 @Injectable()
 export class GroupBuysService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private emailService: EmailService,
+  ) {}
 
   /**
    * Create a new group buy
@@ -141,7 +145,7 @@ export class GroupBuysService {
         OFFSET ${offset}
       `;
     } else {
-      groupBuys = await this.prisma.groupBuy.findMany({
+      const findOptions: any = {
         where,
         include: {
           offer: {
@@ -164,8 +168,14 @@ export class GroupBuysService {
         },
         orderBy: { deadline: 'asc' },
         take: limit,
-        skip: offset,
-      });
+      };
+
+      // Only include skip if offset is defined and greater than 0
+      if (offset !== undefined && offset > 0) {
+        findOptions.skip = offset;
+      }
+
+      groupBuys = await this.prisma.groupBuy.findMany(findOptions);
     }
 
     // Calculate current pricing tier for each group buy
@@ -245,7 +255,16 @@ export class GroupBuysService {
 
     const groupBuy = await this.prisma.groupBuy.findUnique({
       where: { id: groupBuyId },
-      include: { participants: true },
+      include: {
+        participants: true,
+        offer: {
+          include: {
+            user: {
+              select: { id: true, name: true, email: true },
+            },
+          },
+        },
+      },
     });
 
     if (!groupBuy) {
@@ -278,7 +297,7 @@ export class GroupBuysService {
       },
       include: {
         user: {
-          select: { id: true, name: true, avatar: true },
+          select: { id: true, name: true, avatar: true, email: true },
         },
       },
     });
@@ -291,14 +310,46 @@ export class GroupBuysService {
       },
     });
 
+    // Send email to organizer about new participation
+    if (groupBuy.offer.user.email) {
+      await this.emailService.sendGroupBuyParticipation(
+        groupBuy.offer.user.email,
+        participant.user.name,
+        groupBuy.offer.title,
+        groupBuy.currentParticipants + 1,
+        groupBuy.minParticipants,
+      );
+    }
+
     // Check if minimum reached
     const updated = await this.prisma.groupBuy.findUnique({
       where: { id: groupBuyId },
+      include: {
+        participants: {
+          include: {
+            user: {
+              select: { id: true, name: true, email: true },
+            },
+          },
+        },
+      },
     });
 
     if (updated && updated.currentParticipants === updated.minParticipants) {
-      // Notify all participants that group buy is active
-      // TODO: Send notifications
+      // Notify all participants that minimum goal has been reached
+      const participantEmails = updated.participants
+        .map(p => p.user.email)
+        .filter((email): email is string => !!email);
+
+      for (const email of participantEmails) {
+        await this.emailService.sendGroupBuyParticipation(
+          email,
+          'La meta mínima',
+          groupBuy.offer.title,
+          updated.currentParticipants,
+          updated.minParticipants,
+        );
+      }
     }
 
     return participant;
@@ -395,7 +446,16 @@ export class GroupBuysService {
       where: { id: groupBuyId },
       include: {
         offer: true,
-        participants: true,
+        participants: {
+          include: {
+            user: {
+              select: { id: true, name: true, email: true },
+            },
+          },
+        },
+        priceBreaks: {
+          orderBy: { minQuantity: 'desc' },
+        },
       },
     });
 
@@ -424,10 +484,56 @@ export class GroupBuysService {
       data: { status: 'COMPLETED' },
     });
 
-    // TODO: Create orders for each participant
-    // TODO: Send notifications
+    // Calculate total quantity and final price
+    const totalQuantity = groupBuy.participants.reduce((sum, p) => sum + p.quantity, 0);
 
-    return { success: true, message: 'Group buy closed successfully' };
+    // Find applicable price break
+    const applicablePriceBreak = groupBuy.priceBreaks.find(
+      pb => totalQuantity >= pb.minQuantity
+    );
+
+    const finalPrice = applicablePriceBreak
+      ? applicablePriceBreak.pricePerUnit * totalQuantity
+      : (groupBuy.offer.priceEur || 0) * totalQuantity;
+
+    const originalPrice = (groupBuy.offer.priceEur || 0) * totalQuantity;
+    const savings = originalPrice - finalPrice;
+
+    // Create orders for each participant
+    const orderPromises = groupBuy.participants.map(async (participant) => {
+      const participantTotal = applicablePriceBreak
+        ? applicablePriceBreak.pricePerUnit * participant.quantity
+        : (groupBuy.offer.priceEur || 0) * participant.quantity;
+
+      return this.prisma.groupBuyOrder.create({
+        data: {
+          groupBuyId: groupBuy.id,
+          userId: participant.userId,
+          quantity: participant.quantity,
+          pricePerUnit: applicablePriceBreak?.pricePerUnit || groupBuy.offer.priceEur || 0,
+          totalAmount: participantTotal,
+          status: 'PENDING',
+        },
+      });
+    });
+
+    await Promise.all(orderPromises);
+
+    // Send notifications to all participants
+    const participantEmails = groupBuy.participants
+      .map(p => p.user.email)
+      .filter((email): email is string => !!email);
+
+    for (const email of participantEmails) {
+      await this.emailService.sendGroupBuyClosed(
+        email,
+        groupBuy.offer.title,
+        finalPrice,
+        savings,
+      );
+    }
+
+    return { success: true, message: 'Group buy closed successfully', ordersCreated: groupBuy.participants.length };
   }
 
   /**

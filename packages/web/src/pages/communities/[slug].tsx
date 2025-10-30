@@ -57,6 +57,90 @@ const visibilityLabels: Record<CommunityVisibility, string> = {
   FEDERATED: 'Federada',
 };
 
+interface Activity {
+  type: 'offer' | 'event' | 'proposal' | 'post';
+  id: string;
+  title: string | null;
+  description: string;
+  createdAt: string;
+  user: {
+    id: string;
+    name: string;
+    avatar?: string;
+  };
+}
+
+function CommunityActivity({ communityId }: { communityId: string }) {
+  const { data: activities, isLoading } = useQuery<Activity[]>({
+    queryKey: ['community-activity', communityId],
+    queryFn: async () => {
+      const response = await api.get(`/communities/${communityId}/activity?limit=10`);
+      return response.data;
+    },
+  });
+
+  const getActivityIcon = (type: Activity['type']) => {
+    switch (type) {
+      case 'offer': return '🛍️';
+      case 'event': return '📅';
+      case 'proposal': return '📜';
+      case 'post': return '📝';
+      default: return '📌';
+    }
+  };
+
+  const getActivityLink = (activity: Activity) => {
+    switch (activity.type) {
+      case 'offer': return `/offers/${activity.id}`;
+      case 'event': return `/events/${activity.id}`;
+      case 'proposal': return `/governance/proposals/${activity.id}`;
+      case 'post': return `/social/posts/${activity.id}`;
+      default: return '#';
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-lg p-6">
+      <h2 className="text-2xl font-bold text-gray-900 mb-4">Actividad reciente</h2>
+      {isLoading ? (
+        <div className="text-center py-8">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-600 border-t-transparent"></div>
+          <p className="mt-2 text-gray-600">Cargando actividad...</p>
+        </div>
+      ) : activities && activities.length > 0 ? (
+        <div className="space-y-4">
+          {activities.map((activity) => (
+            <Link
+              key={`${activity.type}-${activity.id}`}
+              href={getActivityLink(activity)}
+              className="block p-4 border border-gray-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition"
+            >
+              <div className="flex items-start gap-3">
+                <span className="text-2xl">{getActivityIcon(activity.type)}</span>
+                <div className="flex-1 min-w-0">
+                  {activity.title && (
+                    <h3 className="font-semibold text-gray-900 mb-1">{activity.title}</h3>
+                  )}
+                  <p className="text-sm text-gray-600 line-clamp-2">{activity.description}</p>
+                  <div className="flex items-center gap-2 mt-2 text-xs text-gray-500">
+                    <span>👤 {activity.user.name}</span>
+                    <span>•</span>
+                    <span>{new Date(activity.createdAt).toLocaleDateString()}</span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-8 text-gray-500">
+          <p>No hay actividad reciente en esta comunidad</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function CommunityDetailPage() {
   const router = useRouter();
   const { slug } = router.query;
@@ -319,12 +403,7 @@ export default function CommunityDetailPage() {
               )}
 
               {/* Recent Activity */}
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Actividad reciente</h2>
-                <div className="text-center py-8 text-gray-500">
-                  <p>🔄 Próximamente: Feed de actividad de la comunidad</p>
-                </div>
-              </div>
+              <CommunityActivity communityId={community.id} />
             </div>
 
             {/* Sidebar */}
@@ -367,6 +446,24 @@ export default function CommunityDetailPage() {
                     className="block w-full px-4 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors text-center font-medium"
                   >
                     📅 Ver eventos
+                  </Link>
+                  <Link
+                    href={`/mutual-aid/needs?communityId=${community.id}`}
+                    className="block w-full px-4 py-2 bg-yellow-50 text-yellow-700 rounded-lg hover:bg-yellow-100 transition-colors text-center font-medium"
+                  >
+                    🆘 Necesidades
+                  </Link>
+                  <Link
+                    href={`/mutual-aid/projects?communityId=${community.id}`}
+                    className="block w-full px-4 py-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition-colors text-center font-medium"
+                  >
+                    🤝 Proyectos
+                  </Link>
+                  <Link
+                    href={`/housing?communityId=${community.id}`}
+                    className="block w-full px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition-colors text-center font-medium"
+                  >
+                    🏡 Vivienda
                   </Link>
                   <Link
                     href={`/communities/${slug}/governance`}
@@ -444,6 +541,14 @@ export default function CommunityDetailPage() {
       )}
     </Layout>
   );
+}
+
+export async function getStaticPaths() {
+  // Return empty paths with fallback to generate pages on-demand
+  return {
+    paths: [],
+    fallback: 'blocking', // Generate pages on-demand with SSR
+  };
 }
 
 export { getI18nProps as getStaticProps };

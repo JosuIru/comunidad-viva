@@ -14,7 +14,6 @@ import { ProofOfHelpService } from './proof-of-help.service';
 
 @ApiTags('consensus')
 @Controller('consensus')
-@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class ConsensusController {
   constructor(private readonly pohService: ProofOfHelpService) {}
@@ -24,6 +23,7 @@ export class ConsensusController {
   // ============================================
 
   @Post('blocks')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Create a new trust block (Proof of Help)' })
   async createBlock(
     @Request() req,
@@ -42,6 +42,7 @@ export class ConsensusController {
   }
 
   @Post('blocks/:blockId/validate')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Validate a trust block (community consensus)' })
   async validateBlock(
     @Request() req,
@@ -60,16 +61,10 @@ export class ConsensusController {
   }
 
   @Get('blocks/pending')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get pending blocks for validation' })
   async getPendingBlocks(@Request() req) {
-    // Get blocks where user is a validator
-    const reputation = await this.pohService.calculateReputation(req.user.userId);
-
-    // Return blocks that need validation based on user's level
-    return {
-      reputation,
-      message: 'Blocks pendientes de validación',
-    };
+    return this.pohService.getPendingBlocks(req.user.userId);
   }
 
   // ============================================
@@ -77,15 +72,21 @@ export class ConsensusController {
   // ============================================
 
   @Post('proposals')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Create a Community Improvement Proposal (CIP)' })
   async createProposal(
     @Request() req,
     @Body() body: {
-      type: 'FEATURE' | 'RULE_CHANGE' | 'FUND_ALLOCATION' | 'PARTNERSHIP';
+      type: 'FEATURE' | 'RULE_CHANGE' | 'FUND_ALLOCATION' | 'PARTNERSHIP' | 'COMMUNITY_UPDATE' | 'COMMUNITY_DISSOLUTION';
       title: string;
       description: string;
       requiredBudget?: number;
       implementationPlan?: string;
+      communityId?: string;
+      updates?: any;
+      governanceUpdates?: any;
+      recipientId?: string;
+      amount?: number;
     },
   ) {
     return this.pohService.createProposal({
@@ -95,6 +96,7 @@ export class ConsensusController {
   }
 
   @Post('proposals/:proposalId/vote')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Vote on a proposal using quadratic voting' })
   async voteProposal(
     @Request() req,
@@ -112,23 +114,42 @@ export class ConsensusController {
   @ApiOperation({ summary: 'List all community proposals' })
   async listProposals(
     @Query('status') status?: string,
+    @Query('type') type?: string,
     @Query('limit') limit?: number,
   ) {
-    // Implementation for listing proposals
-    return {
-      proposals: [],
-      message: 'Lista de propuestas comunitarias',
-    };
+    return this.pohService.listProposals({
+      status,
+      type,
+      limit: limit ? parseInt(limit.toString()) : undefined,
+    });
   }
 
   @Get('proposals/:proposalId')
   @ApiOperation({ summary: 'Get proposal details' })
   async getProposal(@Param('proposalId') proposalId: string) {
-    // Implementation for getting proposal details
-    return {
+    return this.pohService.getProposalDetails(proposalId);
+  }
+
+  @Post('proposals/:proposalId/comments')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Create comment on proposal' })
+  async createProposalComment(
+    @Request() req,
+    @Param('proposalId') proposalId: string,
+    @Body() body: { content: string; parentId?: string },
+  ) {
+    return this.pohService.createProposalComment({
       proposalId,
-      message: 'Detalles de la propuesta',
-    };
+      authorId: req.user.userId,
+      content: body.content,
+      parentId: body.parentId,
+    });
+  }
+
+  @Get('proposals/:proposalId/comments')
+  @ApiOperation({ summary: 'Get proposal comments' })
+  async getProposalComments(@Param('proposalId') proposalId: string) {
+    return this.pohService.getProposalComments(proposalId);
   }
 
   // ============================================
@@ -136,12 +157,13 @@ export class ConsensusController {
   // ============================================
 
   @Post('moderation')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Report content for community moderation' })
   async reportContent(
     @Request() req,
     @Body() body: {
       contentId: string;
-      contentType: 'POST' | 'OFFER' | 'COMMENT' | 'MESSAGE' | 'REVIEW';
+      contentType: 'POST' | 'OFFER' | 'COMMENT' | 'MESSAGE' | 'REVIEW' | 'COMMUNITY' | 'EVENT' | 'TIMEBANK';
       reason: string;
     },
   ) {
@@ -154,6 +176,7 @@ export class ConsensusController {
   }
 
   @Post('moderation/:daoId/vote')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Vote on content moderation' })
   async voteModeration(
     @Request() req,
@@ -172,13 +195,20 @@ export class ConsensusController {
   }
 
   @Get('moderation/pending')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get pending moderation requests where user is jury' })
   async getPendingModerations(@Request() req) {
-    // Implementation for getting pending moderations
-    return {
-      pending: [],
-      message: 'Moderaciones pendientes donde eres jurado',
-    };
+    return this.pohService.getPendingModerations(req.user.userId);
+  }
+
+  // ============================================
+  // DASHBOARD & STATS
+  // ============================================
+
+  @Get('dashboard')
+  @ApiOperation({ summary: 'Get governance dashboard with statistics' })
+  async getDashboard() {
+    return this.pohService.getGovernanceDashboard();
   }
 
   // ============================================
@@ -186,6 +216,7 @@ export class ConsensusController {
   // ============================================
 
   @Get('reputation')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get user reputation score' })
   async getReputation(@Request() req) {
     const reputation = await this.pohService.calculateReputation(req.user.userId);

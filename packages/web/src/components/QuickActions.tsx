@@ -23,6 +23,30 @@ export default function QuickActions() {
         >
           Banco de Tiempo
         </Link>
+        <Link
+          href="/mutual-aid/needs/new"
+          className="block w-full py-3 px-4 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 text-center"
+        >
+          + Publicar Necesidad
+        </Link>
+        <Link
+          href="/mutual-aid/projects/new"
+          className="block w-full py-3 px-4 bg-orange-600 text-white rounded-lg hover:bg-orange-700 text-center"
+        >
+          + Crear Proyecto
+        </Link>
+        <Link
+          href="/housing"
+          className="block w-full py-3 px-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-center"
+        >
+          🏡 Vivienda Comunitaria
+        </Link>
+        <Link
+          href="/mutual-aid"
+          className="block w-full py-3 px-4 bg-pink-600 text-white rounded-lg hover:bg-pink-700 text-center"
+        >
+          🤝 Ver Ayuda Mutua
+        </Link>
       </div>
     </div>
   );

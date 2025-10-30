@@ -231,7 +231,7 @@ export default function SwipePage() {
                       </div>
 
                       {/* Interests */}
-                      {currentCard.interests.length > 0 && (
+                      {currentCard.interests && currentCard.interests.length > 0 && (
                         <div className="mb-6">
                           <h3 className="text-lg font-bold text-gray-900 mb-2">💫 Intereses</h3>
                           <div className="flex flex-wrap gap-2">
@@ -248,7 +248,7 @@ export default function SwipePage() {
                       )}
 
                       {/* Help Offered */}
-                      {currentCard.helpOffered.length > 0 && (
+                      {currentCard.helpOffered && currentCard.helpOffered.length > 0 && (
                         <div className="mb-6">
                           <h3 className="text-lg font-bold text-gray-900 mb-2">🤝 Puedo ayudar con</h3>
                           <div className="flex flex-wrap gap-2">
@@ -265,7 +265,7 @@ export default function SwipePage() {
                       )}
 
                       {/* Help Needed */}
-                      {currentCard.helpNeeded.length > 0 && (
+                      {currentCard.helpNeeded && currentCard.helpNeeded.length > 0 && (
                         <div className="mb-6">
                           <h3 className="text-lg font-bold text-gray-900 mb-2">🙏 Necesito ayuda con</h3>
                           <div className="flex flex-wrap gap-2">

@@ -45,6 +45,8 @@ Thumbs.db
 
 # Backups
 backups/*.sql
+backups/*.sql.gz
+backups/
 
 # SSL
 nginx/ssl/*.pem

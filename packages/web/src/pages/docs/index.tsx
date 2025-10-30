@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { getI18nProps } from '@/lib/i18n';
 import Layout from '@/components/Layout';
 
-type TabType = 'about' | 'features' | 'hybrid' | 'gamification' | 'governance' | 'guide' | 'tech' | 'deployment' | 'contribute';
+type TabType = 'about' | 'features' | 'hybrid' | 'gamification' | 'governance' | 'guide' | 'tech' | 'deployment' | 'contribute' | 'downloads';
 
 export default function DocsPage() {
   const [activeTab, setActiveTab] = useState<TabType>('about');
@@ -13,6 +13,7 @@ export default function DocsPage() {
     { id: 'hybrid' as TabType, label: 'Sistema Híbrido', icon: '🔄' },
     { id: 'gamification' as TabType, label: 'Gamificación', icon: '🎮' },
     { id: 'governance' as TabType, label: 'Gobernanza PoH', icon: '🏛️' },
+    { id: 'downloads' as TabType, label: 'Documentos', icon: '📥' },
     { id: 'guide' as TabType, label: 'Guía de Uso', icon: '📖' },
     { id: 'tech' as TabType, label: 'Tecnología', icon: '⚙️' },
     { id: 'deployment' as TabType, label: 'Deployment', icon: '🚀' },
@@ -1546,6 +1547,127 @@ export default function DocsPage() {
                   <p className="text-sm opacity-90">
                     También incluye opciones para deployment en Vercel, Railway, Render y DigitalOcean App Platform.
                   </p>
+                </section>
+              </div>
+            )}
+
+            {/* Downloads Section */}
+            {activeTab === 'downloads' && (
+              <div className="space-y-6">
+                <section className="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 rounded-2xl shadow-2xl p-8 text-white">
+                  <h2 className="text-3xl font-bold mb-2 flex items-center gap-3">
+                    <span className="text-4xl">🎯</span>
+                    Presentación Lista para Usar
+                  </h2>
+                  <p className="text-purple-100 mb-6 text-lg">
+                    Descarga directamente el PowerPoint o visualiza la presentación en tu navegador
+                  </p>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <a
+                      href="/docs/PRESENTATION.pptx"
+                      download
+                      className="group bg-white text-purple-700 px-8 py-6 rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-2xl block"
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="text-5xl">📊</div>
+                        <div className="text-sm bg-purple-100 px-3 py-1 rounded-full font-semibold">66 KB</div>
+                      </div>
+                      <h3 className="text-xl font-bold mb-2">Descargar PowerPoint</h3>
+                      <p className="text-purple-600 text-sm mb-3">PRESENTATION.pptx - Listo para editar</p>
+                      <div className="flex items-center gap-2 text-purple-700 group-hover:gap-3 transition-all">
+                        <span className="font-semibold">Descargar ahora</span>
+                        <span>→</span>
+                      </div>
+                    </a>
+
+                    <a
+                      href="/docs/PRESENTATION.html"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group bg-white text-blue-700 px-8 py-6 rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-2xl block"
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="text-5xl">🌐</div>
+                        <div className="text-sm bg-blue-100 px-3 py-1 rounded-full font-semibold">21 KB</div>
+                      </div>
+                      <h3 className="text-xl font-bold mb-2">Ver en Navegador</h3>
+                      <p className="text-blue-600 text-sm mb-3">PRESENTATION.html - Visualización web</p>
+                      <div className="flex items-center gap-2 text-blue-700 group-hover:gap-3 transition-all">
+                        <span className="font-semibold">Abrir presentación</span>
+                        <span>→</span>
+                      </div>
+                    </a>
+                  </div>
+
+                  <div className="mt-6 bg-white/10 backdrop-blur rounded-lg p-4">
+                    <p className="text-sm text-purple-100">
+                      <strong>💡 Nota:</strong> El archivo PowerPoint (.pptx) fue generado automáticamente con pandoc y está listo para editar en Microsoft PowerPoint, Google Slides, LibreOffice Impress o cualquier software compatible.
+                    </p>
+                  </div>
+                </section>
+
+                <section className="bg-white rounded-lg shadow-lg p-8">
+                  <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                    📚 Documentos Disponibles para Descargar
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {[
+                      {
+                        title: '📊 Presentación (PRESENTATION.md)',
+                        file: 'PRESENTATION.md',
+                        size: '13 KB',
+                        description: 'Presentación completa con 30+ diapositivas en formato Markdown.',
+                      },
+                      {
+                        title: '📄 Whitepaper Completo',
+                        file: 'WHITEPAPER.md',
+                        size: '36 KB',
+                        description: 'Documento técnico principal con todos los detalles del proyecto (~21,000 palabras).',
+                      },
+                      {
+                        title: '⚡ Resumen Ejecutivo',
+                        file: 'EXECUTIVE_SUMMARY.md',
+                        size: '12 KB',
+                        description: 'Versión condensada del whitepaper (2-3 páginas) ideal para presentaciones rápidas.',
+                      },
+                      {
+                        title: '🔧 Módulos Técnicos',
+                        file: 'TECHNICAL_MODULES.md',
+                        size: '21 KB',
+                        description: 'Documentación detallada de todos los módulos técnicos complementarios.',
+                      },
+                      {
+                        title: '🎁 Economía de Regalo y Gobernanza',
+                        file: 'GIFT_ECONOMY_GOVERNANCE.md',
+                        size: '20 KB',
+                        description: 'Sistema de economía de regalo y mecanismos de gobernanza avanzada.',
+                      },
+                      {
+                        title: '📖 Instrucciones de Conversión',
+                        file: 'PRESENTATION_INSTRUCTIONS.md',
+                        size: '7.2 KB',
+                        description: 'Guía completa para convertir la presentación a PowerPoint (.pptx) y PDF.',
+                      },
+                    ].map((doc, idx) => (
+                      <a
+                        key={idx}
+                        href={`/docs/${doc.file}`}
+                        download
+                        className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-xl transition-shadow"
+                      >
+                        <div className="flex items-start justify-between mb-3">
+                          <h3 className="text-lg font-bold text-gray-900 flex-1">{doc.title}</h3>
+                          <span className="ml-2 px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full">{doc.size}</span>
+                        </div>
+                        <p className="text-gray-600 text-sm mb-4">{doc.description}</p>
+                        <div className="text-purple-600 font-medium text-sm flex items-center gap-2">
+                          <span>Descargar</span>
+                          <span>→</span>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
                 </section>
               </div>
             )}

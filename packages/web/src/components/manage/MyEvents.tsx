@@ -57,7 +57,7 @@ export default function MyEvents() {
   };
 
   const getTypeIcon = (type: string) => {
-    const icons = {
+    const icons: { [key: string]: string } = {
       WORKSHOP: '🎓',
       SOCIAL: '🎉',
       SPORT: '⚽',

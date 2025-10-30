@@ -46,6 +46,7 @@ Registro de nuevo usuario.
 ```json
 {
   "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refresh_token": "550e8400-e29b-41d4-a716-446655440000",
   "user": {
     "id": "uuid",
     "email": "user@example.com",
@@ -53,6 +54,11 @@ Registro de nuevo usuario.
   }
 }
 ```
+
+**Notas:**
+- El `access_token` tiene una duración de 15 minutos
+- El `refresh_token` tiene una duración de 7 días y debe guardarse de forma segura
+- El `access_token` debe incluirse en el header `Authorization: Bearer {token}` para peticiones autenticadas
 
 ### POST /auth/login
 
@@ -65,6 +71,277 @@ Inicio de sesión.
   "password": "SecurePass123!"
 }
 ```
+
+**Response:**
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refresh_token": "550e8400-e29b-41d4-a716-446655440000",
+  "user": {
+    "id": "uuid",
+    "email": "user@example.com",
+    "name": "Juan Pérez"
+  }
+}
+```
+
+**Notas:**
+- El `access_token` tiene una duración de 15 minutos
+- El `refresh_token` tiene una duración de 7 días
+- Guarda el `refresh_token` de forma segura para renovar el `access_token`
+
+### POST /auth/refresh
+
+Renovar access token usando refresh token.
+
+**Body:**
+```json
+{
+  "refresh_token": "550e8400-e29b-41d4-a716-446655440000"
+}
+```
+
+**Response:**
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refresh_token": "660e8400-e29b-41d4-a716-446655440001",
+  "user": {
+    "id": "uuid",
+    "email": "user@example.com",
+    "name": "Juan Pérez"
+  }
+}
+```
+
+**Notas:**
+- Implementa token rotation: el refresh token anterior se revoca automáticamente
+- Debes guardar el nuevo `refresh_token` y descartar el anterior
+- Si el refresh token es inválido o expirado, el usuario debe hacer login nuevamente
+
+### POST /auth/logout
+
+Cerrar sesión revocando el refresh token.
+
+**Body:**
+```json
+{
+  "refresh_token": "550e8400-e29b-41d4-a716-446655440000"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+**Notas:**
+- El refresh token queda revocado y no puede ser usado nuevamente
+- El access token seguirá siendo válido hasta su expiración (max 15 minutos)
+- Para mejor seguridad, elimina también el access token del cliente
+
+---
+
+## Autenticación de Dos Factores (2FA)
+
+Sistema TOTP (Time-based One-Time Password) compatible con Google Authenticator, Authy, Microsoft Authenticator y otras apps.
+
+### POST /auth/2fa/setup
+
+Iniciar configuración de 2FA - Generar secreto y código QR.
+
+**Requiere:** JWT Auth
+
+**Response:**
+```json
+{
+  "secret": "JBSWY3DPEHPK3PXP",
+  "qrCodeUrl": "data:image/png;base64,iVBORw0KGgoAAAANS...",
+  "backupCodes": [
+    "A1B2C3D4",
+    "E5F6G7H8",
+    "I9J0K1L2",
+    "M3N4O5P6",
+    "Q7R8S9T0",
+    "U1V2W3X4",
+    "Y5Z6A7B8",
+    "C9D0E1F2"
+  ]
+}
+```
+
+**Flujo de configuración:**
+1. Usuario solicita setup (este endpoint)
+2. App muestra QR code al usuario
+3. Usuario escanea QR con Google Authenticator
+4. Usuario ingresa código de 6 dígitos generado
+5. App llama a `/auth/2fa/enable` con el código
+6. Usuario guarda los backup codes de forma segura
+
+### POST /auth/2fa/enable
+
+Activar 2FA después de verificar el código.
+
+**Requiere:** JWT Auth
+
+**Body:**
+```json
+{
+  "secret": "JBSWY3DPEHPK3PXP",
+  "token": "123456",
+  "backupCodes": ["A1B2C3D4", "E5F6G7H8", ...]
+}
+```
+
+**Response:**
+```json
+{
+  "message": "2FA enabled successfully"
+}
+```
+
+**Notas:**
+- El `token` es el código de 6 dígitos de la app de autenticación
+- El `secret` debe ser el mismo generado en `/auth/2fa/setup`
+- Los `backupCodes` se guardan hasheados en la base de datos
+- Una vez activado, el login requerirá el código 2FA
+
+### POST /auth/login (con 2FA)
+
+Login cuando 2FA está habilitado.
+
+**Flujo con 2FA:**
+
+**Paso 1: Login inicial**
+```json
+POST /auth/login
+{
+  "email": "user@example.com",
+  "password": "SecurePass123!"
+}
+```
+
+**Response (requiere 2FA):**
+```json
+{
+  "requires2FA": true,
+  "temporaryToken": "eyJhbGci..."
+}
+```
+
+**Paso 2: Completar login con código 2FA**
+```json
+POST /auth/login
+{
+  "email": "user@example.com",
+  "password": "SecurePass123!",
+  "twoFactorToken": "123456"
+}
+```
+
+**Response (login completo):**
+```json
+{
+  "access_token": "eyJhbGci...",
+  "refresh_token": "550e8400...",
+  "user": {...}
+}
+```
+
+**Notas:**
+- El `twoFactorToken` puede ser un código TOTP de 6 dígitos o un backup code
+- El `temporaryToken` tiene validez de 5 minutos
+- Si el código es inválido, retorna error 401
+
+### POST /auth/2fa/disable
+
+Desactivar 2FA.
+
+**Requiere:** JWT Auth
+
+**Body:**
+```json
+{
+  "token": "123456"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "2FA disabled successfully"
+}
+```
+
+**Notas:**
+- Requiere un código 2FA válido para desactivar
+- Elimina el secreto y todos los backup codes
+- El usuario puede volver a activar 2FA en cualquier momento
+
+### POST /auth/2fa/regenerate-backup-codes
+
+Regenerar códigos de respaldo.
+
+**Requiere:** JWT Auth
+
+**Body:**
+```json
+{
+  "token": "123456"
+}
+```
+
+**Response:**
+```json
+{
+  "backupCodes": [
+    "A1B2C3D4",
+    "E5F6G7H8",
+    "I9J0K1L2",
+    "M3N4O5P6",
+    "Q7R8S9T0",
+    "U1V2W3X4",
+    "Y5Z6A7B8",
+    "C9D0E1F2"
+  ]
+}
+```
+
+**Notas:**
+- Los códigos anteriores quedan invalidados
+- Guarda los nuevos códigos de forma segura
+- Úsalos solo si pierdes acceso a tu app de autenticación
+
+### GET /auth/2fa/status
+
+Verificar si 2FA está habilitado.
+
+**Requiere:** JWT Auth
+
+**Response:**
+```json
+{
+  "twoFactorEnabled": true
+}
+```
+
+### Backup Codes
+
+Los backup codes son códigos de un solo uso para acceder a tu cuenta si pierdes tu dispositivo de autenticación.
+
+**Características:**
+- 8 códigos generados inicialmente
+- Cada código se usa una sola vez
+- Formato: 8 caracteres alfanuméricos (ej: A1B2C3D4)
+- Se guardan hasheados en la base de datos
+- Se pueden regenerar con un código 2FA válido
+
+**Uso:**
+- En el login, ingresa un backup code en lugar del código TOTP
+- El código se invalida automáticamente después de usarse
+- Si se acaban los códigos, regenera nuevos desde la configuración
 
 ---
 
@@ -874,6 +1151,33 @@ Validar un bloque.
 }
 ```
 
+#### GET /consensus/blocks/pending
+
+Obtener bloques pendientes de validación para el usuario actual.
+
+**Response:**
+```json
+{
+  "reputation": 127,
+  "level": "EXPERIENCED",
+  "validatorLevel": 2,
+  "blocks": [
+    {
+      "id": "block-uuid",
+      "type": "HELP",
+      "status": "PENDING",
+      "canValidate": true,
+      "progress": {
+        "current": 2,
+        "required": 3,
+        "percentage": 66
+      }
+    }
+  ],
+  "totalPending": 5
+}
+```
+
 ### Propuestas (CIPs)
 
 #### POST /consensus/proposals
@@ -918,6 +1222,89 @@ Listar propuestas.
 - `status`: DISCUSSION | VOTING | APPROVED | REJECTED
 - `limit`: number
 
+#### GET /consensus/proposals/:proposalId
+
+Obtener detalles de una propuesta específica.
+
+**Response:**
+```json
+{
+  "id": "proposal-uuid",
+  "type": "FEATURE",
+  "title": "Mercadillo mensual",
+  "description": "Propongo organizar...",
+  "status": "VOTING",
+  "author": {
+    "id": "user-uuid",
+    "name": "María"
+  },
+  "votes": [
+    {
+      "userId": "user-uuid",
+      "userName": "Juan",
+      "points": 5,
+      "timestamp": "2025-10-10T10:00:00Z"
+    }
+  ],
+  "totalVotes": 127,
+  "createdAt": "2025-10-07T10:00:00Z"
+}
+```
+
+#### POST /consensus/proposals/:proposalId/comments
+
+Crear comentario en una propuesta.
+
+**Body:**
+```json
+{
+  "content": "Me parece una excelente idea",
+  "parentId": "comment-uuid"
+}
+```
+
+**Response:**
+```json
+{
+  "id": "comment-uuid",
+  "content": "Me parece una excelente idea",
+  "authorId": "user-uuid",
+  "createdAt": "2025-10-10T10:00:00Z"
+}
+```
+
+#### GET /consensus/proposals/:proposalId/comments
+
+Obtener comentarios de una propuesta (árbol de comentarios anidados).
+
+**Response:**
+```json
+[
+  {
+    "id": "comment-uuid",
+    "content": "Me parece una excelente idea",
+    "author": {
+      "id": "user-uuid",
+      "name": "María",
+      "avatar": "url"
+    },
+    "createdAt": "2025-10-10T10:00:00Z",
+    "replies": [
+      {
+        "id": "reply-uuid",
+        "content": "Totalmente de acuerdo",
+        "author": {
+          "id": "user2-uuid",
+          "name": "Juan"
+        },
+        "createdAt": "2025-10-10T11:00:00Z",
+        "replies": []
+      }
+    ]
+  }
+]
+```
+
 ### Moderación
 
 #### POST /consensus/moderation
@@ -956,6 +1343,74 @@ Votar en moderación.
 - `KEEP`: Mantener
 - `REMOVE`: Eliminar
 - `WARN`: Advertir
+
+#### GET /consensus/moderation/pending
+
+Obtener casos de moderación pendientes donde el usuario es parte del jurado.
+
+**Response:**
+```json
+[
+  {
+    "id": "dao-uuid",
+    "contentId": "content-uuid",
+    "contentType": "POST",
+    "reason": "Contenido inapropiado",
+    "reporterId": "user-uuid",
+    "status": "PENDING",
+    "createdAt": "2025-10-10T10:00:00Z",
+    "jury": ["user1-uuid", "user2-uuid", "user3-uuid"],
+    "votesCount": {
+      "KEEP": 0,
+      "REMOVE": 1,
+      "WARN": 0
+    }
+  }
+]
+```
+
+### Dashboard
+
+#### GET /consensus/dashboard
+
+Obtener estadísticas del sistema de gobernanza.
+
+**Response:**
+```json
+{
+  "overview": {
+    "totalBlocks": 1250,
+    "totalProposals": 45,
+    "activeProposals": 8,
+    "totalValidators": 127,
+    "totalModerationCases": 12,
+    "activeModerationCases": 3
+  },
+  "topValidators": [
+    {
+      "userId": "user-uuid",
+      "name": "María",
+      "validationCount": 89,
+      "reputation": 142,
+      "level": "EXPERT"
+    }
+  ],
+  "recentActivity": [
+    {
+      "id": "block-uuid",
+      "type": "PROPOSAL",
+      "actorName": "Juan",
+      "timestamp": "2025-10-10T10:00:00Z",
+      "status": "VALIDATED"
+    }
+  ],
+  "participationRate": {
+    "validationRate": 0.78,
+    "votingRate": 0.65,
+    "moderationRate": 0.82
+  }
+}
+```
 
 ### Reputación
 
@@ -1049,6 +1504,48 @@ Unirse a comunidad.
 ### POST /communities/:id/leave
 
 Salir de comunidad.
+
+### GET /communities/audit-log
+
+Obtener historial de auditoría de acciones en comunidades.
+
+**Query params:**
+- `userId`: uuid - Filtrar por usuario
+- `entity`: string - Filtrar por tipo de entidad (COMMUNITY, PROPOSAL, MODERATION, etc.)
+- `entityId`: uuid - Filtrar por ID específico de entidad
+- `action`: string - Filtrar por tipo de acción (CREATE, UPDATE, DELETE, VOTE, etc.)
+- `startDate`: ISO date - Fecha de inicio
+- `endDate`: ISO date - Fecha de fin
+- `skip`: number - Saltar N registros (paginación)
+- `take`: number - Tomar N registros (paginación)
+
+**Response:**
+```json
+{
+  "logs": [
+    {
+      "id": "log-uuid",
+      "userId": "user-uuid",
+      "entity": "PROPOSAL",
+      "entityId": "proposal-uuid",
+      "action": "VOTE",
+      "timestamp": "2025-10-10T10:00:00Z",
+      "metadata": {
+        "points": 5,
+        "proposalTitle": "Mercadillo mensual"
+      },
+      "user": {
+        "id": "user-uuid",
+        "name": "María",
+        "email": "maria@example.com"
+      }
+    }
+  ],
+  "total": 1250,
+  "skip": 0,
+  "take": 50
+}
+```
 
 ---
 

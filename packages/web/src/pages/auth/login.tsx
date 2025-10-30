@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
+import Web3WalletButton from '@/components/Web3WalletButton';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -93,6 +94,27 @@ export default function LoginPage() {
             </p>
           </div>
         </form>
+
+        {/* Divider */}
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-white text-gray-500">o continúa con</span>
+          </div>
+        </div>
+
+        {/* Web3 Wallet Login */}
+        <Web3WalletButton
+          mode="login"
+          onSuccess={(data) => {
+            toast.success('¡Autenticado exitosamente!');
+          }}
+          onError={(error) => {
+            toast.error(error);
+          }}
+        />
       </div>
     </div>
   );

@@ -30,6 +30,8 @@ export default function ProfileEditPage() {
   const [address, setAddress] = useState('');
   const [neighborhood, setNeighborhood] = useState('');
   const [interestsInput, setInterestsInput] = useState('');
+  const [avatar, setAvatar] = useState('');
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
   // Get current user from localStorage
   useEffect(() => {
@@ -61,6 +63,7 @@ export default function ProfileEditPage() {
       setAddress(profile.address || '');
       setNeighborhood(profile.neighborhood || '');
       setInterestsInput(profile.interests?.join(', ') || '');
+      setAvatar(profile.avatar || '');
     }
   }, [profile]);
 
@@ -87,6 +90,51 @@ export default function ProfileEditPage() {
     },
   });
 
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.match(/\/(jpg|jpeg|png|gif|webp)$/)) {
+      toast.error('Solo se permiten archivos de imagen (JPG, PNG, GIF, WebP)');
+      return;
+    }
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('El archivo no puede superar 5MB');
+      return;
+    }
+
+    setUploadingAvatar(true);
+
+    try {
+      const token = localStorage.getItem('token');
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/upload/image`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al subir la imagen');
+      }
+
+      const data = await response.json();
+      setAvatar(data.url);
+      toast.success('Imagen subida correctamente');
+    } catch (error: any) {
+      toast.error(error.message || 'Error al subir la imagen');
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -106,6 +154,7 @@ export default function ProfileEditPage() {
       address: address.trim() || undefined,
       neighborhood: neighborhood.trim() || undefined,
       interests: interests.length > 0 ? interests : undefined,
+      avatar: avatar || undefined,
     });
   };
 
@@ -269,21 +318,36 @@ export default function ProfileEditPage() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Avatar</label>
                 <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center">
-                    <span className="text-gray-400 text-2xl">
-                      {name.charAt(0).toUpperCase() || '?'}
-                    </span>
+                  <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                    {avatar ? (
+                      <img src={avatar} alt="Avatar" className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-gray-400 text-2xl">
+                        {name.charAt(0).toUpperCase() || '?'}
+                      </span>
+                    )}
                   </div>
                   <div className="flex-1">
-                    <button
-                      type="button"
-                      disabled
-                      className="px-4 py-2 bg-gray-200 text-gray-500 rounded-lg cursor-not-allowed"
+                    <input
+                      type="file"
+                      id="avatar-upload"
+                      accept="image/jpeg,image/png,image/gif,image/webp"
+                      onChange={handleAvatarChange}
+                      className="hidden"
+                      disabled={uploadingAvatar}
+                    />
+                    <label
+                      htmlFor="avatar-upload"
+                      className={`inline-block px-4 py-2 rounded-lg transition-colors ${
+                        uploadingAvatar
+                          ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                          : 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer'
+                      }`}
                     >
-                      Subir imagen (próximamente)
-                    </button>
+                      {uploadingAvatar ? 'Subiendo...' : 'Subir imagen'}
+                    </label>
                     <p className="text-xs text-gray-500 mt-1">
-                      La funcionalidad de subir avatar estará disponible próximamente
+                      JPG, PNG, GIF o WebP. Máximo 5MB.
                     </p>
                   </div>
                 </div>

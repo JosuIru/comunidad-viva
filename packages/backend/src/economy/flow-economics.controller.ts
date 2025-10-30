@@ -1,23 +1,31 @@
 import { Controller, Get, Post, Put, Body, UseGuards, Request, Query, Param } from '@nestjs/common';
 import { FlowEconomicsService } from './flow-economics.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
-import { CreditReason, PoolType, RequestStatus } from '@prisma/client';
+import { CreditReason, PoolType, RequestStatus, UserRole } from '@prisma/client';
 
 @ApiTags('flow-economics')
 @Controller('flow-economics')
 export class FlowEconomicsController {
   constructor(private flowEconomicsService: FlowEconomicsService) {}
 
-  @ApiOperation({ summary: 'Get economic metrics and system health' })
+  @ApiOperation({ summary: 'Get economic metrics and system health (admin only)' })
   @ApiResponse({ status: 200, description: 'Returns economic metrics' })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @Get('metrics')
   async getMetrics() {
     return this.flowEconomicsService.getEconomicMetrics();
   }
 
-  @ApiOperation({ summary: 'Get Gini Index (economic equality measure)' })
+  @ApiOperation({ summary: 'Get Gini Index (economic equality measure) (admin only)' })
   @ApiResponse({ status: 200, description: 'Returns Gini index (0 = perfect equality, 1 = perfect inequality)' })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @Get('gini')
   async getGiniIndex() {
     const gini = await this.flowEconomicsService.calculateGiniIndex();
@@ -27,8 +35,11 @@ export class FlowEconomicsController {
     };
   }
 
-  @ApiOperation({ summary: 'Get historical economic metrics' })
+  @ApiOperation({ summary: 'Get historical economic metrics (admin only)' })
   @ApiResponse({ status: 200, description: 'Returns historical economic data' })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @Get('metrics/history')
   async getMetricsHistory(@Query('days') days?: string) {
     const daysNum = days ? parseInt(days, 10) : 30;
@@ -165,10 +176,11 @@ export class FlowEconomicsController {
     };
   }
 
-  @ApiOperation({ summary: 'Approve pool request (admin or auto-approval)' })
+  @ApiOperation({ summary: 'Approve pool request (admin only)' })
   @ApiResponse({ status: 200, description: 'Request approved' })
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @Put('pool-requests/:id/approve')
   async approveRequest(@Request() req, @Param('id') requestId: string) {
     const result = await this.flowEconomicsService.approvePoolRequest(
@@ -183,10 +195,11 @@ export class FlowEconomicsController {
     };
   }
 
-  @ApiOperation({ summary: 'Reject pool request' })
+  @ApiOperation({ summary: 'Reject pool request (admin only)' })
   @ApiResponse({ status: 200, description: 'Request rejected' })
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @Put('pool-requests/:id/reject')
   async rejectRequest(@Request() req, @Param('id') requestId: string) {
     const result = await this.flowEconomicsService.rejectPoolRequest(
@@ -201,10 +214,11 @@ export class FlowEconomicsController {
     };
   }
 
-  @ApiOperation({ summary: 'Distribute approved pool request' })
+  @ApiOperation({ summary: 'Distribute approved pool request (admin only)' })
   @ApiResponse({ status: 200, description: 'Funds distributed successfully' })
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @Post('pool-requests/:id/distribute')
   async distributeRequest(@Param('id') requestId: string) {
     const result = await this.flowEconomicsService.distributePoolRequest(requestId);

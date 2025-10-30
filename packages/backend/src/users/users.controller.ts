@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Put, Body, Param, UseGuards, Request } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
@@ -21,12 +21,13 @@ export class UsersController {
 
   @ApiOperation({ summary: 'Update user profile' })
   @ApiResponse({ status: 200, description: 'Profile updated successfully' })
+  @ApiResponse({ status: 403, description: 'Forbidden - can only update own profile' })
   @ApiResponse({ status: 404, description: 'User not found' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Put(':id')
-  async updateProfile(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  async updateProfile(@Param('id') id: string, @Request() req, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(id, req.user.userId, updateUserDto);
   }
 
   @ApiOperation({ summary: 'Search user by email' })

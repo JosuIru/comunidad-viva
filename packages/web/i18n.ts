@@ -14,7 +14,10 @@ export default getRequestConfig(async ({ locale }) => {
     notFound();
   }
 
+  const validLocale = locale as Locale;
+
   return {
-    messages: (await import(`./messages/${locale}.json`)).default,
+    locale: validLocale,
+    messages: (await import(`./messages/${validLocale}.json`)).default,
   };
 });

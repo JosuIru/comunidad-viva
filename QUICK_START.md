@@ -2,6 +2,18 @@
 
 Guía rápida para empezar a usar Comunidad Viva y sus últimas funcionalidades.
 
+## 📊 Estado del Proyecto
+
+**Completitud Global**: 74.2% ✅
+
+**Documentación Clave**:
+- 📋 [**Índice Maestro**](DOCUMENTATION_INDEX.md) - Toda la documentación organizada
+- 📊 [**Estado del Desarrollo**](DEVELOPMENT_STATUS.md) - Qué está hecho y qué falta (análisis completo)
+- 📖 [**Whitepaper**](WHITEPAPER.md) - Visión y arquitectura completa (~21,000 palabras)
+- 🌉 [**Bridge System**](BRIDGE_README.md) - Sistema de bridges multi-cadena (Polygon + Solana)
+
+---
+
 ## ⚡ Inicio Rápido (5 minutos)
 
 ### 1. Levantar el Proyecto

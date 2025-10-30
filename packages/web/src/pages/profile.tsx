@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { getI18nProps } from '@/lib/i18n';
 import { useRouter } from 'next/router';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
 
 interface UserProfile {
   id: string;
@@ -14,6 +15,7 @@ interface UserProfile {
   avatar?: string;
   role: string;
   credits: number;
+  semillaBalance: number;
   level: number;
   experience: number;
   totalSaved: number;
@@ -22,6 +24,11 @@ interface UserProfile {
   co2Avoided: number;
   peopleHelped: number;
   peopleHelpedBy: number;
+  community?: {
+    id: string;
+    name: string;
+    slug: string;
+  };
   skills: Array<{
     id: string;
     name: string;
@@ -36,7 +43,11 @@ interface UserProfile {
 
 export default function ProfilePage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [userId, setUserId] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedName, setEditedName] = useState('');
+  const [editedBio, setEditedBio] = useState('');
 
   useEffect(() => {
     const user = localStorage.getItem('user');
@@ -55,11 +66,41 @@ export default function ProfilePage() {
     enabled: !!userId,
   });
 
+  // Update profile mutation
+  const updateProfileMutation = useMutation({
+    mutationFn: async (data: { name?: string; bio?: string }) => {
+      const response = await api.put(`/users/${userId}`, data);
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success('Perfil actualizado');
+      setIsEditing(false);
+      queryClient.invalidateQueries({ queryKey: ['profile', userId] });
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Error al actualizar perfil');
+    },
+  });
+
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('user');
+    localStorage.removeItem('user_id');
     toast.success('Sesión cerrada');
     router.push('/');
+  };
+
+  const handleEditProfile = () => {
+    setEditedName(profile?.data?.name || '');
+    setEditedBio(profile?.data?.bio || '');
+    setIsEditing(true);
+  };
+
+  const handleSaveProfile = () => {
+    updateProfileMutation.mutate({
+      name: editedName,
+      bio: editedBio,
+    });
   };
 
   if (isLoading || !profile) {
@@ -87,28 +128,108 @@ export default function ProfilePage() {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-2">
-                    <h1 className="text-3xl font-bold text-gray-900">{user?.name || 'Usuario'}</h1>
-                    <button
-                      onClick={handleLogout}
-                      className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                    >
-                      Cerrar sesión
-                    </button>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={editedName}
+                        onChange={(e) => setEditedName(e.target.value)}
+                        className="text-3xl font-bold text-gray-900 border-b-2 border-blue-500 focus:outline-none"
+                        placeholder="Tu nombre"
+                      />
+                    ) : (
+                      <h1 className="text-3xl font-bold text-gray-900">{user?.name || 'Usuario'}</h1>
+                    )}
+                    <div className="flex gap-2">
+                      {isEditing ? (
+                        <>
+                          <button
+                            onClick={() => setIsEditing(false)}
+                            className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                          >
+                            Cancelar
+                          </button>
+                          <button
+                            onClick={handleSaveProfile}
+                            disabled={updateProfileMutation.isPending}
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400"
+                          >
+                            {updateProfileMutation.isPending ? 'Guardando...' : 'Guardar'}
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={handleEditProfile}
+                            className="px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          >
+                            Editar perfil
+                          </button>
+                          <button
+                            onClick={handleLogout}
+                            className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          >
+                            Cerrar sesión
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </div>
                   <p className="text-gray-600 mb-4">{user.email}</p>
-                  {user.bio && <p className="text-gray-700 mb-4">{user.bio}</p>}
-                  <div className="flex items-center gap-4">
+                  {isEditing ? (
+                    <textarea
+                      value={editedBio}
+                      onChange={(e) => setEditedBio(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      rows={3}
+                      placeholder="Cuéntanos sobre ti..."
+                    />
+                  ) : (
+                    user.bio && <p className="text-gray-700 mb-4">{user.bio}</p>
+                  )}
+                  <div className="flex items-center gap-4 flex-wrap">
                     <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm font-medium">
                       Nivel {user.level}
                     </span>
                     <span className="px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-sm font-medium">
                       {user.credits} créditos
                     </span>
+                    <span className="px-3 py-1 bg-amber-100 text-amber-600 rounded-full text-sm font-medium">
+                      {user.semillaBalance?.toFixed(2) || '0.00'} SEMILLA
+                    </span>
                     <span className="px-3 py-1 bg-green-100 text-green-600 rounded-full text-sm font-medium">
                       {user.role}
                     </span>
                   </div>
                 </div>
+              </div>
+
+              {/* Comunidad del usuario */}
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Mi Comunidad</h3>
+                {user.community ? (
+                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg">
+                    <div>
+                      <p className="font-medium text-gray-900">{user.community.name}</p>
+                      <p className="text-sm text-gray-600">Miembro activo</p>
+                    </div>
+                    <Link
+                      href={`/communities/${user.community.slug}`}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                      Ver comunidad
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="p-6 bg-gray-50 rounded-lg text-center">
+                    <p className="text-gray-600 mb-4">No perteneces a ninguna comunidad todavía</p>
+                    <Link
+                      href="/communities"
+                      className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                      Explorar comunidades
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
 

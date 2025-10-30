@@ -1,10 +1,12 @@
 import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreditsService } from '../credits/credits.service';
+import { EmailService } from '../notifications/email.service';
 import { TransactionStatus, CreditReason } from '@prisma/client';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { CompleteTransactionDto } from './dto/complete-transaction.dto';
 import { LoggerService } from '../common/logger.service';
+import { AchievementsService } from '../achievements/achievements.service';
 
 @Injectable()
 export class TimeBankService {
@@ -13,6 +15,8 @@ export class TimeBankService {
   constructor(
     private prisma: PrismaService,
     private creditsService: CreditsService,
+    private emailService: EmailService,
+    private achievementsService: AchievementsService,
   ) {}
 
   /**
@@ -64,10 +68,10 @@ export class TimeBankService {
       },
       include: {
         requester: {
-          select: { id: true, name: true, avatar: true },
+          select: { id: true, name: true, avatar: true, email: true },
         },
         provider: {
-          select: { id: true, name: true, avatar: true },
+          select: { id: true, name: true, avatar: true, email: true },
         },
         timeBankOffer: {
           include: {
@@ -78,7 +82,16 @@ export class TimeBankService {
       },
     });
 
-    // TODO: Send notification to provider
+    // Send email notification to provider
+    if (transaction.provider.email) {
+      await this.emailService.sendTimeBankRequest(
+        transaction.provider.email,
+        transaction.requester.name,
+        description,
+        hours,
+        new Date(scheduledFor),
+      );
+    }
 
     return transaction;
   }
@@ -109,12 +122,20 @@ export class TimeBankService {
       where: { id: transactionId },
       data: { status: newStatus },
       include: {
-        requester: { select: { id: true, name: true, avatar: true } },
-        provider: { select: { id: true, name: true, avatar: true } },
+        requester: { select: { id: true, name: true, avatar: true, email: true } },
+        provider: { select: { id: true, name: true, avatar: true, email: true } },
       },
     });
 
-    // TODO: Send notification to requester
+    // Send email notification to requester
+    if (updated.requester.email) {
+      await this.emailService.sendTimeBankConfirmation(
+        updated.requester.email,
+        updated.provider.name,
+        updated.description,
+        accept,
+      );
+    }
 
     return updated;
   }
@@ -190,8 +211,8 @@ export class TimeBankService {
       where: { id: transactionId },
       data: updateData,
       include: {
-        requester: { select: { id: true, name: true, avatar: true } },
-        provider: { select: { id: true, name: true, avatar: true } },
+        requester: { select: { id: true, name: true, avatar: true, email: true } },
+        provider: { select: { id: true, name: true, avatar: true, email: true } },
       },
     });
 
@@ -213,7 +234,35 @@ export class TimeBankService {
         );
       }
 
-      // TODO: Send completion notification to both parties
+      // Check achievements for both provider and requester
+      try {
+        await Promise.all([
+          this.achievementsService.checkAchievements(transaction.providerId),
+          this.achievementsService.checkAchievements(transaction.requesterId),
+        ]);
+      } catch (error) {
+        // Log error but don't fail the transaction
+        this.logger.error(
+          'Error checking achievements',
+          error instanceof Error ? error.stack : String(error),
+        );
+      }
+
+      // Send completion notification to both parties
+      if (updated.requester.email) {
+        await this.emailService.sendTimeBankCompletion(
+          updated.requester.email,
+          transaction.description,
+          transaction.credits,
+        );
+      }
+      if (updated.provider.email) {
+        await this.emailService.sendTimeBankCompletion(
+          updated.provider.email,
+          transaction.description,
+          transaction.credits,
+        );
+      }
     }
 
     return updated;
