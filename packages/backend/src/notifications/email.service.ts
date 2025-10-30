@@ -378,6 +378,251 @@ export class EmailService {
     });
   }
 
+  // Achievement notifications
+  async sendBadgeUnlocked(
+    to: string,
+    userName: string,
+    badgeName: string,
+    badgeDescription: string,
+    badgeRarity: string,
+    credits?: number,
+    xp?: number,
+  ): Promise<boolean> {
+    const rarityColors = {
+      COMMON: '#9ca3af',
+      RARE: '#3b82f6',
+      EPIC: '#a855f7',
+      LEGENDARY: '#f59e0b',
+      SECRET: '#ec4899',
+    };
+
+    const color = rarityColors[badgeRarity as keyof typeof rarityColors] || '#6b7280';
+
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: ${color};">¡Nuevo Badge Desbloqueado! 🏆</h2>
+        <p>¡Felicidades ${userName}!</p>
+        <div style="background: linear-gradient(135deg, ${color}20, ${color}10); padding: 30px; border-radius: 12px; margin: 20px 0; border: 2px solid ${color};">
+          <h3 style="margin: 0 0 10px 0; color: ${color};">${badgeName}</h3>
+          <p style="margin: 10px 0; font-size: 14px; color: #4b5563;">${badgeDescription}</p>
+          <p style="margin: 10px 0 0 0; font-weight: bold; color: ${color}; text-transform: uppercase; font-size: 12px;">
+            ${badgeRarity}
+          </p>
+        </div>
+        ${credits || xp ? `
+          <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            <h4 style="margin: 0 0 10px 0;">Recompensas:</h4>
+            ${credits ? `<p style="margin: 5px 0;">💰 <strong>${credits} créditos</strong></p>` : ''}
+            ${xp ? `<p style="margin: 5px 0;">⭐ <strong>${xp} XP</strong></p>` : ''}
+          </div>
+        ` : ''}
+        <p>¡Sigue participando en la comunidad para desbloquear más badges!</p>
+        <p style="color: #6b7280; font-size: 12px; margin-top: 30px;">
+          Comunidad Viva - Plataforma de economía colaborativa
+        </p>
+      </div>
+    `;
+
+    return this.sendEmail({
+      to,
+      subject: `¡Badge Desbloqueado! ${badgeName}`,
+      html,
+    });
+  }
+
+  async sendLevelUp(
+    to: string,
+    userName: string,
+    newLevel: number,
+    levelName: string,
+    levelIcon: string,
+  ): Promise<boolean> {
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #f59e0b;">¡Subiste de Nivel! ${levelIcon}</h2>
+        <p>¡Increíble ${userName}!</p>
+        <div style="background: linear-gradient(135deg, #fef3c7, #fde68a); padding: 40px; border-radius: 12px; margin: 20px 0; text-align: center; border: 3px solid #f59e0b;">
+          <div style="font-size: 60px; margin-bottom: 15px;">${levelIcon}</div>
+          <h1 style="margin: 0; color: #92400e;">Nivel ${newLevel}</h1>
+          <h3 style="margin: 10px 0 0 0; color: #b45309;">${levelName}</h3>
+        </div>
+        <p>Tu participación activa en la comunidad está marcando la diferencia.</p>
+        <p>¡Sigue adelante y alcanza nuevos logros!</p>
+        <p style="color: #6b7280; font-size: 12px; margin-top: 30px;">
+          Comunidad Viva - Plataforma de economía colaborativa
+        </p>
+      </div>
+    `;
+
+    return this.sendEmail({
+      to,
+      subject: `¡Nivel ${newLevel} alcanzado! ${levelName}`,
+      html,
+    });
+  }
+
+  // Credit Decay notifications
+  async sendCreditDecayWarning(
+    to: string,
+    userName: string,
+    credits: number,
+    daysUntilExpiration: number,
+  ): Promise<boolean> {
+    const urgencyColor = daysUntilExpiration <= 1 ? '#dc2626' : daysUntilExpiration <= 7 ? '#f59e0b' : '#3b82f6';
+
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: ${urgencyColor};">⚠️ Créditos próximos a expirar</h2>
+        <p>Hola ${userName},</p>
+        <p>Queremos recordarte que tienes créditos que están por expirar:</p>
+        <div style="background: #fef2f2; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid ${urgencyColor};">
+          <h3 style="margin: 0 0 10px 0; color: ${urgencyColor};">
+            ${credits} créditos expirarán en ${daysUntilExpiration} día${daysUntilExpiration > 1 ? 's' : ''}
+          </h3>
+          <p style="margin: 10px 0 0 0; color: #7f1d1d;">
+            Los créditos sin usar durante 12 meses expiran para mantener la economía circulante.
+          </p>
+        </div>
+        <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <h4 style="margin: 0 0 10px 0;">¿Cómo usar tus créditos?</h4>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            <li>Participa en compras grupales</li>
+            <li>Solicita servicios del banco de tiempo</li>
+            <li>Accede a eventos especiales</li>
+            <li>Apoya proyectos de ayuda mutua</li>
+          </ul>
+        </div>
+        <p>¡No dejes que tus créditos se pierdan! Úsalos y contribuye a tu comunidad.</p>
+        <p style="color: #6b7280; font-size: 12px; margin-top: 30px;">
+          Comunidad Viva - Plataforma de economía colaborativa
+        </p>
+      </div>
+    `;
+
+    return this.sendEmail({
+      to,
+      subject: `⚠️ ${credits} créditos expiran en ${daysUntilExpiration} día${daysUntilExpiration > 1 ? 's' : ''}`,
+      html,
+    });
+  }
+
+  async sendCreditDecayNotification(
+    to: string,
+    userName: string,
+    decayAmount: number,
+    decayRate: number,
+  ): Promise<boolean> {
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #f59e0b;">Decay Mensual de Créditos 📉</h2>
+        <p>Hola ${userName},</p>
+        <p>Como parte de nuestro sistema de moneda oxidable, se ha aplicado el decay mensual:</p>
+        <div style="background: #fef3c7; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f59e0b;">
+          <h3 style="margin: 0 0 10px 0; color: #92400e;">
+            -${decayAmount} créditos (${decayRate * 100}% mensual)
+          </h3>
+          <p style="margin: 10px 0 0 0; color: #78350f;">
+            El decay fomenta la circulación activa en lugar del ahorro excesivo.
+          </p>
+        </div>
+        <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <h4 style="margin: 0 0 10px 0;">💡 "El dinero es como el abono"</h4>
+          <p style="margin: 0; font-style: italic; color: #166534;">
+            "Solo sirve si se reparte" - Francis Bacon
+          </p>
+        </div>
+        <p>Recuerda: usa tus créditos regularmente para evitar el decay futuro.</p>
+        <p style="color: #6b7280; font-size: 12px; margin-top: 30px;">
+          Comunidad Viva - Plataforma de economía colaborativa
+        </p>
+      </div>
+    `;
+
+    return this.sendEmail({
+      to,
+      subject: `Decay mensual aplicado: -${decayAmount} créditos`,
+      html,
+    });
+  }
+
+  async sendCreditsExpired(
+    to: string,
+    userName: string,
+    expiredAmount: number,
+  ): Promise<boolean> {
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #dc2626;">Créditos expirados ⌛</h2>
+        <p>Hola ${userName},</p>
+        <p>Lamentamos informarte que algunos de tus créditos han expirado:</p>
+        <div style="background: #fef2f2; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #dc2626;">
+          <h3 style="margin: 0 0 10px 0; color: #991b1b;">
+            -${expiredAmount} créditos expirados
+          </h3>
+          <p style="margin: 10px 0 0 0; color: #7f1d1d;">
+            Estos créditos no fueron usados durante 12 meses.
+          </p>
+        </div>
+        <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <h4 style="margin: 0 0 10px 0;">¿Cómo evitar esto en el futuro?</h4>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            <li>Usa tus créditos regularmente</li>
+            <li>Activa las notificaciones de expiración</li>
+            <li>Revisa tu balance mensualmente</li>
+            <li>Participa activamente en la comunidad</li>
+          </ul>
+        </div>
+        <p>Sigue ganando créditos participando en tu comunidad.</p>
+        <p style="color: #6b7280; font-size: 12px; margin-top: 30px;">
+          Comunidad Viva - Plataforma de economía colaborativa
+        </p>
+      </div>
+    `;
+
+    return this.sendEmail({
+      to,
+      subject: `${expiredAmount} créditos han expirado`,
+      html,
+    });
+  }
+
+  // Community notifications
+  async sendCommunityWelcome(
+    to: string,
+    userName: string,
+    communityName: string,
+  ): Promise<boolean> {
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #2563eb;">¡Bienvenido a ${communityName}! 🏘️</h2>
+        <p>Hola ${userName},</p>
+        <p>Te has unido exitosamente a la comunidad:</p>
+        <div style="background: #eff6ff; padding: 30px; border-radius: 12px; margin: 20px 0; text-align: center;">
+          <h3 style="margin: 0; color: #1e40af; font-size: 24px;">${communityName}</h3>
+        </div>
+        <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <h4 style="margin: 0 0 10px 0;">Próximos pasos:</h4>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            <li>Explora las ofertas locales</li>
+            <li>Conoce a los miembros</li>
+            <li>Participa en eventos</li>
+            <li>Comparte tus habilidades</li>
+          </ul>
+        </div>
+        <p>Juntos construimos una comunidad más fuerte y solidaria.</p>
+        <p style="color: #6b7280; font-size: 12px; margin-top: 30px;">
+          Comunidad Viva - Plataforma de economía colaborativa
+        </p>
+      </div>
+    `;
+
+    return this.sendEmail({
+      to,
+      subject: `Bienvenido a ${communityName}`,
+      html,
+    });
+  }
+
   private htmlToText(html: string): string {
     return html
       .replace(/<[^>]*>/g, '')
