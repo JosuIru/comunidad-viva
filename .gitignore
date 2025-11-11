@@ -83,3 +83,6 @@ packages/backend/prisma/*.db-journal
 # Local development
 .vercel
 .turbo
+
+# Release packages (generated for deployment)
+release/
