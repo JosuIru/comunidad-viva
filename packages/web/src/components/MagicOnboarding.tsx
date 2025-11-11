@@ -1,59 +1,37 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 
 interface OnboardingStep {
   number: number;
-  title: string;
-  description: string;
+  key: string;
   icon: string;
   action?: () => void;
   completed?: boolean;
 }
 
-const ONBOARDING_STEPS: OnboardingStep[] = [
+const BASE_ONBOARDING_STEPS: OnboardingStep[] = [
   {
     number: 1,
-    title: '¡Bienvenido!',
-    description: 'Conoce Comunidad Viva, donde la economía local cobra vida.',
+    key: 'welcome',
     icon: '👋',
   },
   {
     number: 2,
-    title: 'Explora Ofertas',
-    description: 'Descubre servicios y productos de tu comunidad.',
+    key: 'exploreOffers',
     icon: '🔍',
   },
   {
     number: 3,
-    title: 'Crea tu Primera Oferta',
-    description: '¿Qué puedes ofrecer? Comparte tus habilidades con la comunidad.',
-    icon: '✨',
-  },
-  {
-    number: 4,
-    title: 'Conoce el Mapa Local',
-    description: 'Encuentra negocios y personas cerca de ti.',
-    icon: '🗺️',
-  },
-  {
-    number: 5,
-    title: 'Envía tu Primer Crédito',
-    description: 'Apoya a alguien de la comunidad con créditos.',
-    icon: '💸',
-  },
-  {
-    number: 6,
-    title: 'Únete a un Evento',
-    description: 'Participa en eventos comunitarios y conoce gente nueva.',
+    key: 'joinCommunity',
     icon: '🎉',
   },
   {
-    number: 7,
-    title: '¡Listo!',
-    description: 'Ya eres parte activa de la comunidad. ¡A por tus primeros 50 créditos de bono!',
+    number: 4,
+    key: 'completed',
     icon: '🎊',
   },
 ];
@@ -61,6 +39,16 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
 export default function MagicOnboarding({ onComplete }: { onComplete?: () => void }) {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const t = useTranslations('magicOnboarding');
+  const steps = useMemo(
+    () =>
+      BASE_ONBOARDING_STEPS.map((step) => ({
+        ...step,
+        title: t(`steps.${step.key}.title`),
+        description: t(`steps.${step.key}.description`),
+      })),
+    [t]
+  );
   const [currentStep, setCurrentStep] = useState(1);
   const [showModal, setShowModal] = useState(false);
 
@@ -83,7 +71,7 @@ export default function MagicOnboarding({ onComplete }: { onComplete?: () => voi
       queryClient.invalidateQueries({ queryKey: ['onboarding-progress'] });
 
       if (data.completed) {
-        toast.success('¡Onboarding completado! 🎉 Has ganado 50 créditos de bono', {
+        toast.success(t('toast.completed'), {
           duration: 5000,
         });
         setTimeout(() => {
@@ -103,7 +91,7 @@ export default function MagicOnboarding({ onComplete }: { onComplete?: () => voi
   }, [progress]);
 
   const handleNext = () => {
-    if (currentStep < ONBOARDING_STEPS.length) {
+    if (currentStep < steps.length) {
       const nextStep = currentStep + 1;
       setCurrentStep(nextStep);
       trackStepMutation.mutate(nextStep);
@@ -123,29 +111,25 @@ export default function MagicOnboarding({ onComplete }: { onComplete?: () => voi
     // Navigate based on step
     switch (step) {
       case 2:
-        router.push('/offers');
+        // Explore offers and map
+        router.push('/');
         setShowModal(false);
         break;
       case 3:
-        router.push('/offers/create');
-        setShowModal(false);
-        break;
-      case 4:
-        // Navigate to map (if implemented)
-        toast('Función de mapa próximamente', { icon: '🗺️' });
-        handleNext();
-        break;
-      case 5:
-        router.push('/credits/send');
-        setShowModal(false);
-        break;
-      case 6:
+        // Join community - go to events or community page
         router.push('/events');
         setShowModal(false);
         break;
       default:
         handleNext();
     }
+  };
+
+  const handleOptionalCreateOffer = () => {
+    router.push('/offers/new');
+    setShowModal(false);
+    // Mark onboarding as completed
+    trackStepMutation.mutate(steps.length);
   };
 
   const handleSkip = () => {
@@ -157,8 +141,8 @@ export default function MagicOnboarding({ onComplete }: { onComplete?: () => voi
     return null;
   }
 
-  const currentStepData = ONBOARDING_STEPS[currentStep - 1];
-  const progressPercent = (currentStep / ONBOARDING_STEPS.length) * 100;
+  const currentStepData = steps[currentStep - 1];
+  const progressPercent = (currentStep / steps.length) * 100;
   const completedSteps = JSON.parse(progress.completedSteps || '[]');
 
   return (
@@ -169,17 +153,17 @@ export default function MagicOnboarding({ onComplete }: { onComplete?: () => voi
           onClick={handleSkip}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
         >
-          Saltar ✕
+          {t('buttons.skip')}
         </button>
 
         {/* Progress Bar */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm font-medium text-gray-600">
-              Paso {currentStep} de {ONBOARDING_STEPS.length}
+              {t('progress.step', { current: currentStep, total: steps.length })}
             </span>
             <span className="text-sm font-medium text-blue-600">
-              {Math.round(progressPercent)}% completado
+              {t('progress.percent', { percent: Math.round(progressPercent) })}
             </span>
           </div>
           <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -203,7 +187,7 @@ export default function MagicOnboarding({ onComplete }: { onComplete?: () => voi
 
         {/* Completed Steps Indicator */}
         <div className="flex justify-center gap-2 mb-8">
-          {ONBOARDING_STEPS.map((step) => (
+          {steps.map((step) => (
             <div
               key={step.number}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
@@ -224,30 +208,43 @@ export default function MagicOnboarding({ onComplete }: { onComplete?: () => voi
             disabled={currentStep === 1}
             className="px-6 py-3 text-gray-600 hover:text-gray-900 font-medium transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
-            ← Anterior
+            {t('buttons.previous')}
           </button>
 
           <div className="flex gap-3">
-            {currentStep === ONBOARDING_STEPS.length ? (
-              <button
-                onClick={() => handleAction(currentStep)}
-                className="px-8 py-3 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg hover:shadow-lg transform hover:scale-105 transition-all font-bold"
-              >
-                ¡Completar! 🎉
-              </button>
+            {currentStep === steps.length ? (
+              <>
+                <button
+                  onClick={() => {
+                    trackStepMutation.mutate(currentStep);
+                    setShowModal(false);
+                    onComplete?.();
+                  }}
+                  className="px-8 py-3 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg hover:shadow-lg transform hover:scale-105 transition-all font-bold"
+                >
+                  {t('buttons.complete')}
+                </button>
+                <button
+                  onClick={handleOptionalCreateOffer}
+                  className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:shadow-lg transform hover:scale-105 transition-all font-bold flex items-center gap-2"
+                >
+                  <span>✨</span>
+                  <span>{t('buttons.createOffer')}</span>
+                </button>
+              </>
             ) : (
               <>
                 <button
                   onClick={handleNext}
                   className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium"
                 >
-                  Siguiente
+                  {t('buttons.next')}
                 </button>
                 <button
                   onClick={() => handleAction(currentStep)}
                   className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:shadow-lg transform hover:scale-105 transition-all font-bold"
                 >
-                  Ir ahora →
+                  {t('buttons.goNow')}
                 </button>
               </>
             )}
@@ -255,10 +252,10 @@ export default function MagicOnboarding({ onComplete }: { onComplete?: () => voi
         </div>
 
         {/* Motivational Message */}
-        {currentStep === ONBOARDING_STEPS.length && (
+        {currentStep === steps.length && (
           <div className="mt-6 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-lg">
             <p className="text-center text-yellow-800 font-semibold">
-              🎁 ¡Completa el onboarding y recibe 50 créditos de bono!
+              {t('reward')}
             </p>
           </div>
         )}

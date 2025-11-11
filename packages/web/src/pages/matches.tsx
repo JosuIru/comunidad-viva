@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
+import { useTranslations } from 'next-intl';
+import { getI18nProps } from '@/lib/i18n';
 
 interface Match {
   id: string;
@@ -23,6 +25,7 @@ interface Match {
 
 export default function MatchesPage() {
   const router = useRouter();
+  const t = useTranslations('matches');
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -68,11 +71,11 @@ export default function MatchesPage() {
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Volver
+              {t('back')}
             </button>
             <div className="flex items-center gap-2">
               <span className="text-2xl">💜</span>
-              <h1 className="text-xl font-bold text-gray-900">Mis Matches</h1>
+              <h1 className="text-xl font-bold text-gray-900">{t('title')}</h1>
             </div>
             <div className="w-20"></div>
           </div>
@@ -85,24 +88,24 @@ export default function MatchesPage() {
           <div className="bg-white rounded-lg shadow-sm p-12 text-center">
             <div className="text-8xl mb-6">💔</div>
             <h2 className="text-2xl font-bold text-gray-900 mb-3">
-              Aún no tienes matches
+              {t('noMatches.title')}
             </h2>
             <p className="text-gray-600 mb-6">
-              Empieza a deslizar ofertas para encontrar conexiones
+              {t('noMatches.description')}
             </p>
             <button
               onClick={() => router.push('/swipe')}
               className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg hover:shadow-xl"
             >
               <span className="text-xl mr-2">💜</span>
-              Descubrir Ofertas
+              {t('noMatches.action')}
             </button>
           </div>
         ) : (
           <div className="space-y-4">
             <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-lg p-4 mb-6">
               <p className="text-purple-900 font-semibold text-center">
-                🎉 Tienes {matches.length} {matches.length === 1 ? 'match' : 'matches'}
+                {t('summary', { count: matches.length })}
               </p>
             </div>
 
@@ -116,7 +119,7 @@ export default function MatchesPage() {
                   >
                     {match.isSuper && (
                       <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-center py-2 text-sm font-semibold">
-                        ⭐ Super Match
+                        {t('superMatch')}
                       </div>
                     )}
 
@@ -139,7 +142,7 @@ export default function MatchesPage() {
 
                       {/* Match Date */}
                       <p className="text-sm text-gray-500 text-center mb-4">
-                        Match: {new Date(match.createdAt).toLocaleDateString('es-ES', {
+                        {t('matchDate')} {new Date(match.createdAt).toLocaleDateString('es-ES', {
                           day: 'numeric',
                           month: 'long',
                           year: 'numeric'
@@ -152,13 +155,13 @@ export default function MatchesPage() {
                           onClick={() => router.push(`/messages?userId=${otherUser.id}`)}
                           className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
                         >
-                          💬 Enviar Mensaje
+                          {t('buttons.sendMessage')}
                         </button>
                         <button
                           onClick={() => router.push(`/profile/${otherUser.id}`)}
                           className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
                         >
-                          Ver Perfil
+                          {t('buttons.viewProfile')}
                         </button>
                       </div>
                     </div>
@@ -172,3 +175,5 @@ export default function MatchesPage() {
     </div>
   );
 }
+
+export const getStaticProps = async (context: any) => getI18nProps(context);

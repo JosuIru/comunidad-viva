@@ -111,13 +111,13 @@ const categories = {
 
 export default function FeaturesPage() {
   return (
-    <Layout title="Funcionalidades - Comunidad Viva">
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+    <Layout title="Funcionalidades - Truk">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white">
+        <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-700 dark:via-purple-700 dark:to-pink-700 text-white">
           <div className="container mx-auto px-4 py-16">
             <h1 className="text-5xl font-bold mb-6 text-center">
-              ✨ Funcionalidades de Comunidad Viva
+              ✨ Funcionalidades de Truk
             </h1>
             <p className="text-2xl opacity-90 text-center max-w-3xl mx-auto">
               Explora el sistema revolucionario de economía colaborativa con gamificación viral,
@@ -129,17 +129,17 @@ export default function FeaturesPage() {
         <div className="container mx-auto px-4 py-12">
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div className="bg-white rounded-lg shadow-lg p-8 text-center">
-              <div className="text-5xl font-bold text-purple-600 mb-2">9</div>
-              <div className="text-gray-600">Funcionalidades Principales</div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
+              <div className="text-5xl font-bold text-purple-600 dark:text-purple-400 mb-2">9</div>
+              <div className="text-gray-600 dark:text-gray-400">Funcionalidades Principales</div>
             </div>
-            <div className="bg-white rounded-lg shadow-lg p-8 text-center">
-              <div className="text-5xl font-bold text-blue-600 mb-2">~120</div>
-              <div className="text-gray-600">Endpoints de API</div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
+              <div className="text-5xl font-bold text-blue-600 dark:text-blue-400 mb-2">~120</div>
+              <div className="text-gray-600 dark:text-gray-400">Endpoints de API</div>
             </div>
-            <div className="bg-white rounded-lg shadow-lg p-8 text-center">
-              <div className="text-5xl font-bold text-pink-600 mb-2">3</div>
-              <div className="text-gray-600">Sistemas Integrados</div>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
+              <div className="text-5xl font-bold text-pink-600 dark:text-pink-400 mb-2">3</div>
+              <div className="text-gray-600 dark:text-gray-400">Sistemas Integrados</div>
             </div>
           </div>
 
@@ -151,7 +151,7 @@ export default function FeaturesPage() {
               <div key={categoryKey} className="mb-16">
                 <div className="flex items-center gap-4 mb-8">
                   <div className="text-5xl">{categoryInfo.icon}</div>
-                  <h2 className={`text-3xl font-bold ${categoryInfo.color}`}>
+                  <h2 className={`text-3xl font-bold ${categoryInfo.color} dark:opacity-90`}>
                     {categoryInfo.title}
                   </h2>
                 </div>
@@ -161,7 +161,7 @@ export default function FeaturesPage() {
                     <Link
                       key={feature.href}
                       href={feature.href}
-                      className="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1"
+                      className="group bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-1"
                     >
                       <div className={`bg-gradient-to-r ${feature.bgColor} p-6 text-white`}>
                         <div className="text-6xl mb-4">{feature.icon}</div>
@@ -169,8 +169,8 @@ export default function FeaturesPage() {
                       </div>
 
                       <div className="p-6">
-                        <p className="text-gray-700 mb-4">{feature.description}</p>
-                        <div className="flex items-center text-blue-600 font-semibold group-hover:text-blue-700">
+                        <p className="text-gray-700 dark:text-gray-300 mb-4">{feature.description}</p>
+                        <div className="flex items-center text-blue-600 dark:text-blue-400 font-semibold group-hover:text-blue-700 dark:group-hover:text-blue-300">
                           Explorar →
                         </div>
                       </div>
@@ -182,18 +182,18 @@ export default function FeaturesPage() {
           })}
 
           {/* System Overview */}
-          <div className="bg-white rounded-xl shadow-2xl p-8 mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-8 mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-center">
               🌐 Visión General del Sistema
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
               <div className="text-center">
                 <div className="text-6xl mb-4">🎮</div>
-                <h3 className="text-xl font-bold text-purple-600 mb-3">
+                <h3 className="text-xl font-bold text-purple-600 dark:text-purple-400 mb-3">
                   Gamificación Viral
                 </h3>
-                <p className="text-gray-700 text-sm">
+                <p className="text-gray-700 dark:text-gray-300 text-sm">
                   Sistema completo de engagement con challenges, swipe matching, flash deals,
                   compras grupales y referidos multinivel. Diseñado para maximizar retención y
                   crecimiento viral.
@@ -202,10 +202,10 @@ export default function FeaturesPage() {
 
               <div className="text-center">
                 <div className="text-6xl mb-4">🦎</div>
-                <h3 className="text-xl font-bold text-blue-600 mb-3">
+                <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 mb-3">
                   Capas Económicas Híbridas
                 </h3>
-                <p className="text-gray-700 text-sm">
+                <p className="text-gray-700 dark:text-gray-300 text-sm">
                   4 paradigmas económicos coexistentes: Tradicional (💼), Transicional (🔄), Don
                   Puro (🎁) y Camaleón (🦎). Migración fluida entre capas con celebraciones y
                   eventos puente.
@@ -214,21 +214,21 @@ export default function FeaturesPage() {
 
               <div className="text-center">
                 <div className="text-6xl mb-4">🏛️</div>
-                <h3 className="text-xl font-bold text-indigo-600 mb-3">
+                <h3 className="text-xl font-bold text-indigo-600 dark:text-indigo-400 mb-3">
                   Proof of Help
                 </h3>
-                <p className="text-gray-700 text-sm">
+                <p className="text-gray-700 dark:text-gray-300 text-sm">
                   Gobernanza descentralizada basada en contribuciones reales. Votación cuadrática,
                   delegación de votos y sistema de reputación que recompensa la ayuda comunitaria.
                 </p>
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 border-2 border-blue-200">
-              <h4 className="font-bold text-blue-900 mb-3 text-lg">
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 rounded-lg p-6 border-2 border-blue-200 dark:border-blue-700">
+              <h4 className="font-bold text-blue-900 dark:text-blue-200 mb-3 text-lg">
                 🚀 Características Técnicas
               </h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-800">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-800 dark:text-blue-300">
                 <div>
                   <strong>Frontend:</strong>
                   <ul className="ml-4 mt-2 space-y-1">
@@ -252,17 +252,17 @@ export default function FeaturesPage() {
           </div>
 
           {/* API Reference */}
-          <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl shadow-lg p-8 text-center">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+          <div className="bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 rounded-xl shadow-lg p-8 text-center">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
               📚 Documentación Completa
             </h3>
-            <p className="text-gray-700 mb-6">
+            <p className="text-gray-700 dark:text-gray-300 mb-6">
               Consulta la documentación técnica completa con todos los endpoints, modelos de datos
               y ejemplos de uso
             </p>
             <Link
               href="/docs"
-              className="inline-block px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-colors font-bold text-lg shadow-lg"
+              className="inline-block px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-700 dark:to-pink-700 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 dark:hover:from-purple-600 dark:hover:to-pink-600 transition-colors font-bold text-lg shadow-lg"
             >
               Ver Documentación →
             </Link>
@@ -273,4 +273,4 @@ export default function FeaturesPage() {
   );
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

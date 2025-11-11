@@ -1,7 +1,8 @@
-import { Controller, Post, Body, UseGuards, Request, Get } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request, Get, Query, Param } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { TwoFactorService } from './two-factor.service';
 import { Web3AuthService } from './web3-auth.service';
+import { EmailVerificationService } from './email-verification.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
@@ -17,13 +18,14 @@ export class AuthController {
     private authService: AuthService,
     private twoFactorService: TwoFactorService,
     private web3AuthService: Web3AuthService,
+    private emailVerificationService: EmailVerificationService,
   ) {}
 
   @ApiOperation({ summary: 'Register new user' })
   @ApiResponse({ status: 201, description: 'User registered successfully' })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 429, description: 'Too Many Requests - Rate limit exceeded' })
-  @Throttle({ default: { limit: 5, ttl: 60000 } }) // 5 registrations per minute
+  @Throttle({ default: { limit: 3, ttl: 3600000 } }) // 3 registrations per hour (stricter to prevent spam accounts)
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
     return this.authService.register(registerDto);
@@ -33,7 +35,7 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'User logged in successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 429, description: 'Too Many Requests - Rate limit exceeded' })
-  @Throttle({ default: { limit: 10, ttl: 60000 } }) // 10 login attempts per minute
+  @Throttle({ default: { limit: 5, ttl: 900000 } }) // 5 login attempts per 15 minutes (anti brute-force)
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req, @Body() body: { twoFactorToken?: string }) {
@@ -168,5 +170,41 @@ export class AuthController {
   @Get('web3/user/:walletAddress')
   async getUserByWallet(@Request() req) {
     return this.web3AuthService.getUserByWallet(req.params.walletAddress);
+  }
+
+  // ========================================
+  // EMAIL VERIFICATION ENDPOINTS
+  // ========================================
+
+  @ApiOperation({ summary: 'Verify email with token' })
+  @ApiResponse({ status: 200, description: 'Email verified successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid or expired token' })
+  @Throttle({ default: { limit: 10, ttl: 60000 } }) // 10 attempts per minute
+  @Post('verify-email')
+  async verifyEmail(@Body() body: { token: string }) {
+    return this.emailVerificationService.verifyEmail(body.token);
+  }
+
+  @ApiOperation({ summary: 'Resend verification email' })
+  @ApiResponse({ status: 200, description: 'Verification email sent' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiResponse({ status: 400, description: 'Email already verified' })
+  @Throttle({ default: { limit: 3, ttl: 600000 } }) // 3 attempts per 10 minutes (prevent spam)
+  @Post('resend-verification')
+  async resendVerification(@Body() body: { email: string }) {
+    return this.emailVerificationService.resendVerificationEmail(body.email);
+  }
+
+  @ApiOperation({ summary: 'Check if user email is verified' })
+  @ApiResponse({ status: 200, description: 'Email verification status' })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get('email-verification-status')
+  async checkEmailVerification(@Request() req) {
+    const isVerified = await this.emailVerificationService.isEmailVerified(req.user.userId);
+    return {
+      emailVerified: isVerified,
+      message: isVerified ? 'Email verificado' : 'Email pendiente de verificación'
+    };
   }
 }

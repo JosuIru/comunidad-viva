@@ -56,10 +56,10 @@ export default function CommunityOffersPage() {
   if (isLoading) {
     return (
       <Layout title="Cargando...">
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent mb-4"></div>
-            <p className="text-gray-600">Cargando ofertas...</p>
+            <p className="text-gray-600 dark:text-gray-400">Cargando ofertas...</p>
           </div>
         </div>
       </Layout>
@@ -69,11 +69,11 @@ export default function CommunityOffersPage() {
   if (!community) {
     return (
       <Layout title="Comunidad no encontrada">
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
           <div className="text-center">
             <div className="text-6xl mb-4">🏘️</div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Comunidad no encontrada</h1>
-            <p className="text-gray-600 mb-6">La comunidad que buscas no existe</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Comunidad no encontrada</h1>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">La comunidad que buscas no existe</p>
             <Link
               href="/communities"
               className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
@@ -88,7 +88,7 @@ export default function CommunityOffersPage() {
 
   return (
     <Layout title={`Ofertas - ${community.name}`}>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-500 to-green-500 text-white">
           <div className="container mx-auto px-4 py-12">
@@ -110,12 +110,12 @@ export default function CommunityOffersPage() {
         {/* Content */}
         <div className="container mx-auto px-4 py-8">
           {!offers || offers.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-lg shadow-lg">
+            <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
               <div className="text-6xl mb-4">📦</div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                 No hay ofertas disponibles
               </h2>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
                 Sé el primero en crear una oferta en esta comunidad
               </p>
               <Link
@@ -131,11 +131,11 @@ export default function CommunityOffersPage() {
                 <Link
                   key={offer.id}
                   href={`/offers/${offer.id}`}
-                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
                 >
                   {/* Image */}
                   {offer.images && offer.images.length > 0 ? (
-                    <div className="h-48 bg-gray-200">
+                    <div className="h-48 bg-gray-200 dark:bg-gray-700">
                       <img
                         src={offer.images[0]}
                         alt={offer.title}
@@ -159,18 +159,18 @@ export default function CommunityOffersPage() {
                       </span>
                     </div>
 
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 line-clamp-2">
                       {offer.title}
                     </h3>
 
                     {offer.description && (
-                      <p className="text-gray-600 mb-4 line-clamp-3">{offer.description}</p>
+                      <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">{offer.description}</p>
                     )}
 
                     {/* Footer */}
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-sm">
+                        <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-sm">
                           {offer.user.avatar ? (
                             <img
                               src={offer.user.avatar}
@@ -181,11 +181,11 @@ export default function CommunityOffersPage() {
                             '👤'
                           )}
                         </div>
-                        <span className="text-sm text-gray-600">{offer.user.name}</span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400">{offer.user.name}</span>
                       </div>
 
                       {offer.price !== undefined && offer.price !== null && (
-                        <span className="text-lg font-bold text-green-600">
+                        <span className="text-lg font-bold text-green-600 dark:text-green-400">
                           {offer.price} €
                         </span>
                       )}
@@ -208,4 +208,4 @@ export async function getStaticPaths() {
   };
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

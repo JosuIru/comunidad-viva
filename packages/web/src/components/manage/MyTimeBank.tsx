@@ -90,7 +90,7 @@ export default function MyTimeBank() {
       {/* Mis Ofertas de Tiempo */}
       <div>
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
             Mis Servicios ({offers.length})
           </h2>
           <Link
@@ -102,12 +102,12 @@ export default function MyTimeBank() {
         </div>
 
         {offers.length === 0 ? (
-          <div className="text-center py-12 bg-gray-50 rounded-lg">
+          <div className="text-center py-12 bg-gray-50 dark:bg-gray-700 rounded-lg">
             <div className="text-6xl mb-4">⏰</div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
               No tienes servicios de tiempo aún
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               Ofrece tus habilidades para intercambiar tiempo con la comunidad
             </p>
             <Link
@@ -122,14 +122,14 @@ export default function MyTimeBank() {
             {offers.map((offer) => (
               <div
                 key={offer.id}
-                className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
+                className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-md transition-shadow"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <span className="text-3xl">⏰</span>
                       <div>
-                        <h3 className="text-xl font-bold text-gray-900">
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                           {offer.offer.title}
                         </h3>
                         <div className="flex items-center gap-2 mt-1">
@@ -145,9 +145,9 @@ export default function MyTimeBank() {
                       </div>
                     </div>
 
-                    <p className="text-gray-600 mb-4">{offer.offer.description}</p>
+                    <p className="text-gray-600 dark:text-gray-400 mb-4">{offer.offer.description}</p>
 
-                    <div className="flex items-center gap-6 text-sm text-gray-500">
+                    <div className="flex items-center gap-6 text-sm text-gray-500 dark:text-gray-400">
                       <div className="flex items-center gap-1">
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -179,14 +179,14 @@ export default function MyTimeBank() {
 
       {/* Mis Transacciones */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
           Transacciones Recientes ({transactions.length})
         </h2>
 
         {transactions.length === 0 ? (
-          <div className="text-center py-12 bg-gray-50 rounded-lg">
+          <div className="text-center py-12 bg-gray-50 dark:bg-gray-700 rounded-lg">
             <div className="text-6xl mb-4">📋</div>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               No tienes transacciones aún
             </p>
           </div>
@@ -195,12 +195,12 @@ export default function MyTimeBank() {
             {transactions.map((transaction: any) => (
               <div
                 key={transaction.id}
-                className="bg-white border border-gray-200 rounded-lg p-6"
+                className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                         {transaction.description}
                       </h3>
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadge(transaction.status)}`}>
@@ -210,24 +210,24 @@ export default function MyTimeBank() {
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
-                        <span className="text-gray-500">Solicitante:</span>
-                        <div className="font-medium">{transaction.requester?.name || 'N/A'}</div>
+                        <span className="text-gray-500 dark:text-gray-400">Solicitante:</span>
+                        <div className="font-medium dark:text-gray-300">{transaction.requester?.name || 'N/A'}</div>
                       </div>
                       <div>
-                        <span className="text-gray-500">Proveedor:</span>
-                        <div className="font-medium">{transaction.provider?.name || 'N/A'}</div>
+                        <span className="text-gray-500 dark:text-gray-400">Proveedor:</span>
+                        <div className="font-medium dark:text-gray-300">{transaction.provider?.name || 'N/A'}</div>
                       </div>
                       <div>
-                        <span className="text-gray-500">Duración:</span>
-                        <div className="font-medium">{transaction.hours} horas</div>
+                        <span className="text-gray-500 dark:text-gray-400">Duración:</span>
+                        <div className="font-medium dark:text-gray-300">{transaction.hours} horas</div>
                       </div>
                       <div>
-                        <span className="text-gray-500">Créditos:</span>
-                        <div className="font-medium">{transaction.credits} cr</div>
+                        <span className="text-gray-500 dark:text-gray-400">Créditos:</span>
+                        <div className="font-medium dark:text-gray-300">{transaction.credits} cr</div>
                       </div>
                     </div>
 
-                    <div className="mt-2 text-sm text-gray-600">
+                    <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                       Programado para: {new Date(transaction.scheduledFor).toLocaleString()}
                     </div>
                   </div>

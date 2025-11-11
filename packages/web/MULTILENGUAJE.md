@@ -50,7 +50,7 @@ Para actualizar el Navbar existente, reemplaza los textos hardcodeados:
 **Antes:**
 ```tsx
 <Link href="/" className="text-2xl font-bold text-blue-600">
-  Comunidad Viva
+  Truk
 </Link>
 ```
 

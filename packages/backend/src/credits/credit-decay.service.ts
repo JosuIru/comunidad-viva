@@ -95,46 +95,50 @@ export class CreditDecayService {
         if (creditsToExpire > 0 && transaction.user.credits > 0) {
           const amountToDeduct = Math.min(creditsToExpire, transaction.user.credits);
 
-          // Actualizar balance del usuario
-          const updatedUser = await this.prisma.user.update({
-            where: { id: transaction.userId },
-            data: {
-              credits: {
-                decrement: amountToDeduct,
-              },
-            },
-          });
-
-          // Crear transacción de expiración
-          await this.prisma.creditTransaction.create({
-            data: {
-              userId: transaction.userId,
-              amount: -amountToDeduct,
-              balance: updatedUser.credits - amountToDeduct,
-              reason: CreditReason.ADMIN_GRANT, // Usamos ADMIN_GRANT para operaciones del sistema
-              description: `Expiración de créditos (${this.EXPIRATION_MONTHS} meses sin usar)`,
-              relatedId: transaction.id,
-              metadata: {
-                type: 'EXPIRATION',
-                originalTransactionId: transaction.id,
-                expirationDate: now.toISOString(),
-              },
-            },
-          });
-
-          // Crear notificación
-          await this.prisma.notification.create({
-            data: {
-              userId: transaction.userId,
-              type: 'CREDITS_EXPIRING',
-              title: 'Créditos expirados',
-              body: `${amountToDeduct} créditos han expirado por no usarse durante ${this.EXPIRATION_MONTHS} meses.`,
+          // TRANSACCIÓN ATÓMICA: Prevenir race conditions en expiración de créditos
+          await this.prisma.$transaction(async (transactionClient) => {
+            // 1. Actualizar balance del usuario atómicamente con decrement
+            const updatedUser = await transactionClient.user.update({
+              where: { id: transaction.userId },
               data: {
-                amount: -amountToDeduct,
-                reason: 'EXPIRATION',
+                credits: {
+                  decrement: amountToDeduct,
+                },
               },
-              link: '/credits',
-            },
+              select: { credits: true },
+            });
+
+            // 2. Crear transacción de expiración con el balance actualizado
+            await transactionClient.creditTransaction.create({
+              data: {
+                userId: transaction.userId,
+                amount: -amountToDeduct,
+                balance: updatedUser.credits,
+                reason: CreditReason.ADMIN_GRANT, // Usamos ADMIN_GRANT para operaciones del sistema
+                description: `Expiración de créditos (${this.EXPIRATION_MONTHS} meses sin usar)`,
+                relatedId: transaction.id,
+                metadata: {
+                  type: 'EXPIRATION',
+                  originalTransactionId: transaction.id,
+                  expirationDate: now.toISOString(),
+                },
+              },
+            });
+
+            // 3. Crear notificación
+            await transactionClient.notification.create({
+              data: {
+                userId: transaction.userId,
+                type: 'CREDITS_EXPIRING',
+                title: 'Créditos expirados',
+                body: `${amountToDeduct} créditos han expirado por no usarse durante ${this.EXPIRATION_MONTHS} meses.`,
+                data: {
+                  amount: -amountToDeduct,
+                  reason: 'EXPIRATION',
+                },
+                link: '/credits',
+              },
+            });
           });
 
           processedCount++;
@@ -196,46 +200,50 @@ export class CreditDecayService {
         const decayAmount = Math.floor(user.credits * this.DECAY_RATE);
 
         if (decayAmount > 0) {
-          // Actualizar balance del usuario
-          const updatedUser = await this.prisma.user.update({
-            where: { id: user.id },
-            data: {
-              credits: {
-                decrement: decayAmount,
-              },
-            },
-          });
-
-          // Crear transacción de decay
-          await this.prisma.creditTransaction.create({
-            data: {
-              userId: user.id,
-              amount: -decayAmount,
-              balance: updatedUser.credits - decayAmount,
-              reason: CreditReason.ADMIN_GRANT,
-              description: `Decay mensual (${this.DECAY_RATE * 100}% de créditos sin usar)`,
-              metadata: {
-                type: 'DECAY',
-                rate: this.DECAY_RATE,
-                originalAmount: user.credits,
-              },
-            },
-          });
-
-          // Crear notificación
-          await this.prisma.notification.create({
-            data: {
-              userId: user.id,
-              type: 'CREDITS_EXPIRING',
-              title: 'Decay mensual de créditos',
-              body: `${decayAmount} créditos se han oxidado (${this.DECAY_RATE * 100}%). ¡Úsalos en la comunidad!`,
+          // TRANSACCIÓN ATÓMICA: Prevenir race conditions en decay mensual
+          await this.prisma.$transaction(async (transactionClient) => {
+            // 1. Actualizar balance del usuario atómicamente con decrement
+            const updatedUser = await transactionClient.user.update({
+              where: { id: user.id },
               data: {
-                amount: -decayAmount,
-                reason: 'DECAY',
-                rate: this.DECAY_RATE,
+                credits: {
+                  decrement: decayAmount,
+                },
               },
-              link: '/credits',
-            },
+              select: { credits: true },
+            });
+
+            // 2. Crear transacción de decay con el balance actualizado
+            await transactionClient.creditTransaction.create({
+              data: {
+                userId: user.id,
+                amount: -decayAmount,
+                balance: updatedUser.credits,
+                reason: CreditReason.ADMIN_GRANT,
+                description: `Decay mensual (${this.DECAY_RATE * 100}% de créditos sin usar)`,
+                metadata: {
+                  type: 'DECAY',
+                  rate: this.DECAY_RATE,
+                  originalAmount: user.credits + decayAmount, // Balance original antes del decay
+                },
+              },
+            });
+
+            // 3. Crear notificación
+            await transactionClient.notification.create({
+              data: {
+                userId: user.id,
+                type: 'CREDITS_EXPIRING',
+                title: 'Decay mensual de créditos',
+                body: `${decayAmount} créditos se han oxidado (${this.DECAY_RATE * 100}%). ¡Úsalos en la comunidad!`,
+                data: {
+                  amount: -decayAmount,
+                  reason: 'DECAY',
+                  rate: this.DECAY_RATE,
+                },
+                link: '/credits',
+              },
+            });
           });
 
           decayedCount++;

@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 
 interface SwipeCard {
   id: string;
@@ -15,6 +16,17 @@ interface SwipeCard {
   helpOffered: string[];
   helpNeeded: string[];
   mutualConnections: number;
+  level?: number;
+  credits?: number;
+  reputation?: number;
+  location?: string;
+  joinedDate?: string;
+  activeOffersCount?: number;
+  completedTransactionsCount?: number;
+  badges?: string[];
+  languages?: string[];
+  availability?: string;
+  responseRate?: number;
 }
 
 interface Match {
@@ -32,6 +44,16 @@ interface SwipeStats {
   matches: number;
   superLikesRemaining: number;
 }
+
+// Helper function to generate avatar URL
+const getAvatarUrl = (userName: string, avatar?: string | null) => {
+  if (avatar && avatar !== 'null' && !avatar.includes('pravatar')) {
+    return avatar;
+  }
+  // Generate avatar using ui-avatars.com with user's initials
+  const name = encodeURIComponent(userName || 'User');
+  return `https://ui-avatars.com/api/?name=${name}&background=ec4899&color=fff&size=150&bold=true`;
+};
 
 export default function SwipePage() {
   const queryClient = useQueryClient();
@@ -127,8 +149,8 @@ export default function SwipePage() {
   }, [cards]);
 
   return (
-    <Layout title="Swipe & Match - Comunidad Viva">
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50">
+    <Layout title="Swipe & Match - Truk">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
         {/* Header */}
         <div className="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white">
           <div className="container mx-auto px-4 py-12">
@@ -142,23 +164,23 @@ export default function SwipePage() {
         <div className="container mx-auto px-4 py-8">
           {/* Stats Bar */}
           {stats && (
-            <div className="mb-8 bg-white rounded-lg shadow-lg p-6">
+            <div className="mb-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-gray-900">{stats.totalSwipes}</div>
-                  <div className="text-sm text-gray-600">Total Swipes</div>
+                  <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">{stats.totalSwipes}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Total Swipes</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-pink-600">{stats.likes}</div>
-                  <div className="text-sm text-gray-600">Likes Dados</div>
+                  <div className="text-3xl font-bold text-pink-600 dark:text-pink-400">{stats.likes}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Likes Dados</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-600">{stats.matches}</div>
-                  <div className="text-sm text-gray-600">Matches</div>
+                  <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">{stats.matches}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Matches</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-yellow-600">{stats.superLikesRemaining}</div>
-                  <div className="text-sm text-gray-600">Super Likes hoy</div>
+                  <div className="text-3xl font-bold text-yellow-600 dark:text-yellow-400">{stats.superLikesRemaining}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Super Likes hoy</div>
                 </div>
               </div>
             </div>
@@ -166,13 +188,13 @@ export default function SwipePage() {
 
           {/* Tabs */}
           <div className="mb-8">
-            <div className="flex border-b border-gray-200">
+            <div className="flex border-b border-gray-200 dark:border-gray-700">
               <button
                 onClick={() => setActiveTab('swipe')}
                 className={`px-6 py-3 font-semibold transition-colors ${
                   activeTab === 'swipe'
-                    ? 'border-b-2 border-pink-500 text-pink-600'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'border-b-2 border-pink-500 text-pink-600 dark:text-pink-400'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
                 }`}
               >
                 💫 Descubrir
@@ -181,8 +203,8 @@ export default function SwipePage() {
                 onClick={() => setActiveTab('matches')}
                 className={`px-6 py-3 font-semibold transition-colors relative ${
                   activeTab === 'matches'
-                    ? 'border-b-2 border-purple-500 text-purple-600'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'border-b-2 border-purple-500 text-purple-600 dark:text-purple-400'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
                 }`}
               >
                 💝 Matches
@@ -206,39 +228,131 @@ export default function SwipePage() {
                 <div className="max-w-2xl mx-auto">
                   {/* Swipe Card */}
                   <div
-                    className={`bg-white rounded-2xl shadow-2xl overflow-hidden transition-transform duration-300 ${
+                    className={`bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden transition-transform duration-300 ${
                       swipeDirection === 'left' ? '-translate-x-full opacity-0' : ''
                     } ${swipeDirection === 'right' ? 'translate-x-full opacity-0' : ''}`}
                   >
                     {/* Avatar Section */}
-                    <div className="bg-gradient-to-br from-pink-200 to-purple-200 p-12 text-center">
-                      <div className="w-32 h-32 bg-white rounded-full mx-auto mb-4 flex items-center justify-center text-6xl">
-                        {currentCard.avatar || '👤'}
+                    <div className="bg-gradient-to-br from-pink-200 to-purple-200 p-12 text-center relative">
+                      {/* Level Badge */}
+                      {currentCard.level && (
+                        <div className="absolute top-4 right-4 bg-white dark:bg-gray-700 rounded-full px-4 py-2 shadow-lg">
+                          <div className="text-xs text-gray-600 dark:text-gray-400 font-semibold">Nivel</div>
+                          <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{currentCard.level}</div>
+                        </div>
+                      )}
+
+                      <div className="w-32 h-32 bg-white rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden shadow-lg">
+                        <Image
+                          src={getAvatarUrl(currentCard.userName, currentCard.avatar)}
+                          alt={currentCard.userName}
+                          width={128}
+                          height={128}
+                          className="w-full h-full object-cover"
+                        />
                       </div>
-                      <h2 className="text-3xl font-bold text-gray-900 mb-2">{currentCard.userName}</h2>
+                      <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">{currentCard.userName}</h2>
+
+                      {/* Location */}
+                      {currentCard.location && (
+                        <div className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                          📍 {currentCard.location}
+                        </div>
+                      )}
+
+                      {/* Mutual Connections */}
                       {currentCard.mutualConnections > 0 && (
-                        <div className="text-sm text-purple-700 font-semibold">
+                        <div className="text-sm text-purple-700 dark:text-purple-300 font-semibold">
                           🤝 {currentCard.mutualConnections} conexiones en común
+                        </div>
+                      )}
+
+                      {/* Badges */}
+                      {currentCard.badges && currentCard.badges.length > 0 && (
+                        <div className="flex justify-center gap-2 mt-3">
+                          {currentCard.badges.slice(0, 5).map((badge, index) => (
+                            <span key={index} className="text-2xl" title={badge}>
+                              {badge}
+                            </span>
+                          ))}
                         </div>
                       )}
                     </div>
 
                     <div className="p-8">
+                      {/* Stats Grid */}
+                      <div className="grid grid-cols-3 gap-4 mb-6 bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        {currentCard.credits !== undefined && (
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-green-600 dark:text-green-400">{currentCard.credits}</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Créditos</div>
+                          </div>
+                        )}
+                        {currentCard.reputation !== undefined && (
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">⭐ {currentCard.reputation.toFixed(1)}</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Reputación</div>
+                          </div>
+                        )}
+                        {currentCard.completedTransactionsCount !== undefined && (
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{currentCard.completedTransactionsCount}</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Intercambios</div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Activity Info */}
+                      <div className="mb-6 flex flex-wrap gap-3 text-sm">
+                        {currentCard.activeOffersCount !== undefined && currentCard.activeOffersCount > 0 && (
+                          <span className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full font-medium">
+                            📋 {currentCard.activeOffersCount} ofertas activas
+                          </span>
+                        )}
+                        {currentCard.responseRate !== undefined && (
+                          <span className="px-3 py-1 bg-green-50 text-green-700 rounded-full font-medium">
+                            ⚡ {currentCard.responseRate}% respuesta
+                          </span>
+                        )}
+                        {currentCard.availability && (
+                          <span className="px-3 py-1 bg-purple-50 text-purple-700 rounded-full font-medium">
+                            🕐 {currentCard.availability}
+                          </span>
+                        )}
+                      </div>
+
                       {/* Bio */}
                       <div className="mb-6">
-                        <h3 className="text-lg font-bold text-gray-900 mb-2">Sobre mí</h3>
-                        <p className="text-gray-700">{currentCard.bio}</p>
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">📝 Sobre mí</h3>
+                        <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{currentCard.bio}</p>
                       </div>
+
+                      {/* Languages */}
+                      {currentCard.languages && currentCard.languages.length > 0 && (
+                        <div className="mb-6">
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">🗣️ Idiomas</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {currentCard.languages.map((language, index) => (
+                              <span
+                                key={index}
+                                className="px-3 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-full text-sm font-semibold"
+                              >
+                                {language}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
 
                       {/* Interests */}
                       {currentCard.interests && currentCard.interests.length > 0 && (
                         <div className="mb-6">
-                          <h3 className="text-lg font-bold text-gray-900 mb-2">💫 Intereses</h3>
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">💫 Intereses</h3>
                           <div className="flex flex-wrap gap-2">
                             {currentCard.interests.map((interest, index) => (
                               <span
                                 key={index}
-                                className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-semibold"
+                                className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm font-semibold"
                               >
                                 {interest}
                               </span>
@@ -250,12 +364,12 @@ export default function SwipePage() {
                       {/* Help Offered */}
                       {currentCard.helpOffered && currentCard.helpOffered.length > 0 && (
                         <div className="mb-6">
-                          <h3 className="text-lg font-bold text-gray-900 mb-2">🤝 Puedo ayudar con</h3>
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">🤝 Puedo ayudar con</h3>
                           <div className="flex flex-wrap gap-2">
                             {currentCard.helpOffered.map((help, index) => (
                               <span
                                 key={index}
-                                className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold"
+                                className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-sm font-semibold"
                               >
                                 {help}
                               </span>
@@ -267,17 +381,24 @@ export default function SwipePage() {
                       {/* Help Needed */}
                       {currentCard.helpNeeded && currentCard.helpNeeded.length > 0 && (
                         <div className="mb-6">
-                          <h3 className="text-lg font-bold text-gray-900 mb-2">🙏 Necesito ayuda con</h3>
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">🙏 Necesito ayuda con</h3>
                           <div className="flex flex-wrap gap-2">
                             {currentCard.helpNeeded.map((help, index) => (
                               <span
                                 key={index}
-                                className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-semibold"
+                                className="px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-full text-sm font-semibold"
                               >
                                 {help}
                               </span>
                             ))}
                           </div>
+                        </div>
+                      )}
+
+                      {/* Member Since */}
+                      {currentCard.joinedDate && (
+                        <div className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                          Miembro desde {new Date(currentCard.joinedDate).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}
                         </div>
                       )}
                     </div>
@@ -312,15 +433,15 @@ export default function SwipePage() {
                   </div>
 
                   {/* Keyboard Hints */}
-                  <div className="mt-6 text-center text-sm text-gray-600">
+                  <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
                     💡 Usa las flechas del teclado: ← No, ↑ Super Like, → Sí
                   </div>
                 </div>
               ) : (
-                <div className="bg-white rounded-lg shadow-lg p-12 text-center max-w-2xl mx-auto">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-12 text-center max-w-2xl mx-auto">
                   <div className="text-6xl mb-4">😊</div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">No hay más perfiles por ahora</h3>
-                  <p className="text-gray-600 mb-6">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">No hay más perfiles por ahora</h3>
+                  <p className="text-gray-600 dark:text-gray-400 mb-6">
                     Vuelve más tarde para descubrir nuevas conexiones
                   </p>
                   <button
@@ -345,14 +466,20 @@ export default function SwipePage() {
                   {matches.map((match) => (
                     <div
                       key={match.id}
-                      className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                      className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
                     >
                       <div className="bg-gradient-to-br from-pink-200 to-purple-200 p-8 text-center">
-                        <div className="w-24 h-24 bg-white rounded-full mx-auto mb-3 flex items-center justify-center text-5xl">
-                          {match.avatar || '👤'}
+                        <div className="w-24 h-24 bg-white rounded-full mx-auto mb-3 flex items-center justify-center overflow-hidden">
+                          <Image
+                            src={getAvatarUrl(match.userName, match.avatar)}
+                            alt={match.userName}
+                            width={96}
+                            height={96}
+                            className="w-full h-full object-cover"
+                          />
                         </div>
-                        <h3 className="text-xl font-bold text-gray-900">{match.userName}</h3>
-                        <div className="text-sm text-purple-700 mt-1">
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{match.userName}</h3>
+                        <div className="text-sm text-purple-700 dark:text-purple-300 mt-1">
                           Match desde {new Date(match.matchedAt).toLocaleDateString()}
                         </div>
                       </div>
@@ -369,10 +496,10 @@ export default function SwipePage() {
                   ))}
                 </div>
               ) : (
-                <div className="bg-white rounded-lg shadow-lg p-12 text-center">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-12 text-center">
                   <div className="text-6xl mb-4">💝</div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Aún no tienes matches</h3>
-                  <p className="text-gray-600 mb-6">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Aún no tienes matches</h3>
+                  <p className="text-gray-600 dark:text-gray-400 mb-6">
                     Empieza a hacer swipe para encontrar conexiones
                   </p>
                   <button
@@ -387,42 +514,42 @@ export default function SwipePage() {
           )}
 
           {/* How it Works */}
-          <div className="mt-12 bg-white rounded-lg shadow-lg p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">¿Cómo funciona Swipe & Match?</h3>
+          <div className="mt-12 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">¿Cómo funciona Swipe & Match?</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div className="text-center">
                 <div className="text-4xl mb-3">1️⃣</div>
-                <h4 className="font-bold mb-2">Descubre</h4>
-                <p className="text-sm text-gray-600">
+                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">Descubre</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Ve perfiles de personas con intereses y necesidades complementarias
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">2️⃣</div>
-                <h4 className="font-bold mb-2">Swipe</h4>
-                <p className="text-sm text-gray-600">
+                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">Swipe</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Desliza a la derecha si te interesa, izquierda si no
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">3️⃣</div>
-                <h4 className="font-bold mb-2">Match</h4>
-                <p className="text-sm text-gray-600">
+                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">Match</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Si ambos se dan like, ¡es un match!
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">4️⃣</div>
-                <h4 className="font-bold mb-2">Conecta</h4>
-                <p className="text-sm text-gray-600">
+                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">Conecta</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Chatea y coordina cómo pueden ayudarse mutuamente
                 </p>
               </div>
             </div>
 
-            <div className="mt-8 bg-purple-50 border-2 border-purple-200 rounded-lg p-6">
-              <h4 className="font-bold text-purple-900 mb-3">💡 Tips para mejores matches</h4>
-              <ul className="text-sm text-purple-800 space-y-2">
+            <div className="mt-8 bg-purple-50 dark:bg-purple-900/20 border-2 border-purple-200 dark:border-purple-700 rounded-lg p-6">
+              <h4 className="font-bold text-purple-900 dark:text-purple-300 mb-3">💡 Tips para mejores matches</h4>
+              <ul className="text-sm text-purple-800 dark:text-purple-400 space-y-2">
                 <li>• Completa tu perfil con información sobre lo que ofreces y necesitas</li>
                 <li>• Sé específico sobre tus habilidades e intereses</li>
                 <li>• Usa Super Likes estratégicamente (3 por día)</li>
@@ -435,18 +562,24 @@ export default function SwipePage() {
         {/* Match Modal */}
         {showMatchModal && newMatch && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-lg max-w-md w-full p-8 text-center animate-bounce">
+            <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-8 text-center animate-bounce">
               <div className="text-8xl mb-4">🎉</div>
               <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 mb-4">
                 ¡Es un Match!
               </h3>
 
-              <div className="bg-gradient-to-br from-pink-100 to-purple-100 rounded-lg p-6 mb-6">
-                <div className="w-24 h-24 bg-white rounded-full mx-auto mb-3 flex items-center justify-center text-5xl">
-                  {newMatch.avatar || '👤'}
+              <div className="bg-gradient-to-br from-pink-100 to-purple-100 dark:from-pink-900/20 dark:to-purple-900/20 rounded-lg p-6 mb-6">
+                <div className="w-24 h-24 bg-white dark:bg-gray-700 rounded-full mx-auto mb-3 flex items-center justify-center overflow-hidden">
+                  <Image
+                    src={getAvatarUrl(newMatch.userName, newMatch.avatar)}
+                    alt={newMatch.userName}
+                    width={96}
+                    height={96}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                <h4 className="text-xl font-bold text-gray-900">{newMatch.userName}</h4>
-                <p className="text-sm text-purple-700 mt-2">
+                <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100">{newMatch.userName}</h4>
+                <p className="text-sm text-purple-700 dark:text-purple-300 mt-2">
                   A {newMatch.userName} también le interesas
                 </p>
               </div>
@@ -463,7 +596,7 @@ export default function SwipePage() {
                 </button>
                 <button
                   onClick={() => setShowMatchModal(false)}
-                  className="w-full py-3 px-4 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-semibold"
+                  className="w-full py-3 px-4 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-semibold"
                 >
                   Seguir Descubriendo
                 </button>
@@ -476,4 +609,4 @@ export default function SwipePage() {
   );
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

@@ -4,6 +4,7 @@ import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import { api } from '../lib/api';
 import toast from 'react-hot-toast';
+import { getI18nProps } from '@/lib/i18n';
 
 // Dynamic import to avoid SSR issues with Leaflet
 const Map = dynamic(() => import('../components/Map'), {
@@ -152,7 +153,7 @@ export default function MapPage() {
   return (
     <>
       <Head>
-        <title>Mapa de la Comunidad - Comunidad Viva</title>
+        <title>Mapa de la Comunidad - Truk</title>
       </Head>
 
       <div className="min-h-screen bg-gray-50">
@@ -276,3 +277,5 @@ export default function MapPage() {
     </>
   );
 }
+
+export const getStaticProps = async (context: any) => getI18nProps(context);

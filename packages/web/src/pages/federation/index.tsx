@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import Link from 'next/link';
+import { getI18nProps } from '@/lib/i18n';
 import {
   GlobeAltIcon,
   CurrencyDollarIcon,
@@ -283,3 +284,5 @@ export default function FederationDashboard() {
     </Layout>
   );
 }
+
+export const getStaticProps = async (context: any) => getI18nProps(context);

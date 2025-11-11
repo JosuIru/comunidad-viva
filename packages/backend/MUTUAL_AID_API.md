@@ -2,7 +2,7 @@
 
 ## Overview
 
-El sistema de Ayuda Mutua de Comunidad Viva conecta **necesidades** con **recursos** a escala local, intercomunitaria y global. Permite que comunidades y personas apoyen proyectos desde un auzolan local hasta una escuela en África.
+El sistema de Ayuda Mutua de Truk conecta **necesidades** con **recursos** a escala local, intercomunitaria y global. Permite que comunidades y personas apoyen proyectos desde un auzolan local hasta una escuela en África.
 
 **Casos de uso:**
 - Necesidades individuales (comida, vivienda, salud)

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { getI18nProps } from '@/lib/i18n';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
@@ -36,6 +37,7 @@ interface UserDelegationStats {
 }
 
 export default function DelegationPage() {
+  const t = useTranslations('governance.delegation');
   const queryClient = useQueryClient();
   const [selectedDelegate, setSelectedDelegate] = useState<Delegate | null>(null);
   const [delegationCategory, setDelegationCategory] = useState<string>('');
@@ -76,7 +78,7 @@ export default function DelegationPage() {
       return response.data;
     },
     onSuccess: () => {
-      toast.success('¡Delegación creada exitosamente!');
+      toast.success(t('toasts.delegateSuccess'));
       queryClient.invalidateQueries({ queryKey: ['my-delegations'] });
       queryClient.invalidateQueries({ queryKey: ['delegation-stats'] });
       queryClient.invalidateQueries({ queryKey: ['available-delegates'] });
@@ -85,7 +87,7 @@ export default function DelegationPage() {
       setDelegationPower(10);
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al crear delegación');
+      toast.error(error.response?.data?.message || t('toasts.delegateError'));
     },
   });
 
@@ -96,24 +98,24 @@ export default function DelegationPage() {
       return response.data;
     },
     onSuccess: () => {
-      toast.success('Delegación revocada');
+      toast.success(t('toasts.revokeSuccess'));
       queryClient.invalidateQueries({ queryKey: ['my-delegations'] });
       queryClient.invalidateQueries({ queryKey: ['delegation-stats'] });
       queryClient.invalidateQueries({ queryKey: ['available-delegates'] });
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al revocar delegación');
+      toast.error(error.response?.data?.message || t('toasts.revokeError'));
     },
   });
 
   const categories = [
-    'Todas las Categorías',
-    'Tecnología',
-    'Economía',
-    'Gobernanza',
-    'Desarrollo',
-    'Comunidad',
-    'Sostenibilidad',
+    t('categories.all'),
+    t('categories.technology'),
+    t('categories.economy'),
+    t('categories.governance'),
+    t('categories.development'),
+    t('categories.community'),
+    t('categories.sustainability'),
   ];
 
   const getReputationColor = (reputation: number) => {
@@ -124,21 +126,21 @@ export default function DelegationPage() {
   };
 
   const getReputationBadge = (reputation: number) => {
-    if (reputation >= 80) return '👑 Experto';
-    if (reputation >= 50) return '⭐ Avanzado';
-    if (reputation >= 20) return '✓ Confiable';
-    return '🌱 Nuevo';
+    if (reputation >= 80) return t('reputation.expert');
+    if (reputation >= 50) return t('reputation.advanced');
+    if (reputation >= 20) return t('reputation.trusted');
+    return t('reputation.new');
   };
 
   return (
-    <Layout title="Delegación de Votos - Comunidad Viva">
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50">
+    <Layout title={t('layout.title')}>
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
         {/* Header */}
-        <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white">
+        <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 dark:from-indigo-700 dark:via-purple-700 dark:to-pink-700 text-white">
           <div className="container mx-auto px-4 py-12">
-            <h1 className="text-4xl font-bold mb-4">🗳️ Delegación de Votos</h1>
+            <h1 className="text-4xl font-bold mb-4">{t('header.title')}</h1>
             <p className="text-xl opacity-90">
-              Delega tu poder de voto en expertos de confianza
+              {t('header.subtitle')}
             </p>
           </div>
         </div>
@@ -147,35 +149,33 @@ export default function DelegationPage() {
           {/* Stats Overview */}
           {stats && (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <div className="bg-white rounded-lg shadow-lg p-6 text-center">
-                <div className="text-4xl font-bold text-indigo-600">{stats.totalDelegations}</div>
-                <div className="text-sm text-gray-600 mt-1">Delegaciones Activas</div>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center">
+                <div className="text-4xl font-bold text-indigo-600 dark:text-indigo-400">{stats.totalDelegations}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">{t('stats.activeDelegations')}</div>
               </div>
-              <div className="bg-white rounded-lg shadow-lg p-6 text-center">
-                <div className="text-4xl font-bold text-purple-600">{stats.votingPowerDelegated}</div>
-                <div className="text-sm text-gray-600 mt-1">Poder Delegado</div>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center">
+                <div className="text-4xl font-bold text-purple-600 dark:text-purple-400">{stats.votingPowerDelegated}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">{t('stats.delegatedPower')}</div>
               </div>
-              <div className="bg-white rounded-lg shadow-lg p-6 text-center">
-                <div className="text-4xl font-bold text-pink-600">{stats.receivedDelegations}</div>
-                <div className="text-sm text-gray-600 mt-1">Delegaciones Recibidas</div>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center">
+                <div className="text-4xl font-bold text-pink-600 dark:text-pink-400">{stats.receivedDelegations}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">{t('stats.receivedDelegations')}</div>
               </div>
-              <div className="bg-white rounded-lg shadow-lg p-6 text-center">
-                <div className="text-4xl font-bold text-blue-600">{stats.totalDelegated}</div>
-                <div className="text-sm text-gray-600 mt-1">Total Gestionado</div>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center">
+                <div className="text-4xl font-bold text-blue-600 dark:text-blue-400">{stats.totalDelegated}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">{t('stats.totalManaged')}</div>
               </div>
             </div>
           )}
 
           {/* Info Banner */}
-          <div className="bg-gradient-to-r from-indigo-100 to-purple-100 border-2 border-indigo-300 rounded-lg p-6 mb-8">
+          <div className="bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 border-2 border-indigo-300 dark:border-indigo-700 rounded-lg p-6 mb-8">
             <div className="flex items-start gap-4">
               <div className="text-4xl">💡</div>
               <div>
-                <h3 className="font-bold text-indigo-900 mb-2">¿Qué es la Delegación de Votos?</h3>
-                <p className="text-indigo-800 text-sm">
-                  La delegación te permite transferir tu poder de voto a personas de confianza con experiencia
-                  en áreas específicas. Ellos votarán en tu nombre, pero puedes revocar la delegación en cualquier
-                  momento.
+                <h3 className="font-bold text-indigo-900 dark:text-indigo-200 mb-2">{t('info.title')}</h3>
+                <p className="text-indigo-800 dark:text-indigo-300 text-sm">
+                  {t('info.description')}
                 </p>
               </div>
             </div>
@@ -183,26 +183,26 @@ export default function DelegationPage() {
 
           {/* Tabs */}
           <div className="mb-8">
-            <div className="flex border-b border-gray-200">
+            <div className="flex border-b border-gray-200 dark:border-gray-700">
               <button
                 onClick={() => setActiveTab('delegates')}
                 className={`px-6 py-3 font-semibold transition-colors ${
                   activeTab === 'delegates'
-                    ? 'border-b-2 border-indigo-500 text-indigo-600'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'border-b-2 border-indigo-500 dark:border-indigo-400 text-indigo-600 dark:text-indigo-400'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                 }`}
               >
-                👥 Delegados Disponibles
+                {t('tabs.availableDelegates')}
               </button>
               <button
                 onClick={() => setActiveTab('my-delegations')}
                 className={`px-6 py-3 font-semibold transition-colors ${
                   activeTab === 'my-delegations'
-                    ? 'border-b-2 border-purple-500 text-purple-600'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'border-b-2 border-purple-500 dark:border-purple-400 text-purple-600 dark:text-purple-400'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                 }`}
               >
-                📋 Mis Delegaciones
+                {t('tabs.myDelegations')}
               </button>
             </div>
           </div>
@@ -212,14 +212,14 @@ export default function DelegationPage() {
             <div>
               {delegatesLoading ? (
                 <div className="text-center py-12">
-                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 dark:border-indigo-400"></div>
                 </div>
               ) : delegates && delegates.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {delegates.map((delegate) => (
                     <div
                       key={delegate.id}
-                      className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                      className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
                     >
                       <div className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white p-6">
                         <div className="flex items-center gap-4 mb-3">
@@ -237,35 +237,35 @@ export default function DelegationPage() {
 
                       <div className="p-6">
                         {/* Bio */}
-                        <p className="text-gray-700 text-sm mb-4">{delegate.bio}</p>
+                        <p className="text-gray-700 dark:text-gray-300 text-sm mb-4">{delegate.bio}</p>
 
                         {/* Stats */}
                         <div className="grid grid-cols-3 gap-3 mb-4">
                           <div className="text-center">
-                            <div className="text-2xl font-bold text-indigo-600">{delegate.reputation}</div>
-                            <div className="text-xs text-gray-600">Reputación</div>
+                            <div className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{delegate.reputation}</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">{t('delegateCard.reputation')}</div>
                           </div>
                           <div className="text-center">
-                            <div className="text-2xl font-bold text-purple-600">{delegate.activeDelegations}</div>
-                            <div className="text-xs text-gray-600">Delegaciones</div>
+                            <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{delegate.activeDelegations}</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">{t('delegateCard.delegations')}</div>
                           </div>
                           <div className="text-center">
-                            <div className="text-2xl font-bold text-pink-600">
+                            <div className="text-2xl font-bold text-pink-600 dark:text-pink-400">
                               {Math.round(delegate.successRate)}%
                             </div>
-                            <div className="text-xs text-gray-600">Éxito</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">{t('delegateCard.success')}</div>
                           </div>
                         </div>
 
                         {/* Expertise */}
                         {delegate.expertise && delegate.expertise.length > 0 && (
                           <div className="mb-4">
-                            <div className="text-sm font-semibold text-gray-700 mb-2">Áreas de Experticia:</div>
+                            <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('delegateCard.expertise')}</div>
                             <div className="flex flex-wrap gap-2">
                               {delegate.expertise.map((exp, index) => (
                                 <span
                                   key={index}
-                                  className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-semibold"
+                                  className="px-3 py-1 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 rounded-full text-xs font-semibold"
                                 >
                                   {exp}
                                 </span>
@@ -277,7 +277,7 @@ export default function DelegationPage() {
                         {/* Delegate Button */}
                         <button
                           onClick={() => setSelectedDelegate(delegate)}
-                          className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-colors font-semibold"
+                          className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-700 dark:to-purple-700 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 dark:hover:from-indigo-600 dark:hover:to-purple-600 transition-colors font-semibold"
                         >
                           🗳️ Delegar Voto
                         </button>
@@ -286,10 +286,10 @@ export default function DelegationPage() {
                   ))}
                 </div>
               ) : (
-                <div className="bg-white rounded-lg shadow-lg p-12 text-center">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-12 text-center">
                   <div className="text-6xl mb-4">👥</div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">No hay delegados disponibles</h3>
-                  <p className="text-gray-600">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">No hay delegados disponibles</h3>
+                  <p className="text-gray-600 dark:text-gray-400">
                     Los delegados aparecerán aquí cuando haya miembros con suficiente reputación
                   </p>
                 </div>
@@ -305,18 +305,18 @@ export default function DelegationPage() {
                   {myDelegations.map((delegation) => (
                     <div
                       key={delegation.id}
-                      className="bg-white rounded-lg shadow-lg p-6 flex items-center justify-between"
+                      className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 flex items-center justify-between"
                     >
                       <div className="flex items-center gap-4 flex-1">
-                        <div className="w-16 h-16 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                        <div className="w-16 h-16 bg-gradient-to-br from-indigo-400 to-purple-400 dark:from-indigo-600 dark:to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
                           {delegation.delegateName.charAt(0).toUpperCase()}
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-bold text-gray-900 text-lg">{delegation.delegateName}</h4>
+                          <h4 className="font-bold text-gray-900 dark:text-gray-100 text-lg">{delegation.delegateName}</h4>
                           {delegation.category && (
-                            <p className="text-sm text-gray-600">Categoría: {delegation.category}</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">Categoría: {delegation.category}</p>
                           )}
-                          <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
+                          <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mt-1">
                             <span>Poder: {delegation.votingPower}</span>
                             <span>
                               Desde: {new Date(delegation.createdAt).toLocaleDateString()}
@@ -334,8 +334,8 @@ export default function DelegationPage() {
                         <span
                           className={`px-4 py-2 rounded-full text-sm font-semibold ${
                             delegation.active
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-gray-100 text-gray-800'
+                              ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300'
+                              : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'
                           }`}
                         >
                           {delegation.active ? '✓ Activa' : 'Inactiva'}
@@ -344,7 +344,7 @@ export default function DelegationPage() {
                           <button
                             onClick={() => revokeMutation.mutate(delegation.id)}
                             disabled={revokeMutation.isPending}
-                            className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors font-semibold disabled:opacity-50"
+                            className="px-4 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors font-semibold disabled:opacity-50"
                           >
                             Revocar
                           </button>
@@ -542,4 +542,4 @@ export default function DelegationPage() {
   );
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

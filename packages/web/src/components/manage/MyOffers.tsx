@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import { GiftIcon, HandRaisedIcon, CubeIcon } from '@heroicons/react/24/outline';
 
 interface Offer {
   id: string;
@@ -60,11 +61,11 @@ export default function MyOffers() {
   };
 
   const getTypeIcon = (type: string) => {
-    const icons: { [key: string]: string } = {
-      OFFER: '🎁',
-      REQUEST: '🙏',
+    const iconComponents: { [key: string]: JSX.Element } = {
+      OFFER: <GiftIcon className="h-8 w-8" />,
+      REQUEST: <HandRaisedIcon className="h-8 w-8" />,
     };
-    return icons[type] || '📦';
+    return iconComponents[type] || <CubeIcon className="h-8 w-8" />;
   };
 
   if (isLoading) {
@@ -78,11 +79,13 @@ export default function MyOffers() {
   if (offers.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="text-6xl mb-4">📦</div>
-        <h3 className="text-xl font-bold text-gray-900 mb-2">
+        <div className="flex justify-center mb-4">
+          <CubeIcon className="h-24 w-24 text-gray-400" />
+        </div>
+        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
           No tienes ofertas aún
         </h3>
-        <p className="text-gray-600 mb-6">
+        <p className="text-gray-600 dark:text-gray-400 mb-6">
           Crea tu primera oferta para empezar a intercambiar con la comunidad
         </p>
         <Link
@@ -98,7 +101,7 @@ export default function MyOffers() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
           Mis Ofertas ({offers.length})
         </h2>
         <Link
@@ -113,29 +116,29 @@ export default function MyOffers() {
         {offers.map((offer) => (
           <div
             key={offer.id}
-            className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
+            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-md transition-shadow"
           >
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="text-3xl">{getTypeIcon(offer.type)}</span>
+                  <div className="text-gray-600 dark:text-gray-400">{getTypeIcon(offer.type)}</div>
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                       {offer.title}
                     </h3>
                     <div className="flex items-center gap-2 mt-1">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadge(offer.status)}`}>
                         {offer.status}
                       </span>
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
                         {offer.category}
                       </span>
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-600 mb-4">{offer.description}</p>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">{offer.description}</p>
 
-                <div className="flex items-center gap-6 text-sm text-gray-500">
+                <div className="flex items-center gap-6 text-sm text-gray-500 dark:text-gray-400">
                   <div className="flex items-center gap-1">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -195,14 +198,14 @@ export default function MyOffers() {
       {/* Interested Users Modal */}
       {showInterestedModal && selectedOffer && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-              <h3 className="text-xl font-bold text-gray-900">
+          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                 Personas Interesadas ({selectedOffer.interestedUsers.length})
               </h3>
               <button
                 onClick={() => setShowInterestedModal(false)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -212,7 +215,7 @@ export default function MyOffers() {
 
             <div className="p-6">
               {selectedOffer.interestedUsers.length === 0 ? (
-                <p className="text-center text-gray-500 py-8">
+                <p className="text-center text-gray-500 dark:text-gray-400 py-8">
                   Aún no hay personas interesadas en esta oferta
                 </p>
               ) : (
@@ -220,15 +223,15 @@ export default function MyOffers() {
                   {selectedOffer.interestedUsers.map(({ user }) => (
                     <div
                       key={user.id}
-                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                      className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
                     >
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-white font-bold">
                           {user.name?.charAt(0).toUpperCase() || '?'}
                         </div>
                         <div>
-                          <div className="font-semibold text-gray-900">{user.name}</div>
-                          <div className="text-sm text-gray-600">{user.email}</div>
+                          <div className="font-semibold text-gray-900 dark:text-gray-100">{user.name}</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">{user.email}</div>
                         </div>
                       </div>
                       <Link

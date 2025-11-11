@@ -1,17 +1,20 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
 import { HeartIcon, GlobeAltIcon, AcademicCapIcon, HomeIcon } from '@heroicons/react/24/outline';
+import Button from '@/components/Button';
+import SkeletonLoader from '@/components/SkeletonLoader';
+import { staggerContainer, listItem } from '@/utils/animations';
+import ProximityFilter from '@/components/filters/ProximityFilter';
+import CommunityFilter from '@/components/filters/CommunityFilter';
+import PageErrorBoundary from '@/components/PageErrorBoundary';
 
-const SCOPE_LABELS = {
-  PERSONAL: 'Personal',
-  COMMUNITY: 'Comunitario',
-  INTERCOMMUNITY: 'Intercomunitario',
-  GLOBAL: 'Global',
-};
+// Scope labels will be dynamically translated using useTranslations in component
 
 const SCOPE_COLORS = {
   PERSONAL: 'bg-blue-100 text-blue-800',
@@ -20,16 +23,7 @@ const SCOPE_COLORS = {
   GLOBAL: 'bg-orange-100 text-orange-800',
 };
 
-const TYPE_LABELS: Record<string, string> = {
-  FOOD: 'Alimentos',
-  HOUSING: 'Vivienda',
-  HEALTH: 'Salud',
-  EDUCATION: 'Educación',
-  INFRASTRUCTURE: 'Infraestructura',
-  WATER_SANITATION: 'Agua y Saneamiento',
-  ENVIRONMENT: 'Medio Ambiente',
-  AUZOLAN: 'Auzolan',
-};
+// Type labels will be dynamically translated using useTranslations in component
 
 // UN Sustainable Development Goals (SDG/ODS)
 const SDG_ICONS: Record<number, string> = {
@@ -39,25 +33,7 @@ const SDG_ICONS: Record<number, string> = {
   16: '⚖️', 17: '🤲',
 };
 
-const SDG_NAMES: Record<number, string> = {
-  1: 'Fin de la Pobreza',
-  2: 'Hambre Cero',
-  3: 'Salud y Bienestar',
-  4: 'Educación de Calidad',
-  5: 'Igualdad de Género',
-  6: 'Agua Limpia y Saneamiento',
-  7: 'Energía Asequible',
-  8: 'Trabajo Decente',
-  9: 'Industria e Innovación',
-  10: 'Reducción Desigualdades',
-  11: 'Ciudades Sostenibles',
-  12: 'Consumo Responsable',
-  13: 'Acción Climática',
-  14: 'Vida Submarina',
-  15: 'Vida Terrestre',
-  16: 'Paz y Justicia',
-  17: 'Alianzas',
-};
+// SDG names will be dynamically translated using useTranslations in component
 
 const SDG_COLORS: Record<number, string> = {
   1: 'from-red-600 to-red-700',
@@ -79,28 +55,52 @@ const SDG_COLORS: Record<number, string> = {
   17: 'from-blue-800 to-blue-900',
 };
 
-export default function MutualAidPage() {
+function MutualAidPageContent() {
+  const t = useTranslations('mutualAid');
   const [tab, setTab] = useState<'needs' | 'projects'>('needs');
   const [selectedSDG, setSelectedSDG] = useState<number | null>(null);
   const [showSDGFilter, setShowSDGFilter] = useState(false);
+  const [communityFilter, setCommunityFilter] = useState<string>('');
+  const [distanceFilter, setDistanceFilter] = useState<number>(0);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  // Helper functions for translations
+  const getScopeLabel = (scope: string) => t(`scope.${scope}`);
+  const getNeedTypeLabel = (type: string) => t(`needType.${type}`);
+  const getProjectTypeLabel = (type: string) => t(`projectType.${type}`);
+  const getSDGName = (num: number) => t(`sdg.${num}`);
 
   const { data: needs, isLoading: needsLoading } = useQuery({
-    queryKey: ['mutual-aid-needs'],
+    queryKey: ['mutual-aid-needs', communityFilter, distanceFilter, userLocation],
     queryFn: async () => {
-      const response = await api.get('/mutual-aid/needs', {
-        params: { limit: 20 },
-      });
+      const params: any = { limit: 20 };
+      if (communityFilter) {
+        params.communityId = communityFilter;
+      }
+      if (userLocation && distanceFilter > 0) {
+        params.nearLat = userLocation.lat;
+        params.nearLng = userLocation.lng;
+        params.maxDistance = distanceFilter;
+      }
+      const response = await api.get('/mutual-aid/needs', { params });
       return response.data;
     },
     enabled: tab === 'needs',
   });
 
   const { data: projects, isLoading: projectsLoading } = useQuery({
-    queryKey: ['mutual-aid-projects'],
+    queryKey: ['mutual-aid-projects', communityFilter, distanceFilter, userLocation],
     queryFn: async () => {
-      const response = await api.get('/mutual-aid/projects', {
-        params: { limit: 20 },
-      });
+      const params: any = { limit: 20 };
+      if (communityFilter) {
+        params.communityId = communityFilter;
+      }
+      if (userLocation && distanceFilter > 0) {
+        params.nearLat = userLocation.lat;
+        params.nearLng = userLocation.lng;
+        params.maxDistance = distanceFilter;
+      }
+      const response = await api.get('/mutual-aid/projects', { params });
       return response.data;
     },
     enabled: tab === 'projects',
@@ -113,55 +113,63 @@ export default function MutualAidPage() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="container mx-auto px-4">
           {/* Header */}
-          <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Ayuda Mutua</h1>
-                <p className="text-gray-600 mt-2">
-                  Comparte necesidades y proyectos comunitarios alineados con los ODS
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{t('title')}</h1>
+                <p className="text-gray-600 dark:text-gray-400 mt-2">
+                  {t('subtitle')}
                 </p>
               </div>
             </div>
 
             {/* Tabs */}
             <div className="flex gap-2 mb-4">
-              <button
+              <Button
                 onClick={() => setTab('needs')}
-                className={`px-6 py-3 rounded-lg font-medium transition ${
-                  tab === 'needs'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
+                variant={tab === 'needs' ? 'primary' : 'ghost'}
+                size="md"
               >
-                Necesidades
-              </button>
-              <button
+                {t('tabs.needs')}
+              </Button>
+              <Button
                 onClick={() => setTab('projects')}
-                className={`px-6 py-3 rounded-lg font-medium transition ${
-                  tab === 'projects'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
+                variant={tab === 'projects' ? 'primary' : 'ghost'}
+                size="md"
               >
-                Proyectos Comunitarios
-              </button>
+                {t('tabs.projects')}
+              </Button>
+            </div>
+
+            {/* Community and Proximity Filters */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <CommunityFilter
+                value={communityFilter}
+                onChange={setCommunityFilter}
+              />
+
+              <ProximityFilter
+                value={distanceFilter}
+                onChange={setDistanceFilter}
+                onLocationChange={setUserLocation}
+              />
             </div>
 
             {/* SDG Filter - Only show for projects */}
             {tab === 'projects' && (
-              <div className="border-t pt-4">
+              <div className="border-t dark:border-gray-700 pt-4">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-semibold text-gray-700">
-                    Filtrar por Objetivos de Desarrollo Sostenible (ODS)
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    {t('filter.title')}
                   </h3>
                   <button
                     onClick={() => setShowSDGFilter(!showSDGFilter)}
                     className="text-sm text-blue-600 hover:text-blue-700"
                   >
-                    {showSDGFilter ? 'Ocultar' : 'Mostrar'} ODS
+                    {showSDGFilter ? t('filter.hide') : t('filter.show')}
                   </button>
                 </div>
 
@@ -172,10 +180,10 @@ export default function MutualAidPage() {
                       className={`p-2 rounded-lg text-center transition ${
                         selectedSDG === null
                           ? 'bg-gray-900 text-white'
-                          : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                          : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300'
                       }`}
                     >
-                      <div className="text-sm font-semibold">Todos</div>
+                      <div className="text-sm font-semibold">{t('filter.all')}</div>
                     </button>
                     {Object.keys(SDG_ICONS).map((sdgNum) => {
                       const num = parseInt(sdgNum);
@@ -186,9 +194,9 @@ export default function MutualAidPage() {
                           className={`p-2 rounded-lg text-center transition ${
                             selectedSDG === num
                               ? `bg-gradient-to-br ${SDG_COLORS[num]} text-white shadow-md`
-                              : 'bg-gray-100 hover:bg-gray-200'
+                              : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
                           }`}
-                          title={SDG_NAMES[num]}
+                          title={getSDGName(num)}
                         >
                           <div className="text-2xl mb-1">{SDG_ICONS[num]}</div>
                           <div className="text-xs font-semibold">ODS {num}</div>
@@ -200,15 +208,15 @@ export default function MutualAidPage() {
 
                 {selectedSDG && (
                   <div className="mt-3 flex items-center gap-2">
-                    <span className="text-sm text-gray-600">Filtrando por:</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">{t('filter.filtering')}</span>
                     <span className={`px-3 py-1 rounded-full text-white text-sm font-medium bg-gradient-to-r ${SDG_COLORS[selectedSDG]}`}>
-                      {SDG_ICONS[selectedSDG]} ODS {selectedSDG}: {SDG_NAMES[selectedSDG]}
+                      {SDG_ICONS[selectedSDG]} ODS {selectedSDG}: {getSDGName(selectedSDG)}
                     </span>
                     <button
                       onClick={() => setSelectedSDG(null)}
-                      className="text-sm text-gray-500 hover:text-gray-700"
+                      className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
                     >
-                      ✕ Limpiar
+                      ✕ {t('filter.clear')}
                     </button>
                   </div>
                 )}
@@ -220,48 +228,50 @@ export default function MutualAidPage() {
           {tab === 'needs' && (
             <div>
               <div className="flex justify-end mb-4">
-                <Link
-                  href="/mutual-aid/needs/new"
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold"
-                >
-                  + Publicar Necesidad
+                <Link href="/mutual-aid/needs/new">
+                  <Button variant="primary" size="lg">
+                    {t('buttons.publishNeed')}
+                  </Button>
                 </Link>
               </div>
 
               {needsLoading ? (
-                <div className="text-center py-12">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                </div>
+                <SkeletonLoader type="card" count={6} />
               ) : needs && needs.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <motion.div
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                  variants={staggerContainer}
+                  initial="hidden"
+                  animate="visible"
+                >
                   {needs.map((need: any) => (
-                    <Link
-                      key={need.id}
-                      href={`/mutual-aid/needs/${need.id}`}
-                      className="bg-white rounded-lg shadow-sm hover:shadow-md transition p-5"
-                    >
+                    <motion.div key={need.id} variants={listItem}>
+                      <Link
+                        href={`/mutual-aid/needs/${need.id}`}
+                        className="bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition p-5 block"
+                      >
                       <div className="flex items-start justify-between mb-3">
                         <span className={`text-xs font-medium px-2 py-1 rounded ${
                           SCOPE_COLORS[need.scope as keyof typeof SCOPE_COLORS]
                         }`}>
-                          {SCOPE_LABELS[need.scope as keyof typeof SCOPE_LABELS]}
+                          {getScopeLabel(need.scope)}
                         </span>
                         {need.urgencyLevel >= 8 && (
                           <span className="text-xs font-medium px-2 py-1 bg-red-100 text-red-800 rounded">
-                            Urgente
+                            {t('badges.urgent')}
                           </span>
                         )}
                       </div>
 
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
                         {need.title}
                       </h3>
 
-                      <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                      <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
                         {need.description}
                       </p>
 
-                      <div className="space-y-2 text-sm text-gray-600">
+                      <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
                         {need.location && (
                           <div className="flex items-center gap-2">
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -275,16 +285,16 @@ export default function MutualAidPage() {
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                           </svg>
-                          <span>{need.contributorsCount || 0} contribuciones</span>
+                          <span>{need.contributorsCount || 0} {t('contributions')}</span>
                         </div>
 
                         {need.targetEur && (
                           <div className="mt-3">
                             <div className="flex justify-between text-xs mb-1">
-                              <span>Progreso</span>
+                              <span>{t('progress')}</span>
                               <span>{Math.round((need.currentEur / need.targetEur) * 100)}%</span>
                             </div>
-                            <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                               <div
                                 className="bg-blue-600 h-2 rounded-full"
                                 style={{ width: `${Math.min((need.currentEur / need.targetEur) * 100, 100)}%` }}
@@ -293,22 +303,22 @@ export default function MutualAidPage() {
                           </div>
                         )}
                       </div>
-                    </Link>
+                      </Link>
+                    </motion.div>
                   ))}
-                </div>
+                </motion.div>
               ) : (
-                <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    No hay necesidades publicadas
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-12 text-center">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                    {t('empty.needs.title')}
                   </h3>
-                  <p className="text-gray-600 mb-4">
-                    Sé el primero en publicar una necesidad
+                  <p className="text-gray-600 dark:text-gray-400 mb-4">
+                    {t('empty.needs.description')}
                   </p>
-                  <Link
-                    href="/mutual-aid/needs/new"
-                    className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                  >
-                    Publicar Necesidad
+                  <Link href="/mutual-aid/needs/new">
+                    <Button variant="primary" size="lg">
+                      {t('empty.needs.button')}
+                    </Button>
                   </Link>
                 </div>
               )}
@@ -319,26 +329,28 @@ export default function MutualAidPage() {
           {tab === 'projects' && (
             <div>
               <div className="flex justify-end mb-4">
-                <Link
-                  href="/mutual-aid/projects/new"
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold"
-                >
-                  + Crear Proyecto
+                <Link href="/mutual-aid/projects/new">
+                  <Button variant="primary" size="lg">
+                    {t('buttons.createProject')}
+                  </Button>
                 </Link>
               </div>
 
               {projectsLoading ? (
-                <div className="text-center py-12">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                </div>
+                <SkeletonLoader type="card" count={6} />
               ) : filteredProjects && filteredProjects.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <motion.div
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                  variants={staggerContainer}
+                  initial="hidden"
+                  animate="visible"
+                >
                   {filteredProjects.map((project: any) => (
-                    <Link
-                      key={project.id}
-                      href={`/mutual-aid/projects/${project.id}`}
-                      className="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden"
-                    >
+                    <motion.div key={project.id} variants={listItem}>
+                      <Link
+                        href={`/mutual-aid/projects/${project.id}`}
+                        className="bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition overflow-hidden block"
+                      >
                       {project.images && project.images.length > 0 && (
                         <img
                           src={project.images[0]}
@@ -349,7 +361,7 @@ export default function MutualAidPage() {
                       <div className="p-5">
                         <div className="flex items-start justify-between mb-2">
                           <span className="text-xs font-medium px-2 py-1 bg-purple-100 text-purple-800 rounded">
-                            {TYPE_LABELS[project.type] || project.type}
+                            {getProjectTypeLabel(project.type)}
                           </span>
                           {project.isVerified && (
                             <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
@@ -365,28 +377,28 @@ export default function MutualAidPage() {
                               <span
                                 key={sdg}
                                 className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium text-white bg-gradient-to-r ${SDG_COLORS[sdg]}`}
-                                title={SDG_NAMES[sdg]}
+                                title={getSDGName(sdg)}
                               >
                                 {SDG_ICONS[sdg]} ODS {sdg}
                               </span>
                             ))}
                             {project.sdgGoals.length > 4 && (
-                              <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-200 text-gray-700">
+                              <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
                                 +{project.sdgGoals.length - 4}
                               </span>
                             )}
                           </div>
                         )}
 
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
                           {project.title}
                         </h3>
 
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                        <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
                           {project.description}
                         </p>
 
-                        <div className="space-y-2 text-sm text-gray-600">
+                        <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
                           <div className="flex items-center gap-2">
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -399,7 +411,7 @@ export default function MutualAidPage() {
                               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                               </svg>
-                              <span>{project.beneficiaries} beneficiarios</span>
+                              <span>{project.beneficiaries} {t('beneficiaries')}</span>
                             </div>
                           )}
 
@@ -409,7 +421,7 @@ export default function MutualAidPage() {
                                 <span>{project.currentEur}€ / {project.targetEur}€</span>
                                 <span>{Math.round((project.currentEur / project.targetEur) * 100)}%</span>
                               </div>
-                              <div className="w-full bg-gray-200 rounded-full h-2">
+                              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                                 <div
                                   className="bg-green-600 h-2 rounded-full"
                                   style={{ width: `${Math.min((project.currentEur / project.targetEur) * 100, 100)}%` }}
@@ -419,30 +431,31 @@ export default function MutualAidPage() {
                           )}
                         </div>
                       </div>
-                    </Link>
+                      </Link>
+                    </motion.div>
                   ))}
-                </div>
+                </motion.div>
               ) : (
-                <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    {selectedSDG ? `No hay proyectos para ODS ${selectedSDG}` : 'No hay proyectos comunitarios'}
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-12 text-center">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                    {selectedSDG ? t('empty.projects.titleWithFilter', { sdg: selectedSDG }) : t('empty.projects.title')}
                   </h3>
-                  <p className="text-gray-600 mb-4">
-                    {selectedSDG ? 'Intenta con otro objetivo de desarrollo sostenible' : 'Crea el primer proyecto comunitario'}
+                  <p className="text-gray-600 dark:text-gray-400 mb-4">
+                    {selectedSDG ? t('empty.projects.descriptionWithFilter') : t('empty.projects.description')}
                   </p>
                   {selectedSDG ? (
-                    <button
+                    <Button
                       onClick={() => setSelectedSDG(null)}
-                      className="inline-block px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
+                      variant="outline"
+                      size="lg"
                     >
-                      Ver Todos los Proyectos
-                    </button>
+                      {t('buttons.viewAll')}
+                    </Button>
                   ) : (
-                    <Link
-                      href="/mutual-aid/projects/new"
-                      className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                    >
-                      Crear Proyecto
+                    <Link href="/mutual-aid/projects/new">
+                      <Button variant="primary" size="lg">
+                        {t('empty.projects.button')}
+                      </Button>
                     </Link>
                   )}
                 </div>
@@ -455,44 +468,43 @@ export default function MutualAidPage() {
             <div className="bg-gradient-to-br from-blue-50 to-green-50 dark:from-blue-900 dark:to-green-900 dark:bg-opacity-20 rounded-lg p-6 mt-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                 <GlobeAltIcon className="h-6 w-6 text-blue-600" />
-                Objetivos de Desarrollo Sostenible (ODS)
+                {t('sdg.title')}
               </h3>
               <p className="text-gray-700 dark:text-gray-300 mb-4 text-sm">
-                Los proyectos de ayuda mutua están alineados con los 17 Objetivos de Desarrollo Sostenible de las Naciones Unidas,
-                asegurando que nuestras acciones contribuyan a un futuro más sostenible y equitativo.
+                {t('sdg.description')}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-3">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-2xl">{SDG_ICONS[1]}</span>
                     <h4 className="font-semibold text-gray-900 dark:text-white text-sm">
-                      ODS 1: Fin de la Pobreza
+                      ODS 1: {getSDGName(1)}
                     </h4>
                   </div>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
-                    Proyectos que combaten la pobreza y garantizan recursos básicos
+                    {getSDGName(1)}
                   </p>
                 </div>
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-3">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-2xl">{SDG_ICONS[3]}</span>
                     <h4 className="font-semibold text-gray-900 dark:text-white text-sm">
-                      ODS 3: Salud y Bienestar
+                      ODS 3: {getSDGName(3)}
                     </h4>
                   </div>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
-                    Iniciativas de salud comunitaria y bienestar
+                    {getSDGName(3)}
                   </p>
                 </div>
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-3">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-2xl">{SDG_ICONS[11]}</span>
                     <h4 className="font-semibold text-gray-900 dark:text-white text-sm">
-                      ODS 11: Ciudades Sostenibles
+                      ODS 11: {getSDGName(11)}
                     </h4>
                   </div>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
-                    Desarrollo urbano sostenible y comunidades resilientes
+                    {getSDGName(11)}
                   </p>
                 </div>
               </div>
@@ -504,4 +516,12 @@ export default function MutualAidPage() {
   );
 }
 
-export const getStaticProps = getI18nProps;
+export default function MutualAidPage() {
+  return (
+    <PageErrorBoundary pageName="ayuda mutua">
+      <MutualAidPageContent />
+    </PageErrorBoundary>
+  );
+}
+
+export const getStaticProps = async (context: any) => getI18nProps(context);

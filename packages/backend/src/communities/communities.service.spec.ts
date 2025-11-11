@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException, ForbiddenException } from '@nestjs/common';
 import { CommunitiesService } from './communities.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { AchievementsService } from '../achievements/achievements.service';
 import { CommunityVisibility, CommunityType } from '@prisma/client';
 
 describe('CommunitiesService', () => {
@@ -95,6 +96,12 @@ describe('CommunitiesService', () => {
             auditLog: {
               create: jest.fn(),
             },
+          },
+        },
+        {
+          provide: AchievementsService,
+          useValue: {
+            checkAchievements: jest.fn().mockResolvedValue({}),
           },
         },
       ],

@@ -15,7 +15,7 @@ export default function FlashDealsPage() {
   }, [router]);
 
   return (
-    <Layout title="Flash Deals - Comunidad Viva">
+    <Layout title="Flash Deals - Truk">
       <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 py-8">
         <div className="container mx-auto px-4">
           {/* Header */}
@@ -120,4 +120,4 @@ export default function FlashDealsPage() {
   );
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

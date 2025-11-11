@@ -84,20 +84,6 @@ export class MutualAidService {
     if (filters.communityId) where.communityId = filters.communityId;
     if (filters.country) where.country = filters.country;
 
-    // Geographic search (bounding box)
-    if (filters.lat && filters.lng && filters.radiusKm) {
-      const lat = parseFloat(filters.lat);
-      const lng = parseFloat(filters.lng);
-      const radiusKm = parseFloat(filters.radiusKm);
-
-      // Simple bounding box (1 degree ≈ 111km)
-      const latDelta = radiusKm / 111;
-      const lngDelta = radiusKm / (111 * Math.cos((lat * Math.PI) / 180));
-
-      where.latitude = { gte: lat - latDelta, lte: lat + latDelta };
-      where.longitude = { gte: lng - lngDelta, lte: lng + lngDelta };
-    }
-
     // Filter by urgency
     if (filters.minUrgency) {
       where.urgencyLevel = { gte: parseInt(filters.minUrgency) };
@@ -113,7 +99,7 @@ export class MutualAidService {
       where.isVerified = true;
     }
 
-    const needs = await this.prisma.need.findMany({
+    let needs = await this.prisma.need.findMany({
       where,
       include: {
         creator: {
@@ -149,6 +135,15 @@ export class MutualAidService {
       ],
       take: filters.limit ? parseInt(filters.limit) : 50,
     });
+
+    // Apply proximity filter using Haversine formula
+    if (filters.nearLat && filters.nearLng && filters.maxDistance && filters.maxDistance > 0) {
+      needs = needs.filter((need) => {
+        if (!need.latitude || !need.longitude) return false;
+        const distance = this.calculateDistance(filters.nearLat, filters.nearLng, need.latitude, need.longitude);
+        return distance <= filters.maxDistance;
+      });
+    }
 
     return needs;
   }
@@ -343,6 +338,46 @@ export class MutualAidService {
     });
   }
 
+  async deleteNeed(userId: string, needId: string) {
+    const need = await this.prisma.need.findUnique({
+      where: { id: needId },
+    });
+
+    if (!need) {
+      throw new NotFoundException('Necesidad no encontrada');
+    }
+
+    if (need.creatorId !== userId) {
+      throw new ForbiddenException('No tienes permiso para eliminar esta necesidad');
+    }
+
+    // Verificar que no tenga contribuciones activas
+    const activeContributions = await this.prisma.contribution.count({
+      where: {
+        needId,
+        status: {
+          in: ['PENDING', 'ACTIVE'],
+        },
+      },
+    });
+
+    if (activeContributions > 0) {
+      throw new BadRequestException('No se puede eliminar una necesidad con contribuciones activas');
+    }
+
+    // Eliminar contribuciones completadas/canceladas
+    await this.prisma.contribution.deleteMany({
+      where: { needId },
+    });
+
+    // Eliminar la necesidad
+    await this.prisma.need.delete({
+      where: { id: needId },
+    });
+
+    return { message: 'Necesidad eliminada exitosamente' };
+  }
+
   // ============================================
   // COMMUNITY PROJECTS - Proyectos Comunitarios
   // ============================================
@@ -426,20 +461,7 @@ export class MutualAidService {
       where.isVerified = true;
     }
 
-    // Geographic search
-    if (filters.lat && filters.lng && filters.radiusKm) {
-      const lat = parseFloat(filters.lat);
-      const lng = parseFloat(filters.lng);
-      const radiusKm = parseFloat(filters.radiusKm);
-
-      const latDelta = radiusKm / 111;
-      const lngDelta = radiusKm / (111 * Math.cos((lat * Math.PI) / 180));
-
-      where.latitude = { gte: lat - latDelta, lte: lat + latDelta };
-      where.longitude = { gte: lng - lngDelta, lte: lng + lngDelta };
-    }
-
-    const projects = await this.prisma.communityProject.findMany({
+    let projects = await this.prisma.communityProject.findMany({
       where,
       include: {
         creator: {
@@ -476,6 +498,15 @@ export class MutualAidService {
       orderBy: { createdAt: 'desc' },
       take: filters.limit ? parseInt(filters.limit) : 50,
     });
+
+    // Apply proximity filter using Haversine formula
+    if (filters.nearLat && filters.nearLng && filters.maxDistance && filters.maxDistance > 0) {
+      projects = projects.filter((project) => {
+        if (!project.latitude || !project.longitude) return false;
+        const distance = this.calculateDistance(filters.nearLat, filters.nearLng, project.latitude, project.longitude);
+        return distance <= filters.maxDistance;
+      });
+    }
 
     return projects;
   }
@@ -646,6 +677,99 @@ export class MutualAidService {
     });
 
     return contribution;
+  }
+
+  async updateProject(userId: string, projectId: string, data: any) {
+    const project = await this.prisma.communityProject.findUnique({
+      where: { id: projectId },
+    });
+
+    if (!project) {
+      throw new NotFoundException('Proyecto no encontrado');
+    }
+
+    if (project.creatorId !== userId) {
+      throw new ForbiddenException('No tienes permiso para modificar este proyecto');
+    }
+
+    return this.prisma.communityProject.update({
+      where: { id: projectId },
+      data: {
+        ...(data.title && { title: data.title }),
+        ...(data.description && { description: data.description }),
+        ...(data.vision && { vision: data.vision }),
+        ...(data.images && { images: data.images }),
+        ...(data.videoUrl !== undefined && { videoUrl: data.videoUrl }),
+        ...(data.location && { location: data.location }),
+        ...(data.latitude && { latitude: data.latitude }),
+        ...(data.longitude && { longitude: data.longitude }),
+        ...(data.country && { country: data.country }),
+        ...(data.region && { region: data.region }),
+        ...(data.targetEur !== undefined && { targetEur: data.targetEur }),
+        ...(data.targetCredits !== undefined && { targetCredits: data.targetCredits }),
+        ...(data.targetHours !== undefined && { targetHours: data.targetHours }),
+        ...(data.startDate && { startDate: new Date(data.startDate) }),
+        ...(data.endDate && { endDate: new Date(data.endDate) }),
+        ...(data.tags && { tags: data.tags }),
+        ...(data.sdgs && { sdgs: data.sdgs }),
+        ...(data.status && { status: data.status }),
+      },
+    });
+  }
+
+  async deleteProject(userId: string, projectId: string) {
+    const project = await this.prisma.communityProject.findUnique({
+      where: { id: projectId },
+    });
+
+    if (!project) {
+      throw new NotFoundException('Proyecto no encontrado');
+    }
+
+    if (project.creatorId !== userId) {
+      throw new ForbiddenException('No tienes permiso para eliminar este proyecto');
+    }
+
+    // Verificar que no tenga contribuciones activas
+    const activeContributions = await this.prisma.contribution.count({
+      where: {
+        projectId,
+        status: {
+          in: ['PENDING', 'ACTIVE'],
+        },
+      },
+    });
+
+    if (activeContributions > 0) {
+      throw new BadRequestException('No se puede eliminar un proyecto con contribuciones activas');
+    }
+
+    // Eliminar fases del proyecto
+    await this.prisma.projectPhase.deleteMany({
+      where: { projectId },
+    });
+
+    // Eliminar actualizaciones del proyecto
+    await this.prisma.projectUpdate.deleteMany({
+      where: { projectId },
+    });
+
+    // Eliminar reportes de impacto
+    await this.prisma.impactReport.deleteMany({
+      where: { projectId },
+    });
+
+    // Eliminar contribuciones
+    await this.prisma.contribution.deleteMany({
+      where: { projectId },
+    });
+
+    // Eliminar el proyecto
+    await this.prisma.communityProject.delete({
+      where: { id: projectId },
+    });
+
+    return { message: 'Proyecto eliminado exitosamente' };
   }
 
   async addProjectPhase(userId: string, projectId: string, data: any) {
@@ -952,5 +1076,26 @@ export class MutualAidService {
       },
       orderBy: { createdAt: 'desc' },
     });
+  }
+
+  /**
+   * Calculate distance between two coordinates using Haversine formula
+   */
+  private calculateDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
+    const R = 6371; // Earth's radius in km
+    const dLat = this.toRadians(lat2 - lat1);
+    const dLng = this.toRadians(lng2 - lng1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.toRadians(lat1)) *
+        Math.cos(this.toRadians(lat2)) *
+        Math.sin(dLng / 2) *
+        Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  private toRadians(degrees: number): number {
+    return degrees * (Math.PI / 180);
   }
 }

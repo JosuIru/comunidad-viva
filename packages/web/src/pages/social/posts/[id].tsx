@@ -398,4 +398,4 @@ export async function getStaticPaths() {
   };
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

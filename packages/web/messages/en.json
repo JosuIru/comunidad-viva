@@ -1,0 +1,2765 @@
+{
+  "nav": {
+    "title": "Truk",
+    "home": "Home",
+    "offers": "Offers",
+    "events": "Events",
+    "docs": "Documentation",
+    "discover": "Discover",
+    "economy": "Economy",
+    "manage": "Manage",
+    "profile": "Profile",
+    "communities": "Communities",
+    "logout": "Log out",
+    "login": "Log in",
+    "register": "Register",
+    "swipeOffers": "Swipe Offers",
+    "myMatches": "My Matches",
+    "stories": "Stories",
+    "flashDeals": "Flash Deals",
+    "weeklyChallenges": "Weekly Challenges",
+    "economicDashboard": "Economic Dashboard",
+    "sendCredits": "Send Credits",
+    "communityPools": "Community Pools",
+    "platform": {
+      "label": "Platform",
+      "sections": {
+        "gamification": "🎮 GAMIFICATION",
+        "economy": "💰 ECONOMY",
+        "governance": "🏛️ GOVERNANCE",
+        "housing": "🏠 HOUSING AND AID"
+      },
+      "items": {
+        "challenges": "Challenges & Leaderboard",
+        "swipe": "Swipe & Match",
+        "flashDeals": "Flash Deals",
+        "groupBuys": "Group Buys",
+        "referrals": "Referrals",
+        "hybridDashboard": "Hybrid System",
+        "hybridEvents": "Celebrations",
+        "economyDashboard": "Economy Dashboard",
+        "bridge": "Blockchain Bridges",
+        "proposals": "Proposals",
+        "delegation": "Vote Delegation",
+        "housing": "Housing",
+        "mutualAid": "Mutual Aid",
+        "allFeatures": "All features",
+        "features": "✨ Features"
+      }
+    },
+    "userMenu": {
+      "defaultName": "User",
+      "profile": "My Profile",
+      "manage": "Manage Content",
+      "viewProfile": "View profile"
+    }
+  },
+  "auth": {
+    "sessionClosed": "Session closed"
+  },
+  "common": {
+    "menu": "Menu",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search",
+    "filter": "Filter",
+    "loading": "Loading...",
+    "loadingOffers": "Loading offers...",
+    "error": "An error occurred",
+    "success": "Success!",
+    "noResults": "No results found",
+    "viewMore": "View more",
+    "viewLess": "View less",
+    "noImage": "No image",
+    "credits": "credits",
+    "views": "views"
+  },
+  "offers": {
+    "title": "Offers",
+    "newOffer": "+ New Offer",
+    "create": "Create new offer",
+    "myOffers": "My offers",
+    "category": "Category",
+    "price": "Price",
+    "description": "Description",
+    "location": "Location",
+    "allTypes": "All types",
+    "allCategories": "All categories",
+    "noOffersAvailable": "No offers available",
+    "createFirstOffer": "Create the first offer",
+    "types": {
+      "PRODUCT": "Product",
+      "SERVICE": "Service",
+      "TIME_BANK": "Time Bank",
+      "GROUP_BUY": "Group Purchase",
+      "EVENT": "Event"
+    },
+    "categories": {
+      "Alimentación": "Food",
+      "Ropa": "Clothing",
+      "Hogar": "Home",
+      "Tecnología": "Technology",
+      "Servicios": "Services",
+      "Otros": "Other"
+    }
+  },
+  "events": {
+    "title": "Events",
+    "create": "Create new event",
+    "myEvents": "My events",
+    "date": "Date",
+    "time": "Time",
+    "participants": "Participants",
+    "pageTitle": "Community Events",
+    "pageSubtitle": "Participate, learn and connect with your community",
+    "loading": "Loading events...",
+    "noEvents": "No upcoming events",
+    "createFirst": "Create the first event",
+    "credits": "credits",
+    "attendees": "attendees",
+    "organizedBy": "Organized by",
+    "organizer": "Organizer"
+  },
+  "credits": {
+    "balance": "Balance",
+    "send": "Send",
+    "receive": "Receive",
+    "history": "History",
+    "amount": "Amount",
+    "recipient": "Recipient"
+  },
+  "profile": {
+    "myProfile": "My profile",
+    "editProfile": "Edit profile",
+    "settings": "Settings",
+    "language": "Language"
+  },
+  "manage": {
+    "title": "Manage",
+    "myOffers": "My Offers",
+    "myEvents": "My Events",
+    "timeBank": "Time Bank",
+    "myProfile": "My Profile",
+    "description": "Manage your offers, events and time bank services"
+  },
+  "swipe": {
+    "matchToast": "It's a Match! 🎉",
+    "allSeenTitle": "You've seen all offers!",
+    "allSeenDescription": "Come back later to discover new community offers",
+    "matchesInfo": "💜 You have {count, plural, one {{count} match} other {{count} matches}}",
+    "viewMatches": "View my matches →",
+    "directionRight": "LIKE",
+    "directionLeft": "PASS",
+    "passTitle": "Pass",
+    "superTitle": "Super Like",
+    "likeTitle": "Like",
+    "counter": "{current} of {total}",
+    "hint": "💡 Swipe to pass, ❤️ to connect, or ⭐ for super like"
+  },
+  "flashDeals": {
+    "toastSuccess": "Deal activated! Show this at the shop 🎉",
+    "toastError": "Error activating deal",
+    "empty": {
+      "title": "No active Flash Deals right now",
+      "description": "Deals appear at 10:00, 14:00 and 20:00. Come back soon!"
+    },
+    "header": {
+      "title": "🔥 Flash Deals",
+      "count": "{count, plural, one {{count} active deal} other {{count} active deals}}"
+    },
+    "timer": {
+      "expired": "Expired",
+      "label": "remaining",
+      "hoursMinutes": "{hours}h {minutes}m",
+      "minutesSeconds": "{minutes}m {seconds}s"
+    },
+    "stock": {
+      "remaining": "{remaining} of {total} available",
+      "almostGone": "Last units!"
+    },
+    "button": {
+      "loading": "Activating...",
+      "soldOut": "Sold out",
+      "expired": "Expired",
+      "active": "🔥 Activate Deal"
+    }
+  },
+  "dailySeed": {
+    "title": "🌱 Daily Seed",
+    "toast": {
+      "success": "Congratulations! You've earned {credits} credits",
+      "error": "Error completing challenge",
+      "alreadyCompleted": "You've already completed today's challenge"
+    },
+    "participants": "{count, plural, one {1 person has completed this challenge} other {{count} people have completed this challenge}}",
+    "button": {
+      "completed": "✓ Completed",
+      "loading": "Completing...",
+      "action": "Complete (+{credits} credits)"
+    }
+  },
+  "web3Wallet": {
+    "errors": {
+      "metamaskNotInstalled": "MetaMask is not installed. Please install MetaMask from https://metamask.io",
+      "phantomNotInstalled": "Phantom is not installed. Please install Phantom from https://phantom.app",
+      "metaConnect": "Error connecting to MetaMask",
+      "phantomConnect": "Error connecting to Phantom"
+    },
+    "alerts": {
+      "metaWelcome": "Welcome! Your account has been created with MetaMask.",
+      "metaLoginSuccess": "Successfully authenticated with MetaMask!",
+      "phantomWelcome": "Welcome! Your account has been created with Phantom.",
+      "phantomLoginSuccess": "Successfully authenticated with Phantom!",
+      "linkSuccess": "Wallet linked successfully!"
+    },
+    "empty": {
+      "description": "No Web3 wallets detected. Install one to continue:",
+      "installMetaMask": "Install MetaMask",
+      "installPhantom": "Install Phantom"
+    },
+    "intro": {
+      "login": "Connect your Web3 wallet to log in or register",
+      "link": "Link your Web3 wallet to your account"
+    },
+    "buttons": {
+      "connecting": "Connecting...",
+      "meta": "Connect with MetaMask",
+      "phantom": "Connect with Phantom"
+    },
+    "footer": {
+      "terms": "By connecting your wallet, you agree to the terms of service"
+    }
+  },
+  "feed": {
+    "toast": {
+      "created": "Post created!",
+      "error": "Error creating post",
+      "writeFirst": "Write something first"
+    },
+    "errors": {
+      "load": "Error loading feed"
+    },
+    "scope": {
+      "title": "🌍 Feed Scope",
+      "filters": {
+        "local": {
+          "label": "My neighbourhood",
+          "description": "Posts from your neighbourhood"
+        },
+        "community": {
+          "label": "My community",
+          "description": "Posts from your community"
+        },
+        "region": {
+          "label": "Region",
+          "description": "Posts from your region"
+        },
+        "global": {
+          "label": "Global",
+          "description": "All posts"
+        }
+      }
+    },
+    "types": {
+      "all": "📋 All",
+      "STORY": "Story",
+      "NEED": "Need",
+      "OFFER": "Offer",
+      "THANKS": "Thanks",
+      "ACHIEVEMENT": "Achievement",
+      "MILESTONE": "Milestone",
+      "TIP": "Tip"
+    },
+    "create": {
+      "prompt": "💬 What would you like to share with your community?",
+      "placeholder": "Write your post...",
+      "cancel": "Cancel",
+      "submit": "Post",
+      "submitting": "Posting...",
+      "open": "Create post",
+      "emptyTitle": "No posts yet",
+      "emptyDescription": "Be the first to share something with your community"
+    },
+    "loading": "Loading posts...",
+    "helped": "{count, plural, one {{count} person helped} other {{count} people helped}}"
+  },
+  "timebankStats": {
+    "errors": {
+      "load": "Error loading statistics"
+    },
+    "title": "My Time Bank statistics",
+    "metrics": {
+      "hoursProvided": "Hours offered",
+      "hoursReceived": "Hours received",
+      "transactions": "Exchanges",
+      "rating": "Average rating",
+      "ratingCount": "({count, plural, one {{count} rating} other {{count} ratings}})"
+    },
+    "balance": {
+      "title": "Hours balance",
+      "description": "Difference between hours offered and received",
+      "unit": "h"
+    },
+    "motivation": {
+      "tipTitle": "💡 Did you know...?",
+      "tipDescription": "The time bank allows you to exchange skills with your community. Start by offering something you're good at!",
+      "greatTitle": "🌟 Excellent work!",
+      "greatDescription": "Your high rating shows your commitment to the community. Keep it up!"
+    }
+  },
+  "magicOnboarding": {
+    "steps": {
+      "welcome": {
+        "title": "Welcome!",
+        "description": "Discover Truk, where local economy comes to life."
+      },
+      "exploreOffers": {
+        "title": "Explore Offers",
+        "description": "Discover services and products from your community."
+      },
+      "createOffer": {
+        "title": "Create Your First Offer",
+        "description": "What can you offer? Share your skills with the community."
+      },
+      "localMap": {
+        "title": "Check the Local Map",
+        "description": "Find businesses and people near you."
+      },
+      "sendCredits": {
+        "title": "Send Your First Credit",
+        "description": "Support someone in the community with credits."
+      },
+      "joinEvent": {
+        "title": "Join an Event",
+        "description": "Participate in community events and meet new people."
+      },
+      "completed": {
+        "title": "Ready!",
+        "description": "You're now an active part of the community. Get your first 50 bonus credits!"
+      }
+    },
+    "toast": {
+      "completed": "Onboarding completed! 🎉 You've earned 50 bonus credits"
+    },
+    "messages": {
+      "mapSoon": "Map feature coming soon"
+    },
+    "buttons": {
+      "skip": "Skip ✕",
+      "previous": "← Previous",
+      "next": "Next",
+      "goNow": "Go now →",
+      "complete": "Complete! 🎉"
+    },
+    "progress": {
+      "step": "Step {current} of {total}",
+      "percent": "{percent}% complete"
+    },
+    "reward": "🎁 Complete onboarding and receive 50 bonus credits!"
+  },
+  "adminCommunities": {
+    "layout": {
+      "title": "Admin - Community Management",
+      "loadingTitle": "Admin - Communities"
+    },
+    "loading": {
+      "text": "Loading..."
+    },
+    "toasts": {
+      "createSuccess": "Community created successfully!",
+      "createError": "Error creating community",
+      "locationRequired": "Please enter a location first",
+      "geocodeSuccess": "Coordinates obtained successfully",
+      "geocodeNotFound": "No coordinates found for this location",
+      "geocodeError": "Error obtaining coordinates"
+    },
+    "header": {
+      "title": "Community Management",
+      "description": "Manage and create new local communities",
+      "new": "+ New Community",
+      "cancel": "✕ Cancel"
+    },
+    "form": {
+      "title": "Create New Community",
+      "fields": {
+        "name": {
+          "label": "Name *",
+          "placeholder": "E.g.: Gracia Neighbourhood"
+        },
+        "slug": {
+          "label": "Slug (URL) *",
+          "placeholder": "gracia-barcelona",
+          "auto": "Auto"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Describe your community..."
+        },
+        "location": {
+          "label": "Location",
+          "placeholder": "Barcelona, Spain",
+          "button": "📍 Get coordinates"
+        },
+        "radius": "Radius (km)",
+        "latitude": {
+          "label": "Latitude",
+          "autoFilled": "✓ Auto-filled",
+          "placeholder": "41.4036"
+        },
+        "longitude": {
+          "label": "Longitude",
+          "autoFilled": "✓ Auto-filled",
+          "placeholder": "2.1589"
+        },
+        "primaryColor": "Primary Colour",
+        "type": "Type *",
+        "visibility": "Visibility *",
+        "language": "Language",
+        "currency": "Currency"
+      },
+      "checkboxes": {
+        "requiresApproval": "Require manual approval for new members",
+        "allowExternalOffers": "Allow offers from connected communities"
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "submit": "Create Community",
+        "submitting": "Creating..."
+      }
+    },
+    "selects": {
+      "typeOptions": {
+        "NEIGHBORHOOD": "Neighbourhood",
+        "VILLAGE": "Village",
+        "TOWN": "Town",
+        "COUNTY": "County",
+        "REGION": "Region",
+        "CUSTOM": "Custom"
+      },
+      "visibilityOptions": {
+        "PRIVATE": "Private",
+        "PUBLIC": "Public (with approval)",
+        "OPEN": "Open (anyone can join)",
+        "FEDERATED": "Federated"
+      },
+      "languageOptions": {
+        "es": "Español",
+        "eu": "Euskera",
+        "ca": "Català",
+        "gl": "Galego",
+        "en": "English"
+      },
+      "currencyOptions": {
+        "EUR": "EUR (€)",
+        "USD": "USD ($)",
+        "GBP": "GBP (£)"
+      }
+    },
+    "list": {
+      "title": "{count, plural, one {Existing community ({count})} other {Existing communities ({count})}}",
+      "locationUnknown": "No location",
+      "members": "{count, plural, one {{count} member} other {{count} members}}",
+      "offers": "{count, plural, one {{count} offer} other {{count} offers}}"
+    },
+    "empty": {
+      "title": "No communities created yet",
+      "description": "Create the first community using the button above"
+    }
+  },
+  "creditsSend": {
+    "layout": {
+      "title": "Send Credits - Truk"
+    },
+    "nav": {
+      "back": "← Back"
+    },
+    "toasts": {
+      "loginRequired": "You must log in",
+      "success": "Credits sent successfully",
+      "error": "Error sending credits",
+      "selectRecipient": "Select a recipient",
+      "invalidAmount": "Enter a valid amount",
+      "insufficientCredits": "You don't have enough credits",
+      "userNotFound": "User not found"
+    },
+    "balance": {
+      "label": "Your current balance",
+      "amount": "{amount} credits"
+    },
+    "form": {
+      "title": "Send Credits with Flow Multiplier",
+      "recipient": {
+        "label": "Recipient's email",
+        "placeholder": "user@example.com"
+      },
+      "amount": {
+        "label": "Amount",
+        "placeholder": "0",
+        "insufficient": "You don't have enough credits"
+      },
+      "description": {
+        "label": "Message (optional)",
+        "placeholder": "E.g.: Thanks for your help..."
+      },
+      "submit": {
+        "default": "Send Credits",
+        "pending": "Sending..."
+      }
+    },
+    "preview": {
+      "title": "✨ Flow Multiplier Preview",
+      "send": "You send",
+      "multiplier": "Flow multiplier",
+      "receive": "Recipient receives",
+      "bonus": "🎁 Bonus of {bonus} credits generated by economic flow",
+      "pool": "Community pool contribution (2%)"
+    },
+    "recipient": {
+      "balance": "Balance: {amount} credits"
+    },
+    "info": {
+      "title": "💡 How does the Flow Multiplier work?",
+      "items": [
+        "When you send credits to someone with a lower balance, extra value is generated",
+        "Greater balance difference = higher multiplier (up to 1.5x)",
+        "2% goes to the community pool to help those in need",
+        "Encourages circulation and generosity in the community"
+      ]
+    }
+  },
+  "offerDetail": {
+    "layout": {
+      "title": "{title} - Truk",
+      "loadingTitle": "Offer - Truk"
+    },
+    "toasts": {
+      "markInterested": "Marked as interested",
+      "unmarkInterested": "Interest removed",
+      "markError": "Error marking interest",
+      "loginContact": "You must log in to contact",
+      "selfContact": "You cannot contact yourself",
+      "loginInterest": "You must log in to mark interest",
+      "userNotFound": "User not found"
+    },
+    "buttons": {
+      "back": "← Back",
+      "contact": "Contact",
+      "processing": "Processing...",
+      "alreadyInterested": "✓ Already interested",
+      "interest": "I'm interested",
+      "viewProfile": "View profile"
+    },
+    "sections": {
+      "noImage": "No image",
+      "locationTitle": "Location",
+      "locationValue": "📍 {address}",
+      "offeredBy": "Offered by",
+      "userFallback": "User"
+    },
+    "stats": {
+      "views": "👁️ {count, plural, one {{count} view} other {{count} views}}",
+      "interested": "⭐ {count, plural, one {{count} interested} other {{count} interested}}",
+      "date": "📅 {date}"
+    },
+    "price": {
+      "credits": "{amount} credits"
+    },
+    "info": {
+      "notFound": "Offer not found"
+    },
+    "tags": {
+      "type": {
+        "PRODUCT": "Product",
+        "SERVICE": "Service",
+        "TIME_BANK": "Time bank",
+        "GROUP_BUY": "Group purchase",
+        "EVENT": "Event",
+        "DONATION": "Donation"
+      }
+    }
+  },
+  "offerCreate": {
+    "layout": {
+      "title": "Create New Offer - Truk"
+    },
+    "toasts": {
+      "addressRequired": "Please enter an address first",
+      "geocodeSuccess": "Coordinates obtained successfully",
+      "geocodeNotFound": "No coordinates found for this address",
+      "geocodeError": "Error obtaining coordinates",
+      "uploadError": "Error uploading image: {name}",
+      "createSuccess": "Offer created successfully!",
+      "createError": "Error creating offer"
+    },
+    "headings": {
+      "title": "Create New Offer"
+    },
+    "form": {
+      "title": {
+        "label": "Title *",
+        "placeholder": "E.g.: Bicycle in good condition"
+      },
+      "description": {
+        "label": "Description *",
+        "placeholder": "Describe your offer in detail..."
+      },
+      "type": "Type *",
+      "category": "Category *",
+      "typeOptions": {
+        "PRODUCT": "Product",
+        "SERVICE": "Service",
+        "TIME_BANK": "Time Bank",
+        "GROUP_BUY": "Group Purchase",
+        "EVENT": "Event"
+      },
+      "categories": [
+        "Transport",
+        "Electronics",
+        "Home",
+        "Gardening",
+        "Education",
+        "Health",
+        "Food",
+        "Clothing",
+        "Services",
+        "Other"
+      ],
+      "categoryPlaceholder": "Select...",
+      "priceEur": {
+        "label": "Price (EUR)",
+        "placeholder": "0.00"
+      },
+      "priceCredits": {
+        "label": "Price (Credits)",
+        "placeholder": "0"
+      },
+      "stock": {
+        "label": "Stock",
+        "placeholder": "1"
+      },
+      "address": {
+        "label": "Address",
+        "placeholder": "High Street 1, Madrid",
+        "button": "📍 Get coordinates",
+        "help": "Enter the address and click \"Get coordinates\" to automatically fill in lat/lng"
+      },
+      "lat": {
+        "label": "Latitude (to appear on the map)",
+        "placeholder": "E.g.: 40.416775",
+        "help": "Latitude coordinate"
+      },
+      "lng": {
+        "label": "Longitude (to appear on the map)",
+        "placeholder": "E.g.: -3.703790",
+        "help": "Longitude coordinate"
+      },
+      "tags": {
+        "label": "Tags (comma-separated)",
+        "placeholder": "bicycle, transport, eco-friendly"
+      },
+      "images": {
+        "label": "Images",
+        "previewAlt": "Preview {index}"
+      },
+      "submit": {
+        "default": "Create Offer",
+        "pending": "Creating..."
+      },
+      "cancel": "Cancel"
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "updated": "Last updated: March 2025",
+    "intro": "At Truk we take the protection of your data very seriously. This policy explains what information we collect, how we use it and what rights you have over it.",
+    "sections": [
+      {
+        "title": "1. Information we collect",
+        "paragraphs": [
+          "We collect strictly necessary information for the platform to function, to integrate with Web3 services and to improve the community experience."
+        ],
+        "bullets": [
+          "Registration data: name, email, preferred language and community you belong to.",
+          "Usage information: activity within the platform, offers created, events you register for and credit transfers.",
+          "Content you share: text, images and opinions you voluntarily publish.",
+          "Identifiers linked to Web3 wallets and blockchain network addresses when you choose to connect MetaMask, Phantom or other compatible providers."
+        ]
+      },
+      {
+        "title": "2. How we use your information",
+        "paragraphs": [
+          "We use the data to facilitate exchange within the community, manage your Web3 identity and keep the platform secure.",
+          "We record in smart contracts or blockchain systems transactions that require traceability (for example, credit movements or gamified attendance confirmations).",
+          "We also analyse platform usage in aggregate to improve functionality, detect fraud and launch new community initiatives."
+        ]
+      },
+      {
+        "title": "3. When we share information",
+        "paragraphs": [
+          "We do not sell your personal data. We only share information with third parties when it is essential to provide the service or when required by regulations."
+        ],
+        "bullets": [
+          "Technology providers who help us host, send emails or process payments.",
+          "When you give us explicit consent for a specific integration.",
+          "When a competent authority requests it legally.",
+          "Decentralised services necessary to publish transactions on blockchain (for example, nodes, explorers or storage networks) respecting minimisation principles."
+        ]
+      },
+      {
+        "title": "4. Your rights",
+        "paragraphs": [
+          "You can request access, rectification or deletion of your personal data at any time.",
+          "If you choose to unsubscribe, we will delete or anonymise your data except for those we must retain due to legal obligations."
+        ]
+      },
+      {
+        "title": "5. Retention and security",
+        "paragraphs": [
+          "We keep information for as long as necessary to provide the service, comply with applicable regulations and maintain traceability of blockchain operations when mandatory.",
+          "We apply technical and organisational measures (encryption, backups, access controls) to protect your data from unauthorised access, loss or alteration.",
+          "Please note that transactions published on blockchain networks may be immutable and publicly consultable; therefore we only publish the essential information on-chain."
+        ]
+      }
+    ],
+    "contact": {
+      "title": "Contact",
+      "paragraphs": [
+        "If you have questions about this policy or wish to exercise your rights, write to us at privacy@comunidad.viva."
+      ]
+    }
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "updated": "Last updated: March 2025",
+    "intro": "These terms regulate the use of Truk. By creating an account and participating in the platform you agree to comply with the following conditions.",
+    "sections": [
+      {
+        "title": "1. Acceptance of terms",
+        "paragraphs": [
+          "Use of the platform implies complete acceptance of these terms and their updates. If you do not agree, you may stop using the service at any time."
+        ]
+      },
+      {
+        "title": "2. Account and security",
+        "paragraphs": [
+          "You are responsible for maintaining the confidentiality of your credentials and your account information.",
+          "You must notify us immediately if you detect unauthorised use or any security incident."
+        ]
+      },
+      {
+        "title": "3. Offers and participation",
+        "paragraphs": [
+          "The offers, events or services you publish must comply with current regulations and community rules.",
+          "You are responsible for the content you share, the operations you sign with your wallet and for complying with the agreements you reach with other users, on and off the chain."
+        ]
+      },
+      {
+        "title": "4. Community credits",
+        "paragraphs": [
+          "Truk credits are not fiat money or financial instruments.",
+          "Their function is to encourage exchange within the community and they cannot be redeemed for money outside the platform.",
+          "When credits or rewards are reflected in smart contracts or blockchain networks, you agree that their custody depends on the security of your wallet."
+        ]
+      },
+      {
+        "title": "5. Community-generated content",
+        "paragraphs": [
+          "You grant us a limited licence to host and display the content you share in order to operate the platform.",
+          "We may remove content we consider contrary to legislation or community rules."
+        ]
+      },
+      {
+        "title": "6. Limitation of liability",
+        "paragraphs": [
+          "Truk is offered \"as is\" and we do not guarantee that the service will be uninterrupted or error-free.",
+          "We are not responsible for agreements or transactions between users, nor for the custody of your wallets or private keys.",
+          "Blockchain operations are final; always review information before signing and only use secure devices."
+        ]
+      },
+      {
+        "title": "7. Changes to terms",
+        "paragraphs": [
+          "We may update these terms when we incorporate new functionalities or regulations require it.",
+          "We will notify you of relevant changes and, if you continue using the platform, you will be deemed to accept the new terms."
+        ]
+      },
+      {
+        "title": "8. Applicable law and contact",
+        "paragraphs": [
+          "These terms are interpreted in accordance with Spanish law.",
+          "For any enquiries you can write to us at legal@comunidad.viva."
+        ]
+      }
+    ]
+  },
+  "eventDetail": {
+    "layout": {
+      "title": "{title} - Truk",
+      "loadingTitle": "Event - Truk"
+    },
+    "toasts": {
+      "registerSuccess": "You have successfully registered for the event",
+      "registerError": "Error registering for event",
+      "organizerNotFound": "Could not find the organiser",
+      "loginContact": "You must log in to contact the organiser",
+      "selfContact": "You cannot contact yourself",
+      "loginRegister": "You must log in to register",
+      "capacityReached": "The event has reached its maximum capacity",
+      "alreadyRegistered": "You are already registered for this event"
+    },
+    "loading": {
+      "text": "Loading event..."
+    },
+    "notFound": {
+      "title": "Event not found",
+      "description": "Sorry, we couldn't find the event you're looking for.",
+      "button": "View all events"
+    },
+    "buttons": {
+      "back": "← Back",
+      "contact": "Contact organiser",
+      "register": "Register",
+      "registering": "Registering...",
+      "registered": "✓ Registered",
+      "capacityFull": "Capacity full"
+    },
+    "status": {
+      "finished": "Finished",
+      "reward": "Attend and earn {credits} credits"
+    },
+    "sections": {
+      "schedule": {
+        "start": "Start",
+        "end": "End"
+      },
+      "location": {
+        "title": "Location",
+        "value": "{address}"
+      },
+      "imageFallback": "Event",
+      "attendeeFallback": "User",
+      "organizerFallback": "Organiser",
+      "description": "Description",
+      "capacity": {
+        "label": "Capacity",
+        "value": "{current} / {capacity} attendees"
+      },
+      "attendees": "Attendees ({count})",
+      "meta": {
+        "attendees": "👥 {count, plural, one {{count} attendee} other {{count} attendees}}",
+        "published": "📅 Published {date}"
+      },
+      "organizer": "Organised by",
+      "details": {
+        "title": "Details",
+        "type": "Event type",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "availableSpots": "Available places"
+      }
+    },
+    "badges": {
+      "type": {
+        "WORKSHOP": "Workshop",
+        "CONFERENCE": "Conference",
+        "MEETUP": "Meetup",
+        "SOCIAL": "Social",
+        "VOLUNTEER": "Volunteer",
+        "OTHER": "Other"
+      },
+      "reward": "+{credits} credits"
+    }
+  },
+  "weeklyChallenges": {
+    "empty": {
+      "title": "No active challenge",
+      "description": "Weekly challenges start on Mondays. Come back soon!"
+    },
+    "badges": {
+      "weekly": "Weekly Challenge",
+      "daysRemaining": "{count, plural, one {{count} day remaining} other {{count} days remaining}}"
+    },
+    "reward": {
+      "target": "Target"
+    },
+    "leaderboard": {
+      "title": "🥇 Leaderboard",
+      "participants": "{count, plural, one {{count} participant} other {{count} participants}}",
+      "empty": "Be the first to participate in this challenge",
+      "progress": "Progress: {progress} / {target}",
+      "points": "⭐ {score} points",
+      "completed": "✓ Completed"
+    },
+    "positions": {
+      "first": {
+        "title": "1st Place",
+        "description": "Full reward + 50 extra credits"
+      },
+      "second": {
+        "title": "2nd Place",
+        "description": "Full reward + 30 extra credits"
+      },
+      "third": {
+        "title": "3rd Place",
+        "description": "Full reward + 20 extra credits"
+      }
+    },
+    "instructions": {
+      "title": "💡 How to participate",
+      "HELP_STREAK": [
+        "Complete exchanges or services with different people",
+        "Each different person counts as 1 point",
+        "Keep the streak going by helping new members"
+      ],
+      "ECO_WARRIOR": [
+        "Perform sustainable actions such as sharing objects",
+        "Participate in eco-friendly group purchases",
+        "Each green action adds points"
+      ],
+      "CONNECTOR": [
+        "Connect with new community members",
+        "Use the swipe system to make matches",
+        "Participate in community events"
+      ],
+      "TRANSACTION_MASTER": [
+        "Complete successful exchanges on the platform",
+        "Offer and request services",
+        "Each completed transaction adds 1 point"
+      ],
+      "default": [
+        "Participate actively in the community",
+        "Complete activities related to the challenge",
+        "Check your notifications for updates"
+      ]
+    }
+  },
+  "languageSelector": {
+    "ariaLabel": "Change language",
+    "languages": {
+      "es": "Español",
+      "eu": "Euskara",
+      "en": "English",
+      "ca": "Català"
+    }
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "createOffer": "+ Create Offer",
+    "createEvent": "+ Create Event",
+    "timeBank": "Time Bank",
+    "publishNeed": "+ Post Need",
+    "createProject": "+ Create Project",
+    "housingCommunity": "🏡 Community Housing",
+    "viewMutualAid": "🤝 View Mutual Aid"
+  },
+  "home": {
+    "viewToggle": {
+      "map": "Map",
+      "feed": "Feed"
+    },
+    "noLocations": "No locations to display",
+    "groupbuy": {
+      "fallbackTitle": "Group Purchase"
+    }
+  },
+  "map": {
+    "loading": "Loading map...",
+    "clickToEnableScroll": "Click on the map to enable scroll zoom",
+    "viewDetails": "View details →"
+  },
+  "communityStats": {
+    "activeUsers": "Active Users",
+    "hoursShared": "Hours Shared",
+    "totalSavings": "Total Savings",
+    "co2Avoided": "CO2 Avoided"
+  },
+  "register": {
+    "title": "Join Truk",
+    "subtitle": "Create your account and start collaborating",
+    "form": {
+      "fullName": {
+        "label": "Full name *",
+        "placeholder": "John Smith"
+      },
+      "email": {
+        "label": "Email *",
+        "placeholder": "your@email.com"
+      },
+      "phone": {
+        "label": "Phone (optional)",
+        "placeholder": "+44 7000 000 000"
+      },
+      "password": {
+        "label": "Password *",
+        "placeholder": "••••••••",
+        "toggleHide": "Hide password",
+        "toggleShow": "Show password"
+      },
+      "confirmPassword": {
+        "label": "Confirm password *",
+        "placeholder": "••••••••"
+      },
+      "submit": "Create account",
+      "submitting": "Creating account..."
+    },
+    "hasAccount": "Already have an account?",
+    "loginLink": "Log in here",
+    "errors": {
+      "passwordMismatch": "Passwords do not match",
+      "passwordTooShort": "Password must be at least 6 characters",
+      "createFailed": "Error creating account"
+    },
+    "success": "Account created successfully!"
+  },
+  "login": {
+    "title": "Log in",
+    "form": {
+      "email": {
+        "label": "Email",
+        "placeholder": "your@email.com"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "••••••••",
+        "toggleShow": "Show password",
+        "toggleHide": "Hide password"
+      },
+      "submit": "Log in",
+      "submitting": "Logging in..."
+    },
+    "success": "Successfully logged in!",
+    "errors": {
+      "loginFailed": "Error logging in"
+    },
+    "noAccount": "Don't have an account?",
+    "registerLink": "Register",
+    "divider": "Or continue with"
+  },
+  "timebank": {
+    "title": "Time Bank",
+    "subtitle": "Share your skills and learn from others",
+    "stats": {
+      "hoursShared": "Hours Shared",
+      "hoursReceived": "Hours Received",
+      "exchanges": "Exchanges",
+      "pending": "Pending"
+    },
+    "tabs": {
+      "offers": "Available Offers",
+      "exchanges": "My Exchanges"
+    },
+    "loading": {
+      "offers": "Loading offers...",
+      "exchanges": "Loading exchanges..."
+    },
+    "empty": {
+      "offers": "No offers available",
+      "exchanges": "You have no exchanges yet"
+    },
+    "estimatedHours": "⏱️ {hours}h estimated",
+    "canTeach": "👨‍🏫 Can teach",
+    "roles": {
+      "provider": "Provider",
+      "requester": "Requester"
+    }
+  },
+  "managePage": {
+    "description": "Manage your offers, events and profile in one place"
+  },
+  "mutualAid": {
+    "title": "Mutual Aid",
+    "subtitle": "Share needs and community projects aligned with the SDGs",
+    "tabs": {
+      "needs": "Needs",
+      "projects": "Community Projects"
+    },
+    "filter": {
+      "title": "Filter by Sustainable Development Goals (SDGs)",
+      "show": "Show",
+      "hide": "Hide",
+      "all": "All",
+      "filtering": "Filtering by:",
+      "clear": "Clear"
+    },
+    "buttons": {
+      "publishNeed": "+ Post Need",
+      "createProject": "+ Create Project",
+      "viewAll": "View All Projects"
+    },
+    "badges": {
+      "urgent": "Urgent"
+    },
+    "contributions": "contributions",
+    "beneficiaries": "beneficiaries",
+    "empty": {
+      "needs": {
+        "title": "No needs posted",
+        "description": "Be the first to post a need",
+        "button": "Post Need"
+      },
+      "projects": {
+        "title": "No community projects",
+        "titleWithFilter": "No projects for SDG {sdg}",
+        "description": "Create the first community project",
+        "descriptionWithFilter": "Try another goal...",
+        "button": "Create Project"
+      }
+    },
+    "sdg": {
+      "title": "Sustainable Development Goals (SDGs)",
+      "description": "Mutual aid projects are aligned with the UN Sustainable Development Goals, promoting a positive impact on the community and the environment.",
+      "1": "No poverty",
+      "2": "Zero hunger",
+      "3": "Good health and well-being",
+      "4": "Quality education",
+      "5": "Gender equality",
+      "6": "Clean water and sanitation",
+      "7": "Affordable and clean energy",
+      "8": "Decent work and economic growth",
+      "9": "Industry, innovation and infrastructure",
+      "10": "Reduced inequalities",
+      "11": "Sustainable cities and communities",
+      "12": "Responsible consumption and production",
+      "13": "Climate action",
+      "14": "Life below water",
+      "15": "Life on land",
+      "16": "Peace, justice and strong institutions",
+      "17": "Partnerships for the goals"
+    },
+    "scope": {
+      "PERSONAL": "Personal",
+      "COMMUNITY": "Community",
+      "REGIONAL": "Regional",
+      "GLOBAL": "Global"
+    },
+    "needType": {
+      "FOOD": "Food",
+      "HOUSING": "Housing",
+      "HEALTH": "Health",
+      "EDUCATION": "Education",
+      "TRANSPORT": "Transport",
+      "CARE": "Care",
+      "LEGAL": "Legal",
+      "FINANCIAL": "Financial",
+      "EMPLOYMENT": "Employment",
+      "OTHER": "Other"
+    }
+  },
+  "eventCreate": {
+    "layout": {
+      "title": "Create New Event - Truk"
+    },
+    "heading": "Create New Event",
+    "form": {
+      "title": {
+        "label": "Event Title *",
+        "placeholder": "E.g.: Urban garden workshop"
+      },
+      "description": {
+        "label": "Description *",
+        "placeholder": "Describe the event, what activities will take place..."
+      },
+      "startDate": {
+        "label": "Start Date and Time *"
+      },
+      "endDate": {
+        "label": "End Date and Time *"
+      },
+      "address": {
+        "label": "Address",
+        "placeholder": "High Street 1, Madrid",
+        "button": "📍 Get coordinates"
+      },
+      "lat": {
+        "label": "Latitude",
+        "placeholder": "E.g.: 40.416775"
+      },
+      "lng": {
+        "label": "Longitude",
+        "placeholder": "E.g.: -3.703790"
+      },
+      "capacity": {
+        "label": "Maximum capacity",
+        "placeholder": "Maximum number of attendees"
+      },
+      "rewardCredits": {
+        "label": "Reward credits",
+        "placeholder": "0"
+      },
+      "images": {
+        "label": "Event images"
+      },
+      "submit": "Create Event",
+      "submitting": "Creating...",
+      "cancel": "Cancel"
+    },
+    "errors": {
+      "getCoordinates": "Error obtaining coordinates",
+      "uploadImage": "Error uploading image: {name}",
+      "createEvent": "Error creating event"
+    }
+  },
+  "profilePage": {
+    "title": "Profile of {name} - Truk",
+    "defaultUser": "User",
+    "yourName": "Your name",
+    "aboutPlaceholder": "Tell us about yourself...",
+    "auth": {
+      "mustLogin": "You must log in",
+      "sessionClosed": "Session closed"
+    },
+    "success": {
+      "profileUpdated": "Profile updated"
+    },
+    "errors": {
+      "updateProfile": "Error updating profile"
+    },
+    "stats": {
+      "saved": "Saved",
+      "hoursShared": "Hours Shared",
+      "co2Avoided": "CO₂ Avoided",
+      "peopleHelped": "People Helped"
+    },
+    "sections": {
+      "myCommunity": "My Community",
+      "activeMember": "Active member",
+      "notInCommunity": "You don't belong to any community yet",
+      "exploreCommunities": "Explore communities",
+      "skills": "Skills",
+      "noSkills": "You haven't added skills yet",
+      "badges": "Badges",
+      "noBadges": "You haven't earned badges yet",
+      "levelProgress": "Level Progress",
+      "nextLevel": "Next level:"
+    },
+    "level": "Level {level}",
+    "credits": "{credits} credits",
+    "semilla": "{balance} SEMILLA",
+    "experience": "{exp} XP",
+    "buttons": {
+      "editProfile": "Edit profile",
+      "logout": "Log out",
+      "viewCommunity": "View community",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving..."
+    },
+    "badges": {
+      "verified": "✓ Verified"
+    }
+  },
+  "profileEdit": {
+    "layout": {
+      "title": "Edit Profile - Truk"
+    },
+    "heading": "Edit Profile",
+    "back": "Back",
+    "auth": {
+      "mustLogin": "You must log in"
+    },
+    "success": {
+      "profileUpdated": "Profile updated successfully",
+      "imageUploaded": "Image uploaded successfully"
+    },
+    "errors": {
+      "updateProfile": "Error updating profile",
+      "loadProfile": "Could not load profile",
+      "nameRequired": "Name is required",
+      "invalidImage": "Only image files are allowed (JPG, PNG, GIF, WebP)",
+      "imageTooLarge": "File cannot exceed 5MB",
+      "imageUploadError": "Error uploading image"
+    },
+    "form": {
+      "name": {
+        "label": "Name",
+        "placeholder": "Your name",
+        "required": "*"
+      },
+      "email": {
+        "label": "Email",
+        "cannotModify": "Email cannot be modified"
+      },
+      "bio": {
+        "label": "Biography",
+        "placeholder": "Tell us about yourself...",
+        "maxChars": "Maximum 500 characters ({count}/500)"
+      },
+      "address": {
+        "label": "Address",
+        "placeholder": "Street, number, town..."
+      },
+      "neighborhood": {
+        "label": "Neighbourhood",
+        "placeholder": "Your neighbourhood"
+      },
+      "interests": {
+        "label": "Interests",
+        "placeholder": "Music, sports, cooking... (comma-separated)",
+        "helper": "Separate your interests with commas. Example: music, sports, cooking"
+      },
+      "avatar": {
+        "label": "Avatar",
+        "upload": "Upload image",
+        "uploading": "Uploading...",
+        "fileTypes": "JPG, PNG, GIF or WebP. Maximum 5MB."
+      },
+      "submit": "Save changes",
+      "submitting": "Saving...",
+      "cancel": "Cancel"
+    },
+    "tip": {
+      "title": "💡 Tip",
+      "description": "A complete profile helps you connect better with your community. Share your interests and skills to find meaningful collaborations."
+    }
+  },
+  "governance": {
+    "proposals": {
+      "layout": {
+        "title": "Community Proposals - Truk"
+      },
+      "header": {
+        "title": "🏛️ Community Proposals",
+        "subtitle": "Decentralised governance system - Proof of Help"
+      },
+      "reputation": {
+        "title": "Your Reputation",
+        "level": "New",
+        "privilegesTitle": "Privileges",
+        "requirementInfo": "💡 You need reputation 20+ to create proposals. Current: {current}"
+      },
+      "toasts": {
+        "createSuccess": "Proposal created successfully!",
+        "createError": "Error creating proposal",
+        "voteSuccess": "Vote registered successfully!",
+        "voteError": "Error voting",
+        "reputationRequired": "You need reputation 20+ to create proposals"
+      },
+      "filters": {
+        "all": "All",
+        "discussion": "In Discussion",
+        "voting": "Voting",
+        "approved": "Approved"
+      },
+      "buttons": {
+        "newProposal": "+ New Proposal"
+      },
+      "loading": "Loading...",
+      "empty": {
+        "title": "No proposals",
+        "description": "Be the first to create a community proposal",
+        "button": "Create First Proposal"
+      },
+      "status": {
+        "DISCUSSION": "In Discussion",
+        "VOTING": "Active Voting",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      },
+      "type": {
+        "FEATURE": "✨ New Feature",
+        "RULE_CHANGE": "⚖️ Rule Change",
+        "FUND_ALLOCATION": "💰 Fund Allocation",
+        "PARTNERSHIP": "🤝 Partnership"
+      },
+      "meta": {
+        "author": "Anonymous",
+        "budget": "£{amount}"
+      },
+      "voting": {
+        "votesFor": "In favour: {count}",
+        "votesAgainst": "Against: {count}"
+      },
+      "actions": {
+        "viewDetails": "View Details",
+        "voteNow": "Vote Now",
+        "alreadyVoted": "✓ Already voted"
+      },
+      "form": {
+        "title": {
+          "label": "Title",
+          "placeholder": "Concise title for your proposal"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Describe your proposal in detail"
+        },
+        "implementation": {
+          "label": "Implementation Plan",
+          "placeholder": "How will this proposal be implemented?"
+        },
+        "budget": {
+          "label": "Required Budget (£)",
+          "placeholder": "0"
+        },
+        "typeLabel": "Proposal Type",
+        "typeOptions": {
+          "FEATURE": "New Feature",
+          "RULE_CHANGE": "Rule Change",
+          "FUND_ALLOCATION": "Fund Allocation",
+          "PARTNERSHIP": "Partnership"
+        },
+        "processInfo": {
+          "title": "📋 Proposal Process",
+          "step1": "Discussion phase: 3 days",
+          "step2": "Voting phase: 4 days",
+          "step3": "If it reaches threshold (10% active users) → Approved"
+        },
+        "cancel": "Cancel",
+        "submit": "Create Proposal",
+        "submitting": "Creating..."
+      },
+      "voteModal": {
+        "title": "Vote on Proposal",
+        "quadraticTitle": "📊 Quadratic Voting",
+        "quadraticInfo": "The cost of voting increases quadratically: Voting 1 point = 1 credit, 5 points = 25 credits, 10 points = 100 credits",
+        "pointsLabel": "Points to vote: {points}",
+        "costLabel": "Cost:",
+        "costAmount": "{cost} credits",
+        "cancel": "Cancel",
+        "confirm": "Confirm Vote",
+        "confirming": "Voting..."
+      },
+      "modal": {
+        "newProposal": "New Community Proposal"
+      }
+    }
+  },
+  "groupBuyDetail": {
+    "errors": {
+      "load": "Error loading group purchase"
+    },
+    "loading": "Loading group purchase...",
+    "back": "Back",
+    "status": {
+      "active": "Purchase active!",
+      "full": "Full"
+    },
+    "progress": {
+      "participants": "{current} / {min} minimum participants",
+      "maxParticipants": "Maximum: {max} people"
+    },
+    "sections": {
+      "description": "Description",
+      "currentPrice": "Current price",
+      "pricePerUnit": "per unit",
+      "savings": "You save {percent}% compared to base price",
+      "nextDiscount": "Next discount!",
+      "unitsNeeded": "{units} units needed",
+      "volumeDiscounts": "Volume discounts",
+      "fromUnits": "from {units} units",
+      "details": "Details",
+      "totalQuantity": "Total quantity",
+      "unitsOrdered": "units ordered",
+      "pickupPoint": "Collection point",
+      "closingDate": "Registration closing",
+      "in": "In {time}",
+      "category": "Category",
+      "participants": "Participants ({count})",
+      "unit": "unit",
+      "units": "units",
+      "committed": "Committed: £{amount}"
+    },
+    "actions": {
+      "join": "Join purchase",
+      "full": "Purchase full"
+    }
+  },
+  "matches": {
+    "title": "My Matches",
+    "back": "Back",
+    "loading": "Loading...",
+    "noMatches": {
+      "title": "You don't have matches yet",
+      "description": "Start swiping offers to find connections",
+      "action": "Discover Offers"
+    },
+    "summary": "🎉 You have {count} {count, plural, =1 {match} other {matches}}",
+    "superMatch": "⭐ Super Match",
+    "matchDate": "Match:",
+    "buttons": {
+      "sendMessage": "💬 Send Message",
+      "viewProfile": "View Profile"
+    }
+  },
+  "navbar": {
+    "housing": "🏡 Housing",
+    "mutualAid": "🤝 Mutual Aid",
+    "appearance": "Appearance"
+  },
+  "footer": {
+    "title": "Truk",
+    "description": "Local collaborative economy platform that connects people to share resources, services and knowledge.",
+    "sections": {
+      "resources": {
+        "title": "Resources",
+        "generalDocs": "📚 General Documentation",
+        "apiReference": "🔌 API Reference",
+        "guides": "📖 Guides and Tutorials",
+        "features": "✨ Features"
+      },
+      "community": {
+        "title": "Community",
+        "communities": "Communities",
+        "events": "📅 Events",
+        "offers": "💼 Offers",
+        "housing": "🏠 Housing",
+        "mutualAid": "🤝 Mutual Aid"
+      },
+      "legal": {
+        "title": "Legal and Support",
+        "privacy": "🔒 Privacy",
+        "terms": "📜 Terms of Use",
+        "reportBug": "🐛 Report a Problem",
+        "contact": "📧 Contact"
+      }
+    },
+    "tagline": "Building stronger and more sustainable communities",
+    "copyright": "Made with 💚 for local communities"
+  },
+  "groupBuyCard": {
+    "status": {
+      "active": "Active!",
+      "full": "Full"
+    },
+    "minParticipants": "minimum participants",
+    "maxParticipants": "Maximum: {max} people",
+    "currentPrice": "Current price: £{price}/unit",
+    "savings": "{percent}% savings",
+    "nextLevel": "Next level:",
+    "moreUnits": "({units} more units)",
+    "volumeDiscounts": "Volume discounts:",
+    "unitsOrMore": "{units}+ units",
+    "unitsOrdered": "units ordered",
+    "pickup": "Collection: {location}",
+    "closesIn": "Closes in {time}",
+    "buttons": {
+      "viewDetails": "View details",
+      "join": "Join"
+    }
+  },
+  "communities": {
+    "viewAll": "View all communities",
+    "pageTitle": "Local Communities",
+    "pageSubtitle": "Discover and join collaborative economy communities near you",
+    "search": {
+      "label": "Search",
+      "placeholder": "Name or location..."
+    },
+    "filters": {
+      "type": "Type",
+      "visibility": "Visibility",
+      "all": "All",
+      "allFeminine": "All"
+    },
+    "types": {
+      "NEIGHBORHOOD": "Neighbourhood",
+      "VILLAGE": "Village",
+      "TOWN": "Town",
+      "COUNTY": "County",
+      "REGION": "Region",
+      "CUSTOM": "Custom"
+    },
+    "visibility": {
+      "PRIVATE": "Private",
+      "PUBLIC": "Public",
+      "OPEN": "Open",
+      "FEDERATED": "Federated"
+    },
+    "notFound": {
+      "message": "Can't find your community?",
+      "action": "Create it"
+    },
+    "stats": {
+      "activeCommunities": "Active Communities",
+      "totalMembers": "Total Members",
+      "activeOffers": "Active Offers"
+    },
+    "loading": "Loading communities...",
+    "empty": {
+      "title": "No communities yet",
+      "description": "Be the first to create a local community",
+      "action": "Create Community"
+    },
+    "card": {
+      "viewCommunity": "View community"
+    },
+    "cta": {
+      "title": "Want to manage communities?",
+      "description": "Create and manage local collaborative economy communities. Connect neighbours, organise events and build mutual support networks.",
+      "action": "Go to Management Panel"
+    }
+  },
+  "communityDetail": {
+    "loading": {
+      "title": "Loading...",
+      "text": "Loading community..."
+    },
+    "notFound": {
+      "title": "Community not found",
+      "description": "The community you're looking for does not exist",
+      "button": "View all communities"
+    },
+    "type": {
+      "NEIGHBORHOOD": "Neighbourhood",
+      "VILLAGE": "Village",
+      "TOWN": "Town",
+      "COUNTY": "County",
+      "REGION": "Region",
+      "CUSTOM": "Custom"
+    },
+    "visibility": {
+      "PRIVATE": "Private",
+      "PUBLIC": "Public",
+      "OPEN": "Open",
+      "FEDERATED": "Federated"
+    },
+    "about": {
+      "title": "About this community",
+      "communityType": "Community type",
+      "access": "Access",
+      "accessOpen": "Open community - Anyone can join",
+      "accessPublic": "Public community - Requires approval to join",
+      "accessPrivate": "Private community - Invitation only",
+      "accessFederated": "Federated community - Connected with other communities",
+      "externalOffers": "External offers",
+      "externalOffersText": "This community allows viewing offers from connected communities",
+      "language": "Language",
+      "currency": "Currency"
+    },
+    "stats": {
+      "members": "members",
+      "activeOffers": "active offers",
+      "radius": "km radius",
+      "membersLabel": "Members:",
+      "offersLabel": "Offers:",
+      "created": "Created:",
+      "statistics": "Statistics"
+    },
+    "members": {
+      "title": "Members",
+      "helps": "helps",
+      "activeSince": "Active since"
+    },
+    "activity": {
+      "title": "Recent activity",
+      "loading": "Loading activity...",
+      "empty": "No recent activity in this community"
+    },
+    "actions": {
+      "title": "Actions",
+      "viewOffers": "View offers",
+      "viewEvents": "View events",
+      "needs": "Needs",
+      "projects": "Projects",
+      "housing": "Housing",
+      "governance": "Governance"
+    },
+    "share": {
+      "title": "Do you like this community?",
+      "description": "Share it with your friends and neighbours",
+      "button": "Share"
+    },
+    "joinModal": {
+      "title": "Join {name}",
+      "requiresApproval": "⚠️ This community requires manual approval. Your request will be reviewed by the administrators.",
+      "openCommunity": "✅ You can join this open community immediately",
+      "benefits": "By joining this community you will be able to:",
+      "benefitsList": {
+        "offers": "✓ Access exclusive community offers",
+        "events": "✓ Participate in local events",
+        "connect": "✓ Connect with neighbours",
+        "vote": "✓ Vote on community decisions"
+      },
+      "joining": "Joining...",
+      "join": "Confirm"
+    },
+    "toasts": {
+      "joinSuccess": "You have joined the community!",
+      "joinError": "Error joining community"
+    },
+    "buttons": {
+      "join": "Join community",
+      "viewOffers": "View offers",
+      "viewAll": "View all →",
+      "seeOffers": "🛍️ View offers",
+      "seeEvents": "📅 View events",
+      "cancel": "Cancel"
+    }
+  },
+  "housing": {
+    "solutionTypes": {
+      "SPACE_BANK": "Space Bank",
+      "TEMPORARY_HOUSING": "Temporary Housing",
+      "HOUSING_COOP": "Housing Cooperative",
+      "COMMUNITY_GUARANTEE": "Community Guarantee"
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "FILLED": "Full",
+      "CLOSED": "Closed"
+    },
+    "title": "Community Housing",
+    "subtitle": "Solidarity and collaborative housing solutions",
+    "buttons": {
+      "createSolution": "+ Create Solution"
+    },
+    "filters": {
+      "all": "All"
+    },
+    "capacity": "Capacity:",
+    "capacityPeople": "people",
+    "members": "members",
+    "monthlyContribution": "€/month",
+    "empty": {
+      "title": "No housing solutions available",
+      "description": "Be the first to create a community housing solution",
+      "button": "Create Solution"
+    }
+  },
+  "docs": {
+    "title": "Documentation - Living Community",
+    "header": {
+      "title": "📚 Documentation",
+      "subtitle": "Everything you need to know about Living Community: our mission, features, how to use the platform, and how to contribute."
+    },
+    "tabs": {
+      "about": "About Living Community",
+      "features": "Features",
+      "hybrid": "Hybrid System",
+      "gamification": "Gamification",
+      "governance": "PoH Governance",
+      "downloads": "Documents",
+      "guide": "User Guide",
+      "tech": "Technology",
+      "deployment": "Deployment",
+      "contribute": "Contribute"
+    },
+    "about": {
+      "whatIs": {
+        "title": "What is Living Community?",
+        "intro": "Living Community is a local collaborative economy social network that connects people in your community to share resources, services, knowledge, and experiences.",
+        "description": "Our platform facilitates exchanges without the need for traditional money, promoting relationships of trust, solidarity, and mutual support among neighbors."
+      },
+      "mission": {
+        "title": "Our Mission",
+        "strengthen": {
+          "title": "Strengthen the local community",
+          "description": "Create strong bonds between neighbors, fostering cooperation and mutual understanding."
+        },
+        "circular": {
+          "title": "Promote the circular economy",
+          "description": "Reduce waste by giving objects a second life and sharing underutilized resources."
+        },
+        "access": {
+          "title": "Facilitate equitable access",
+          "description": "Make goods and services accessible without economic barriers through a community credit system."
+        },
+        "sustainability": {
+          "title": "Drive sustainability",
+          "description": "Reduce the ecological footprint by favoring local consumption and exchange over purchase."
+        }
+      },
+      "principles": {
+        "title": "Core Principles",
+        "reciprocity": {
+          "title": "🤝 Reciprocity",
+          "description": "What you give to the community comes back to you in multiple ways"
+        },
+        "trust": {
+          "title": "⭐ Trust",
+          "description": "Reputation system based on generosity and reliability"
+        },
+        "democracy": {
+          "title": "🗳️ Democracy",
+          "description": "Important decisions are made through community consensus"
+        },
+        "transparency": {
+          "title": "🌐 Transparency",
+          "description": "Open source and visible community management"
+        }
+      }
+    },
+    "features": {
+      "offersAndServices": {
+        "title": "🛍️ Offers and Services",
+        "description": "Publish and discover offers for goods, services, object loans, or exchanges.",
+        "timeBank": {
+          "title": "Time Bank:",
+          "description": "Offer your time and skills (classes, repairs, care)"
+        },
+        "localMarket": {
+          "title": "Local Market:",
+          "description": "Sell or exchange objects using credits or euros"
+        },
+        "loans": {
+          "title": "Loans:",
+          "description": "Share tools, books, or any object temporarily"
+        },
+        "geolocation": {
+          "title": "Geolocation:",
+          "description": "Find offers near you on the interactive map"
+        }
+      },
+      "creditsSystem": {
+        "title": "💰 Community Credits System",
+        "description": "Credits are our local virtual currency that facilitates exchanges without money.",
+        "howItWorks": {
+          "title": "How do credits work?",
+          "initialBalance": "• You start with an initial credit balance when you register",
+          "earnCredits": "• You earn credits by offering services and helping the community",
+          "spendCredits": "• You spend credits accessing services and goods from other members",
+          "noRealMoney": "• They cannot be converted to real money - they only have value within the community"
+        }
+      },
+      "events": {
+        "title": "📅 Community Events",
+        "description": "Organize and participate in activities that strengthen community bonds.",
+        "workshops": {
+          "title": "Workshops and Classes",
+          "description": "Learn and teach skills"
+        },
+        "social": {
+          "title": "Social Gatherings",
+          "description": "Meet your neighbors"
+        },
+        "volunteering": {
+          "title": "Volunteering",
+          "description": "Improve your local environment"
+        },
+        "parties": {
+          "title": "Parties",
+          "description": "Celebrate with the community"
+        }
+      },
+      "socialFeatures": {
+        "title": "💜 Social Features",
+        "messaging": {
+          "title": "Direct Messaging",
+          "description": "Communicate securely with other members"
+        },
+        "swipe": {
+          "title": "Offers Swipe",
+          "description": "Discover offers intuitively by swiping cards"
+        },
+        "stories": {
+          "title": "24h Stories",
+          "description": "Share fleeting moments with the community"
+        },
+        "matches": {
+          "title": "Match System",
+          "description": "Connect with people who share similar interests"
+        }
+      },
+      "groupBuying": {
+        "title": "🛒 Group Buying",
+        "description": "Join collective purchases to get better prices and reduce costs.",
+        "organize": "• Organize bulk purchases with neighbors",
+        "access": "• Access sustainable products at better prices",
+        "support": "• Support local producers with grouped orders"
+      },
+      "governance": {
+        "title": "🗳️ Community Governance",
+        "description": "Participate in important community decisions through a democratic system.",
+        "proposals": {
+          "title": "🏛️ Proposals",
+          "description": "Any member can create improvement proposals"
+        },
+        "voting": {
+          "title": "👥 Consensus Voting",
+          "description": "Voting system that seeks collective agreement"
+        },
+        "transparency": {
+          "title": "📊 Total Transparency",
+          "description": "All votes and decisions are public"
+        }
+      },
+      "reputation": {
+        "title": "⭐ Reputation System",
+        "description": "Your generosity score reflects your contributions to the community.",
+        "earnPoints": {
+          "title": "Earn generosity points:",
+          "completing": "• Completing offers and services",
+          "participating": "• Participating in community events",
+          "receiving": "• Receiving positive reviews",
+          "contributing": "• Contributing regularly to the community",
+          "referring": "• Referring new members"
+        }
+      }
+    },
+    "hybrid": {
+      "title": "🔄 Hybrid Economic Layers System",
+      "subtitle": "The first platform that allows the peaceful coexistence of 3 different economic paradigms.",
+      "whatIs": {
+        "title": "What is the Hybrid System?",
+        "description": "It's a revolutionary system that allows you to choose how you want to participate in the economy: traditional capitalism, transitional economy, or pure gift economy. You decide!"
+      },
+      "traditional": {
+        "title": "TRADITIONAL",
+        "description": "Classic capitalist system",
+        "feature1": "✓ Prices in euros and credits",
+        "feature2": "✓ Traditional transactions",
+        "feature3": "✓ Reviews and reputation",
+        "feature4": "✓ Ideal for local commerce"
+      },
+      "transitional": {
+        "title": "TRANSITIONAL",
+        "description": "Gradual gift economy",
+        "feature1": "✓ \"Pay what you received\"",
+        "feature2": "✓ Pay-it-forward system",
+        "feature3": "✓ Chain of favors",
+        "feature4": "✓ Smooth transition"
+      },
+      "giftPure": {
+        "title": "GIFT_PURE",
+        "description": "Pure gift economy",
+        "feature1": "✓ Post-money, no prices",
+        "feature2": "✓ Share abundance",
+        "feature3": "✓ Express needs",
+        "feature4": "✓ Zero tracking, zero debt"
+      },
+      "chameleon": {
+        "title": "CHAMELEON",
+        "description": "Experimental mode",
+        "feature1": "✓ Try different layers",
+        "feature2": "✓ Temporary bridge events",
+        "feature3": "✓ No commitment",
+        "feature4": "✓ Perfect for exploring"
+      },
+      "mainFeatures": {
+        "title": "Main Features",
+        "migration": {
+          "title": "🔄 Free Migration Between Layers",
+          "description": "Change economic paradigm whenever you want. Your choice, your freedom."
+        },
+        "bridge": {
+          "title": "🌉 Bridge Events",
+          "description": "Temporarily experiment with another layer. For example: \"Money-free week\"."
+        },
+        "threshold": {
+          "title": "🎯 Migration Threshold",
+          "description": "If 70% of the community is in GIFT_PURE, collective migration is proposed."
+        },
+        "celebrations": {
+          "title": "🎉 Abundance Celebrations",
+          "description": "Record and celebrate when the community shares resources generously."
+        }
+      }
+    },
+    "gamification": {
+      "title": "🎮 Gamification and Viral Engagement",
+      "subtitle": "Complete gamification system that makes participating in the collaborative economy fun and addictive.",
+      "features": {
+        "title": "Gamification Features",
+        "onboarding": {
+          "title": "📚 Gamified Onboarding",
+          "description": "5-step interactive tutorial with rewards",
+          "step1": "• Complete your profile → +10 credits",
+          "step2": "• Create your first offer → +15 credits",
+          "step3": "• Join a community → +10 credits",
+          "step4": "• Attend an event → +10 credits",
+          "step5": "• Complete your first exchange → +15 credits",
+          "bonus": "🎁 Bonus for completing everything: +50 total credits"
+        },
+        "flashDeals": {
+          "title": "⚡ Flash Deals",
+          "description": "Lightning offers with limited-time discounts",
+          "feature1": "• 30-70% discounts",
+          "feature2": "• Duration: 2-4 hours",
+          "feature3": "• Limited quantity (scarcity marketing)",
+          "feature4": "• Automatic rotation 3 times/day",
+          "feature5": "• Real-time push notifications"
+        },
+        "stories": {
+          "title": "📖 24h Stories",
+          "description": "Instagram-style ephemeral content",
+          "feature1": "• Share photos and text for 24 hours",
+          "feature2": "• Automatic self-destruction",
+          "feature3": "• View counter",
+          "feature4": "• Perfect for sharing moments"
+        },
+        "swipe": {
+          "title": "❤️ Swipe & Match",
+          "description": "Discover Tinder-style offers",
+          "feature1": "• Swipe to like or dislike",
+          "feature2": "• Super like for 3 credits",
+          "feature3": "• Matches when both are interested",
+          "feature4": "• Personalized recommendation algorithm"
+        },
+        "challenges": {
+          "title": "🏆 Challenges",
+          "description": "Weekly challenges with leaderboard",
+          "feature1": "• Rotating challenges every week",
+          "feature2": "• Real-time rankings",
+          "feature3": "• Special bonus for top 10",
+          "feature4": "• Types: help neighbors, create offers, events"
+        },
+        "referrals": {
+          "title": "🎁 Referral System",
+          "description": "Invite friends and earn rewards",
+          "feature1": "• Unique personalized code",
+          "feature2": "• You: +20 credits per referral",
+          "feature3": "• Your friend: +10 credits upon registration",
+          "feature4": "• Milestones: 5, 10, 25, 50 referrals → Extra bonuses"
+        },
+        "levels": {
+          "title": "📊 Levels and XP",
+          "description": "10-level progression system",
+          "feature1": "• Earn XP for each action",
+          "feature2": "• 10 levels with unlockable perks",
+          "feature3": "• Level 5: 10% discount on everything",
+          "feature4": "• Level 10: VIP access to events"
+        },
+        "streaks": {
+          "title": "🔥 Streaks",
+          "description": "Consecutive active days",
+          "feature1": "• Keep your streak active",
+          "feature2": "• Multiplier up to ×2 on rewards",
+          "feature3": "• Milestones: 7, 14, 30, 60, 90 days",
+          "feature4": "• Special badges for consistency"
+        },
+        "happyHour": {
+          "title": "⏰ Happy Hour",
+          "description": "Periods with double credits",
+          "feature1": "• Active 2-3 times per week",
+          "feature2": "• Duration: 1-2 hours",
+          "feature3": "• ×2 multiplier on all rewards",
+          "feature4": "• Notification when starting"
+        },
+        "achievements": {
+          "title": "🏆 Achievements System (70+ Badges)",
+          "description": "Complete achievement and medal system with automatic progression",
+          "categories": {
+            "title": "13 Badge Categories:",
+            "help": "• 🤝 Help (10, 50, 100, 500)",
+            "events": "• 🎉 Events (5, 20, 50)",
+            "timebank": "• ⏰ Time Bank (10h, 50h, 200h)",
+            "credits": "• 💰 Credits earned/spent",
+            "community": "• 🏘️ Community participation",
+            "governance": "• 🗳️ Governance and voting",
+            "social": "• 🌱 Social contributions",
+            "creativity": "• 🎨 Creativity and content",
+            "technical": "• 🔧 Technical skills",
+            "environmental": "• 🌍 Environmental impact",
+            "education": "• 📚 Education and learning",
+            "generosity": "• 🎁 Extreme generosity",
+            "secret": "• 🏆 Unlockable secret badges"
+          },
+          "rarities": {
+            "title": "Rarities:",
+            "common": "• ⚪ COMMON: Easy to get (beginners)",
+            "uncommon": "• 🟢 UNCOMMON: Require moderate effort",
+            "rare": "• 🔵 RARE: For dedicated users only",
+            "epic": "• 🟣 EPIC: Exceptional achievements",
+            "legendary": "• 🟠 LEGENDARY: The most difficult",
+            "secret": "• 🌈 SECRET: Hidden until unlocked"
+          },
+          "features": {
+            "title": "Features:",
+            "autoCheck": "• ✅ Automatic auto-checking after each action",
+            "rewards": "• 🎁 Rewards in credits and XP",
+            "notifications": "• 🔔 Real-time notifications (WebSocket + Email)",
+            "tracking": "• 📊 Progress tracking (0% → 100%)",
+            "gallery": "• 🎨 Visual gallery with filters by category and rarity",
+            "newIndicator": "• 🆕 \"New\" indicator on freshly unlocked badges"
+          }
+        },
+        "creditDecay": {
+          "title": "⏳ Credit Decay (Rust Money)",
+          "description": "Programmed credit obsolescence to encourage circulation",
+          "decay": "• 📉 2% monthly decay - Credits gradually lose value",
+          "expiration": "• ⏰ 12-month expiration - Unused credits disappear",
+          "protection": "• 💸 Only affects balances >100 credits - Protection for new users",
+          "notifications": {
+            "title": "• 🔔 Automatic notifications:",
+            "thirtyDays": "→ 30 days before: Warning of upcoming expiration",
+            "sevenDays": "→ 7 days before: Urgent reminder",
+            "expired": "→ Upon expiration: Notification of lost credits"
+          },
+          "objective": "• 🎯 Objective: Stimulate economic flow and avoid accumulation",
+          "cronJob": "• ⚙️ Daily cron job - Automatic processing at 3 AM",
+          "transparency": "• 📊 Total transparency - History visible in profile",
+          "why": {
+            "title": "💡 Why Rust Money?",
+            "description": "Inspired by Silvio Gesell's economic theory, rust money incentivizes the circulation of money rather than accumulation, promoting a more active and redistributive economy. It's a key mechanism in reciprocity economies."
+          }
+        },
+        "notifications": {
+          "title": "🔔 Real-Time Notification System",
+          "description": "Instant multi-channel notifications",
+          "websocket": {
+            "title": "🌐 WebSocket (Real-Time):",
+            "badgeUnlocked": "• 🏆 Badge unlocked → Instant animated toast",
+            "creditsUpdate": "• 💰 Credits update → Notification in top bar",
+            "eventConfirmation": "• 📅 Event confirmation → Real-time alert",
+            "messages": "• 💬 Direct messages → Instant notification",
+            "timebank": "• ⏰ TimeBank updates → Reservation notifications",
+            "happyHour": "• 🎁 Happy Hour activated → Banner across entire app"
+          },
+          "email": {
+            "title": "📧 Email Notifications (25+ Templates):",
+            "badgeUnlocked": "• 🏆 Badge Unlocked: Email with design based on badge rarity",
+            "levelUp": "• ⬆️ Level Up: Level-up celebration",
+            "creditDecay": "• ⏳ Credit Decay: Expiration warnings (30d, 7d)",
+            "eventConfirmation": "• 📅 Event Confirmation: Event registration confirmation",
+            "timebank": "• ⏰ TimeBank: Requests, confirmations, completions",
+            "groupBuy": "• 🛍️ GroupBuy: New participants, purchase closing",
+            "governance": "• 🗳️ Governance: New proposal, voting result",
+            "community": "• 🏘️ Community: Welcome to new community"
+          },
+          "highlights": {
+            "title": "✨ Featured Highlights:",
+            "templates": "• 🎨 Professional HTML templates with responsive design",
+            "colors": "• 🎨 Dynamic colors based on notification type",
+            "ctas": "• 🔗 CTAs (Call-to-action) with direct links to the app",
+            "multilang": "• 🌍 Multilingual support (ES/EU)"
+          }
+        }
+      }
+    },
+    "governance": {
+      "title": "🏛️ Decentralized Governance - Proof of Help",
+      "subtitle": "Consensus system inspired by Bitcoin, where \"mining\" means helping others.",
+      "whatIs": {
+        "title": "What is Proof of Help (PoH)?",
+        "description": "A revolutionary consensus system where \"mining\" doesn't consume energy, but generates social value. Every hour of help to your community is a \"proof of work\".",
+        "mining": {
+          "title": "⛏️ Mining = Helping",
+          "description": "Instead of burning electricity, you generate \"proof of work\" by helping others. Zero energy consumption, 100% social value."
+        },
+        "trustChain": {
+          "title": "⛓️ Trust Chain",
+          "description": "Every help is recorded on an immutable local blockchain. Total transparency and auditability."
+        },
+        "reputation": {
+          "title": "🏆 Social Reputation",
+          "description": "Your reputation is automatically calculated based on your contributions. More help = more privileges."
+        }
+      },
+      "reputationSystem": {
+        "title": "Reputation System",
+        "description": "Earn reputation by helping your community. More reputation = more privileges.",
+        "level1": {
+          "title": "Level 1: Active (10+ helps)",
+          "privileges": "Privileges:",
+          "privilege1": "✓ Validate simple transactions",
+          "privilege2": "✓ Vote on proposals",
+          "privilege3": "✓ Participate in moderation"
+        },
+        "level2": {
+          "title": "Level 2: Contributor (50+ helps)",
+          "privileges": "Privileges:",
+          "privilege1": "✓ All of the above +",
+          "privilege2": "✓ Validate community proposals",
+          "privilege3": "✓ Participate in moderation juries",
+          "privilege4": "✓ Create proposals (if has 20+ reputation)"
+        },
+        "level3": {
+          "title": "Level 3: Expert (100+ helps)",
+          "privileges": "Privileges:",
+          "privilege1": "✓ All of the above +",
+          "privilege2": "✓ Resolve disputes as mediator",
+          "privilege3": "✓ Propose rule changes",
+          "privilege4": "✓ Access to advanced analytics"
+        }
+      },
+      "proposals": {
+        "title": "Community Improvement Proposals (CIPs)",
+        "description": "Community Improvement Proposals: Any member with 20+ reputation can propose community improvements.",
+        "step1": {
+          "title": "1. Creation",
+          "description": "Create your proposal with title, description and plan"
+        },
+        "step2": {
+          "title": "2. Discussion (3 days)",
+          "description": "The community comments and debates"
+        },
+        "step3": {
+          "title": "3. Voting (4 days)",
+          "description": "Quadratic voting with credits"
+        },
+        "step4": {
+          "title": "4. Approval",
+          "description": "If it reaches threshold → Approved"
+        },
+        "quadraticVoting": {
+          "title": "📊 Quadratic Voting",
+          "description": "System that prevents a few from dominating decisions:",
+          "point1": "1 point = 1² = 1 credit",
+          "point5": "5 points = 5² = 25 credits",
+          "point10": "10 points = 10² = 100 credits"
+        }
+      },
+      "moderation": {
+        "title": "🛡️ Decentralized Moderation",
+        "description": "Moderation isn't done by an admin, but by the community through temporary mini-DAOs.",
+        "step1": {
+          "title": "Report Content",
+          "description": "A user reports inappropriate content (spam, offensive, etc.)"
+        },
+        "step2": {
+          "title": "Jury Selection",
+          "description": "System selects 5-7 people: 3 with high reputation + 2 random"
+        },
+        "step3": {
+          "title": "Jury Voting",
+          "description": "Each juror votes: KEEP (maintain), REMOVE (delete), WARN (warning)"
+        },
+        "step4": {
+          "title": "Consensus (66%)",
+          "description": "If 66% vote REMOVE → Content deleted. Correct jurors earn +1 credit"
+        }
+      },
+      "benefits": {
+        "title": "✨ Benefits vs Centralized Systems",
+        "noSinglePoint": {
+          "title": "No single point of failure",
+          "description": "The platform keeps working even if the central server fails"
+        },
+        "resistant": {
+          "title": "Censorship resistant",
+          "description": "The community decides what content is appropriate"
+        },
+        "incentives": {
+          "title": "Aligned incentives",
+          "description": "Helping and validating generates tangible rewards"
+        },
+        "transparency": {
+          "title": "Total transparency",
+          "description": "All decisions are public and auditable"
+        }
+      }
+    },
+    "guide": {
+      "gettingStarted": {
+        "title": "🚀 Getting Started",
+        "step1": {
+          "title": "Create your account",
+          "description": "Sign up with your email. It's free and you'll receive initial welcome credits."
+        },
+        "step2": {
+          "title": "Complete your profile",
+          "description": "Add a photo, write a brief bio and tell us about your interests."
+        },
+        "step3": {
+          "title": "Explore the map",
+          "description": "Discover what offers and events are near you on the interactive map."
+        },
+        "step4": {
+          "title": "Post your first offer",
+          "description": "Have something to share? Create your first good or service offer."
+        },
+        "step5": {
+          "title": "Connect with your community",
+          "description": "Send messages, attend events and build trusting relationships."
+        }
+      },
+      "createOffer": {
+        "title": "📝 How to create an offer",
+        "step1": "Click \"Create Offer\" in the menu or quick action button",
+        "step2": "Select type: Time Bank, Local Market or Loan",
+        "step3": "Fill in title, detailed description and category",
+        "step4": "Set price in credits or euros (or both)",
+        "step5": "Upload quality photos (optional but recommended)",
+        "step6": "Add your location so others can find you on the map",
+        "step7": "Publish and wait for interested parties to contact you"
+      },
+      "organizeEvent": {
+        "title": "🎉 How to organize an event",
+        "step1": "Go to \"Events\" section and click \"Create Event\"",
+        "step2": "Define title, description and event type",
+        "step3": "Set start date, end and location",
+        "step4": "Define maximum attendee capacity (optional)",
+        "step5": "Optionally, offer credits as a reward for attending",
+        "step6": "Publish and promote your event in the community"
+      },
+      "tips": {
+        "title": "💡 Community Tips",
+        "clear": {
+          "title": "✓ Be clear and honest",
+          "description": "Accurately describe what you're offering to avoid misunderstandings"
+        },
+        "respond": {
+          "title": "✓ Respond quickly",
+          "description": "Answer messages within 24h to maintain trust"
+        },
+        "fulfill": {
+          "title": "✓ Fulfill your commitments",
+          "description": "If you meet with someone, respect agreements. Your reputation reflects it"
+        },
+        "rate": {
+          "title": "✓ Rate other members",
+          "description": "Leave honest reviews after each exchange"
+        },
+        "participate": {
+          "title": "✓ Participate actively",
+          "description": "Attend events, comment on the feed and grow the community"
+        }
+      },
+      "safety": {
+        "title": "⚠️ Safety Guidelines",
+        "noPersonalInfo": "• Don't share sensitive personal information in public messages",
+        "publicPlaces": "• Always arrange exchanges in public places if you don't know the person",
+        "report": "• Report inappropriate or suspicious behavior immediately",
+        "checkReputation": "• Check a member's reputation before arranging important exchanges"
+      }
+    },
+    "tech": {
+      "architecture": {
+        "title": "⚙️ Technical Architecture",
+        "description": "Living Community is built with modern, robust and scalable technologies.",
+        "frontend": {
+          "title": "Frontend",
+          "nextjs": "Next.js 13+ - React Framework",
+          "typescript": "TypeScript - Type safety",
+          "tailwind": "TailwindCSS - Utility-first styles",
+          "reactQuery": "React Query - Data fetching",
+          "leaflet": "Leaflet - Interactive maps"
+        },
+        "backend": {
+          "title": "Backend",
+          "nestjs": "NestJS - Node.js Framework",
+          "prisma": "Prisma ORM - Database toolkit",
+          "postgresql": "PostgreSQL - Database",
+          "redis": "Redis - Cache and sessions",
+          "jwt": "JWT - Authentication"
+        }
+      },
+      "security": {
+        "title": "🔒 Security and Privacy",
+        "encryption": {
+          "title": "Communication Encryption",
+          "description": "All communications use HTTPS with SSL/TLS certificates"
+        },
+        "protection": {
+          "title": "Data Protection",
+          "description": "Passwords are stored with bcrypt hash and never in plain text"
+        },
+        "rateLimiting": {
+          "title": "Rate Limiting",
+          "description": "Protection against brute force and DDoS attacks"
+        },
+        "accessControl": {
+          "title": "Access Control",
+          "description": "Role and permission system to protect sensitive data"
+        }
+      },
+      "docker": {
+        "title": "🐳 Docker Infrastructure",
+        "description": "The entire application is containerized to facilitate deployment and scalability.",
+        "servicesTitle": "# Available services:",
+        "backendApi": "• Backend API (NestJS) - Port 4000",
+        "frontendWeb": "• Frontend Web (Next.js) - Port 3000",
+        "postgresql": "• PostgreSQL - Port 5432",
+        "redis": "• Redis - Port 6379",
+        "nginx": "• Nginx (Production) - Ports 80/443",
+        "monitoringTitle": "# Monitoring:",
+        "prometheus": "• Prometheus - Port 9090",
+        "grafana": "• Grafana - Port 3001"
+      },
+      "monitoring": {
+        "title": "📊 Monitoring and Backups",
+        "monitoring": {
+          "title": "Monitoring",
+          "prometheus": "• Prometheus for system metrics",
+          "grafana": "• Grafana for data visualization",
+          "alerts": "• Automatic alerts upon failures",
+          "logs": "• Centralized logs"
+        },
+        "backups": {
+          "title": "Backups",
+          "automatic": "• Automatic backups every 24h",
+          "retention": "• 7-day retention",
+          "restore": "• Restoration with one command",
+          "encrypted": "• Encrypted storage"
+        }
+      },
+      "advanced": {
+        "title": "📱 Advanced Technical Features",
+        "ssr": {
+          "title": "🚀 Server-Side Rendering (SSR)",
+          "description": "Server-side rendering for better SEO and performance"
+        },
+        "imageOptimization": {
+          "title": "⚡ Image Optimization",
+          "description": "Automatic compression and modern formats (WebP)"
+        },
+        "geolocation": {
+          "title": "📍 Geolocation",
+          "description": "Coordinate system for proximity searches"
+        },
+        "realtime": {
+          "title": "🔄 Real-time Updates",
+          "description": "Real-time updates with React Query"
+        },
+        "messaging": {
+          "title": "📨 Messaging System",
+          "description": "Secure direct messages between members"
+        }
+      },
+      "api": {
+        "title": "🌐 REST API and Documentation",
+        "description": "The API is fully documented with Swagger/OpenAPI.",
+        "access": "Access the API documentation:",
+        "url": "http://localhost:4000/api/docs",
+        "explore": "Explore all endpoints, parameters and responses interactively"
+      }
+    },
+    "deployment": {
+      "title": "🚀 Production Deployment",
+      "subtitle": "Complete guide to deploy Living Community on your server with Docker",
+      "prerequisites": {
+        "title": "📋 Prerequisites",
+        "docker": "Server with Docker and Docker Compose installed",
+        "domain": "Domain configured (optional but recommended)",
+        "ports": "Ports 80 and 443 available (for HTTPS)",
+        "ram": "At least 2GB of available RAM"
+      },
+      "automatic": {
+        "title": "⚡ Option 1: Automatic Deployment (Recommended)",
+        "description": "Use our automated script that handles everything:",
+        "cloneTitle": "# 1. Clone the repository",
+        "cloneCmd1": "git clone https://github.com/tu-usuario/comunidad-viva.git",
+        "cloneCmd2": "cd comunidad-viva",
+        "executableTitle": "# 2. Make script executable",
+        "executableCmd": "chmod +x deploy.sh",
+        "deployTitle": "# 3. Run deployment",
+        "deployCmd": "./deploy.sh production",
+        "scriptsDoesTitle": "The script automatically:",
+        "check": "✓ Checks that Docker and .env files are ready",
+        "backup": "✓ Creates database backup (if exists)",
+        "build": "✓ Builds optimized Docker images",
+        "start": "✓ Starts all services (PostgreSQL, Backend, Frontend)",
+        "migrate": "✓ Applies database migrations",
+        "verify": "✓ Verifies that all services are running",
+        "cleanup": "✓ Cleans up unused resources"
+      },
+      "manual": {
+        "title": "🔧 Option 2: Manual Deployment",
+        "step1": {
+          "title": "Step 1: Configure Environment Variables",
+          "backendComment": "# Backend",
+          "backendCmd1": "cp packages/backend/.env.example packages/backend/.env",
+          "backendCmd2": "nano packages/backend/.env",
+          "frontendComment": "# Frontend",
+          "frontendCmd1": "cp packages/web/.env.production.example packages/web/.env.production",
+          "frontendCmd2": "nano packages/web/.env.production",
+          "important": "Important: Change passwords, JWT_SECRET and URLs in .env files"
+        },
+        "step2": {
+          "title": "Step 2: Build Images",
+          "cmd": "docker compose -f docker-compose.yml -f docker-compose.prod.yml build"
+        },
+        "step3": {
+          "title": "Step 3: Start Services",
+          "cmd": "docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d"
+        },
+        "step4": {
+          "title": "Step 4: Apply Migrations",
+          "cmd": "docker compose exec backend npx prisma migrate deploy"
+        },
+        "step5": {
+          "title": "Step 5: Verify Status",
+          "verifyComment": "# Verify services are running",
+          "verifyCmd": "docker compose ps",
+          "backendComment": "# Test backend",
+          "backendCmd": "curl http://localhost:4000/health",
+          "frontendComment": "# Test frontend",
+          "frontendCmd": "curl http://localhost:3000"
+        }
+      },
+      "domain": {
+        "title": "🌐 Configure Domain with NGINX + SSL",
+        "description": "To use a custom domain with HTTPS:",
+        "step1": {
+          "title": "1. Install NGINX and Certbot",
+          "cmd1": "sudo apt-get update",
+          "cmd2": "sudo apt-get install nginx certbot python3-certbot-nginx"
+        },
+        "step2": {
+          "title": "2. Configure NGINX",
+          "description": "Create file /etc/nginx/sites-available/comunidad-viva:",
+          "frontendComment": "# Frontend",
+          "backendComment": "# Backend API"
+        },
+        "step3": {
+          "title": "3. Activate and Get SSL",
+          "activateComment": "# Activate configuration",
+          "activateCmd1": "sudo ln -s /etc/nginx/sites-available/comunidad-viva /etc/nginx/sites-enabled/",
+          "activateCmd2": "sudo nginx -t",
+          "activateCmd3": "sudo systemctl restart nginx",
+          "sslComment": "# Get free SSL certificate",
+          "sslCmd": "sudo certbot --nginx -d tu-dominio.com -d api.tu-dominio.com"
+        }
+      },
+      "update": {
+        "title": "🔄 Update the Application",
+        "description": "When there are new versions:",
+        "pullComment": "# Pull latest changes",
+        "pullCmd": "git pull origin main",
+        "rebuildComment": "# Rebuild and restart",
+        "rebuildCmd1": "docker compose -f docker-compose.yml -f docker-compose.prod.yml build",
+        "rebuildCmd2": "docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d",
+        "migrateComment": "# Apply migrations if there are new ones",
+        "migrateCmd": "docker compose exec backend npx prisma migrate deploy"
+      },
+      "backup": {
+        "title": "🔐 Database Backup",
+        "create": {
+          "title": "Create Backup",
+          "cmd": "docker compose exec postgres \\\n  pg_dump -U comunidad \\\n  comunidad_viva > \\\n  backup_$(date +%Y%m%d).sql"
+        },
+        "restore": {
+          "title": "Restore Backup",
+          "cmd": "cat backup_20250101.sql | \\\n  docker compose exec -T \\\n  postgres psql -U comunidad \\\n  -d comunidad_viva"
+        }
+      },
+      "monitoring": {
+        "title": "📊 Monitoring and Logs",
+        "allLogs": {
+          "title": "View logs of all services",
+          "cmd": "docker compose logs -f"
+        },
+        "specificLogs": {
+          "title": "View logs of specific service",
+          "cmd": "docker compose logs -f backend"
+        },
+        "status": {
+          "title": "View services status",
+          "cmd": "docker compose ps"
+        },
+        "resources": {
+          "title": "View resource usage",
+          "cmd": "docker stats"
+        }
+      },
+      "troubleshooting": {
+        "title": "🐛 Common Troubleshooting",
+        "portInUse": {
+          "title": "Port already in use",
+          "cmd1": "sudo lsof -i :4000  # See what's using the port",
+          "cmd2": "sudo kill -9 PID    # Kill process if necessary"
+        },
+        "frontendConnection": {
+          "title": "Frontend doesn't connect to backend",
+          "description": "Verify that NEXT_PUBLIC_API_URL in .env.production points to the correct backend URL"
+        },
+        "migrations": {
+          "title": "Migration error",
+          "description": "Make sure PostgreSQL is running and DATABASE_URL is correct"
+        }
+      },
+      "docs": {
+        "title": "📄 Complete Documentation",
+        "description": "For more details, consult the DEPLOYMENT.md file at the project root.",
+        "platforms": "Also includes deployment options for Vercel, Railway, Render and DigitalOcean App Platform."
+      }
+    },
+    "downloads": {
+      "title": "📚 Documents Available for Download",
+      "presentation": {
+        "title": "🎯 Ready-to-Use Presentation",
+        "subtitle": "Download the PowerPoint directly or view the presentation in your browser",
+        "powerpoint": {
+          "title": "Download PowerPoint",
+          "filename": "PRESENTATION.pptx - Ready to edit",
+          "size": "66 KB",
+          "cta": "Download now"
+        },
+        "browser": {
+          "title": "View in Browser",
+          "filename": "PRESENTATION.html - Web view",
+          "size": "21 KB",
+          "cta": "Open presentation"
+        },
+        "note": "💡 Note: The PowerPoint file (.pptx) was automatically generated with pandoc and is ready to edit in Microsoft PowerPoint, Google Slides, LibreOffice Impress or any compatible software."
+      },
+      "documents": {
+        "title": "📚 Documents Available for Download",
+        "cta": "Download"
+      }
+    },
+    "contribute": {
+      "title": "🤝 How to Contribute?",
+      "intro": "Living Community is an open source project that grows thanks to the participation of people like you. All contributions are welcome!",
+      "areas": {
+        "development": {
+          "title": "💻 Development",
+          "description": "Help improve the code, fix bugs or add new functionalities.",
+          "frontend": "• Frontend (React/Next.js)",
+          "backend": "• Backend (NestJS/Node.js)",
+          "database": "• Database (PostgreSQL/Prisma)",
+          "devops": "• DevOps (Docker/CI-CD)"
+        },
+        "design": {
+          "title": "🎨 Design",
+          "description": "Improve user experience and visual design.",
+          "uiux": "• UI/UX Design",
+          "graphic": "• Graphic design",
+          "icons": "• Iconography",
+          "accessibility": "• Accessibility (A11y)"
+        },
+        "documentation": {
+          "title": "📝 Documentation",
+          "description": "Write guides, tutorials and technical documentation.",
+          "userGuides": "• User guides",
+          "technical": "• Technical documentation",
+          "translations": "• Translations",
+          "videos": "• Video tutorials"
+        },
+        "testing": {
+          "title": "🧪 Testing",
+          "description": "Test the application and report bugs or issues.",
+          "manual": "• Manual testing",
+          "bugs": "• Bug reports",
+          "automated": "• Automated tests",
+          "qa": "• QA and validation"
+        }
+      },
+      "codeGuide": {
+        "title": "🚀 Code Contribution Guide",
+        "step1": {
+          "title": "1. Prepare your environment",
+          "forkComment": "# Fork the repository",
+          "cloneCmd": "git clone https://github.com/tu-usuario/comunidad-viva.git",
+          "cdCmd": "cd comunidad-viva",
+          "installComment": "# Install dependencies",
+          "installCmd": "make install",
+          "devComment": "# Start development environment",
+          "devCmd": "make dev"
+        },
+        "step2": {
+          "title": "2. Create a branch for your feature",
+          "cmd": "git checkout -b feature/your-feature-name"
+        },
+        "step3": {
+          "title": "3. Develop your functionality",
+          "follow": "• Follow project code conventions",
+          "clean": "• Write clean and well-documented code",
+          "tests": "• Add tests for your functionality",
+          "compile": "• Make sure everything compiles without errors"
+        },
+        "step4": {
+          "title": "4. Commit your changes",
+          "addCmd": "git add .",
+          "commitCmd": "git commit -m \"feat: clear description of the change\"",
+          "typesComment": "# Commit types: feat, fix, docs, style, refactor, test"
+        },
+        "step5": {
+          "title": "5. Push and create Pull Request",
+          "pushCmd": "git push origin feature/your-feature-name",
+          "description": "Then go to GitHub and create a Pull Request with a clear description of your changes."
+        }
+      },
+      "bestPractices": {
+        "title": "📋 Best Practices",
+        "smallCommits": {
+          "title": "Small and frequent commits",
+          "description": "It's easier to review specific changes than large blocks of code"
+        },
+        "descriptive": {
+          "title": "Descriptive commit messages",
+          "description": "Use the format: type(scope): clear description"
+        },
+        "tests": {
+          "title": "Tests for all new code",
+          "description": "Ensures quality and prevents regressions"
+        },
+        "document": {
+          "title": "Document complex functions",
+          "description": "Helps other developers understand your code"
+        },
+        "style": {
+          "title": "Respect code style",
+          "description": "Use Prettier and ESLint to maintain consistency"
+        }
+      },
+      "bugs": {
+        "title": "🐛 Report Bugs",
+        "description": "If you find a bug, please report it by creating an issue on GitHub with:",
+        "clearDescription": "Clear description of the problem",
+        "steps": "Steps to reproduce the error",
+        "expected": "Expected behavior vs. actual behavior",
+        "screenshots": "Screenshots if applicable",
+        "environment": "Environment information (browser, OS, etc.)"
+      },
+      "community": {
+        "title": "💬 Community and Support",
+        "discussions": {
+          "title": "GitHub Discussions",
+          "description": "Participate in discussions about new features and improvements"
+        },
+        "issues": {
+          "title": "GitHub Issues",
+          "description": "Report bugs, request features or ask technical questions"
+        },
+        "pullRequests": {
+          "title": "Pull Requests",
+          "description": "Review others' code and learn from the community"
+        }
+      },
+      "contributors": {
+        "title": "🌟 Contributors",
+        "thanks": "Thanks to all the people who have contributed to making Living Community a better platform every day.",
+        "yourName": "Your name can appear here. Make your first contribution today!"
+      },
+      "license": {
+        "title": "📄 License",
+        "description": "Living Community is licensed under MIT License.",
+        "details": "This means you can use, modify and distribute the code freely, as long as you maintain the copyright notice and license."
+      }
+    }
+  },
+  "contact": {
+    "title": "Contact - Living Community",
+    "header": {
+      "title": "📧 Get in Touch",
+      "subtitle": "Have questions, suggestions, or want to collaborate? We're here to help."
+    },
+    "form": {
+      "title": "Send us a Message",
+      "success": "✅ Message sent successfully! We'll get back to you soon.",
+      "fields": {
+        "name": "Name",
+        "email": "Email",
+        "subject": "Subject",
+        "message": "Message"
+      },
+      "placeholders": {
+        "name": "Your full name",
+        "email": "your@email.com",
+        "subject": "Select a subject",
+        "message": "Tell us how we can help..."
+      },
+      "subjects": {
+        "general": "General Inquiry",
+        "support": "Technical Support",
+        "bug": "Report a Bug",
+        "feature": "Suggest a Feature",
+        "partnership": "Partnership or Collaboration",
+        "other": "Other"
+      },
+      "submit": "Send Message"
+    },
+    "info": {
+      "email": {
+        "title": "Email",
+        "description": "We'll respond to your inquiry within 24-48 hours."
+      },
+      "github": {
+        "title": "GitHub",
+        "description": "Report bugs, request features, or contribute to the code."
+      },
+      "community": {
+        "title": "Community",
+        "description": "Join our community to connect with other users and contributors."
+      },
+      "response": {
+        "title": "Response Time",
+        "description": "We typically respond within 24-48 hours. For technical emergencies, use GitHub Issues."
+      }
+    }
+  }
+}

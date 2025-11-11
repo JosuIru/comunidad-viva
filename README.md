@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌱 Comunidad Viva
+# 🌱 Truk
 
 ### Plataforma de Economía Colaborativa Local
 
@@ -34,13 +34,13 @@
 
 ## 📸 Vista Previa
 
-![Comunidad Viva](app.png)
+![Truk](design/branding/app.png)
 
-**🚀 [Quick Start Guide](QUICK_START.md)** - Empieza en 5 minutos
+**🚀 [Quick Start Guide](docs/guides/QUICK_START.md)** - Empieza en 5 minutos
 
-## 🎯 ¿Qué es Comunidad Viva?
+## 🎯 ¿Qué es Truk?
 
-Comunidad Viva es una plataforma innovadora que reimagina la economía local, permitiendo que convivan **3 paradigmas económicos diferentes** en una sola aplicación. Desde el capitalismo tradicional hasta la economía de regalo pura, pasando por modelos de transición.
+Truk es una plataforma innovadora que reimagina la economía local, permitiendo que convivan **3 paradigmas económicos diferentes** en una sola aplicación. Desde el capitalismo tradicional hasta la economía de regalo pura, pasando por modelos de transición.
 
 ### 💡 Características Únicas
 
@@ -80,37 +80,46 @@ Comunidad Viva es una plataforma innovadora que reimagina la economía local, pe
 
 ## 📚 Documentación
 
+La documentación ha sido reorganizada en una estructura clara y organizada. Ver [📋 DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md) para el índice completo.
+
 ### 📖 Documentación Principal
 
-| Documento | Descripción | Audiencia |
-|-----------|-------------|-----------|
-| [📋 **Índice de Documentación**](DOCUMENTATION_INDEX.md) | **Índice maestro de toda la documentación** | Todos |
-| [📊 **Estado del Desarrollo**](DEVELOPMENT_STATUS.md) 🆕 | **Análisis completo: qué está hecho y qué falta (74.2%)** | Devs, PMs, CTOs |
-| [📖 Quick Start](QUICK_START.md) | Empieza en 5 minutos | Desarrolladores |
-| [📖 Whitepaper](WHITEPAPER.md) | Documento técnico principal (~21,000 palabras) | Inversores, Equipos técnicos |
-| [📖 Resumen Ejecutivo](EXECUTIVE_SUMMARY.md) | Resumen de 2-3 páginas | General, Inversores |
-| [📖 API Reference](API_REFERENCE.md) | Referencia completa de ~120 endpoints | Desarrolladores |
-| [📖 Changelog](CHANGELOG.md) | Historial de implementaciones | Todos |
+| Documento | Descripción |
+|-----------|-------------|
+| [📋 **Índice de Documentación**](DOCUMENTATION_INDEX.md) | Índice maestro de toda la documentación |
+| [🏛️ **Gobernanza del Proyecto**](GOVERNANCE.md) | Modelo de gobernanza comunitaria |
+| [📊 **Estado del Desarrollo**](docs/reports/DEVELOPMENT_STATUS.md) | Análisis completo: 74.2% completado |
+| [📖 Quick Start](docs/guides/QUICK_START.md) | Empieza en 5 minutos |
+| [📖 Changelog](CHANGELOG.md) | Historial de implementaciones |
+
+### 🔧 Documentación Técnica
+
+| Documento | Descripción |
+|-----------|-------------|
+| [📖 Arquitectura](docs/technical/ARCHITECTURE.md) | Arquitectura del sistema |
+| [📖 API Reference](docs/technical/API_REFERENCE.md) | Referencia completa de ~120 endpoints |
+| [📖 Whitepaper](docs/technical/WHITEPAPER.md) | Documento técnico principal (~21,000 palabras) |
+| [🏛️ Consenso y Gobernanza](docs/technical/CONSENSUS_GUIDE.md) | Proof of Help y consenso descentralizado |
+| [🔧 Módulos](docs/technical/MODULES.md) | Documentación de módulos técnicos |
 
 ### 🌉 Blockchain y Web3
 
 | Documento | Descripción |
 |-----------|-------------|
-| [🌉 Bridge README](BRIDGE_README.md) | Sistema de bridges multi-cadena (Polygon, Solana) |
-| [📋 Bridge Summary](BRIDGE_SUMMARY.md) | Resumen ejecutivo técnico del sistema bridges |
-| [🚀 Bridge Quick Start](BRIDGE_QUICK_START.md) | Guía práctica paso a paso |
-| [📖 Bridge Deployment](BRIDGE_DEPLOYMENT_GUIDE.md) | Guía de deployment en producción |
-| [🧩 Blockchain Guide](BLOCKCHAIN_BRIDGE_GUIDE.md) | Conceptos y arquitectura de bridges |
+| [🌉 Bridge README](docs/blockchain/README.md) | Sistema de bridges multi-cadena |
+| [📖 Arquitectura Bridge](docs/blockchain/BRIDGE_ARCHITECTURE.md) | Conceptos y arquitectura de bridges |
+| [🚀 Quick Start](docs/blockchain/QUICK_START.md) | Guía práctica paso a paso |
+| [📖 Deployment](docs/blockchain/DEPLOYMENT.md) | Guía de deployment en producción |
 
-### 💡 Características Avanzadas
+### 🚀 Deployment y Business
 
 | Documento | Descripción |
 |-----------|-------------|
-| [🔄 Sistema Híbrido](packages/backend/src/hybrid/README.md) | Guía del sistema de 3 capas económicas |
-| [🏛️ Gobernanza](CONSENSUS_GOVERNANCE_GUIDE.md) | Proof of Help y consenso descentralizado |
-| [🎁 Economía de Regalo](GIFT_ECONOMY_GOVERNANCE.md) | Gobernanza avanzada y economía del regalo |
-| [🔧 Módulos Técnicos](TECHNICAL_MODULES.md) | Documentación de módulos complementarios |
-| [🌐 Multilenguaje](packages/web/MULTILENGUAJE.md) | Sistema i18n (ES/EU) |
+| [🚀 Guía de Deployment](docs/deployment/DEPLOYMENT_GUIDE.md) | Deployment completo |
+| [✅ Checklist de Producción](docs/deployment/READINESS_CHECKLIST.md) | Lista de verificación |
+| [📊 Resumen Ejecutivo](docs/business/EXECUTIVE_SUMMARY.md) | Resumen para inversores |
+| [📅 Plan de Lanzamiento](docs/business/LAUNCH_PLAN.md) | Roadmap de lanzamiento público |
+| [💰 Open Collective](docs/business/OPEN_COLLECTIVE_SETUP.md) | Configuración de financiación transparente |
 
 ### 🎯 Estado Actual (Octubre 2025)
 
@@ -327,7 +336,7 @@ Ventaja: Promueve consenso amplio vs dictadura de mayorías
 - ✅ Transparencia total y auditabilidad
 - ✅ Gobernanza evolutiva
 
-[📖 Guía completa de Gobernanza](CONSENSUS_GOVERNANCE_GUIDE.md)
+[📖 Guía completa de Gobernanza](docs/technical/CONSENSUS_GUIDE.md)
 
 ---
 
@@ -575,9 +584,9 @@ Una vez levantado el backend, accede a:
 
 ### Referencias Completas
 
-- **[📖 API Reference](API_REFERENCE.md)** - Documentación completa de todos los endpoints (~120 endpoints)
+- **[📖 API Reference](docs/technical/API_REFERENCE.md)** - Documentación completa de todos los endpoints (~120 endpoints)
 - **[📖 Sistema Híbrido](packages/backend/src/hybrid/README.md)** - Guía del sistema de capas económicas
-- **[📖 Gobernanza](CONSENSUS_GOVERNANCE_GUIDE.md)** - Proof of Help y consenso descentralizado
+- **[📖 Gobernanza](docs/technical/CONSENSUS_GUIDE.md)** - Proof of Help y consenso descentralizado
 - **[📖 Changelog](CHANGELOG.md)** - Historial de implementaciones y cambios
 
 ### Principales Grupos de Endpoints

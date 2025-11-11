@@ -1,9 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, memo } from 'react';
+import Image from 'next/image';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import ReactionButton from './ReactionButton';
+import { isValidImageSrc, handleImageError } from '@/lib/imageUtils';
 
 interface Post {
   id: string;
@@ -45,7 +47,7 @@ interface PostCardProps {
   onDelete?: () => void;
 }
 
-export default function PostCard({
+function PostCard({
   post,
   currentUserId,
   onReact,
@@ -82,12 +84,17 @@ export default function PostCard({
       <div className="p-4">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            {post.author.avatar ? (
-              <img
-                src={post.author.avatar}
-                alt={post.author.name}
-                className="w-12 h-12 rounded-full object-cover"
-              />
+            {isValidImageSrc(post.author.avatar) ? (
+              <div className="relative w-12 h-12 rounded-full overflow-hidden">
+                <Image
+                  src={post.author.avatar}
+                  alt={post.author.name}
+                  width={48}
+                  height={48}
+                  className="rounded-full object-cover"
+                  onError={handleImageError}
+                />
+              </div>
             ) : (
               <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
                 <span className="text-green-600 font-semibold text-lg">
@@ -121,13 +128,18 @@ export default function PostCard({
         {/* Media */}
         {post.media && post.media.length > 0 && (
           <div className={`mt-4 grid gap-2 ${post.media.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
-            {post.media.map((url, index) => (
-              <img
-                key={index}
-                src={url}
-                alt=""
-                className="w-full rounded-lg object-cover max-h-96"
-              />
+            {post.media.filter(isValidImageSrc).map((url, index) => (
+              <div key={index} className="relative w-full rounded-lg overflow-hidden" style={{ maxHeight: '384px', minHeight: '200px' }}>
+                <Image
+                  src={url}
+                  alt=""
+                  width={600}
+                  height={400}
+                  className="w-full rounded-lg object-cover"
+                  sizes="(max-width: 768px) 100vw, 600px"
+                  onError={handleImageError}
+                />
+              </div>
             ))}
           </div>
         )}
@@ -171,12 +183,17 @@ export default function PostCard({
             });
             return (
               <div key={comment.id} className="flex gap-2">
-                {comment.author.avatar ? (
-                  <img
-                    src={comment.author.avatar}
-                    alt={comment.author.name}
-                    className="w-8 h-8 rounded-full object-cover flex-shrink-0"
-                  />
+                {isValidImageSrc(comment.author.avatar) ? (
+                  <div className="relative w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                    <Image
+                      src={comment.author.avatar}
+                      alt={comment.author.name}
+                      width={32}
+                      height={32}
+                      className="rounded-full object-cover"
+                      onError={handleImageError}
+                    />
+                  </div>
                 ) : (
                   <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
                     <span className="text-green-600 font-semibold text-xs">
@@ -232,3 +249,15 @@ export default function PostCard({
     </div>
   );
 }
+
+// Memoize component with custom comparison to prevent unnecessary re-renders
+export default memo(PostCard, (prevProps, nextProps) => {
+  // Only re-render if post data changed
+  return (
+    prevProps.post.id === nextProps.post.id &&
+    prevProps.post.content === nextProps.post.content &&
+    prevProps.post.reactions.length === nextProps.post.reactions.length &&
+    prevProps.post.comments.length === nextProps.post.comments.length &&
+    prevProps.currentUserId === nextProps.currentUserId
+  );
+});

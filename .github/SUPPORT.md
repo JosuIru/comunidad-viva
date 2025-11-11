@@ -1,6 +1,6 @@
 # 🆘 Soporte y Recursos de Ayuda
 
-¿Necesitas ayuda con **Comunidad Viva**? ¡Estamos aquí para ayudarte!
+¿Necesitas ayuda con **Truk**? ¡Estamos aquí para ayudarte!
 
 ## 📚 Recursos Disponibles
 
@@ -199,7 +199,7 @@ Somos un proyecto de código abierto con contribuidores voluntarios:
 
 ## 🙏 Agradecimientos
 
-Gracias por usar Comunidad Viva y por ser parte de nuestra comunidad. Tu feedback nos ayuda a mejorar.
+Gracias por usar Truk y por ser parte de nuestra comunidad. Tu feedback nos ayuda a mejorar.
 
 ---
 

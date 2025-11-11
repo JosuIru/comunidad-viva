@@ -2,7 +2,7 @@ import { getRequestConfig } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 // Lista de idiomas soportados
-export const locales = ['es', 'eu'] as const;
+export const locales = ['es', 'eu', 'en', 'ca'] as const;
 export type Locale = (typeof locales)[number];
 
 // Idioma por defecto

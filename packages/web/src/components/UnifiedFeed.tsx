@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, memo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { api } from '@/lib/api';
+import { logger } from '@/lib/logger';
 import {
   CalendarIcon,
   ShoppingBagIcon,
@@ -11,7 +12,10 @@ import {
   LightBulbIcon,
   MapPinIcon,
   UserGroupIcon,
+  MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
+import EmptyState from './EmptyState';
+import { isValidImageSrc, handleImageError } from '@/lib/imageUtils';
 
 type ResourceType = 'event' | 'offer' | 'timebank' | 'need' | 'project' | 'housing' | 'groupbuy';
 
@@ -26,12 +30,22 @@ interface UnifiedResource {
   latitude?: number;
   longitude?: number;
   distance?: number; // distancia en km desde el usuario
+  communityId?: string;
   author?: {
     name: string;
     avatar?: string;
   };
   link: string;
   metadata?: any;
+}
+
+interface UnifiedFeedProps {
+  selectedTypes?: Set<string>;
+  selectedCommunities?: Set<string>;
+  proximityRadius?: number | null;
+  searchText?: string;
+  userLocation?: [number, number] | null;
+  onTypesChange?: (types: Set<string>) => void;
 }
 
 // Función para calcular distancia usando fórmula Haversine
@@ -52,82 +66,96 @@ const typeConfig = {
     label: 'Evento',
     icon: CalendarIcon,
     color: 'blue',
-    bgColor: 'bg-blue-50',
-    textColor: 'text-blue-700',
-    borderColor: 'border-blue-200',
+    bgColor: 'bg-blue-50 dark:bg-blue-900/20',
+    textColor: 'text-blue-700 dark:text-blue-400',
+    borderColor: 'border-blue-200 dark:border-blue-700',
   },
   offer: {
     label: 'Oferta',
     icon: ShoppingBagIcon,
     color: 'green',
-    bgColor: 'bg-green-50',
-    textColor: 'text-green-700',
-    borderColor: 'border-green-200',
+    bgColor: 'bg-green-50 dark:bg-green-900/20',
+    textColor: 'text-green-700 dark:text-green-400',
+    borderColor: 'border-green-200 dark:border-green-700',
   },
   timebank: {
     label: 'Banco de Tiempo',
     icon: ClockIcon,
     color: 'purple',
-    bgColor: 'bg-purple-50',
-    textColor: 'text-purple-700',
-    borderColor: 'border-purple-200',
+    bgColor: 'bg-purple-50 dark:bg-purple-900/20',
+    textColor: 'text-purple-700 dark:text-purple-400',
+    borderColor: 'border-purple-200 dark:border-purple-700',
   },
   need: {
     label: 'Necesidad',
     icon: HeartIcon,
     color: 'red',
-    bgColor: 'bg-red-50',
-    textColor: 'text-red-700',
-    borderColor: 'border-red-200',
+    bgColor: 'bg-red-50 dark:bg-red-900/20',
+    textColor: 'text-red-700 dark:text-red-400',
+    borderColor: 'border-red-200 dark:border-red-700',
   },
   project: {
     label: 'Proyecto',
     icon: LightBulbIcon,
     color: 'yellow',
-    bgColor: 'bg-yellow-50',
-    textColor: 'text-yellow-700',
-    borderColor: 'border-yellow-200',
+    bgColor: 'bg-yellow-50 dark:bg-yellow-900/20',
+    textColor: 'text-yellow-700 dark:text-yellow-400',
+    borderColor: 'border-yellow-200 dark:border-yellow-700',
   },
   housing: {
     label: 'Vivienda',
     icon: HomeIcon,
     color: 'indigo',
-    bgColor: 'bg-indigo-50',
-    textColor: 'text-indigo-700',
-    borderColor: 'border-indigo-200',
+    bgColor: 'bg-indigo-50 dark:bg-indigo-900/20',
+    textColor: 'text-indigo-700 dark:text-indigo-400',
+    borderColor: 'border-indigo-200 dark:border-indigo-700',
   },
   groupbuy: {
     label: 'Compra Grupal',
     icon: UserGroupIcon,
     color: 'pink',
-    bgColor: 'bg-pink-50',
-    textColor: 'text-pink-700',
-    borderColor: 'border-pink-200',
+    bgColor: 'bg-pink-50 dark:bg-pink-900/20',
+    textColor: 'text-pink-700 dark:text-pink-400',
+    borderColor: 'border-pink-200 dark:border-pink-700',
   },
 };
 
-export default function UnifiedFeed() {
-  const [filter, setFilter] = useState<ResourceType | 'all'>('all');
-  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+export default function UnifiedFeed({
+  selectedTypes = new Set(['offer', 'event', 'timebank', 'need', 'project', 'housing', 'groupbuy']),
+  selectedCommunities,
+  proximityRadius,
+  searchText,
+  userLocation: externalUserLocation,
+  onTypesChange,
+}: UnifiedFeedProps = {}) {
+  const [internalUserLocation, setInternalUserLocation] = useState<[number, number] | null>(null);
 
-  // Obtener ubicación del usuario
+  // Use external location if provided, otherwise get user's location
+  const userLocation = externalUserLocation || internalUserLocation;
+
+  // Obtener ubicación del usuario solo si no se proporciona externamente
   useEffect(() => {
+    if (externalUserLocation) return;
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setUserLocation([position.coords.latitude, position.coords.longitude]);
+          setInternalUserLocation([position.coords.latitude, position.coords.longitude]);
         },
         (error) => {
-          console.log('Geolocation error:', error);
+          logger.debug('Geolocation not available, using default location', {
+            error: error.message,
+            defaultLocation: 'Navarra'
+          });
           // Ubicación por defecto (Navarra) si no se puede obtener
-          setUserLocation([42.8125, -1.6458]);
+          setInternalUserLocation([42.8125, -1.6458]);
         }
       );
     } else {
       // Ubicación por defecto si geolocalización no está disponible (Navarra)
-      setUserLocation([42.8125, -1.6458]);
+      setInternalUserLocation([42.8125, -1.6458]);
     }
-  }, []);
+  }, [externalUserLocation]);
 
   // Fetch all data
   const { data: events } = useQuery({
@@ -178,8 +206,8 @@ export default function UnifiedFeed() {
     },
   });
 
-  // Transform all data into unified format
-  const unifiedResources: UnifiedResource[] = [
+  // Transform all data into unified format - Memoized for performance
+  const unifiedResources = useMemo<UnifiedResource[]>(() => [
     // Events
     ...(events || []).map((event: any) => {
       const lat = event.lat;
@@ -199,6 +227,7 @@ export default function UnifiedFeed() {
         latitude: lat,
         longitude: lng,
         distance,
+        communityId: event.communityId,
         author: event.creator ? {
           name: event.creator.name,
           avatar: event.creator.avatar,
@@ -402,45 +431,92 @@ export default function UnifiedFeed() {
         },
       };
     }),
-  ];
+  ], [events, offers, needs, projects, housing, groupbuys, userLocation]);
 
-  // Sort by proximity (local to global)
-  const sortedResources = unifiedResources.sort((a, b) => {
-    // Primero por distancia (más cercano primero)
-    const distDiff = (a.distance || Number.MAX_SAFE_INTEGER) - (b.distance || Number.MAX_SAFE_INTEGER);
-    if (distDiff !== 0) return distDiff;
+  // Apply filters and sorting - Memoized for performance
+  const filteredResources = useMemo(() => {
+    // Apply external filters first
+  let filteredByExternalFilters = unifiedResources;
 
-    // Si tienen la misma distancia, ordenar por fecha (más reciente primero)
-    const dateA = new Date(a.date || 0).getTime();
-    const dateB = new Date(b.date || 0).getTime();
-    return dateB - dateA;
-  });
+  // Type filter (external)
+  if (selectedTypes && selectedTypes.size > 0) {
+    filteredByExternalFilters = filteredByExternalFilters.filter(resource => {
+      // Map resource type to filter type
+      const resourceTypeMapping: Record<string, string> = {
+        'event': 'event',
+        'offer': 'offer',
+        'timebank': 'service',
+        'need': 'need',
+        'project': 'project',
+        'housing': 'housing',
+        'groupbuy': 'offer',
+      };
+      const filterType = resourceTypeMapping[resource.type] || resource.type;
+      return selectedTypes.has(filterType);
+    });
+  }
 
-  // Filter resources
-  const filteredResources = filter === 'all'
-    ? sortedResources
-    : sortedResources.filter(r => r.type === filter);
+  // Community filter (external)
+  if (selectedCommunities && selectedCommunities.size > 0) {
+    filteredByExternalFilters = filteredByExternalFilters.filter(resource =>
+      resource.communityId && selectedCommunities.has(resource.communityId)
+    );
+  }
 
-  const ResourceCard = ({ resource }: { resource: UnifiedResource }) => {
+  // Proximity filter (external)
+  if (proximityRadius !== null && proximityRadius !== undefined) {
+    filteredByExternalFilters = filteredByExternalFilters.filter(resource =>
+      (resource.distance || Number.MAX_SAFE_INTEGER) <= proximityRadius
+    );
+  }
+
+  // Search filter (external)
+  if (searchText && searchText.trim().length > 0) {
+    const searchLower = searchText.toLowerCase();
+    filteredByExternalFilters = filteredByExternalFilters.filter(resource =>
+      resource.title.toLowerCase().includes(searchLower) ||
+      resource.description.toLowerCase().includes(searchLower)
+    );
+  }
+
+    // Sort by proximity (local to global)
+    const sortedResources = filteredByExternalFilters.sort((a, b) => {
+      // Primero por distancia (más cercano primero)
+      const distDiff = (a.distance || Number.MAX_SAFE_INTEGER) - (b.distance || Number.MAX_SAFE_INTEGER);
+      if (distDiff !== 0) return distDiff;
+
+      // Si tienen la misma distancia, ordenar por fecha (más reciente primero)
+      const dateA = new Date(a.date || 0).getTime();
+      const dateB = new Date(b.date || 0).getTime();
+      return dateB - dateA;
+    });
+
+    // Filter resources by selectedTypes
+    return sortedResources.filter(r => selectedTypes.has(r.type));
+  }, [unifiedResources, selectedTypes, selectedCommunities, proximityRadius, searchText]);
+
+  // Memoized ResourceCard to prevent unnecessary re-renders
+  const ResourceCard = memo(({ resource }: { resource: UnifiedResource }) => {
     const config = typeConfig[resource.type];
     const Icon = config.icon;
 
     return (
       <Link href={resource.link}>
-        <div className={`bg-white rounded-lg shadow-sm hover:shadow-md transition border ${config.borderColor} overflow-hidden`}>
+        <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md dark:hover:shadow-gray-900/50 transition border ${config.borderColor} overflow-hidden`}>
           <div className="flex gap-4 p-4">
-            {resource.image && (
+            {isValidImageSrc(resource.image) && (
               <div className="flex-shrink-0">
                 <img
                   src={resource.image}
                   alt={resource.title}
                   className="w-24 h-24 object-cover rounded-lg"
+                  onError={handleImageError}
                 />
               </div>
             )}
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2 mb-2">
-                <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-1">
                   {resource.title}
                 </h3>
                 <span className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${config.bgColor} ${config.textColor} flex-shrink-0`}>
@@ -449,22 +525,23 @@ export default function UnifiedFeed() {
                 </span>
               </div>
 
-              <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+              <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3">
                 {resource.description}
               </p>
 
-              <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500">
+              <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
                 {resource.author && (
                   <div className="flex items-center gap-1">
-                    {resource.author.avatar ? (
+                    {isValidImageSrc(resource.author.avatar) ? (
                       <img
                         src={resource.author.avatar}
                         alt={resource.author.name}
                         className="w-5 h-5 rounded-full"
+                        onError={handleImageError}
                       />
                     ) : (
-                      <div className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center">
-                        <span className="text-xs font-medium text-gray-600">
+                      <div className="w-5 h-5 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                        <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
                           {resource.author.name[0]}
                         </span>
                       </div>
@@ -493,7 +570,7 @@ export default function UnifiedFeed() {
 
               {/* Type-specific metadata */}
               {resource.type === 'event' && resource.metadata?.attendees !== undefined && (
-                <div className="mt-2 text-xs text-gray-600">
+                <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
                   {resource.metadata.attendees} asistentes
                   {resource.metadata.maxAttendees && ` / ${resource.metadata.maxAttendees}`}
                 </div>
@@ -501,13 +578,13 @@ export default function UnifiedFeed() {
 
               {(resource.type === 'need' || resource.type === 'project') && resource.metadata?.goal > 0 && (
                 <div className="mt-2">
-                  <div className="flex justify-between text-xs text-gray-600 mb-1">
+                  <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
                     <span>Recaudado</span>
                     <span>{resource.metadata.raised}€ / {resource.metadata.goal}€</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-1.5">
+                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
                     <div
-                      className={`h-1.5 rounded-full bg-${config.color}-600`}
+                      className={`h-1.5 rounded-full bg-${config.color}-600 dark:bg-${config.color}-500`}
                       style={{
                         width: `${Math.min((resource.metadata.raised / resource.metadata.goal) * 100, 100)}%`,
                       }}
@@ -520,23 +597,27 @@ export default function UnifiedFeed() {
         </div>
       </Link>
     );
-  };
+  });
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
           Red Unificada
         </h2>
 
         {/* Filter tabs */}
         <div className="flex flex-wrap gap-2">
           <button
-            onClick={() => setFilter('all')}
+            onClick={() => {
+              if (onTypesChange) {
+                onTypesChange(new Set(['offer', 'event', 'timebank', 'need', 'project', 'housing', 'groupbuy']));
+              }
+            }}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-              filter === 'all'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              selectedTypes.size === 7
+                ? 'bg-blue-600 dark:bg-blue-500 text-white'
+                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >
             Todos ({unifiedResources.length})
@@ -544,14 +625,28 @@ export default function UnifiedFeed() {
           {Object.entries(typeConfig).map(([type, config]) => {
             const count = unifiedResources.filter(r => r.type === type).length;
             const Icon = config.icon;
+            const isSelected = selectedTypes.has(type);
             return (
               <button
                 key={type}
-                onClick={() => setFilter(type as ResourceType)}
+                onClick={() => {
+                  if (onTypesChange) {
+                    const newTypes = new Set(selectedTypes);
+                    if (isSelected) {
+                      newTypes.delete(type);
+                    } else {
+                      newTypes.add(type);
+                    }
+                    // Ensure at least one type is selected
+                    if (newTypes.size > 0) {
+                      onTypesChange(newTypes);
+                    }
+                  }
+                }}
                 className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition ${
-                  filter === type
+                  isSelected
                     ? `${config.bgColor} ${config.textColor} border ${config.borderColor}`
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -565,9 +660,18 @@ export default function UnifiedFeed() {
       {/* Resources grid */}
       <div className="space-y-4">
         {filteredResources.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
-            No hay recursos disponibles
-          </div>
+          <EmptyState
+            icon={<MagnifyingGlassIcon className="h-12 w-12" />}
+            title="No hay recursos disponibles"
+            description="No encontramos contenido cerca de ti. Intenta ampliar tu búsqueda, ajustar los filtros o crear el primero."
+            actions={[
+              {
+                label: 'Crear oferta',
+                href: '/offers/new',
+                variant: 'secondary',
+              },
+            ]}
+          />
         ) : (
           filteredResources.map((resource) => (
             <ResourceCard key={`${resource.type}-${resource.id}`} resource={resource} />

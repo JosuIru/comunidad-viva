@@ -97,8 +97,8 @@ export default function FlashDealsPage() {
   };
 
   return (
-    <Layout title="Flash Deals - Comunidad Viva">
-      <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-50">
+    <Layout title="Flash Deals - Truk">
+      <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 dark:from-gray-900 dark:to-gray-800">
         {/* Header */}
         <div className="bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 text-white">
           <div className="container mx-auto px-4 py-12">
@@ -129,30 +129,30 @@ export default function FlashDealsPage() {
 
           {/* Info Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
               <div className="flex items-center gap-3 mb-3">
                 <div className="text-4xl">⏰</div>
                 <div>
-                  <h3 className="font-bold text-gray-900">Tiempo Limitado</h3>
-                  <p className="text-sm text-gray-600">2-4 horas por deal</p>
+                  <h3 className="font-bold text-gray-900 dark:text-gray-100">Tiempo Limitado</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">2-4 horas por deal</p>
                 </div>
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
               <div className="flex items-center gap-3 mb-3">
                 <div className="text-4xl">💰</div>
                 <div>
-                  <h3 className="font-bold text-gray-900">Hasta 70% OFF</h3>
-                  <p className="text-sm text-gray-600">Descuentos increíbles</p>
+                  <h3 className="font-bold text-gray-900 dark:text-gray-100">Hasta 70% OFF</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Descuentos increíbles</p>
                 </div>
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
               <div className="flex items-center gap-3 mb-3">
                 <div className="text-4xl">🔥</div>
                 <div>
-                  <h3 className="font-bold text-gray-900">Stock Limitado</h3>
-                  <p className="text-sm text-gray-600">Primero llegar, primero servir</p>
+                  <h3 className="font-bold text-gray-900 dark:text-gray-100">Stock Limitado</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Primero llegar, primero servir</p>
                 </div>
               </div>
             </div>
@@ -170,7 +170,7 @@ export default function FlashDealsPage() {
                 return (
                   <div
                     key={deal.id}
-                    className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                    className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
                   >
                     {/* Deal Badge */}
                     <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 flex items-center justify-between">
@@ -180,20 +180,20 @@ export default function FlashDealsPage() {
 
                     <div className="p-6">
                       {/* Product Info */}
-                      <h3 className="text-xl font-bold text-gray-900 mb-2">{deal.title}</h3>
-                      <p className="text-gray-600 mb-4">{deal.product}</p>
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">{deal.title}</h3>
+                      <p className="text-gray-600 dark:text-gray-400 mb-4">{deal.product}</p>
 
                       {/* Price */}
                       <div className="mb-4">
                         <div className="flex items-baseline gap-3">
-                          <span className="text-3xl font-bold text-red-600">
+                          <span className="text-3xl font-bold text-red-600 dark:text-red-400">
                             €{getDiscountedPrice(deal.originalPrice, deal.discount)}
                           </span>
-                          <span className="text-lg text-gray-400 line-through">
+                          <span className="text-lg text-gray-400 dark:text-gray-500 line-through">
                             €{deal.originalPrice.toFixed(2)}
                           </span>
                         </div>
-                        <div className="text-sm text-green-600 font-semibold">
+                        <div className="text-sm text-green-600 dark:text-green-400 font-semibold">
                           Ahorras €
                           {(
                             deal.originalPrice - parseFloat(getDiscountedPrice(deal.originalPrice, deal.discount))
@@ -204,12 +204,12 @@ export default function FlashDealsPage() {
                       {/* Stock */}
                       <div className="mb-4">
                         <div className="flex justify-between text-sm mb-1">
-                          <span className="text-gray-600">Stock disponible</span>
+                          <span className="text-gray-600 dark:text-gray-400">Stock disponible</span>
                           <span className={`font-bold ${urgencyColor}`}>
                             {deal.remainingQuantity} / {deal.quantity}
                           </span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                           <div
                             className={`h-2 rounded-full transition-all ${
                               deal.remainingQuantity / deal.quantity < 0.2
@@ -226,8 +226,8 @@ export default function FlashDealsPage() {
                       </div>
 
                       {/* Merchant */}
-                      <div className="flex items-center gap-2 mb-4 text-sm text-gray-600">
-                        <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
+                      <div className="flex items-center gap-2 mb-4 text-sm text-gray-600 dark:text-gray-400">
+                        <div className="w-6 h-6 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
                         <span>{deal.merchant?.name || 'Comerciante'}</span>
                       </div>
 
@@ -251,45 +251,45 @@ export default function FlashDealsPage() {
               })}
             </div>
           ) : (
-            <div className="bg-white rounded-lg shadow-lg p-12 text-center">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-12 text-center">
               <div className="text-6xl mb-4">⚡</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">No hay Flash Deals activos</h3>
-              <p className="text-gray-600 mb-6">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">No hay Flash Deals activos</h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
                 Los flash deals rotan automáticamente 3 veces al día
               </p>
-              <p className="text-sm text-gray-500">Vuelve pronto para no perderte las ofertas</p>
+              <p className="text-sm text-gray-500 dark:text-gray-500">Vuelve pronto para no perderte las ofertas</p>
             </div>
           )}
 
           {/* How it Works */}
-          <div className="mt-12 bg-white rounded-lg shadow-lg p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">¿Cómo funcionan los Flash Deals?</h3>
+          <div className="mt-12 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">¿Cómo funcionan los Flash Deals?</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div className="text-center">
                 <div className="text-4xl mb-3">1️⃣</div>
-                <h4 className="font-bold mb-2">Encuentra un Deal</h4>
-                <p className="text-sm text-gray-600">
+                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">Encuentra un Deal</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Explora las ofertas activas y elige la que más te interese
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">2️⃣</div>
-                <h4 className="font-bold mb-2">Reclama Rápido</h4>
-                <p className="text-sm text-gray-600">
+                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">Reclama Rápido</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Haz clic en "Reclamar" antes de que se agote el stock
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">3️⃣</div>
-                <h4 className="font-bold mb-2">Obtén tu Código</h4>
-                <p className="text-sm text-gray-600">
+                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">Obtén tu Código</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Recibirás un código único para usar el descuento
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">4️⃣</div>
-                <h4 className="font-bold mb-2">Contacta al Vendedor</h4>
-                <p className="text-sm text-gray-600">
+                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">Contacta al Vendedor</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Usa el código cuando contactes al comerciante
                 </p>
               </div>
@@ -300,28 +300,28 @@ export default function FlashDealsPage() {
         {/* Claim Modal */}
         {selectedDeal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-lg max-w-md w-full p-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Confirmar Flash Deal</h3>
+            <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-8">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Confirmar Flash Deal</h3>
 
-              <div className="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-lg p-4 mb-6">
-                <h4 className="font-bold text-lg mb-2">{selectedDeal.title}</h4>
-                <p className="text-sm text-gray-600 mb-3">{selectedDeal.product}</p>
+              <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 border-2 border-red-200 dark:border-red-700 rounded-lg p-4 mb-6">
+                <h4 className="font-bold text-lg mb-2 text-gray-900 dark:text-gray-100">{selectedDeal.title}</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{selectedDeal.product}</p>
                 <div className="flex items-baseline gap-3 mb-2">
-                  <span className="text-3xl font-bold text-red-600">
+                  <span className="text-3xl font-bold text-red-600 dark:text-red-400">
                     €{getDiscountedPrice(selectedDeal.originalPrice, selectedDeal.discount)}
                   </span>
-                  <span className="text-lg text-gray-400 line-through">
+                  <span className="text-lg text-gray-400 dark:text-gray-500 line-through">
                     €{selectedDeal.originalPrice.toFixed(2)}
                   </span>
                 </div>
-                <div className="text-sm text-green-600 font-semibold">
+                <div className="text-sm text-green-600 dark:text-green-400 font-semibold">
                   Descuento: {selectedDeal.discount}% OFF
                 </div>
               </div>
 
-              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-6">
-                <h4 className="font-semibold text-yellow-900 mb-2">⚠️ Importante</h4>
-                <ul className="text-sm text-yellow-800 space-y-1">
+              <div className="bg-yellow-50 dark:bg-yellow-900/20 border-2 border-yellow-200 dark:border-yellow-700 rounded-lg p-4 mb-6">
+                <h4 className="font-semibold text-yellow-900 dark:text-yellow-300 mb-2">⚠️ Importante</h4>
+                <ul className="text-sm text-yellow-800 dark:text-yellow-400 space-y-1">
                   <li>• El código expira en {getTimeRemaining(selectedDeal.expiresAt)}</li>
                   <li>• Solo puedes reclamar este deal una vez</li>
                   <li>• Contacta al vendedor para usar tu código</li>
@@ -331,7 +331,7 @@ export default function FlashDealsPage() {
               <div className="flex gap-4">
                 <button
                   onClick={() => setSelectedDeal(null)}
-                  className="flex-1 py-3 px-4 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-semibold"
+                  className="flex-1 py-3 px-4 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-semibold"
                 >
                   Cancelar
                 </button>
@@ -351,4 +351,4 @@ export default function FlashDealsPage() {
   );
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import { getI18nProps } from '@/lib/i18n';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { motion } from 'framer-motion';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
+import Avatar from '@/components/Avatar';
+import SkeletonLoader from '@/components/SkeletonLoader';
+import { staggerContainer, listItem } from '@/utils/animations';
 
 interface TimeBankOffer {
   id: string;
@@ -51,6 +56,7 @@ interface TimeBankStats {
 }
 
 export default function TimeBankPage() {
+  const t = useTranslations('timebank');
   const [activeTab, setActiveTab] = useState<'offers' | 'transactions' | 'stats'>('offers');
 
   const { data: offersData, isLoading: offersLoading } = useQuery({
@@ -87,14 +93,14 @@ export default function TimeBankPage() {
   };
 
   return (
-    <Layout title="Banco de Tiempo - Comunidad Viva">
-      <div className="min-h-screen bg-gray-50">
+    <Layout title={`${t('title')} - Truk`}>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         {/* Header */}
         <div className="bg-gradient-to-r from-green-500 to-blue-600 text-white">
           <div className="container mx-auto px-4 py-12">
-            <h1 className="text-4xl font-bold mb-4">⏰ Banco de Tiempo</h1>
+            <h1 className="text-4xl font-bold mb-4">⏰ {t('title')}</h1>
             <p className="text-xl opacity-90">
-              Comparte tus habilidades y aprende de otros
+              {t('subtitle')}
             </p>
           </div>
         </div>
@@ -102,49 +108,49 @@ export default function TimeBankPage() {
         {/* Stats */}
         <div className="container mx-auto px-4 -mt-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white rounded-lg shadow p-6">
-              <p className="text-3xl font-bold text-green-600">{stats.hoursGiven}h</p>
-              <p className="text-gray-600">Horas Compartidas</p>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+              <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.hoursGiven}h</p>
+              <p className="text-gray-600 dark:text-gray-400">{t('stats.hoursShared')}</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6">
-              <p className="text-3xl font-bold text-blue-600">{stats.hoursReceived}h</p>
-              <p className="text-gray-600">Horas Recibidas</p>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+              <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{stats.hoursReceived}h</p>
+              <p className="text-gray-600 dark:text-gray-400">{t('stats.hoursReceived')}</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6">
-              <p className="text-3xl font-bold text-purple-600">{stats.totalTransactions}</p>
-              <p className="text-gray-600">Intercambios</p>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+              <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">{stats.totalTransactions}</p>
+              <p className="text-gray-600 dark:text-gray-400">{t('stats.exchanges')}</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6">
-              <p className="text-3xl font-bold text-orange-600">{stats.pendingRequests}</p>
-              <p className="text-gray-600">Pendientes</p>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+              <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">{stats.pendingRequests}</p>
+              <p className="text-gray-600 dark:text-gray-400">{t('stats.pending')}</p>
             </div>
           </div>
         </div>
 
         {/* Tabs */}
         <div className="container mx-auto px-4 py-8">
-          <div className="bg-white rounded-lg shadow">
-            <div className="border-b border-gray-200">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+            <div className="border-b border-gray-200 dark:border-gray-700">
               <nav className="flex -mb-px">
                 <button
                   onClick={() => setActiveTab('offers')}
                   className={`px-6 py-4 text-sm font-medium border-b-2 ${
                     activeTab === 'offers'
-                      ? 'border-green-500 text-green-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? 'border-green-500 text-green-600 dark:text-green-400'
+                      : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
-                  Ofertas Disponibles
+                  {t('tabs.offers')}
                 </button>
                 <button
                   onClick={() => setActiveTab('transactions')}
                   className={`px-6 py-4 text-sm font-medium border-b-2 ${
                     activeTab === 'transactions'
-                      ? 'border-green-500 text-green-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? 'border-green-500 text-green-600 dark:text-green-400'
+                      : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
-                  Mis Intercambios
+                  {t('tabs.exchanges')}
                 </button>
               </nav>
             </div>
@@ -153,42 +159,42 @@ export default function TimeBankPage() {
               {activeTab === 'offers' && (
                 <div>
                   {offersLoading ? (
-                    <div className="text-center py-12">
-                      <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
-                      <p className="mt-4 text-gray-600">Cargando ofertas...</p>
-                    </div>
+                    <SkeletonLoader type="card" count={6} />
                   ) : offers.length === 0 ? (
                     <div className="text-center py-12">
-                      <p className="text-gray-600 text-lg">No hay ofertas disponibles</p>
+                      <p className="text-gray-600 dark:text-gray-400 text-lg">{t('empty.offers')}</p>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <motion.div
+                      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                      variants={staggerContainer}
+                      initial="hidden"
+                      animate="visible"
+                    >
                       {offers.map((offer) => (
-                        <div
-                          key={offer.id}
-                          className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
-                        >
-                          <div className="p-6">
-                            <div className="flex items-center gap-3 mb-4">
-                              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                                <span className="text-green-600 font-semibold">
-                                  {offer.offer.user?.name?.charAt(0)?.toUpperCase() || '?'}
-                                </span>
-                              </div>
+                        <motion.div key={offer.id} variants={listItem}>
+                          <div className="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                            <div className="p-6">
+                              <div className="flex items-center gap-3 mb-4">
+                                <Avatar
+                                  name={offer.offer.user?.name || 'User'}
+                                  src={offer.offer.user?.avatar}
+                                  size="sm"
+                                />
                               <div>
                                 <p className="font-medium">{offer.offer.user?.name}</p>
                                 <p className="text-xs text-gray-500">{offer.offer.category}</p>
                               </div>
                             </div>
-                            <h3 className="text-lg font-bold text-gray-900 mb-2">
+                            <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">
                               {offer.offer.title}
                             </h3>
-                            <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                            <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
                               {offer.offer.description}
                             </p>
                             <div className="flex items-center justify-between text-sm">
-                              <span className="text-gray-600">
-                                ⏱️ {offer.estimatedHours}h estimadas
+                              <span className="text-gray-600 dark:text-gray-400">
+                                {t('estimatedHours', { hours: offer.estimatedHours })}
                               </span>
                               <span
                                 className={`px-3 py-1 rounded-full text-xs font-medium ${
@@ -204,13 +210,14 @@ export default function TimeBankPage() {
                             </div>
                             {offer.canTeach && (
                               <div className="mt-3 px-3 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full inline-block">
-                                👨‍🏫 Puede enseñar
+                                {t('canTeach')}
                               </div>
                             )}
                           </div>
-                        </div>
+                          </div>
+                        </motion.div>
                       ))}
-                    </div>
+                    </motion.div>
                   )}
                 </div>
               )}
@@ -218,46 +225,46 @@ export default function TimeBankPage() {
               {activeTab === 'transactions' && (
                 <div>
                   {transactionsLoading ? (
-                    <div className="text-center py-12">
-                      <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
-                      <p className="mt-4 text-gray-600">Cargando intercambios...</p>
-                    </div>
+                    <SkeletonLoader type="list" count={5} />
                   ) : transactions.length === 0 ? (
                     <div className="text-center py-12">
-                      <p className="text-gray-600 text-lg">No tienes intercambios aún</p>
+                      <p className="text-gray-600 dark:text-gray-400 text-lg">{t('empty.exchanges')}</p>
                     </div>
                   ) : (
-                    <div className="space-y-4">
+                    <motion.div
+                      className="space-y-4"
+                      variants={staggerContainer}
+                      initial="hidden"
+                      animate="visible"
+                    >
                       {transactions.map((transaction) => (
-                        <div
-                          key={transaction.id}
-                          className="bg-white border border-gray-200 rounded-lg p-6"
-                        >
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-3 mb-3">
-                                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                                  <span className="text-green-600 font-semibold">
-                                    {transaction.provider?.name?.charAt(0)?.toUpperCase() || '?'}
-                                  </span>
-                                </div>
+                        <motion.div key={transaction.id} variants={listItem}>
+                          <div className="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-6">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-3 mb-3">
+                                  <Avatar
+                                    name={transaction.provider?.name || 'Provider'}
+                                    src={transaction.provider?.avatar}
+                                    size="sm"
+                                  />
                                 <div>
                                   <p className="font-medium">{transaction.provider?.name}</p>
-                                  <p className="text-xs text-gray-500">Proveedor</p>
+                                  <p className="text-xs text-gray-500">{t('roles.provider')}</p>
                                 </div>
                                 <span className="text-gray-400">→</span>
-                                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                  <span className="text-blue-600 font-semibold">
-                                    {transaction.requester?.name?.charAt(0)?.toUpperCase() || '?'}
-                                  </span>
-                                </div>
+                                <Avatar
+                                  name={transaction.requester?.name || 'Requester'}
+                                  src={transaction.requester?.avatar}
+                                  size="sm"
+                                />
                                 <div>
                                   <p className="font-medium">{transaction.requester?.name}</p>
-                                  <p className="text-xs text-gray-500">Solicitante</p>
+                                  <p className="text-xs text-gray-500">{t('roles.requester')}</p>
                                 </div>
                               </div>
-                              <p className="text-gray-900 mb-2">{transaction.description}</p>
-                              <div className="flex items-center gap-4 text-sm text-gray-600">
+                              <p className="text-gray-900 dark:text-gray-100 mb-2">{transaction.description}</p>
+                              <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                                 <span>⏱️ {transaction.hours}h</span>
                                 <span>💰 {transaction.credits} créditos</span>
                                 <span>
@@ -282,9 +289,10 @@ export default function TimeBankPage() {
                               </span>
                             </div>
                           </div>
-                        </div>
+                          </div>
+                        </motion.div>
                       ))}
-                    </div>
+                    </motion.div>
                   )}
                 </div>
               )}
@@ -296,4 +304,4 @@ export default function TimeBankPage() {
   );
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

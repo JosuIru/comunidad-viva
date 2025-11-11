@@ -180,7 +180,7 @@ export default function PoolRequestDetailPage() {
   const isRequestor = request.user.id === userId;
 
   return (
-    <Layout title={`Solicitud de Pool - Comunidad Viva`}>
+    <Layout title={`Solicitud de Pool - Truk`}>
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Header */}
@@ -486,4 +486,4 @@ export async function getStaticPaths() {
   };
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

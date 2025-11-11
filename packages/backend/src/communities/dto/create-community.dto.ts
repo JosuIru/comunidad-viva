@@ -1,5 +1,15 @@
-import { IsString, IsOptional, IsBoolean, IsEnum, IsNumber } from 'class-validator';
-import { CommunityType, CommunityVisibility } from '@prisma/client';
+import { IsString, IsOptional, IsBoolean, IsEnum, IsNumber, IsObject, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { CommunityType, CommunityVisibility, OrganizedCommunityType } from '@prisma/client';
+
+class OnboardingPackData {
+  @IsEnum(OrganizedCommunityType)
+  type: OrganizedCommunityType;
+
+  @IsOptional()
+  @IsObject()
+  setupData?: Record<string, any>;
+}
 
 export class CreateCommunityDto {
   @IsString()
@@ -61,4 +71,9 @@ export class CreateCommunityDto {
   @IsOptional()
   @IsString()
   currency?: string;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => OnboardingPackData)
+  onboardingPack?: OnboardingPackData;
 }

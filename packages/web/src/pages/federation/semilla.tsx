@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
+import { getI18nProps } from '@/lib/i18n';
 import {
   CurrencyDollarIcon,
   ArrowUpIcon,
@@ -354,3 +355,5 @@ export default function SemillaWallet() {
     </Layout>
   );
 }
+
+export const getStaticProps = async (context: any) => getI18nProps(context);

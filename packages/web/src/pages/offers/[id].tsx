@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { getI18nProps } from '@/lib/i18n';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -5,6 +6,10 @@ import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getImageUrl } from '@/lib/imageUtils';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
+import Button from '@/components/Button';
+import Avatar from '@/components/Avatar';
+import SkeletonLoader from '@/components/SkeletonLoader';
 
 interface OfferDetail {
   id: string;
@@ -35,6 +40,39 @@ export default function OfferDetailPage() {
   const router = useRouter();
   const { id } = router.query;
   const queryClient = useQueryClient();
+  const t = useTranslations('offerDetail');
+  const userLocale = router.locale || 'es';
+  const numberFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat(userLocale, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }),
+    [userLocale]
+  );
+  const decimalFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat(userLocale, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+    [userLocale]
+  );
+  const currencyFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat(userLocale, {
+        style: 'currency',
+        currency: 'EUR',
+      }),
+    [userLocale]
+  );
+  const dateFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(userLocale, {
+        dateStyle: 'medium',
+      }),
+    [userLocale]
+  );
 
   const { data: offer, isLoading } = useQuery<{ data: OfferDetail }>({
     queryKey: ['offer', id],
@@ -49,29 +87,61 @@ export default function OfferDetailPage() {
     },
     onSuccess: (data) => {
       if (data.interested) {
-        toast.success('Marcado como interesado');
+        toast.success(t('toasts.markInterested'));
       } else {
-        toast.success('Interés removido');
+        toast.success(t('toasts.unmarkInterested'));
       }
       queryClient.invalidateQueries({ queryKey: ['offer', id] });
     },
     onError: (error: any) => {
-      const message = error.response?.data?.message || 'Error al marcar interés';
+      const message = error.response?.data?.message || t('toasts.markError');
       toast.error(message);
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: () => api.delete(`/offers/${id}`),
+    onSuccess: () => {
+      toast.success('Oferta eliminada exitosamente');
+      router.push('/offers');
+    },
+    onError: (err: any) => {
+      const message = err.response?.data?.message || 'Error al eliminar la oferta';
+      toast.error(message);
+    },
+  });
+
+  const handleEdit = () => {
+    router.push(`/offers/${id}/edit`);
+  };
+
+  const handleDelete = () => {
+    if (confirm('¿Estás seguro de que quieres eliminar esta oferta? Esta acción no se puede deshacer.')) {
+      deleteMutation.mutate();
+    }
+  };
+
+  const getCurrentUserId = () => {
+    const user = localStorage.getItem('user');
+    if (!user) return null;
+    try {
+      return JSON.parse(user).id;
+    } catch {
+      return null;
+    }
+  };
+
   const handleContact = () => {
     const user = localStorage.getItem('user');
     if (!user) {
-      toast.error('Debes iniciar sesión para contactar');
+      toast.error(t('toasts.loginContact'));
       router.push('/auth/login');
       return;
     }
 
     const currentUser = JSON.parse(user);
     if (currentUser.id === offerData.user.id) {
-      toast.error('No puedes contactarte a ti mismo');
+      toast.error(t('toasts.selfContact'));
       return;
     }
 
@@ -81,7 +151,7 @@ export default function OfferDetailPage() {
   const handleInterest = () => {
     const user = localStorage.getItem('user');
     if (!user) {
-      toast.error('Debes iniciar sesión para marcar interés');
+      toast.error(t('toasts.loginInterest'));
       router.push('/auth/login');
       return;
     }
@@ -91,8 +161,8 @@ export default function OfferDetailPage() {
 
   if (isLoading) {
     return (
-      <Layout>
-        <div className="min-h-screen flex items-center justify-center">
+      <Layout title={t('layout.loadingTitle')}>
+        <div className="min-h-screen flex items-center justify-center dark:bg-gray-900">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         </div>
       </Layout>
@@ -101,31 +171,41 @@ export default function OfferDetailPage() {
 
   if (!offer?.data) {
     return (
-      <Layout>
-        <div className="min-h-screen flex items-center justify-center">
-          <p className="text-gray-600">Oferta no encontrada</p>
+      <Layout title={t('layout.loadingTitle')}>
+        <div className="min-h-screen flex items-center justify-center dark:bg-gray-900">
+          <p className="text-gray-600 dark:text-gray-400">{t('info.notFound')}</p>
         </div>
       </Layout>
     );
   }
 
   const offerData = offer.data;
+  const typeLabels: Record<string, string> = {
+    PRODUCT: t('tags.type.PRODUCT'),
+    SERVICE: t('tags.type.SERVICE'),
+    TIME_BANK: t('tags.type.TIME_BANK'),
+    GROUP_BUY: t('tags.type.GROUP_BUY'),
+    EVENT: t('tags.type.EVENT'),
+    DONATION: t('tags.type.DONATION'),
+  };
+  const typeLabel = typeLabels[offerData.type] || offerData.type.replace('_', ' ');
+  const formattedDate = dateFormatter.format(new Date(offerData.createdAt));
 
   return (
-    <Layout title={`${offerData.title} - Comunidad Viva`}>
-      <div className="min-h-screen bg-gray-50 py-8">
+    <Layout title={t('layout.title', { title: offerData.title })}>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="container mx-auto px-4">
           <button
             onClick={() => router.back()}
-            className="mb-6 text-blue-600 hover:text-blue-700 flex items-center gap-2"
+            className="mb-6 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-2"
           >
-            ← Volver
+            {t('buttons.back')}
           </button>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-lg shadow overflow-hidden">
-                <div className="h-96 bg-gray-200 flex items-center justify-center">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+                <div className="h-96 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                   {offerData.images?.length > 0 ? (
                     <img
                       src={getImageUrl(offerData.images[0])}
@@ -133,24 +213,24 @@ export default function OfferDetailPage() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <span className="text-gray-400 text-lg">Sin imagen</span>
+                    <span className="text-gray-400 text-lg">{t('sections.noImage')}</span>
                   )}
                 </div>
 
                 <div className="p-6">
                   <div className="flex items-center gap-2 mb-4">
-                    <span className="px-3 py-1 bg-blue-100 text-blue-600 text-sm rounded-full font-medium">
-                      {offerData.type.replace('_', ' ')}
+                    <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 text-sm rounded-full font-medium">
+                      {typeLabel}
                     </span>
-                    <span className="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full">
+                    <span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-sm rounded-full">
                       {offerData.category}
                     </span>
                   </div>
 
-                  <h1 className="text-3xl font-bold text-gray-900 mb-4">{offerData.title}</h1>
+                  <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">{offerData.title}</h1>
 
                   <div className="prose max-w-none mb-6">
-                    <p className="text-gray-700 whitespace-pre-line">{offerData.description}</p>
+                    <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line">{offerData.description}</p>
                   </div>
 
                   {offerData.tags?.length > 0 && (
@@ -158,7 +238,7 @@ export default function OfferDetailPage() {
                       {offerData.tags.map((tag, index) => (
                         <span
                           key={index}
-                          className="px-3 py-1 bg-purple-100 text-purple-600 text-sm rounded-full"
+                          className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 text-sm rounded-full"
                         >
                           #{tag}
                         </span>
@@ -168,75 +248,102 @@ export default function OfferDetailPage() {
 
                   {offerData.address && (
                     <div className="mb-6">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Ubicación</h3>
-                      <p className="text-gray-600">📍 {offerData.address}</p>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                        {t('sections.locationTitle')}
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        {t('sections.locationValue', { address: offerData.address })}
+                      </p>
                     </div>
                   )}
 
-                  <div className="flex items-center gap-6 pt-6 border-t border-gray-200 text-gray-600">
-                    <span>👁️ {offerData.views} vistas</span>
-                    <span>⭐ {offerData.interested} interesados</span>
-                    <span>📅 {new Date(offerData.createdAt).toLocaleDateString()}</span>
+                  <div className="flex items-center gap-6 pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
+                    <span>{t('stats.views', { count: offerData.views })}</span>
+                    <span>{t('stats.interested', { count: offerData.interested })}</span>
+                    <span>{t('stats.date', { date: formattedDate })}</span>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-lg shadow p-6 sticky top-4">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 sticky top-4">
                 <div className="mb-6">
                   {offerData.priceEur && (
-                    <div className="text-3xl font-bold text-blue-600 mb-2">
-                      €{offerData.priceEur.toFixed(2)}
+                    <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+                      {currencyFormatter.format(offerData.priceEur)}
                     </div>
                   )}
                   {offerData.priceCredits && (
-                    <div className="text-2xl font-bold text-purple-600">
-                      {offerData.priceCredits} créditos
+                    <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                      {t('price.credits', { amount: numberFormatter.format(offerData.priceCredits) })}
                     </div>
                   )}
                 </div>
 
-                <div className="space-y-3 mb-6">
-                  <button
-                    onClick={handleContact}
-                    className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
-                  >
-                    Contactar
-                  </button>
-                  <button
-                    onClick={handleInterest}
-                    disabled={interestMutation.isPending}
-                    className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
-                      offerData.userIsInterested
-                        ? 'bg-blue-600 text-white hover:bg-blue-700'
-                        : 'bg-white text-blue-600 border-2 border-blue-600 hover:bg-blue-50'
-                    } ${interestMutation.isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  >
-                    {interestMutation.isPending
-                      ? 'Procesando...'
-                      : offerData.userIsInterested
-                      ? '✓ Ya me interesa'
-                      : 'Me interesa'}
-                  </button>
-                </div>
+                {/* Edit/Delete buttons for owner */}
+                {getCurrentUserId() === offerData.user?.id && (
+                  <div className="flex gap-2 mb-4">
+                    <button
+                      onClick={handleEdit}
+                      className="flex-1 py-2 px-4 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 font-medium transition-colors"
+                    >
+                      ✏️ Editar
+                    </button>
+                    <button
+                      onClick={handleDelete}
+                      disabled={deleteMutation.isPending}
+                      className="flex-1 py-2 px-4 bg-white dark:bg-gray-700 text-red-600 dark:text-red-400 border border-red-300 dark:border-red-600 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 font-medium transition-colors disabled:opacity-50"
+                    >
+                      {deleteMutation.isPending ? 'Eliminando...' : '🗑️ Eliminar'}
+                    </button>
+                  </div>
+                )}
 
-                <div className="pt-6 border-t border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Ofrecido por</h3>
+                {getCurrentUserId() !== offerData.user?.id && (
+                  <div className="space-y-3 mb-6">
+                    <button
+                      onClick={handleContact}
+                      className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
+                    >
+                      {t('buttons.contact')}
+                    </button>
+                    <button
+                      onClick={handleInterest}
+                      disabled={interestMutation.isPending}
+                      className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
+                        offerData.userIsInterested
+                          ? 'bg-blue-600 text-white hover:bg-blue-700'
+                          : 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 border-2 border-blue-600 dark:border-blue-400 hover:bg-blue-50 dark:hover:bg-gray-600'
+                      } ${interestMutation.isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      {interestMutation.isPending
+                        ? t('buttons.processing')
+                        : offerData.userIsInterested
+                        ? t('buttons.alreadyInterested')
+                        : t('buttons.interest')}
+                    </button>
+                  </div>
+                )}
+
+                <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">{t('sections.offeredBy')}</h3>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
+                    <div className="w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
                     <div>
-                      <p className="font-medium text-gray-900">{offerData.user?.name || 'Usuario'}</p>
+                      <p className="font-medium text-gray-900 dark:text-gray-100">
+                        {offerData.user?.name || t('sections.userFallback')}
+                      </p>
                       {offerData.user?.bio && (
-                        <p className="text-sm text-gray-600">{offerData.user.bio}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{offerData.user.bio}</p>
                       )}
                     </div>
                   </div>
                   <button
                     onClick={() => offerData.user?.id && router.push(`/profile/${offerData.user.id}`)}
-                    className="w-full py-2 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-medium transition-colors"
+                    className="w-full py-2 px-4 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 font-medium transition-colors"
                   >
-                    Ver perfil
+                    {t('buttons.viewProfile')}
                   </button>
                 </div>
               </div>
@@ -255,4 +362,4 @@ export async function getStaticPaths() {
   };
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

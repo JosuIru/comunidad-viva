@@ -24,10 +24,10 @@ export default function Feed({ currentUserId, currentUser }: FeedProps) {
   const { data: posts = [], isLoading } = useQuery({
     queryKey: ['feed', filter],
     queryFn: async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       if (!token) throw new Error('Not authenticated');
 
-      const response = await fetch(`${API_URL}/social/feed`, {
+      const response = await fetch(`${API_URL}/posts`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -41,8 +41,8 @@ export default function Feed({ currentUserId, currentUser }: FeedProps) {
   // Create post mutation
   const createPostMutation = useMutation({
     mutationFn: async (data: { content: string; media?: string[] }) => {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${API_URL}/social/posts`, {
+      const token = localStorage.getItem('access_token');
+      const response = await fetch(`${API_URL}/posts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,8 +61,8 @@ export default function Feed({ currentUserId, currentUser }: FeedProps) {
   // Add reaction mutation
   const addReactionMutation = useMutation({
     mutationFn: async ({ postId, type }: { postId: string; type: string }) => {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${API_URL}/social/posts/${postId}/reactions`, {
+      const token = localStorage.getItem('access_token');
+      const response = await fetch(`${API_URL}/posts/${postId}/react`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,8 +81,8 @@ export default function Feed({ currentUserId, currentUser }: FeedProps) {
   // Remove reaction mutation
   const removeReactionMutation = useMutation({
     mutationFn: async (postId: string) => {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${API_URL}/social/posts/${postId}/reactions`, {
+      const token = localStorage.getItem('access_token');
+      const response = await fetch(`${API_URL}/posts/${postId}/react`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,

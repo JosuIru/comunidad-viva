@@ -1,6 +1,8 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/router';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -9,7 +11,11 @@ interface TimeBankStatsProps {
 }
 
 export default function TimeBankStats({ userId }: TimeBankStatsProps) {
-  const { data: stats, isLoading } = useQuery({
+  const t = useTranslations('timebankStats');
+  const router = useRouter();
+  const userLocale = router.locale || 'es';
+
+  const { data: stats, isLoading, error } = useQuery({
     queryKey: ['timebank', 'stats', userId],
     queryFn: async () => {
       const token = localStorage.getItem('token');
@@ -18,7 +24,7 @@ export default function TimeBankStats({ userId }: TimeBankStatsProps) {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (!response.ok) throw new Error('Error al cargar estadísticas');
+      if (!response.ok) throw new Error('stats-fetch-error');
       return response.json();
     },
     enabled: !!userId,
@@ -44,58 +50,87 @@ export default function TimeBankStats({ userId }: TimeBankStatsProps) {
     );
   }
 
+  if (error) {
+    return (
+      <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
+        <p className="text-sm text-red-700">{t('errors.load')}</p>
+      </div>
+    );
+  }
+
   if (!stats) {
     return null;
   }
 
+  const formatHours = (value: number) =>
+    new Intl.NumberFormat(userLocale, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 1,
+    }).format(value);
+
+  const formatDecimal = (value: number) =>
+    new Intl.NumberFormat(userLocale, {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    }).format(value);
+
+  const hoursProvided = stats.hoursProvided ?? 0;
+  const hoursReceived = stats.hoursReceived ?? 0;
+  const transactionsCompleted = stats.transactionsCompleted ?? 0;
+  const averageRating = stats.averageRating ?? 0;
+  const totalRatings = stats.totalRatings ?? 0;
+  const balance = hoursProvided - hoursReceived;
+  const formattedBalance =
+    balance > 0 ? `+${formatDecimal(balance)}` : formatDecimal(balance);
+
   return (
     <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
       <h3 className="text-lg font-bold text-gray-900 mb-4">
-        Mis estadísticas de Banco de Tiempo
+        {t('title')}
       </h3>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {/* Hours provided */}
         <div className="text-center p-4 bg-green-50 rounded-lg">
           <div className="text-3xl font-bold text-green-600">
-            {stats.hoursProvided}
+            {formatHours(hoursProvided)}
           </div>
           <div className="text-sm text-gray-600 mt-1">
-            Horas ofrecidas
+            {t('metrics.hoursProvided')}
           </div>
         </div>
 
         {/* Hours received */}
         <div className="text-center p-4 bg-blue-50 rounded-lg">
           <div className="text-3xl font-bold text-blue-600">
-            {stats.hoursReceived}
+            {formatHours(hoursReceived)}
           </div>
           <div className="text-sm text-gray-600 mt-1">
-            Horas recibidas
+            {t('metrics.hoursReceived')}
           </div>
         </div>
 
         {/* Transactions completed */}
         <div className="text-center p-4 bg-purple-50 rounded-lg">
           <div className="text-3xl font-bold text-purple-600">
-            {stats.transactionsCompleted}
+            {new Intl.NumberFormat(userLocale).format(transactionsCompleted)}
           </div>
           <div className="text-sm text-gray-600 mt-1">
-            Intercambios
+            {t('metrics.transactions')}
           </div>
         </div>
 
         {/* Average rating */}
         <div className="text-center p-4 bg-yellow-50 rounded-lg">
           <div className="text-3xl font-bold text-yellow-600 flex items-center justify-center gap-1">
-            {stats.averageRating > 0 ? stats.averageRating.toFixed(1) : '-'}
-            {stats.averageRating > 0 && <span className="text-xl">⭐</span>}
+            {averageRating > 0 ? formatDecimal(averageRating) : '-'}
+            {averageRating > 0 && <span className="text-xl">⭐</span>}
           </div>
           <div className="text-sm text-gray-600 mt-1">
-            Valoración media
-            {stats.totalRatings > 0 && (
+            {t('metrics.rating')}
+            {totalRatings > 0 && (
               <span className="text-xs block text-gray-500">
-                ({stats.totalRatings} {stats.totalRatings === 1 ? 'valoración' : 'valoraciones'})
+                {t('metrics.ratingCount', { count: totalRatings })}
               </span>
             )}
           </div>
@@ -106,45 +141,40 @@ export default function TimeBankStats({ userId }: TimeBankStatsProps) {
       <div className="mt-4 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg border border-green-200">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-700">Balance de horas</p>
+            <p className="text-sm font-medium text-gray-700">{t('balance.title')}</p>
             <p className="text-xs text-gray-600 mt-0.5">
-              Diferencia entre horas ofrecidas y recibidas
+              {t('balance.description')}
             </p>
           </div>
           <div className="text-right">
             <div
               className={`text-2xl font-bold ${
-                stats.hoursProvided - stats.hoursReceived > 0
+                balance > 0
                   ? 'text-green-600'
-                  : stats.hoursProvided - stats.hoursReceived < 0
+                  : balance < 0
                   ? 'text-red-600'
                   : 'text-gray-600'
               }`}
             >
-              {stats.hoursProvided - stats.hoursReceived > 0 ? '+' : ''}
-              {(stats.hoursProvided - stats.hoursReceived).toFixed(1)}h
+              {formattedBalance}
+              {t('balance.unit')}
             </div>
           </div>
         </div>
       </div>
 
       {/* Motivation message */}
-      {stats.transactionsCompleted === 0 && (
+      {transactionsCompleted === 0 && (
         <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
-          <p className="font-medium">💡 ¿Sabías que...?</p>
-          <p className="mt-1">
-            El banco de tiempo te permite intercambiar habilidades con tu comunidad.
-            ¡Comienza ofreciendo algo que se te da bien!
-          </p>
+          <p className="font-medium">{t('motivation.tipTitle')}</p>
+          <p className="mt-1">{t('motivation.tipDescription')}</p>
         </div>
       )}
 
-      {stats.transactionsCompleted > 0 && stats.averageRating >= 4.5 && (
+      {transactionsCompleted > 0 && averageRating >= 4.5 && (
         <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800">
-          <p className="font-medium">🌟 ¡Excelente trabajo!</p>
-          <p className="mt-1">
-            Tu alta valoración demuestra tu compromiso con la comunidad. ¡Sigue así!
-          </p>
+          <p className="font-medium">{t('motivation.greatTitle')}</p>
+          <p className="mt-1">{t('motivation.greatDescription')}</p>
         </div>
       )}
     </div>

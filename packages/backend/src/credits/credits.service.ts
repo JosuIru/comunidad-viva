@@ -66,6 +66,7 @@ export class CreditsService {
   }
 
   // Grant credits with validation and limits
+  // TRANSACCIÓN ATÓMICA: Previene race conditions usando increment atómico
   async grantCredits(
     userId: string,
     amount: number,
@@ -73,6 +74,7 @@ export class CreditsService {
     relatedId?: string,
     description?: string,
   ) {
+    // Validaciones previas fuera de la transacción (no modifican datos)
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       throw new NotFoundException('User not found');
@@ -100,20 +102,26 @@ export class CreditsService {
       }
     }
 
-    const newBalance = user.credits + amount;
     const oldLevel = this.getUserLevel(user.credits);
-    const newLevel = this.getUserLevel(newBalance);
 
     // Calculate expiration date (12 months from now)
     const expiresAt = new Date();
     expiresAt.setMonth(expiresAt.getMonth() + 12);
 
-    const result = await this.prisma.$transaction([
-      this.prisma.user.update({
+    // TRANSACCIÓN ATÓMICA: Todas las modificaciones dentro de una sola transacción
+    // Usar callback para acceso al balance actualizado
+    const result = await this.prisma.$transaction(async (transactionClient) => {
+      // 1. Actualizar balance atómicamente con increment
+      const updatedUser = await transactionClient.user.update({
         where: { id: userId },
-        data: { credits: newBalance },
-      }),
-      this.prisma.creditTransaction.create({
+        data: { credits: { increment: amount } },
+        select: { credits: true }, // Retornar el nuevo balance
+      });
+
+      const newBalance = updatedUser.credits;
+
+      // 2. Crear registro de transacción con el balance actualizado
+      const creditTransaction = await transactionClient.creditTransaction.create({
         data: {
           userId,
           amount,
@@ -121,10 +129,15 @@ export class CreditsService {
           reason,
           relatedId,
           description: description || this.getEarningRule(reason).description,
-          expiresAt, // Agregar fecha de expiración
+          expiresAt,
         },
-      }),
-    ]);
+      });
+
+      return { updatedUser, creditTransaction };
+    });
+
+    const newBalance = result.updatedUser.credits;
+    const newLevel = this.getUserLevel(newBalance);
 
     // Level up notification
     const leveledUp = newLevel.level > oldLevel.level;
@@ -134,11 +147,12 @@ export class CreditsService {
       amount,
       level: newLevel,
       leveledUp,
-      transaction: result[1],
+      transaction: result.creditTransaction,
     };
   }
 
   // Spend credits
+  // TRANSACCIÓN ATÓMICA: Previene double-spending usando decrement atómico con validación
   async spendCredits(
     userId: string,
     amount: number,
@@ -146,23 +160,35 @@ export class CreditsService {
     relatedId?: string,
     description?: string,
   ) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    if (user.credits < amount) {
-      throw new BadRequestException(`Insufficient credits. Balance: ${user.credits}, Required: ${amount}`);
-    }
-
-    const newBalance = user.credits - amount;
-
-    const result = await this.prisma.$transaction([
-      this.prisma.user.update({
+    // TRANSACCIÓN ATÓMICA: Validación y modificación dentro de la misma transacción
+    // Previene race conditions donde dos operaciones simultáneas podrían gastar más créditos de los disponibles
+    const result = await this.prisma.$transaction(async (transactionClient) => {
+      // 1. Obtener usuario y verificar existencia dentro de la transacción
+      const user = await transactionClient.user.findUnique({
         where: { id: userId },
-        data: { credits: newBalance },
-      }),
-      this.prisma.creditTransaction.create({
+        select: { id: true, credits: true },
+      });
+
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+
+      // 2. Validar balance suficiente DENTRO de la transacción
+      if (user.credits < amount) {
+        throw new BadRequestException(`Insufficient credits. Balance: ${user.credits}, Required: ${amount}`);
+      }
+
+      // 3. Actualizar balance atómicamente con decrement
+      const updatedUser = await transactionClient.user.update({
+        where: { id: userId },
+        data: { credits: { decrement: amount } },
+        select: { credits: true },
+      });
+
+      const newBalance = updatedUser.credits;
+
+      // 4. Crear registro de transacción con el balance actualizado
+      const creditTransaction = await transactionClient.creditTransaction.create({
         data: {
           userId,
           amount: -amount, // Negative for spending
@@ -171,13 +197,15 @@ export class CreditsService {
           relatedId,
           description: description || `Créditos gastados: ${reason}`,
         },
-      }),
-    ]);
+      });
+
+      return { updatedUser, creditTransaction };
+    });
 
     return {
-      newBalance,
+      newBalance: result.updatedUser.credits,
       spent: amount,
-      transaction: result[1],
+      transaction: result.creditTransaction,
     };
   }
 

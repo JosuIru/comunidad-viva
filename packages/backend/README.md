@@ -1,12 +1,12 @@
-# Comunidad Viva - Plataforma de Economía Solidaria y Transformación Social
+# Truk - Plataforma de Economía Solidaria y Transformación Social
 
 ## 🌍 Visión y Filosofía
 
-**Comunidad Viva** no es simplemente una aplicación tecnológica, es una **semilla de transformación social** que reimagina las relaciones económicas y humanas desde una perspectiva de abundancia compartida, cooperación y regeneración planetaria.
+**Truk** no es simplemente una aplicación tecnológica, es una **semilla de transformación social** que reimagina las relaciones económicas y humanas desde una perspectiva de abundancia compartida, cooperación y regeneración planetaria.
 
 ### El Paradigma de la Abundancia Mutua
 
-Esta aplicación se fundamenta en una premisa revolucionaria pero simple: **cuando todos prosperan, yo prospero**. Frente al modelo competitivo tradicional que promueve la escasez y el individualismo, Comunidad Viva demuestra que el bienestar colectivo es la base del bienestar individual.
+Esta aplicación se fundamenta en una premisa revolucionaria pero simple: **cuando todos prosperan, yo prospero**. Frente al modelo competitivo tradicional que promueve la escasez y el individualismo, Truk demuestra que el bienestar colectivo es la base del bienestar individual.
 
 Cada funcionalidad está diseñada para que el usuario experimente directamente que:
 
@@ -72,7 +72,7 @@ Esta aplicación planta semillas que germinan a múltiples niveles:
 
 ### La Tecnología al Servicio de la Vida
 
-Comunidad Viva usa la tecnología no para acelerar el consumo o maximizar beneficios, sino para:
+Truk usa la tecnología no para acelerar el consumo o maximizar beneficios, sino para:
 
 - **Facilitar la cooperación** a escala
 - **Visibilizar recursos** ocultos en la comunidad

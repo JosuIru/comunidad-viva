@@ -1,8 +1,8 @@
 {
-  "name": "comunidad-viva",
+  "name": "truk",
   "version": "1.0.0",
   "private": true,
-  "description": "Red social de economía colaborativa local",
+  "description": "Truk - Plataforma de economía colaborativa local e intercambio comunitario",
   "workspaces": [
     "packages/*"
   ],

@@ -2,6 +2,8 @@ import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
+import { isValidImageSrc, handleImageError } from '@/lib/imageUtils';
 
 interface User {
   id: string;
@@ -22,6 +24,7 @@ interface Offer {
 
 export default function SwipeStack() {
   const queryClient = useQueryClient();
+  const t = useTranslations('swipe');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [swipeDirection, setSwipeDirection] = useState<string | null>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -61,7 +64,7 @@ export default function SwipeStack() {
     },
     onSuccess: (data) => {
       if (data.match) {
-        toast.success('¡Es un Match! 🎉', {
+        toast.success(t('matchToast'), {
           icon: '💜',
           duration: 3000,
         });
@@ -140,21 +143,21 @@ export default function SwipeStack() {
       <div className="bg-white rounded-lg shadow-lg p-12 text-center">
         <div className="text-8xl mb-6">🎉</div>
         <h3 className="text-2xl font-bold text-gray-900 mb-3">
-          ¡Has visto todas las ofertas!
+          {t('allSeenTitle')}
         </h3>
         <p className="text-gray-600 mb-6">
-          Vuelve más tarde para descubrir nuevas ofertas de la comunidad
+          {t('allSeenDescription')}
         </p>
         {matches.length > 0 && (
           <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-200 rounded-lg">
             <p className="text-purple-900 font-semibold mb-2">
-              💜 Tienes {matches.length} {matches.length === 1 ? 'match' : 'matches'}
+              {t('matchesInfo', { count: matches.length })}
             </p>
             <button
               onClick={() => window.location.href = '/matches'}
               className="text-purple-600 hover:text-purple-700 font-medium underline"
             >
-              Ver mis matches →
+              {t('viewMatches')}
             </button>
           </div>
         )}
@@ -219,25 +222,26 @@ export default function SwipeStack() {
           {swipeDirection === 'RIGHT' && (
             <div className="absolute top-10 right-10 z-10 transform rotate-12">
               <div className="px-6 py-3 bg-green-500 text-white text-2xl font-bold rounded-lg shadow-lg">
-                ME GUSTA
+                {t('directionRight')}
               </div>
             </div>
           )}
           {swipeDirection === 'LEFT' && (
             <div className="absolute top-10 left-10 z-10 transform -rotate-12">
               <div className="px-6 py-3 bg-red-500 text-white text-2xl font-bold rounded-lg shadow-lg">
-                PASAR
+                {t('directionLeft')}
               </div>
             </div>
           )}
 
           {/* Image */}
           <div className="h-2/3 bg-gradient-to-br from-blue-100 to-purple-100 relative">
-            {currentOffer.images && currentOffer.images.length > 0 ? (
+            {currentOffer.images && currentOffer.images.length > 0 && isValidImageSrc(currentOffer.images[0]) ? (
               <img
                 src={currentOffer.images[0]}
                 alt={currentOffer.title}
                 className="w-full h-full object-cover"
+                onError={handleImageError}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-8xl">
@@ -287,7 +291,7 @@ export default function SwipeStack() {
         <button
           onClick={() => handleSwipe('LEFT')}
           className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center text-3xl hover:scale-110 transition-transform active:scale-95 border-2 border-red-200"
-          title="Pasar"
+          title={t('passTitle')}
         >
           ✕
         </button>
@@ -295,7 +299,7 @@ export default function SwipeStack() {
         <button
           onClick={() => handleSwipe('SUPER')}
           className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg flex items-center justify-center text-3xl hover:scale-110 transition-transform active:scale-95 text-white"
-          title="Super Like"
+          title={t('superTitle')}
         >
           ⭐
         </button>
@@ -303,7 +307,7 @@ export default function SwipeStack() {
         <button
           onClick={() => handleSwipe('RIGHT')}
           className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center text-3xl hover:scale-110 transition-transform active:scale-95 border-2 border-green-200"
-          title="Me gusta"
+          title={t('likeTitle')}
         >
           ❤️
         </button>
@@ -311,13 +315,13 @@ export default function SwipeStack() {
 
       {/* Counter */}
       <div className="text-center mt-6 text-gray-600">
-        {currentIndex + 1} de {offers.length}
+        {t('counter', { current: currentIndex + 1, total: offers.length })}
       </div>
 
       {/* Info */}
       <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
         <p className="text-sm text-blue-800 text-center">
-          💡 Desliza para pasar, ❤️ para conectar, o ⭐ para super like
+          {t('hint')}
         </p>
       </div>
     </div>

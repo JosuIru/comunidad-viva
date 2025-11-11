@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
+import { isValidImageSrc, handleImageError } from '@/lib/imageUtils';
 
 interface User {
   id: string;
@@ -160,11 +161,12 @@ export default function Stories() {
                 )} ${hasViewed ? 'opacity-50' : ''}`}
               >
                 <div className="w-full h-full rounded-full bg-white p-0.5">
-                  {story.user.avatar ? (
+                  {isValidImageSrc(story.user.avatar) ? (
                     <img
                       src={story.user.avatar}
                       alt={story.user.name}
                       className="w-full h-full rounded-full object-cover"
+                      onError={handleImageError}
                     />
                   ) : (
                     <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xl font-bold">
@@ -251,11 +253,12 @@ export default function Stories() {
 
             {/* Story content */}
             <div className="flex-1 flex items-center justify-center p-8 pt-20">
-              {stories[selectedStoryIndex].media ? (
+              {isValidImageSrc(stories[selectedStoryIndex].media) ? (
                 <img
                   src={stories[selectedStoryIndex].media}
                   alt="Story"
                   className="max-w-full max-h-full object-contain"
+                  onError={handleImageError}
                 />
               ) : (
                 <div className="text-center">

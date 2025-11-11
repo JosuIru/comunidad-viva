@@ -70,8 +70,8 @@ export class SocialService {
     });
 
     // Check achievements for post creation
-    this.achievementsService.checkAchievements(authorId).catch(err => {
-      console.error('Error checking achievements after post creation:', err);
+    this.achievementsService.checkAchievements(authorId).catch(() => {
+      // Achievement check failed silently
     });
 
     return post;
@@ -294,7 +294,7 @@ export class SocialService {
 
     // Check achievements for comment creation
     this.achievementsService.checkAchievements(authorId).catch(err => {
-      console.error('Error checking achievements after comment creation:', err);
+      // Achievement check failed silently
     });
 
     return comment;
@@ -397,10 +397,10 @@ export class SocialService {
 
     // Check achievements for post author (received reaction) and reactor
     this.achievementsService.checkAchievements(post.authorId).catch(err => {
-      console.error('Error checking achievements for post author:', err);
+      // Achievement check failed silently
     });
     this.achievementsService.checkAchievements(userId).catch(err => {
-      console.error('Error checking achievements for reactor:', err);
+      // Achievement check failed silently
     });
 
     return reaction;

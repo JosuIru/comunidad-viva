@@ -7,7 +7,7 @@ interface LayoutProps {
   title?: string;
 }
 
-export default function Layout({ children, title = 'Comunidad Viva' }: LayoutProps) {
+export default function Layout({ children, title = 'Truk' }: LayoutProps) {
   return (
     <>
       <Head>

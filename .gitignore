@@ -57,3 +57,29 @@ nginx/ssl/*.key
 .temp/
 .tmp/
 *.crdownload
+
+# Uploads (user data - should not be in git)
+packages/backend/uploads/
+
+# Backups and temporary files
+*.backup
+*.bak
+*.tmp
+
+# Design assets (keep in design/ folder, not root)
+design/
+
+# TypeScript build info
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# Installer flag (regenerated after installation)
+packages/backend/.installed
+
+# Prisma
+packages/backend/prisma/*.db
+packages/backend/prisma/*.db-journal
+
+# Local development
+.vercel
+.turbo

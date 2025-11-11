@@ -1,4 +1,4 @@
-# Gobernanza Descentralizada - Comunidad Viva
+# Gobernanza Descentralizada - Truk
 
 ## Filosofía: Sin Jerarquías, Sin Policías
 
@@ -203,7 +203,7 @@ Si aprueban → Conexión establecida
 
 ## Diferencias con Sistemas Tradicionales
 
-| Tradicional | Comunidad Viva |
+| Tradicional | Truk |
 |-------------|----------------|
 | Admin decide | Comunidad vota |
 | Roles permanentes | Reputación temporal |

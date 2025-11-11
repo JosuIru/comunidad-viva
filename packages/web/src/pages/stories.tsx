@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Stories from '@/components/Stories';
+import { getI18nProps } from '@/lib/i18n';
 
 export default function StoriesPage() {
   const router = useRouter();
@@ -43,3 +44,5 @@ export default function StoriesPage() {
     </div>
   );
 }
+
+export const getStaticProps = async (context: any) => getI18nProps(context);

@@ -5,6 +5,8 @@ import toast from 'react-hot-toast';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
+import { useFormValidation } from '@/hooks/useFormValidation';
+import { createProjectSchema, type CreateProjectFormData } from '@/lib/validations';
 
 const PROJECT_TYPES = [
   { value: 'INFRASTRUCTURE', label: 'Infraestructura' },
@@ -43,24 +45,32 @@ const SDG_GOALS = [
 
 export default function NewProjectPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    type: 'INFRASTRUCTURE',
-    title: '',
-    description: '',
-    vision: '',
-    location: '',
-    country: '',
-    region: '',
-    beneficiaries: '',
-    targetEur: '',
-    targetCredits: '',
-    targetHours: '',
-    volunteersNeeded: '',
-    estimatedMonths: '',
-    impactGoals: '',
-    tags: '',
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+
+  // Initialize form validation
+  const {
+    formData,
+    errors,
+    isSubmitting,
+    handleChange,
+    handleBlur,
+    validateForm,
+  } = useFormValidation<CreateProjectFormData>({
+    schema: createProjectSchema,
+    initialData: {
+      title: '',
+      description: '',
+      type: 'INFRASTRUCTURE',
+      location: '',
+      country: '',
+      lat: 0,
+      lng: 0,
+      impactGoals: [],
+      sdgGoals: [],
+      tags: [],
+      images: [],
+    },
   });
-  const [selectedSDGs, setSelectedSDGs] = useState<number[]>([]);
 
   const createMutation = useMutation({
     mutationFn: async (data: any) => {
@@ -76,76 +86,56 @@ export default function NewProjectPage() {
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validate form
+    const validation = validateForm();
+    if (!validation.success) {
+      const firstError = Object.values(validation.errors)[0];
+      if (firstError) {
+        toast.error(firstError);
+      }
+      return;
+    }
+
+    // Prepare project data with validated data
     const payload: any = {
-      type: formData.type,
-      title: formData.title,
-      description: formData.description,
-      vision: formData.vision,
-      location: formData.location,
-      country: formData.country,
-      region: formData.region || undefined,
-      impactGoals: formData.impactGoals.split('\n').filter(Boolean),
-      tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
-      sdgGoals: selectedSDGs,
+      title: validation.data.title,
+      description: validation.data.description,
+      type: validation.data.type,
+      location: validation.data.location,
+      country: validation.data.country,
+      lat: validation.data.lat,
+      lng: validation.data.lng,
+      impactGoals: validation.data.impactGoals,
+      sdgGoals: validation.data.sdgGoals,
+      ...(validation.data.vision && { vision: validation.data.vision }),
+      ...(validation.data.targetEur && { targetEur: validation.data.targetEur }),
+      ...(validation.data.targetCredits && { targetCredits: validation.data.targetCredits }),
+      ...(validation.data.beneficiaries && { beneficiaries: validation.data.beneficiaries }),
+      ...(validation.data.volunteersNeeded && { volunteersNeeded: validation.data.volunteersNeeded }),
+      ...(validation.data.estimatedMonths && { estimatedMonths: validation.data.estimatedMonths }),
+      ...(validation.data.tags && validation.data.tags.length > 0 && { tags: validation.data.tags }),
     };
-
-    if (formData.beneficiaries) {
-      payload.beneficiaries = parseInt(formData.beneficiaries);
-    }
-
-    if (formData.targetEur) {
-      payload.targetEur = parseFloat(formData.targetEur);
-    }
-
-    if (formData.targetCredits) {
-      payload.targetCredits = parseInt(formData.targetCredits);
-    }
-
-    if (formData.targetHours) {
-      payload.targetHours = parseFloat(formData.targetHours);
-    }
-
-    if (formData.volunteersNeeded) {
-      payload.volunteersNeeded = parseInt(formData.volunteersNeeded);
-    }
-
-    if (formData.estimatedMonths) {
-      payload.estimatedMonths = parseInt(formData.estimatedMonths);
-    }
 
     createMutation.mutate(payload);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const toggleSDG = (sdg: number) => {
-    setSelectedSDGs(prev =>
-      prev.includes(sdg) ? prev.filter(s => s !== sdg) : [...prev, sdg]
-    );
-  };
-
   return (
     <Layout>
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-lg shadow-sm p-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6">
                 Crear Proyecto Comunitario
               </h1>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Type */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Tipo de Proyecto *
                   </label>
                   <select
@@ -153,7 +143,7 @@ export default function NewProjectPage() {
                     value={formData.type}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                   >
                     {PROJECT_TYPES.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -165,7 +155,7 @@ export default function NewProjectPage() {
 
                 {/* Title */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Título del Proyecto *
                   </label>
                   <input
@@ -174,14 +164,14 @@ export default function NewProjectPage() {
                     value={formData.title}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                     placeholder="Ej: Escuela en Ghana"
                   />
                 </div>
 
                 {/* Description */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Descripción *
                   </label>
                   <textarea
@@ -190,14 +180,14 @@ export default function NewProjectPage() {
                     onChange={handleChange}
                     required
                     rows={4}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                     placeholder="Describe el proyecto en detalle..."
                   />
                 </div>
 
                 {/* Vision */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Visión *
                   </label>
                   <textarea
@@ -206,7 +196,7 @@ export default function NewProjectPage() {
                     onChange={handleChange}
                     required
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                     placeholder="¿Qué impacto quieres lograr con este proyecto?"
                   />
                 </div>
@@ -214,7 +204,7 @@ export default function NewProjectPage() {
                 {/* Location */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                       Ubicación *
                     </label>
                     <input
@@ -223,12 +213,12 @@ export default function NewProjectPage() {
                       value={formData.location}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                       placeholder="Ciudad"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                       País *
                     </label>
                     <input
@@ -237,12 +227,12 @@ export default function NewProjectPage() {
                       value={formData.country}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                       placeholder="País"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                       Región
                     </label>
                     <input
@@ -250,7 +240,7 @@ export default function NewProjectPage() {
                       name="region"
                       value={formData.region}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                       placeholder="Región/Estado"
                     />
                   </div>
@@ -259,7 +249,7 @@ export default function NewProjectPage() {
                 {/* Impact */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                       Beneficiarios
                     </label>
                     <input
@@ -268,12 +258,12 @@ export default function NewProjectPage() {
                       value={formData.beneficiaries}
                       onChange={handleChange}
                       min="1"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                       placeholder="Número de personas"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                       Duración Estimada (meses)
                     </label>
                     <input
@@ -282,21 +272,21 @@ export default function NewProjectPage() {
                       value={formData.estimatedMonths}
                       onChange={handleChange}
                       min="1"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                       placeholder="Meses"
                     />
                   </div>
                 </div>
 
                 {/* Resources Needed */}
-                <div className="border-t pt-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                <div className="border-t dark:border-gray-700 pt-6">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
                     Recursos Necesarios
                   </h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                         Meta en Euros (€)
                       </label>
                       <input
@@ -306,13 +296,13 @@ export default function NewProjectPage() {
                         onChange={handleChange}
                         min="0"
                         step="0.01"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                         placeholder="0"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                         Meta en Créditos
                       </label>
                       <input
@@ -321,13 +311,13 @@ export default function NewProjectPage() {
                         value={formData.targetCredits}
                         onChange={handleChange}
                         min="0"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                         placeholder="0"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                         Horas de Voluntariado
                       </label>
                       <input
@@ -337,13 +327,13 @@ export default function NewProjectPage() {
                         onChange={handleChange}
                         min="0"
                         step="0.5"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                         placeholder="0"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                         Voluntarios Necesarios
                       </label>
                       <input
@@ -352,7 +342,7 @@ export default function NewProjectPage() {
                         value={formData.volunteersNeeded}
                         onChange={handleChange}
                         min="0"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                         placeholder="0"
                       />
                     </div>
@@ -361,7 +351,7 @@ export default function NewProjectPage() {
 
                 {/* Impact Goals */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Objetivos de Impacto *
                   </label>
                   <textarea
@@ -370,26 +360,26 @@ export default function NewProjectPage() {
                     onChange={handleChange}
                     required
                     rows={4}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                     placeholder="Un objetivo por línea&#10;Ej: Proveer educación a 200 niños&#10;Construir 4 aulas equipadas&#10;Formar 10 profesores locales"
                   />
                 </div>
 
                 {/* SDG Goals */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Objetivos de Desarrollo Sostenible (ODS)
                   </label>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-64 overflow-y-auto border border-gray-200 rounded-lg p-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-64 overflow-y-auto border border-gray-200 dark:border-gray-600 rounded-lg p-3">
                     {SDG_GOALS.map((sdg) => (
-                      <label key={sdg.value} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                      <label key={sdg.value} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded">
                         <input
                           type="checkbox"
                           checked={selectedSDGs.includes(sdg.value)}
                           onChange={() => toggleSDG(sdg.value)}
                           className="rounded text-blue-600"
                         />
-                        <span className="text-sm">{sdg.label}</span>
+                        <span className="text-sm dark:text-gray-300">{sdg.label}</span>
                       </label>
                     ))}
                   </div>
@@ -397,7 +387,7 @@ export default function NewProjectPage() {
 
                 {/* Tags */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Etiquetas
                   </label>
                   <input
@@ -405,7 +395,7 @@ export default function NewProjectPage() {
                     name="tags"
                     value={formData.tags}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                     placeholder="educación, infantil, África (separadas por comas)"
                   />
                 </div>
@@ -415,7 +405,7 @@ export default function NewProjectPage() {
                   <button
                     type="button"
                     onClick={() => router.back()}
-                    className="flex-1 px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-semibold"
+                    className="flex-1 px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition font-semibold"
                   >
                     Cancelar
                   </button>
@@ -436,4 +426,4 @@ export default function NewProjectPage() {
   );
 }
 
-export const getStaticProps = getI18nProps;
+export const getStaticProps = async (context: any) => getI18nProps(context);

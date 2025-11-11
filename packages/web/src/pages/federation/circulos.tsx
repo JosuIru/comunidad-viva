@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
+import { getI18nProps } from '@/lib/i18n';
 import {
   UserGroupIcon,
   PlusIcon,
@@ -270,7 +271,7 @@ export default function Circulos() {
                         ) : (
                           <button
                             onClick={() => joinMutation.mutate(circulo.id)}
-                            disabled={joinMutation.isPending || isFull}
+                            disabled={joinMutation.isPending || Boolean(isFull)}
                             className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
                           >
                             {isFull ? 'Círculo Lleno' : joinMutation.isPending ? 'Uniéndose...' : 'Unirse al Círculo'}
@@ -467,3 +468,5 @@ export default function Circulos() {
     </Layout>
   );
 }
+
+export const getStaticProps = async (context: any) => getI18nProps(context);

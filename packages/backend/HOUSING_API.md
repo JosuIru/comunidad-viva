@@ -2,7 +2,7 @@
 
 ## Overview
 
-El sistema de vivienda de Comunidad Viva proporciona cuatro subsistemas principales:
+El sistema de vivienda de Truk proporciona cuatro subsistemas principales:
 
 1. **Banco de Espacios (Space Bank)** - Compartir espacios físicos (huertos, talleres, almacenes, etc.)
 2. **Hospedaje Temporal** - Alojamiento de corto plazo entre miembros

@@ -12,7 +12,6 @@ export const ExampleComponent: React.FC = () => {
     leaveRoom,
     clearNotifications,
     on,
-    off,
     emit
   } = useSocket();
 
@@ -22,13 +21,12 @@ export const ExampleComponent: React.FC = () => {
       console.log('Custom event received:', data);
     };
 
-    on('custom_event', handleCustomEvent);
+    // on() returns a cleanup function
+    const unsubscribe = on('custom_event', handleCustomEvent);
 
     // Cleanup: Remove listener when component unmounts
-    return () => {
-      off('custom_event', handleCustomEvent);
-    };
-  }, [on, off]);
+    return unsubscribe;
+  }, [on]);
 
   useEffect(() => {
     // Example: Join a room when connected

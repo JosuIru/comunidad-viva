@@ -15,7 +15,7 @@ export default function ChallengesPage() {
   }, [router]);
 
   return (
-    <Layout title="Retos Semanales - Comunidad Viva">
+    <Layout title="Retos Semanales - Truk">
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 py-8">
         <div className="container mx-auto px-4">
           {/* Header */}
@@ -162,4 +162,4 @@ export default function ChallengesPage() {
   );
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

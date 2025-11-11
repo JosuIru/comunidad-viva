@@ -181,17 +181,17 @@ export default function GroupBuysPage() {
       case 'ACTIVE':
         return 'bg-green-100 text-green-800';
       case 'COMPLETED':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-blue-100 text-blue-800 dark:text-blue-400';
       case 'CANCELLED':
         return 'bg-red-100 text-red-800';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-100 dark:bg-gray-800 text-gray-800';
     }
   };
 
   return (
-    <Layout title="Group Buys - Comunidad Viva">
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+    <Layout title="Group Buys - Truk">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white">
           <div className="container mx-auto px-4 py-12">
@@ -204,7 +204,7 @@ export default function GroupBuysPage() {
               </div>
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="px-6 py-3 bg-white text-blue-600 rounded-lg font-bold hover:bg-blue-50 transition-colors"
+                className="px-6 py-3 bg-white text-blue-600 dark:text-blue-400 rounded-lg font-bold hover:bg-blue-50 transition-colors"
               >
                 + Crear Compra Grupal
               </button>
@@ -215,30 +215,30 @@ export default function GroupBuysPage() {
         <div className="container mx-auto px-4 py-8">
           {/* Info Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="bg-white rounded dark:bg-gray-800-lg shadow-lg p-6">
               <div className="flex items-center gap-3 mb-3">
                 <div className="text-4xl">👥</div>
                 <div>
-                  <h3 className="font-bold text-gray-900">Más Gente</h3>
-                  <p className="text-sm text-gray-600">Mayor descuento</p>
+                  <h3 className="font-bold text-gray-900 dark:text-gray-100">Más Gente</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Mayor descuento</p>
                 </div>
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="bg-white rounded dark:bg-gray-800-lg shadow-lg p-6">
               <div className="flex items-center gap-3 mb-3">
                 <div className="text-4xl">💰</div>
                 <div>
-                  <h3 className="font-bold text-gray-900">Hasta 50% OFF</h3>
-                  <p className="text-sm text-gray-600">Descuentos progresivos</p>
+                  <h3 className="font-bold text-gray-900 dark:text-gray-100">Hasta 50% OFF</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Descuentos progresivos</p>
                 </div>
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="bg-white rounded dark:bg-gray-800-lg shadow-lg p-6">
               <div className="flex items-center gap-3 mb-3">
                 <div className="text-4xl">🎯</div>
                 <div>
-                  <h3 className="font-bold text-gray-900">Win-Win</h3>
-                  <p className="text-sm text-gray-600">Todos ahorran</p>
+                  <h3 className="font-bold text-gray-900 dark:text-gray-100">Win-Win</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Todos ahorran</p>
                 </div>
               </div>
             </div>
@@ -253,7 +253,7 @@ export default function GroupBuysPage() {
                 className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
                   filterStatus === status
                     ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                    : 'bg-white text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800'
                 }`}
               >
                 {status === 'ALL' ? 'Todas' : status === 'ACTIVE' ? 'Activas' : 'Completadas'}
@@ -275,7 +275,7 @@ export default function GroupBuysPage() {
                 return (
                   <div
                     key={groupBuy.id}
-                    className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                    className="bg-white rounded dark:bg-gray-800-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
                   >
                     {/* Header */}
                     <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-3 flex items-center justify-between">
@@ -287,19 +287,19 @@ export default function GroupBuysPage() {
 
                     <div className="p-6">
                       {/* Title & Description */}
-                      <h3 className="text-xl font-bold text-gray-900 mb-2">{groupBuy.title}</h3>
-                      <p className="text-gray-600 text-sm mb-4">{groupBuy.description}</p>
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">{groupBuy.title}</h3>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">{groupBuy.description}</p>
 
                       {/* Product */}
                       <div className="bg-blue-50 rounded-lg p-3 mb-4">
-                        <div className="text-sm text-blue-900 font-semibold mb-1">Producto</div>
+                        <div className="text-sm text-blue-900 dark:text-blue-300 font-semibold mb-1">Producto</div>
                         <div className="text-blue-700">{groupBuy.product}</div>
                       </div>
 
                       {/* Price */}
                       <div className="mb-4">
                         <div className="flex items-baseline gap-3">
-                          <span className="text-3xl font-bold text-blue-600">
+                          <span className="text-3xl font-bold text-blue-600 dark:text-blue-400">
                             €{getCurrentPrice(groupBuy).toFixed(2)}
                           </span>
                           <span className="text-lg text-gray-400 line-through">
@@ -314,12 +314,12 @@ export default function GroupBuysPage() {
                       {/* Participants Progress */}
                       <div className="mb-4">
                         <div className="flex justify-between text-sm mb-2">
-                          <span className="text-gray-600">Participantes</span>
-                          <span className="font-bold text-gray-900">
+                          <span className="text-gray-600 dark:text-gray-400">Participantes</span>
+                          <span className="font-bold text-gray-900 dark:text-gray-100">
                             {groupBuy.currentParticipants} / {groupBuy.maxParticipants}
                           </span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-3">
+                        <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3">
                           <div
                             className="h-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all"
                             style={{ width: `${Math.min(progressPercentage, 100)}%` }}
@@ -340,16 +340,16 @@ export default function GroupBuysPage() {
                               🎯 Próximo nivel: {nextTier.discount}% OFF
                             </span>
                           </div>
-                          <div className="text-xs text-purple-600 mt-1">
+                          <div className="text-xs text-purple-600 dark:text-purple-400 mt-1">
                             Faltan {nextTier.participants - groupBuy.currentParticipants} personas
                           </div>
                         </div>
                       )}
 
                       {/* Time & Merchant */}
-                      <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
+                      <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-4">
                         <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
+                          <div className="w-6 h-6 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
                           <span>{groupBuy.merchant?.name || 'Comerciante'}</span>
                         </div>
                         <div>⏰ {getTimeRemaining(groupBuy.expiresAt)}</div>
@@ -391,12 +391,12 @@ export default function GroupBuysPage() {
               })}
             </div>
           ) : (
-            <div className="bg-white rounded-lg shadow-lg p-12 text-center">
+            <div className="bg-white rounded dark:bg-gray-800-lg shadow-lg p-12 text-center">
               <div className="text-6xl mb-4">🛒</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                 No hay compras grupales {filterStatus.toLowerCase()}
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
                 {filterStatus === 'ACTIVE'
                   ? 'Crea la primera o espera a que alguien más lo haga'
                   : 'Cambia el filtro para ver otras compras'}
@@ -414,59 +414,59 @@ export default function GroupBuysPage() {
 
           {/* How it Works */}
           <div className="mt-12 bg-white rounded-lg shadow-lg p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">¿Cómo funcionan las Compras Grupales?</h3>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">¿Cómo funcionan las Compras Grupales?</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div className="text-center">
                 <div className="text-4xl mb-3">1️⃣</div>
                 <h4 className="font-bold mb-2">Encuentra o Crea</h4>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Busca una compra grupal activa o crea una nueva
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">2️⃣</div>
                 <h4 className="font-bold mb-2">Únete</h4>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Haz clic en "Unirme" para participar
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">3️⃣</div>
                 <h4 className="font-bold mb-2">Espera</h4>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Más personas = mayor descuento para todos
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">4️⃣</div>
                 <h4 className="font-bold mb-2">Compra</h4>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Contacta al vendedor con el descuento final
                 </p>
               </div>
             </div>
 
             <div className="mt-8 bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
-              <h4 className="font-bold text-blue-900 mb-3">💡 Descuentos Progresivos</h4>
-              <p className="text-sm text-blue-800 mb-3">
+              <h4 className="font-bold text-blue-900 dark:text-blue-300 mb-3">💡 Descuentos Progresivos</h4>
+              <p className="text-sm text-blue-800 dark:text-blue-400 mb-3">
                 El descuento aumenta automáticamente según el número de participantes:
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <div className="bg-white rounded p-3 text-center">
-                  <div className="font-bold text-blue-600">5 personas</div>
-                  <div className="text-sm text-gray-600">10% OFF</div>
+                <div className="bg-white rounded dark:bg-gray-800 p-3 text-center">
+                  <div className="font-bold text-blue-600 dark:text-blue-400">5 personas</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">10% OFF</div>
                 </div>
-                <div className="bg-white rounded p-3 text-center">
-                  <div className="font-bold text-blue-600">10 personas</div>
-                  <div className="text-sm text-gray-600">20% OFF</div>
+                <div className="bg-white rounded dark:bg-gray-800 p-3 text-center">
+                  <div className="font-bold text-blue-600 dark:text-blue-400">10 personas</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">20% OFF</div>
                 </div>
-                <div className="bg-white rounded p-3 text-center">
-                  <div className="font-bold text-blue-600">25 personas</div>
-                  <div className="text-sm text-gray-600">30% OFF</div>
+                <div className="bg-white rounded dark:bg-gray-800 p-3 text-center">
+                  <div className="font-bold text-blue-600 dark:text-blue-400">25 personas</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">30% OFF</div>
                 </div>
-                <div className="bg-white rounded p-3 text-center">
-                  <div className="font-bold text-blue-600">50+ personas</div>
-                  <div className="text-sm text-gray-600">40% OFF</div>
+                <div className="bg-white rounded dark:bg-gray-800 p-3 text-center">
+                  <div className="font-bold text-blue-600 dark:text-blue-400">50+ personas</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">40% OFF</div>
                 </div>
               </div>
             </div>
@@ -476,14 +476,14 @@ export default function GroupBuysPage() {
         {/* Join Modal */}
         {selectedBuy && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-lg max-w-md w-full p-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Unirse a Compra Grupal</h3>
+            <div className="bg-white rounded dark:bg-gray-800-lg max-w-md w-full p-8">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Unirse a Compra Grupal</h3>
 
               <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-lg p-4 mb-6">
                 <h4 className="font-bold text-lg mb-2">{selectedBuy.title}</h4>
-                <p className="text-sm text-gray-600 mb-3">{selectedBuy.product}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{selectedBuy.product}</p>
                 <div className="flex items-baseline gap-3 mb-2">
-                  <span className="text-3xl font-bold text-blue-600">
+                  <span className="text-3xl font-bold text-blue-600 dark:text-blue-400">
                     €{getCurrentPrice(selectedBuy).toFixed(2)}
                   </span>
                   <span className="text-lg text-gray-400 line-through">
@@ -496,8 +496,8 @@ export default function GroupBuysPage() {
               </div>
 
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-6">
-                <h4 className="font-semibold text-yellow-900 mb-2">⚠️ Importante</h4>
-                <ul className="text-sm text-yellow-800 space-y-1">
+                <h4 className="font-semibold text-yellow-900 dark:text-yellow-300 mb-2">⚠️ Importante</h4>
+                <ul className="text-sm text-yellow-800 dark:text-yellow-400 space-y-1">
                   <li>• El descuento puede mejorar si se unen más personas</li>
                   <li>• La compra expira en {getTimeRemaining(selectedBuy.expiresAt)}</li>
                   <li>• Mínimo {selectedBuy.minParticipants} participantes requeridos</li>
@@ -508,7 +508,7 @@ export default function GroupBuysPage() {
               <div className="flex gap-4">
                 <button
                   onClick={() => setSelectedBuy(null)}
-                  className="flex-1 py-3 px-4 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-semibold"
+                  className="flex-1 py-3 px-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:bg-gray-600 transition-colors font-semibold"
                 >
                   Cancelar
                 </button>
@@ -527,63 +527,63 @@ export default function GroupBuysPage() {
         {/* Create Modal */}
         {showCreateModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-            <div className="bg-white rounded-lg max-w-2xl w-full p-8 my-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Crear Compra Grupal</h3>
+            <div className="bg-white rounded dark:bg-gray-800-lg max-w-2xl w-full p-8 my-8">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Crear Compra Grupal</h3>
 
               <div className="space-y-4 mb-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Título</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Título</label>
                   <input
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Ej: Pack de productos orgánicos"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Descripción</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Descripción</label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     rows={3}
                     placeholder="Describe qué incluye la compra grupal"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Producto</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Producto</label>
                   <input
                     type="text"
                     value={formData.product}
                     onChange={(e) => setFormData({ ...formData, product: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Nombre específico del producto"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Precio Base (€)</label>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Precio Base (€)</label>
                     <input
                       type="number"
                       value={formData.basePrice}
                       onChange={(e) => setFormData({ ...formData, basePrice: parseFloat(e.target.value) })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       min="0"
                       step="0.01"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Duración (horas)</label>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Duración (horas)</label>
                     <input
                       type="number"
                       value={formData.duration}
                       onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value) })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       min="1"
                     />
                   </div>
@@ -591,30 +591,30 @@ export default function GroupBuysPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Min. Participantes</label>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Min. Participantes</label>
                     <input
                       type="number"
                       value={formData.minParticipants}
                       onChange={(e) => setFormData({ ...formData, minParticipants: parseInt(e.target.value) })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       min="2"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Max. Participantes</label>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Max. Participantes</label>
                     <input
                       type="number"
                       value={formData.maxParticipants}
                       onChange={(e) => setFormData({ ...formData, maxParticipants: parseInt(e.target.value) })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       min="2"
                     />
                   </div>
                 </div>
 
                 <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
-                  <h4 className="font-semibold text-blue-900 mb-3">Niveles de Descuento</h4>
+                  <h4 className="font-semibold text-blue-900 dark:text-blue-300 mb-3">Niveles de Descuento</h4>
                   <div className="space-y-2">
                     {formData.discountTiers.map((tier, index) => (
                       <div key={index} className="flex items-center gap-3">
@@ -629,7 +629,7 @@ export default function GroupBuysPage() {
                           className="w-24 px-3 py-2 border border-blue-300 rounded-lg"
                           min="1"
                         />
-                        <span className="text-sm text-gray-600">personas =</span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400">personas =</span>
                         <input
                           type="number"
                           value={tier.discount}
@@ -642,7 +642,7 @@ export default function GroupBuysPage() {
                           min="0"
                           max="100"
                         />
-                        <span className="text-sm text-gray-600">% OFF</span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400">% OFF</span>
                       </div>
                     ))}
                   </div>
@@ -655,7 +655,7 @@ export default function GroupBuysPage() {
                     setShowCreateModal(false);
                     resetForm();
                   }}
-                  className="flex-1 py-3 px-4 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-semibold"
+                  className="flex-1 py-3 px-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:bg-gray-600 transition-colors font-semibold"
                 >
                   Cancelar
                 </button>
@@ -675,4 +675,4 @@ export default function GroupBuysPage() {
   );
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

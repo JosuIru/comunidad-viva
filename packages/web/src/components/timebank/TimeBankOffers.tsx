@@ -1,6 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
+import { ClockIcon, AcademicCapIcon } from '@heroicons/react/24/outline';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -55,7 +56,9 @@ export default function TimeBankOffers({ onSelectOffer }: TimeBankOffersProps) {
   if (!data?.offers || data.offers.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow border border-gray-200 p-12 text-center">
-        <div className="text-6xl mb-4">⏰</div>
+        <div className="flex justify-center mb-4">
+          <ClockIcon className="h-24 w-24 text-gray-400" />
+        </div>
         <p className="text-gray-600 mb-2">No hay ofertas disponibles</p>
         <p className="text-sm text-gray-500">
           Sé el primero en ofrecer tu tiempo a la comunidad
@@ -105,7 +108,7 @@ export default function TimeBankOffers({ onSelectOffer }: TimeBankOffersProps) {
                 {/* Details */}
                 <div className="flex flex-wrap items-center gap-3 text-xs text-gray-600">
                   <span className="flex items-center gap-1">
-                    <span>⏱️</span>
+                    <ClockIcon className="h-4 w-4" />
                     {offer.estimatedHours}h estimadas
                   </span>
 
@@ -119,7 +122,7 @@ export default function TimeBankOffers({ onSelectOffer }: TimeBankOffersProps) {
 
                   {offer.canTeach && (
                     <span className="flex items-center gap-1 text-green-600">
-                      <span>🎓</span>
+                      <AcademicCapIcon className="h-4 w-4" />
                       Puede enseñar
                     </span>
                   )}

@@ -222,22 +222,100 @@ export class ViralFeaturesService {
       where: {
         id: { notIn: swipedOfferIds },
         status: 'ACTIVE',
+        userId: { not: userId }, // Excluir ofertas propias
       },
       include: {
-        user: {
-          select: {
-            id: true,
-            name: true,
-            avatar: true,
-            generosityScore: true,
-          },
-        },
+        user: true,
       },
       take: limit,
       orderBy: { createdAt: 'desc' },
     });
 
-    return offers;
+    // Transformar las ofertas en tarjetas de perfil enriquecidas
+    const cards = await Promise.all(
+      offers.map(async (offer) => {
+        // Contar ofertas activas del usuario
+        const activeOffersCount = await this.prisma.offer.count({
+          where: {
+            userId: offer.userId,
+            status: 'ACTIVE',
+          },
+        });
+
+        // Contar transacciones completadas
+        const completedTransactionsCount = await this.prisma.timeBankTransaction.count({
+          where: {
+            OR: [
+              { providerId: offer.userId },
+              { requesterId: offer.userId },
+            ],
+            status: 'COMPLETED',
+          },
+        });
+
+        // Obtener badges del usuario
+        const userBadges = await this.prisma.userBadge.findMany({
+          where: { userId: offer.userId },
+          take: 5,
+        });
+
+        // Mapear badges a emojis
+        const badgeEmojiMap: Record<string, string> = {
+          FIRST_OFFER: '🎯',
+          SOCIAL_BUTTERFLY: '🦋',
+          HELPER: '🤝',
+          GENEROUS: '💝',
+          EXPERT: '⭐',
+          COMMUNITY_BUILDER: '🏘️',
+          TIME_BANKER: '⏰',
+          EVENT_ORGANIZER: '📅',
+          EARLY_ADOPTER: '🚀',
+          ACTIVE_MEMBER: '💪',
+        };
+
+        // Calcular tasa de respuesta (simulada, puede mejorarse con datos reales)
+        const responseRate = completedTransactionsCount > 0 ? 95 : 100;
+
+        // Calcular reputación basada en generosityScore
+        const reputation = offer.user.generosityScore
+          ? Math.min(5, Math.max(1, offer.user.generosityScore / 20))
+          : 4.5;
+
+        // Generar intereses ficticios basados en la categoría de la oferta
+        const interests = [offer.category];
+
+        // Simular idiomas (puede mejorarse con datos reales del perfil)
+        const languages = ['Español'];
+
+        // Simular disponibilidad
+        const availability = 'Fines de semana';
+
+        return {
+          id: offer.id,
+          userId: offer.userId,
+          userName: offer.user.name,
+          avatar: offer.user.avatar || undefined,
+          bio: offer.user.bio || `Miembro activo de la comunidad ofreciendo ${offer.title}`,
+          interests: interests.filter(Boolean),
+          helpOffered: [offer.title],
+          helpNeeded: [], // Puede extenderse consultando otras ofertas del tipo "REQUEST"
+          mutualConnections: 0, // TODO: Implementar lógica de conexiones mutuas
+          level: offer.user.level || 1,
+          credits: offer.user.credits || 0,
+          reputation: reputation,
+          location: 'No especificada', // El modelo User no tiene campo location
+          joinedDate: offer.user.createdAt.toISOString(),
+          activeOffersCount,
+          completedTransactionsCount,
+          badges: userBadges.map(ub => badgeEmojiMap[ub.badgeType] || '🏅').filter(Boolean),
+          languages,
+          availability,
+          responseRate,
+        };
+      }),
+    );
+
+    return cards;
   }
 
   async swipeOffer(userId: string, offerId: string, direction: 'LEFT' | 'RIGHT' | 'SUPER') {
@@ -483,6 +561,100 @@ export class ViralFeaturesService {
     });
 
     return referral;
+  }
+
+  async getReferralStats(userId: string) {
+    const referralCode = await this.prisma.referralCode.findFirst({
+      where: { userId },
+      include: {
+        referrals: {
+          include: {
+            referredUser: true,
+          },
+        },
+      },
+    });
+
+    if (!referralCode) {
+      return {
+        totalReferrals: 0,
+        activeReferrals: 0,
+        totalRewards: 0,
+        currentTier: 'Iniciado',
+        nextTierAt: 5,
+      };
+    }
+
+    const totalReferrals = referralCode.referrals.length;
+    const activeReferrals = referralCode.referrals.filter(
+      (r) => r.referredUser && r.referredUser.level > 1,
+    ).length;
+    const totalRewards = referralCode.usedCount * referralCode.rewardForReferrer;
+
+    // Determine tier based on total referrals
+    let currentTier = 'Iniciado';
+    let nextTierAt = 5;
+
+    if (totalReferrals >= 50) {
+      currentTier = 'Líder Comunitario';
+      nextTierAt = 50;
+    } else if (totalReferrals >= 15) {
+      currentTier = 'Embajador';
+      nextTierAt = 50;
+    } else if (totalReferrals >= 5) {
+      currentTier = 'Conector';
+      nextTierAt = 15;
+    }
+
+    return {
+      totalReferrals,
+      activeReferrals,
+      totalRewards,
+      currentTier,
+      nextTierAt,
+    };
+  }
+
+  async getMyReferrals(userId: string) {
+    const referralCode = await this.prisma.referralCode.findFirst({
+      where: { userId },
+      include: {
+        referrals: {
+          include: {
+            referredUser: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+                level: true,
+                createdAt: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+      },
+    });
+
+    if (!referralCode) {
+      return { referrals: [] };
+    }
+
+    const referrals = referralCode.referrals.map((ref) => ({
+      id: ref.id,
+      referredUserId: ref.referredUserId,
+      referredUserName: ref.referredUser?.name || 'Usuario',
+      status: ref.referredUser && ref.referredUser.level > 1 ? 'ACTIVE' : 'PENDING',
+      rewardEarned: referralCode.rewardForReferrer,
+      createdAt: ref.createdAt.toISOString(),
+      activatedAt: ref.referredUser && ref.referredUser.level > 1
+        ? ref.referredUser.createdAt.toISOString()
+        : undefined,
+    }));
+
+    return { referrals };
   }
 
   /**
@@ -744,6 +916,27 @@ export class ViralFeaturesService {
   }
 
   /**
+   * Get perks for a specific level
+   */
+  private getLevelPerks(level: number): string[] {
+    const perks: string[] = [];
+
+    if (level >= 1) perks.push('Acceso a la plataforma');
+    if (level >= 2) perks.push('Crear ofertas y eventos');
+    if (level >= 3) perks.push('Participar en compras grupales');
+    if (level >= 4) perks.push('Acceso a chat directo');
+    if (level >= 5) perks.push('Badge de miembro activo');
+    if (level >= 6) perks.push('Descuento 5% en servicios');
+    if (level >= 7) perks.push('Prioridad en eventos');
+    if (level >= 8) perks.push('Descuento 10% en servicios');
+    if (level >= 9) perks.push('Acceso a eventos premium');
+    if (level >= 10) perks.push('Badge VIP exclusivo');
+    if (level >= 15) perks.push('Acceso VIP completo');
+
+    return perks;
+  }
+
+  /**
    * Get level progress
    */
   async getLevelProgress(userId: string) {
@@ -756,11 +949,13 @@ export class ViralFeaturesService {
 
     return {
       current: user.level,
+      currentLevel: user.level,
       next: user.level + 1,
       progress: Math.round(Math.max(0, Math.min(100, progress))),
       currentXP: user.experience,
       xpNeeded: nextLevelXP - user.experience,
       nextLevelXP,
+      perks: this.getLevelPerks(user.level),
     };
   }
 

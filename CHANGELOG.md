@@ -6,7 +6,7 @@ Registro de todas las implementaciones y cambios significativos del proyecto.
 
 ### 🎯 Proyecto Completo al 95% - Production Ready
 
-**Este release marca la completitud del MVP de Comunidad Viva.**
+**Este release marca la completitud del MVP de Truk.**
 
 #### 📧 Email Notification System - COMPLETO
 

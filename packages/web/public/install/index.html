@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRUK - Instalación</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .help-text {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .info-box {
+            background: #f0f7ff;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .summary-value {
+            color: #333;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .installation-log {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .log-line {
+            margin-bottom: 5px;
+        }
+
+        .complete-icon {
+            width: 80px;
+            height: 80px;
+            background: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: scaleIn 0.5s;
+        }
+
+        .complete-icon svg {
+            width: 50px;
+            height: 50px;
+            stroke: white;
+            stroke-width: 3;
+            fill: none;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .link-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+        }
+
+        .link-card:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .link-card-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .link-card-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .link-card-desc {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 TRUK</h1>
+            <p>Plataforma de Economía Colaborativa Local</p>
+        </div>
+
+        <div class="content">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+
+            <!-- Paso 0: Bienvenida -->
+            <div class="step active" id="step0">
+                <h2 style="margin-bottom: 20px;">¡Bienvenido a TRUK!</h2>
+
+                <div class="info-box">
+                    <p><strong>✨ Instalación Guiada</strong></p>
+                    <p>Este asistente te guiará paso a paso en la configuración de tu plataforma. El proceso tomará aproximadamente 5-10 minutos.</p>
+                </div>
+
+                <h3 style="margin: 30px 0 15px 0;">📋 Requisitos previos:</h3>
+                <ul style="margin-left: 20px; line-height: 2;">
+                    <li>Servidor con Node.js 18+ instalado</li>
+                    <li>PostgreSQL 13+ disponible</li>
+                    <li>Al menos 2 GB de RAM</li>
+                    <li>Dominio configurado (opcional)</li>
+                </ul>
+
+                <div class="warning-box" style="margin-top: 30px;">
+                    <p><strong>⚠️ Importante:</strong> Asegúrate de tener a mano las credenciales de tu base de datos PostgreSQL antes de continuar.</p>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-primary" onclick="nextStep()">Comenzar Instalación →</button>
+                </div>
+            </div>
+
+            <!-- Paso 1: Información General -->
+            <div class="step" id="step1">
+                <h2 style="margin-bottom: 20px;">1. Información General</h2>
+
+                <div class="form-group">
+                    <label for="siteName">Nombre de tu comunidad</label>
+                    <input type="text" id="siteName" placeholder="Ej: Comunidad Viva Barcelona">
+                    <div class="help-text">Este nombre aparecerá en toda la plataforma</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="siteUrl">URL del sitio</label>
+                    <input type="url" id="siteUrl" placeholder="https://tu-dominio.com">
+                    <div class="help-text">La URL donde estará accesible tu plataforma</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="adminEmail">Email del administrador</label>
+                    <input type="email" id="adminEmail" placeholder="admin@tu-dominio.com">
+                    <div class="help-text">Para notificaciones importantes del sistema</div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Atrás</button>
+                    <button class="btn-primary" onclick="nextStep()">Continuar →</button>
+                </div>
+            </div>
+
+            <!-- Paso 2: Base de Datos -->
+            <div class="step" id="step2">
+                <h2 style="margin-bottom: 20px;">2. Configuración de Base de Datos</h2>
+
+                <div class="info-box">
+                    <p><strong>🗄️ PostgreSQL</strong></p>
+                    <p>Necesitamos conectar con tu base de datos PostgreSQL. Si no tienes una, puedes crearla desde tu panel de hosting o usar un servicio como ElephantSQL.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="dbHost">Host</label>
+                    <input type="text" id="dbHost" placeholder="localhost" value="localhost">
+                </div>
+
+                <div class="form-group">
+                    <label for="dbPort">Puerto</label>
+                    <input type="number" id="dbPort" placeholder="5432" value="5432">
+                </div>
+
+                <div class="form-group">
+                    <label for="dbName">Nombre de la base de datos</label>
+                    <input type="text" id="dbName" placeholder="truk_db">
+                </div>
+
+                <div class="form-group">
+                    <label for="dbUser">Usuario</label>
+                    <input type="text" id="dbUser" placeholder="truk_user">
+                </div>
+
+                <div class="form-group">
+                    <label for="dbPassword">Contraseña</label>
+                    <input type="password" id="dbPassword" placeholder="••••••••">
+                </div>
+
+                <button class="btn-secondary" onclick="testDatabaseConnection()" style="margin-top: 10px;">
+                    🔍 Probar Conexión
+                </button>
+                <div id="dbTestResult" style="margin-top: 10px;"></div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Atrás</button>
+                    <button class="btn-primary" onclick="nextStep()">Continuar →</button>
+                </div>
+            </div>
+
+            <!-- Paso 3: Administrador -->
+            <div class="step" id="step3">
+                <h2 style="margin-bottom: 20px;">3. Usuario Administrador</h2>
+
+                <div class="info-box">
+                    <p><strong>👤 Primer Usuario</strong></p>
+                    <p>Crea la cuenta del administrador principal de la plataforma.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="adminName">Nombre completo</label>
+                    <input type="text" id="adminName" placeholder="Juan Pérez">
+                </div>
+
+                <div class="form-group">
+                    <label for="adminUsername">Usuario</label>
+                    <input type="text" id="adminUsername" placeholder="admin">
+                </div>
+
+                <div class="form-group">
+                    <label for="adminPassword">Contraseña</label>
+                    <input type="password" id="adminPassword" placeholder="••••••••">
+                    <div class="help-text">Mínimo 8 caracteres, incluye mayúsculas y números</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="adminPasswordConfirm">Confirmar contraseña</label>
+                    <input type="password" id="adminPasswordConfirm" placeholder="••••••••">
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Atrás</button>
+                    <button class="btn-primary" onclick="nextStep()">Continuar →</button>
+                </div>
+            </div>
+
+            <!-- Paso 4: Opciones Avanzadas -->
+            <div class="step" id="step4">
+                <h2 style="margin-bottom: 20px;">4. Opciones Avanzadas (Opcional)</h2>
+
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enableRedis">
+                        <label for="enableRedis" style="margin-bottom: 0;">Habilitar Redis para caché</label>
+                    </div>
+                    <div class="help-text">Mejora el rendimiento (requiere Redis instalado)</div>
+                </div>
+
+                <div class="form-group" id="redisUrlGroup" style="display: none;">
+                    <label for="redisUrl">URL de Redis</label>
+                    <input type="text" id="redisUrl" placeholder="redis://localhost:6379">
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enableEmail">
+                        <label for="enableEmail" style="margin-bottom: 0;">Configurar email SMTP</label>
+                    </div>
+                    <div class="help-text">Para notificaciones por correo</div>
+                </div>
+
+                <div id="emailConfig" style="display: none; margin-top: 20px;">
+                    <div class="form-group">
+                        <label for="smtpHost">Host SMTP</label>
+                        <input type="text" id="smtpHost" placeholder="smtp.gmail.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="smtpPort">Puerto</label>
+                        <input type="number" id="smtpPort" placeholder="587">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="smtpUser">Usuario</label>
+                        <input type="text" id="smtpUser" placeholder="tu-email@gmail.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="smtpPassword">Contraseña</label>
+                        <input type="password" id="smtpPassword" placeholder="••••••••">
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Atrás</button>
+                    <button class="btn-primary" onclick="nextStep()">Continuar →</button>
+                </div>
+            </div>
+
+            <!-- Paso 5: Resumen -->
+            <div class="step" id="step5">
+                <h2 style="margin-bottom: 20px;">5. Resumen de Configuración</h2>
+
+                <div class="info-box">
+                    <p><strong>📋 Revisa tu configuración</strong></p>
+                    <p>Verifica que toda la información sea correcta antes de proceder con la instalación.</p>
+                </div>
+
+                <div id="configSummary" style="margin-top: 30px;"></div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="prevStep()">← Atrás</button>
+                    <button class="btn-primary" onclick="startInstallation()">🚀 Iniciar Instalación</button>
+                </div>
+            </div>
+
+            <!-- Paso 6: Instalación -->
+            <div class="step" id="step6">
+                <h2 style="margin-bottom: 20px;">6. Instalando TRUK...</h2>
+
+                <div class="info-box">
+                    <p><strong>⏳ Por favor espera</strong></p>
+                    <p>La instalación puede tardar varios minutos. No cierres esta ventana.</p>
+                </div>
+
+                <div class="installation-log" id="installLog">
+                    <div class="log-line">► Iniciando instalación...</div>
+                </div>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+
+            <!-- Paso 7: Completado -->
+            <div class="step" id="step7">
+                <div class="complete-icon">
+                    <svg viewBox="0 0 24 24">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+
+                <h2 style="text-align: center; margin-bottom: 20px;">¡Instalación Completada!</h2>
+
+                <div class="success-box">
+                    <p><strong>🎉 ¡Felicitaciones!</strong></p>
+                    <p>TRUK se ha instalado correctamente y está listo para usar.</p>
+                </div>
+
+                <h3 style="margin: 30px 0 15px 0;">🔑 Tus credenciales:</h3>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <p><strong>Usuario:</strong> <span id="finalUsername"></span></p>
+                    <p><strong>Contraseña:</strong> (la que configuraste)</p>
+                </div>
+
+                <h3 style="margin: 30px 0 15px 0;">🔗 Enlaces útiles:</h3>
+                <div class="links-grid">
+                    <a href="/" class="link-card">
+                        <div class="link-card-icon">🏠</div>
+                        <div class="link-card-title">Ir a la Plataforma</div>
+                        <div class="link-card-desc">Accede a TRUK</div>
+                    </a>
+                    <a href="/admin" class="link-card">
+                        <div class="link-card-icon">⚙️</div>
+                        <div class="link-card-title">Panel Admin</div>
+                        <div class="link-card-desc">Configuración</div>
+                    </a>
+                    <a href="/docs" class="link-card">
+                        <div class="link-card-icon">📚</div>
+                        <div class="link-card-title">Documentación</div>
+                        <div class="link-card-desc">Guías y tutoriales</div>
+                    </a>
+                    <a href="https://github.com/JosuIru/comunidad-viva" class="link-card" target="_blank">
+                        <div class="link-card-icon">💻</div>
+                        <div class="link-card-title">GitHub</div>
+                        <div class="link-card-desc">Código fuente</div>
+                    </a>
+                </div>
+
+                <div class="button-group" style="margin-top: 30px;">
+                    <button class="btn-primary" onclick="window.location.href='/'">Empezar a Usar TRUK →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="install.js"></script>
+</body>
+</html>

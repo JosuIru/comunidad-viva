@@ -4,6 +4,19 @@ import { useQuery } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import Link from 'next/link';
+import {
+  TrophyIcon,
+  ChartBarIcon,
+  StarIcon,
+  FireIcon,
+  ClockIcon,
+  CurrencyDollarIcon,
+  BoltIcon,
+  HeartIcon,
+  CheckIcon,
+  PuzzlePieceIcon,
+  FlagIcon,
+} from '@heroicons/react/24/outline';
 
 interface Challenge {
   id: string;
@@ -100,12 +113,15 @@ export default function ChallengesPage() {
   };
 
   return (
-    <Layout title="Retos y Gamificación - Comunidad Viva">
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
+    <Layout title="Retos y Gamificación - Truk">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-900 dark:to-gray-800">
         {/* Header */}
         <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 text-white">
           <div className="container mx-auto px-4 py-12">
-            <h1 className="text-4xl font-bold mb-4">🎮 Retos y Gamificación</h1>
+            <h1 className="text-4xl font-bold mb-4 flex items-center gap-3">
+              <PuzzlePieceIcon className="h-10 w-10" />
+              Retos y Gamificación
+            </h1>
             <p className="text-xl opacity-90">
               Completa retos, sube de nivel y gana recompensas
             </p>
@@ -113,51 +129,51 @@ export default function ChallengesPage() {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+        <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10 shadow-sm">
           <div className="container mx-auto px-4">
             <div className="flex gap-2 overflow-x-auto">
               <button
                 onClick={() => setActiveTab('challenges')}
-                className={`px-6 py-4 font-medium whitespace-nowrap transition-colors border-b-2 ${
+                className={`px-6 py-4 font-medium whitespace-nowrap transition-colors border-b-2 flex items-center gap-2 ${
                   activeTab === 'challenges'
-                    ? 'border-purple-600 text-purple-600'
-                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
+                    ? 'border-purple-600 text-purple-600 dark:text-purple-400'
+                    : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
               >
-                <span className="mr-2">🏆</span>
+                <TrophyIcon className="h-5 w-5" />
                 Retos
               </button>
               <button
                 onClick={() => setActiveTab('leaderboard')}
-                className={`px-6 py-4 font-medium whitespace-nowrap transition-colors border-b-2 ${
+                className={`px-6 py-4 font-medium whitespace-nowrap transition-colors border-b-2 flex items-center gap-2 ${
                   activeTab === 'leaderboard'
-                    ? 'border-purple-600 text-purple-600'
-                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
+                    ? 'border-purple-600 text-purple-600 dark:text-purple-400'
+                    : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
               >
-                <span className="mr-2">📊</span>
+                <ChartBarIcon className="h-5 w-5" />
                 Clasificación
               </button>
               <button
                 onClick={() => setActiveTab('level')}
-                className={`px-6 py-4 font-medium whitespace-nowrap transition-colors border-b-2 ${
+                className={`px-6 py-4 font-medium whitespace-nowrap transition-colors border-b-2 flex items-center gap-2 ${
                   activeTab === 'level'
-                    ? 'border-purple-600 text-purple-600'
-                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
+                    ? 'border-purple-600 text-purple-600 dark:text-purple-400'
+                    : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
               >
-                <span className="mr-2">⭐</span>
+                <StarIcon className="h-5 w-5" />
                 Mi Nivel
               </button>
               <button
                 onClick={() => setActiveTab('streak')}
-                className={`px-6 py-4 font-medium whitespace-nowrap transition-colors border-b-2 ${
+                className={`px-6 py-4 font-medium whitespace-nowrap transition-colors border-b-2 flex items-center gap-2 ${
                   activeTab === 'streak'
-                    ? 'border-purple-600 text-purple-600'
-                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
+                    ? 'border-purple-600 text-purple-600 dark:text-purple-400'
+                    : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
               >
-                <span className="mr-2">🔥</span>
+                <FireIcon className="h-5 w-5" />
                 Racha
               </button>
             </div>
@@ -180,15 +196,15 @@ export default function ChallengesPage() {
                       <h2 className="text-3xl font-bold mb-2">{challenge.description}</h2>
                       <div className="flex items-center gap-4 text-sm">
                         <span className="flex items-center gap-1">
-                          <span className="text-xl">⏰</span>
+                          <ClockIcon className="h-5 w-5" />
                           {formatTimeRemaining(challenge.endsAt)}
                         </span>
                         <span className="flex items-center gap-1">
-                          <span className="text-xl">💰</span>
+                          <CurrencyDollarIcon className="h-5 w-5" />
                           {challenge.reward} créditos
                         </span>
                         <span className="flex items-center gap-1">
-                          <span className="text-xl">🏆</span>
+                          <TrophyIcon className="h-5 w-5" />
                           +{challenge.bonusFirst} bonus para top 10
                         </span>
                       </div>
@@ -221,10 +237,12 @@ export default function ChallengesPage() {
                   </div>
                 </div>
               ) : (
-                <div className="bg-white rounded-lg shadow-lg p-8 text-center">
-                  <div className="text-6xl mb-4">🎯</div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">No hay reto activo</h3>
-                  <p className="text-gray-600">El próximo reto semanal comenzará pronto</p>
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
+                  <div className="flex justify-center mb-4">
+                    <FlagIcon className="h-20 w-20 text-gray-400 dark:text-gray-500" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">No hay reto activo</h3>
+                  <p className="text-gray-600 dark:text-gray-400">El próximo reto semanal comenzará pronto</p>
                 </div>
               )}
 
@@ -232,7 +250,7 @@ export default function ChallengesPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Link href="/gamification/flash-deals" className="bg-gradient-to-br from-red-500 to-orange-500 text-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="text-5xl">⚡</div>
+                    <BoltIcon className="h-12 w-12" />
                     <div>
                       <h3 className="text-2xl font-bold">Flash Deals</h3>
                       <p className="opacity-90">Ofertas relámpago por tiempo limitado</p>
@@ -245,7 +263,7 @@ export default function ChallengesPage() {
 
                 <Link href="/gamification/swipe" className="bg-gradient-to-br from-pink-500 to-red-500 text-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="text-5xl">❤️</div>
+                    <HeartIcon className="h-12 w-12" />
                     <div>
                       <h3 className="text-2xl font-bold">Swipe & Match</h3>
                       <p className="opacity-90">Descubre ofertas tipo Tinder</p>
@@ -261,9 +279,12 @@ export default function ChallengesPage() {
 
           {/* Leaderboard Tab */}
           {activeTab === 'leaderboard' && (
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
               <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white p-6">
-                <h2 className="text-2xl font-bold mb-2">🏆 Clasificación Semanal</h2>
+                <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
+                  <TrophyIcon className="h-7 w-7" />
+                  Clasificación Semanal
+                </h2>
                 <p className="opacity-90">Los mejores de esta semana</p>
               </div>
 
@@ -275,46 +296,61 @@ export default function ChallengesPage() {
                 <>
                   {/* My Rank */}
                   {leaderboard && (
-                    <div className="bg-blue-50 border-b border-blue-100 p-4">
+                    <div className="bg-blue-50 dark:bg-blue-900/20 border-b border-blue-100 dark:border-blue-700 p-4">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">Tu Posición</span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400">Tu Posición</span>
                         <div className="flex items-center gap-4">
-                          <span className="text-2xl font-bold text-blue-600">#{leaderboard.myRank}</span>
-                          <span className="text-lg font-semibold text-gray-700">{leaderboard.myPoints} puntos</span>
+                          <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">#{leaderboard.myRank}</span>
+                          <span className="text-lg font-semibold text-gray-700 dark:text-gray-300">{leaderboard.myPoints} puntos</span>
                         </div>
                       </div>
                     </div>
                   )}
 
                   {/* Leaderboard */}
-                  <div className="divide-y divide-gray-200">
+                  <div className="divide-y divide-gray-200 dark:divide-gray-700">
                     {leaderboard?.leaderboard.map((entry) => (
                       <div
                         key={entry.userId}
-                        className={`p-4 flex items-center justify-between hover:bg-gray-50 transition-colors ${
-                          entry.rank <= 3 ? 'bg-gradient-to-r from-yellow-50 to-orange-50' : ''
+                        className={`p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
+                          entry.rank <= 3 ? 'bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20' : ''
                         }`}
                       >
                         <div className="flex items-center gap-4">
-                          <div className={`text-2xl font-bold ${
-                            entry.rank === 1 ? 'text-yellow-500' :
-                            entry.rank === 2 ? 'text-gray-400' :
-                            entry.rank === 3 ? 'text-orange-600' :
-                            'text-gray-600'
+                          <div className={`flex items-center justify-center min-w-[2rem] ${
+                            entry.rank === 1 ? 'text-yellow-500 dark:text-yellow-400' :
+                            entry.rank === 2 ? 'text-gray-400 dark:text-gray-500' :
+                            entry.rank === 3 ? 'text-orange-600 dark:text-orange-400' :
+                            'text-gray-600 dark:text-gray-400'
                           }`}>
-                            {entry.rank === 1 && '🥇'}
-                            {entry.rank === 2 && '🥈'}
-                            {entry.rank === 3 && '🥉'}
-                            {entry.rank > 3 && `#${entry.rank}`}
+                            {entry.rank === 1 && (
+                              <svg className="h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" />
+                                <text x="12" y="16" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">1</text>
+                              </svg>
+                            )}
+                            {entry.rank === 2 && (
+                              <svg className="h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" />
+                                <text x="12" y="16" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">2</text>
+                              </svg>
+                            )}
+                            {entry.rank === 3 && (
+                              <svg className="h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" />
+                                <text x="12" y="16" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">3</text>
+                              </svg>
+                            )}
+                            {entry.rank > 3 && <span className="text-2xl font-bold">{`#${entry.rank}`}</span>}
                           </div>
-                          <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+                          <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
                           <div>
-                            <div className="font-semibold text-gray-900">{entry.userName}</div>
-                            <div className="text-sm text-gray-500">{entry.points} puntos</div>
+                            <div className="font-semibold text-gray-900 dark:text-gray-100">{entry.userName}</div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">{entry.points} puntos</div>
                           </div>
                         </div>
                         {entry.rank <= 10 && (
-                          <div className="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded-full">
+                          <div className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-xs font-semibold rounded-full">
                             TOP 10
                           </div>
                         )}
@@ -342,7 +378,7 @@ export default function ChallengesPage() {
                         <div className="text-6xl font-bold mb-2">{level.currentLevel}</div>
                         <div className="text-xl opacity-90">{level.currentXP} / {level.nextLevelXP} XP</div>
                       </div>
-                      <div className="text-8xl">⭐</div>
+                      <StarIcon className="h-24 w-24" />
                     </div>
 
                     <div className="mb-4">
@@ -360,7 +396,7 @@ export default function ChallengesPage() {
                       <div className="space-y-2">
                         {level.perks.map((perk, index) => (
                           <div key={index} className="flex items-center gap-2">
-                            <span className="text-xl">✓</span>
+                            <CheckIcon className="h-5 w-5" />
                             <span className="text-sm opacity-90">{perk}</span>
                           </div>
                         ))}
@@ -369,8 +405,8 @@ export default function ChallengesPage() {
                   </div>
 
                   {/* Level Benefits */}
-                  <div className="bg-white rounded-lg shadow-lg p-6">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-6">Próximos Beneficios</h3>
+                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Próximos Beneficios</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {[
                         { level: level.currentLevel + 1, perk: 'Acceso a eventos premium' },
@@ -378,14 +414,14 @@ export default function ChallengesPage() {
                         { level: level.currentLevel + 3, perk: 'Badge exclusivo' },
                         { level: 10, perk: 'Acceso VIP completo' },
                       ].map((item, index) => (
-                        <div key={index} className="p-4 border-2 border-gray-200 rounded-lg">
+                        <div key={index} className="p-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg">
                           <div className="flex items-center gap-3 mb-2">
-                            <div className="w-8 h-8 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center font-bold text-sm">
+                            <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-full flex items-center justify-center font-bold text-sm">
                               {item.level}
                             </div>
-                            <span className="font-semibold text-gray-900">Nivel {item.level}</span>
+                            <span className="font-semibold text-gray-900 dark:text-gray-100">Nivel {item.level}</span>
                           </div>
-                          <p className="text-sm text-gray-600">{item.perk}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{item.perk}</p>
                         </div>
                       ))}
                     </div>
@@ -411,7 +447,7 @@ export default function ChallengesPage() {
                         <div className="text-6xl font-bold mb-2">{streak.currentStreak}</div>
                         <div className="text-xl opacity-90">días consecutivos</div>
                       </div>
-                      <div className="text-8xl">🔥</div>
+                      <FireIcon className="h-24 w-24" />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 mb-6">
@@ -435,8 +471,8 @@ export default function ChallengesPage() {
                   </div>
 
                   {/* Streak Milestones */}
-                  <div className="bg-white rounded-lg shadow-lg p-6">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-6">Milestones de Racha</h3>
+                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Milestones de Racha</h3>
                     <div className="space-y-4">
                       {[
                         { days: 7, reward: 'Badge "Semana Completa"', bonus: '+10 créditos' },
@@ -451,22 +487,22 @@ export default function ChallengesPage() {
                             key={index}
                             className={`p-4 border-2 rounded-lg ${
                               achieved
-                                ? 'border-green-500 bg-green-50'
-                                : 'border-gray-200 bg-white'
+                                ? 'border-green-500 bg-green-50 dark:border-green-400 dark:bg-green-900/20'
+                                : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700'
                             }`}
                           >
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-4">
                                 <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${
-                                  achieved ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-600'
+                                  achieved ? 'bg-green-500 text-white' : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300'
                                 }`}>
-                                  {achieved ? '✓' : milestone.days}
+                                  {achieved ? <CheckIcon className="h-6 w-6" /> : milestone.days}
                                 </div>
                                 <div>
-                                  <div className={`font-semibold ${achieved ? 'text-green-900' : 'text-gray-900'}`}>
+                                  <div className={`font-semibold ${achieved ? 'text-green-900 dark:text-green-300' : 'text-gray-900 dark:text-gray-100'}`}>
                                     {milestone.days} días
                                   </div>
-                                  <div className={`text-sm ${achieved ? 'text-green-700' : 'text-gray-600'}`}>
+                                  <div className={`text-sm ${achieved ? 'text-green-700 dark:text-green-400' : 'text-gray-600 dark:text-gray-400'}`}>
                                     {milestone.reward}
                                   </div>
                                 </div>
@@ -474,7 +510,7 @@ export default function ChallengesPage() {
                               <div className={`px-3 py-1 rounded-full text-sm font-semibold ${
                                 achieved
                                   ? 'bg-green-500 text-white'
-                                  : 'bg-gray-200 text-gray-700'
+                                  : 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300'
                               }`}>
                                 {milestone.bonus}
                               </div>
@@ -494,4 +530,4 @@ export default function ChallengesPage() {
   );
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

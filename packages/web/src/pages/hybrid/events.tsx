@@ -225,10 +225,10 @@ export default function HybridEventsPage() {
   };
 
   return (
-    <Layout title="Celebraciones y Eventos - Comunidad Viva">
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
+    <Layout title="Celebraciones y Eventos - Truk">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-900 dark:to-gray-800">
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 text-white">
+        <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 dark:from-purple-700 dark:via-pink-700 dark:to-red-700 text-white">
           <div className="container mx-auto px-4 py-12">
             <div className="flex justify-between items-center">
               <div>
@@ -240,7 +240,7 @@ export default function HybridEventsPage() {
               {activeTab === 'events' && (
                 <button
                   onClick={() => setShowCreateEventModal(true)}
-                  className="px-6 py-3 bg-white text-purple-600 rounded-lg font-bold hover:bg-purple-50 transition-colors"
+                  className="px-6 py-3 bg-white dark:bg-gray-800 text-purple-600 dark:text-purple-300 rounded-lg font-bold hover:bg-purple-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   + Crear Evento
                 </button>
@@ -252,13 +252,13 @@ export default function HybridEventsPage() {
         <div className="container mx-auto px-4 py-8">
           {/* Tabs */}
           <div className="mb-8">
-            <div className="flex border-b border-gray-200">
+            <div className="flex border-b border-gray-200 dark:border-gray-700">
               <button
                 onClick={() => setActiveTab('celebrations')}
                 className={`px-6 py-3 font-semibold transition-colors ${
                   activeTab === 'celebrations'
-                    ? 'border-b-2 border-purple-500 text-purple-600'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'border-b-2 border-purple-500 dark:border-purple-400 text-purple-600 dark:text-purple-400'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                 }`}
               >
                 🎊 Celebraciones
@@ -267,8 +267,8 @@ export default function HybridEventsPage() {
                 onClick={() => setActiveTab('events')}
                 className={`px-6 py-3 font-semibold transition-colors ${
                   activeTab === 'events'
-                    ? 'border-b-2 border-pink-500 text-pink-600'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'border-b-2 border-pink-500 dark:border-pink-400 text-pink-600 dark:text-pink-400'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                 }`}
               >
                 🌉 Eventos Puente
@@ -281,14 +281,14 @@ export default function HybridEventsPage() {
             <div>
               {celebrationsLoading ? (
                 <div className="text-center py-12">
-                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 dark:border-purple-400"></div>
                 </div>
               ) : celebrations && celebrations.length > 0 ? (
                 <div className="space-y-6">
                   {celebrations.map((celebration) => (
                     <div
                       key={celebration.id}
-                      className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                      className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
                     >
                       <div className={`bg-gradient-to-r ${layerColors[celebration.toLayer]} text-white px-6 py-4`}>
                         <div className="flex items-center justify-between">
@@ -310,13 +310,13 @@ export default function HybridEventsPage() {
                       </div>
 
                       <div className="p-6">
-                        <div className="bg-purple-50 border-l-4 border-purple-500 rounded p-4 mb-4">
-                          <h4 className="font-semibold text-purple-900 mb-2">💭 Razón de la migración:</h4>
-                          <p className="text-purple-800">{celebration.reason}</p>
+                        <div className="bg-purple-50 dark:bg-purple-900/30 border-l-4 border-purple-500 dark:border-purple-600 rounded p-4 mb-4">
+                          <h4 className="font-semibold text-purple-900 dark:text-purple-200 mb-2">💭 Razón de la migración:</h4>
+                          <p className="text-purple-800 dark:text-purple-300">{celebration.reason}</p>
                         </div>
 
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2 text-gray-600">
+                          <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                             <span className="text-2xl">👏</span>
                             <span className="font-semibold">{celebration.congratulations} felicitaciones</span>
                           </div>
@@ -325,12 +325,12 @@ export default function HybridEventsPage() {
                             <button
                               onClick={() => congratulateMutation.mutate(celebration.id)}
                               disabled={congratulateMutation.isPending}
-                              className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-colors font-semibold disabled:opacity-50"
+                              className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-700 dark:to-pink-700 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 dark:hover:from-purple-600 dark:hover:to-pink-600 transition-colors font-semibold disabled:opacity-50"
                             >
                               👏 Felicitar
                             </button>
                           ) : (
-                            <div className="px-6 py-2 bg-purple-100 text-purple-700 rounded-lg font-semibold">
+                            <div className="px-6 py-2 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200 rounded-lg font-semibold">
                               ✓ Ya felicitaste
                             </div>
                           )}
@@ -340,33 +340,33 @@ export default function HybridEventsPage() {
                   ))}
                 </div>
               ) : (
-                <div className="bg-white rounded-lg shadow-lg p-12 text-center">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-12 text-center">
                   <div className="text-6xl mb-4">🎊</div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">No hay celebraciones recientes</h3>
-                  <p className="text-gray-600">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">No hay celebraciones recientes</h3>
+                  <p className="text-gray-600 dark:text-gray-300">
                     Cuando alguien migre de capa económica, aparecerá aquí para que puedas felicitarlo
                   </p>
                 </div>
               )}
 
               {/* Info Section */}
-              <div className="mt-12 bg-white rounded-lg shadow-lg p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">¿Qué son las Celebraciones?</h3>
-                <p className="text-gray-700 mb-6">
+              <div className="mt-12 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">¿Qué son las Celebraciones?</h3>
+                <p className="text-gray-700 dark:text-gray-300 mb-6">
                   Cuando un miembro de la comunidad migra de una capa económica a otra, es un momento significativo
                   que merece ser celebrado. Las celebraciones permiten que la comunidad apoye y reconozca estos
                   pasos evolutivos.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-purple-50 rounded-lg p-4">
-                    <h4 className="font-bold text-purple-900 mb-2">💼 → 🔄 Tradicional a Transicional</h4>
-                    <p className="text-sm text-purple-800">
+                  <div className="bg-purple-50 dark:bg-purple-900/30 rounded-lg p-4">
+                    <h4 className="font-bold text-purple-900 dark:text-purple-200 mb-2">💼 → 🔄 Tradicional a Transicional</h4>
+                    <p className="text-sm text-purple-800 dark:text-purple-300">
                       Primeros pasos hacia una economía más colaborativa
                     </p>
                   </div>
-                  <div className="bg-pink-50 rounded-lg p-4">
-                    <h4 className="font-bold text-pink-900 mb-2">🔄 → 🎁 Transicional a Don Puro</h4>
-                    <p className="text-sm text-pink-800">
+                  <div className="bg-pink-50 dark:bg-pink-900/30 rounded-lg p-4">
+                    <h4 className="font-bold text-pink-900 dark:text-pink-200 mb-2">🔄 → 🎁 Transicional a Don Puro</h4>
+                    <p className="text-sm text-pink-800 dark:text-pink-300">
                       Adoptando completamente la economía del don
                     </p>
                   </div>
@@ -380,14 +380,14 @@ export default function HybridEventsPage() {
             <div>
               {eventsLoading ? (
                 <div className="text-center py-12">
-                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600"></div>
+                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 dark:border-pink-400"></div>
                 </div>
               ) : events && events.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {events.map((event) => (
                     <div
                       key={event.id}
-                      className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                      className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
                     >
                       <div className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-4 py-3">
                         <div className="flex items-center justify-between">
@@ -398,17 +398,17 @@ export default function HybridEventsPage() {
                       </div>
 
                       <div className="p-6">
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">{event.name}</h3>
-                        <p className="text-gray-600 text-sm mb-4">{event.description}</p>
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">{event.name}</h3>
+                        <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">{event.description}</p>
 
                         {/* Date & Location */}
                         <div className="space-y-2 mb-4">
-                          <div className="flex items-center gap-2 text-sm text-gray-700">
+                          <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
                             <span>📅</span>
                             <span>{getEventDate(event.date)}</span>
                           </div>
                           {event.location && (
-                            <div className="flex items-center gap-2 text-sm text-gray-700">
+                            <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
                               <span>📍</span>
                               <span>{event.location}</span>
                             </div>
@@ -417,12 +417,12 @@ export default function HybridEventsPage() {
 
                         {/* Target Layers */}
                         <div className="mb-4">
-                          <div className="text-sm font-semibold text-gray-700 mb-2">Capas objetivo:</div>
+                          <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Capas objetivo:</div>
                           <div className="flex flex-wrap gap-2">
                             {event.targetLayers.map((layer) => (
                               <span
                                 key={layer}
-                                className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold flex items-center gap-1"
+                                className="px-3 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 rounded-full text-xs font-semibold flex items-center gap-1"
                               >
                                 {layerEmojis[layer]} {layerNames[layer]}
                               </span>
@@ -433,13 +433,13 @@ export default function HybridEventsPage() {
                         {/* Attendees */}
                         <div className="mb-4">
                           <div className="flex justify-between text-sm mb-2">
-                            <span className="text-gray-600">Asistentes</span>
-                            <span className="font-bold text-gray-900">
+                            <span className="text-gray-600 dark:text-gray-400">Asistentes</span>
+                            <span className="font-bold text-gray-900 dark:text-gray-100">
                               {event.attendees} {event.maxAttendees ? `/ ${event.maxAttendees}` : ''}
                             </span>
                           </div>
                           {event.maxAttendees && (
-                            <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                               <div
                                 className="h-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 transition-all"
                                 style={{ width: `${Math.min((event.attendees / event.maxAttendees) * 100, 100)}%` }}
@@ -449,7 +449,7 @@ export default function HybridEventsPage() {
                         </div>
 
                         {/* Organizer */}
-                        <div className="text-sm text-gray-600 mb-4">
+                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                           Organiza: <span className="font-semibold">{event.organizer.name}</span>
                         </div>
 
@@ -460,7 +460,7 @@ export default function HybridEventsPage() {
                               <button
                                 onClick={() => leaveEventMutation.mutate(event.id)}
                                 disabled={leaveEventMutation.isPending}
-                                className="w-full py-3 px-4 bg-red-100 text-red-700 rounded-lg font-bold hover:bg-red-200 transition-colors disabled:opacity-50"
+                                className="w-full py-3 px-4 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg font-bold hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors disabled:opacity-50"
                               >
                                 Cancelar Asistencia
                               </button>
@@ -468,7 +468,7 @@ export default function HybridEventsPage() {
                               <button
                                 onClick={() => joinEventMutation.mutate(event.id)}
                                 disabled={joinEventMutation.isPending || (event.maxAttendees !== undefined && event.attendees >= event.maxAttendees)}
-                                className="w-full py-3 px-4 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-lg font-bold hover:from-pink-700 hover:to-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full py-3 px-4 bg-gradient-to-r from-pink-600 to-purple-600 dark:from-pink-700 dark:to-purple-700 text-white rounded-lg font-bold hover:from-pink-700 hover:to-purple-700 dark:hover:from-pink-600 dark:hover:to-purple-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 {event.maxAttendees !== undefined && event.attendees >= event.maxAttendees
                                   ? 'Evento Lleno'
@@ -482,15 +482,15 @@ export default function HybridEventsPage() {
                   ))}
                 </div>
               ) : (
-                <div className="bg-white rounded-lg shadow-lg p-12 text-center">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-12 text-center">
                   <div className="text-6xl mb-4">🌉</div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">No hay eventos próximos</h3>
-                  <p className="text-gray-600 mb-6">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">No hay eventos próximos</h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-6">
                     Los eventos puente conectan personas de diferentes capas económicas
                   </p>
                   <button
                     onClick={() => setShowCreateEventModal(true)}
-                    className="px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-semibold"
+                    className="px-6 py-3 bg-pink-600 dark:bg-pink-700 text-white rounded-lg hover:bg-pink-700 dark:hover:bg-pink-600 transition-colors font-semibold"
                   >
                     + Crear Primer Evento
                   </button>
@@ -498,9 +498,9 @@ export default function HybridEventsPage() {
               )}
 
               {/* Info Section */}
-              <div className="mt-12 bg-white rounded-lg shadow-lg p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">¿Qué son los Eventos Puente?</h3>
-                <p className="text-gray-700 mb-6">
+              <div className="mt-12 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">¿Qué son los Eventos Puente?</h3>
+                <p className="text-gray-700 dark:text-gray-300 mb-6">
                   Los Eventos Puente son encuentros diseñados para conectar personas de diferentes capas económicas,
                   facilitando el diálogo, la comprensión mutua y el aprendizaje intercultural entre paradigmas
                   económicos.
@@ -508,22 +508,22 @@ export default function HybridEventsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="text-center">
                     <div className="text-4xl mb-3">🤝</div>
-                    <h4 className="font-bold mb-2">Conexión</h4>
-                    <p className="text-sm text-gray-600">
+                    <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">Conexión</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       Conoce personas con perspectivas económicas diferentes
                     </p>
                   </div>
                   <div className="text-center">
                     <div className="text-4xl mb-3">📚</div>
-                    <h4 className="font-bold mb-2">Aprendizaje</h4>
-                    <p className="text-sm text-gray-600">
+                    <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">Aprendizaje</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       Comprende cómo funcionan otras capas económicas
                     </p>
                   </div>
                   <div className="text-center">
                     <div className="text-4xl mb-3">🌱</div>
-                    <h4 className="font-bold mb-2">Evolución</h4>
-                    <p className="text-sm text-gray-600">
+                    <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">Evolución</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       Facilita transiciones suaves entre paradigmas
                     </p>
                   </div>
@@ -535,28 +535,28 @@ export default function HybridEventsPage() {
 
         {/* Create Event Modal */}
         {showCreateEventModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-            <div className="bg-white rounded-lg max-w-2xl w-full p-8 my-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Crear Evento Puente</h3>
+          <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center p-4 z-50 overflow-y-auto">
+            <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full p-8 my-8">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Crear Evento Puente</h3>
 
               <div className="space-y-4 mb-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Nombre del Evento</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Nombre del Evento</label>
                   <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-pink-500 dark:focus:ring-pink-400 focus:border-pink-500"
                     placeholder="Ej: Diálogo entre Capas Económicas"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Descripción</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Descripción</label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-pink-500 dark:focus:ring-pink-400 focus:border-pink-500"
                     rows={4}
                     placeholder="Describe el propósito y actividades del evento"
                   />
@@ -564,17 +564,17 @@ export default function HybridEventsPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Fecha y Hora</label>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Fecha y Hora</label>
                     <input
                       type="datetime-local"
                       value={formData.date}
                       onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-pink-500 dark:focus:ring-pink-400 focus:border-pink-500"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                       Máx. Asistentes (opcional)
                     </label>
                     <input
@@ -586,7 +586,7 @@ export default function HybridEventsPage() {
                           maxAttendees: e.target.value ? parseInt(e.target.value) : undefined,
                         })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-pink-500 dark:focus:ring-pink-400 focus:border-pink-500"
                       placeholder="Sin límite"
                       min="1"
                     />
@@ -594,18 +594,18 @@ export default function HybridEventsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Ubicación (opcional)</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Ubicación (opcional)</label>
                   <input
                     type="text"
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-pink-500 dark:focus:ring-pink-400 focus:border-pink-500"
                     placeholder="Ej: Centro Comunitario, Calle Principal 123"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
                     Capas Económicas Objetivo
                   </label>
                   <div className="grid grid-cols-2 gap-3">
@@ -618,7 +618,7 @@ export default function HybridEventsPage() {
                           className={`px-4 py-3 rounded-lg font-semibold transition-all ${
                             formData.targetLayers.includes(layer)
                               ? `bg-gradient-to-r ${layerColors[layer]} text-white`
-                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                              : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                           }`}
                         >
                           {layerEmojis[layer]} {layerNames[layer]}
@@ -626,7 +626,7 @@ export default function HybridEventsPage() {
                       )
                     )}
                   </div>
-                  <p className="text-xs text-gray-500 mt-2">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                     Selecciona las capas que quieres conectar (al menos 2)
                   </p>
                 </div>
@@ -638,7 +638,7 @@ export default function HybridEventsPage() {
                     setShowCreateEventModal(false);
                     resetForm();
                   }}
-                  className="flex-1 py-3 px-4 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-semibold"
+                  className="flex-1 py-3 px-4 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-semibold"
                 >
                   Cancelar
                 </button>
@@ -651,7 +651,7 @@ export default function HybridEventsPage() {
                     !formData.date ||
                     formData.targetLayers.length < 2
                   }
-                  className="flex-1 py-3 px-4 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-lg hover:from-pink-700 hover:to-purple-700 transition-colors font-semibold disabled:opacity-50"
+                  className="flex-1 py-3 px-4 bg-gradient-to-r from-pink-600 to-purple-600 dark:from-pink-700 dark:to-purple-700 text-white rounded-lg hover:from-pink-700 hover:to-purple-700 dark:hover:from-pink-600 dark:hover:to-purple-600 transition-colors font-semibold disabled:opacity-50"
                 >
                   {createEventMutation.isPending ? 'Creando...' : '🌉 Crear Evento'}
                 </button>
@@ -664,4 +664,4 @@ export default function HybridEventsPage() {
   );
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

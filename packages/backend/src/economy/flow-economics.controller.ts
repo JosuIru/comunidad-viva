@@ -11,21 +11,19 @@ import { CreditReason, PoolType, RequestStatus, UserRole } from '@prisma/client'
 export class FlowEconomicsController {
   constructor(private flowEconomicsService: FlowEconomicsService) {}
 
-  @ApiOperation({ summary: 'Get economic metrics and system health (admin only)' })
+  @ApiOperation({ summary: 'Get economic metrics and system health' })
   @ApiResponse({ status: 200, description: 'Returns economic metrics' })
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard)
   @Get('metrics')
   async getMetrics() {
     return this.flowEconomicsService.getEconomicMetrics();
   }
 
-  @ApiOperation({ summary: 'Get Gini Index (economic equality measure) (admin only)' })
+  @ApiOperation({ summary: 'Get Gini Index (economic equality measure)' })
   @ApiResponse({ status: 200, description: 'Returns Gini index (0 = perfect equality, 1 = perfect inequality)' })
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard)
   @Get('gini')
   async getGiniIndex() {
     const gini = await this.flowEconomicsService.calculateGiniIndex();

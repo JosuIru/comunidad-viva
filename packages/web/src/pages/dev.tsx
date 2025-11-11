@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Head from 'next/head';
+import { getI18nProps } from '@/lib/i18n';
 
 interface SeedResponse {
   success: boolean;
@@ -81,7 +82,7 @@ export default function DevPage() {
   return (
     <>
       <Head>
-        <title>Developer Tools - Comunidad Viva</title>
+        <title>Developer Tools - Truk</title>
       </Head>
 
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '40px 20px' }}>
@@ -284,3 +285,5 @@ export default function DevPage() {
     </>
   );
 }
+
+export const getStaticProps = async (context: any) => getI18nProps(context);

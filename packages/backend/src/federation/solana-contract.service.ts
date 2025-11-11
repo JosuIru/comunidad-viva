@@ -7,9 +7,10 @@ import {
   SystemProgram,
   LAMPORTS_PER_SOL,
 } from '@solana/web3.js';
-import {
-  TOKEN_PROGRAM_ID,
-} from '@solana/spl-token';
+
+// Solana SPL Token Program ID (well-known constant)
+// This avoids dependency on @solana/spl-token package which has security vulnerabilities
+const TOKEN_PROGRAM_ID = new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
 
 /**
  * Solana Contract Service

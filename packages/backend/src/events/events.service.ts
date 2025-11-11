@@ -57,10 +57,14 @@ export class EventsService {
   async findAll(params?: {
     upcoming?: boolean;
     category?: string;
+    communityId?: string;
     limit?: number;
     offset?: number;
+    nearLat?: number;
+    nearLng?: number;
+    maxDistance?: number;
   }) {
-    const { upcoming = true, category, limit = 20, offset = 0 } = params || {};
+    const { upcoming = true, category, communityId, limit = 20, offset = 0, nearLat, nearLng, maxDistance } = params || {};
 
     const where: any = {};
 
@@ -72,34 +76,93 @@ export class EventsService {
       where.category = category;
     }
 
-    const [events, total] = await Promise.all([
-      this.prisma.event.findMany({
-        where,
-        include: {
-          organizer: {
-            select: { id: true, name: true, avatar: true },
-          },
-          attendees: {
-            include: {
-              user: {
-                select: { id: true, name: true, avatar: true },
-              },
-            },
-          },
-          _count: {
-            select: {
-              attendees: true,
+    if (communityId) {
+      where.communityId = communityId;
+    }
+
+    let events = await this.prisma.event.findMany({
+      where,
+      select: {
+        id: true,
+        offerId: true,
+        organizerId: true,
+        communityId: true,
+        title: true,
+        description: true,
+        image: true,
+        lat: true,
+        lng: true,
+        address: true,
+        startsAt: true,
+        endsAt: true,
+        capacity: true,
+        creditsReward: true,
+        tags: true,
+        type: true,
+        requirements: true,
+        status: true,
+        qrCode: true,
+        createdAt: true,
+        updatedAt: true,
+        organizer: {
+          select: { id: true, name: true, avatar: true },
+        },
+        attendees: {
+          select: {
+            id: true,
+            userId: true,
+            registeredAt: true,
+            checkedInAt: true,
+            user: {
+              select: { id: true, name: true, avatar: true },
             },
           },
         },
-        orderBy: { startsAt: 'asc' },
-        take: limit,
-        skip: offset,
-      }),
-      this.prisma.event.count({ where }),
-    ]);
+        _count: {
+          select: {
+            attendees: true,
+          },
+        },
+      },
+      orderBy: { startsAt: 'asc' },
+    });
 
-    return { events, total, limit, offset };
+    // Apply proximity filter if coordinates and distance are provided
+    if (nearLat && nearLng && maxDistance && maxDistance > 0) {
+      events = events.filter((event) => {
+        if (!event.lat || !event.lng) return false;
+
+        const distance = this.calculateDistance(nearLat, nearLng, event.lat, event.lng);
+        return distance <= maxDistance;
+      });
+    }
+
+    // Apply pagination after proximity filtering
+    const total = events.length;
+    const paginatedEvents = events.slice(offset, offset + limit);
+
+    return { events: paginatedEvents, total, limit, offset };
+  }
+
+  /**
+   * Calculate distance between two coordinates using Haversine formula
+   */
+  private calculateDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
+    const R = 6371; // Earth's radius in km
+    const dLat = this.toRadians(lat2 - lat1);
+    const dLng = this.toRadians(lng2 - lng1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.toRadians(lat1)) *
+        Math.cos(this.toRadians(lat2)) *
+        Math.sin(dLng / 2) *
+        Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  private toRadians(degrees: number): number {
+    return degrees * (Math.PI / 180);
   }
 
   /**

@@ -2,7 +2,7 @@
 
 ## Medidas de Seguridad Implementadas
 
-Este documento describe las medidas de seguridad implementadas en Comunidad Viva para proteger la plataforma y los datos de los usuarios.
+Este documento describe las medidas de seguridad implementadas en Truk para proteger la plataforma y los datos de los usuarios.
 
 ---
 

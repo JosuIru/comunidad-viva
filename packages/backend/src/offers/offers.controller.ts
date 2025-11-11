@@ -1,6 +1,10 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards, Request } from '@nestjs/common';
 import { OffersService } from './offers.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { EmailVerifiedGuard } from '../auth/guards/email-verified.guard';
+import { OwnershipGuard } from '../common/guards/ownership.guard';
+import { RequireEmailVerification } from '../common/decorators/require-email-verification.decorator';
+import { CheckOwnership } from '../common/decorators/check-ownership.decorator';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { CreateOfferDto } from './dto/create-offer.dto';
 import { UpdateOfferDto } from './dto/update-offer.dto';
@@ -38,8 +42,10 @@ export class OffersController {
   @ApiOperation({ summary: 'Create new offer' })
   @ApiResponse({ status: 201, description: 'Offer created successfully' })
   @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 403, description: 'Email not verified' })
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @RequireEmailVerification()
+  @UseGuards(JwtAuthGuard, EmailVerifiedGuard)
   @Post()
   async create(@Request() req, @Body() createOfferDto: CreateOfferDto) {
     return this.offersService.create(req.user.userId, createOfferDto);
@@ -48,8 +54,10 @@ export class OffersController {
   @ApiOperation({ summary: 'Update offer' })
   @ApiResponse({ status: 200, description: 'Offer updated successfully' })
   @ApiResponse({ status: 404, description: 'Offer not found' })
+  @ApiResponse({ status: 403, description: 'Not authorized to update this offer' })
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, OwnershipGuard)
+  @CheckOwnership('offer')
   @Put(':id')
   async update(@Param('id') id: string, @Request() req, @Body() updateOfferDto: UpdateOfferDto) {
     return this.offersService.update(id, req.user.userId, updateOfferDto);
@@ -58,8 +66,10 @@ export class OffersController {
   @ApiOperation({ summary: 'Delete offer' })
   @ApiResponse({ status: 200, description: 'Offer deleted successfully' })
   @ApiResponse({ status: 404, description: 'Offer not found' })
+  @ApiResponse({ status: 403, description: 'Not authorized to delete this offer' })
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, OwnershipGuard)
+  @CheckOwnership('offer')
   @Delete(':id')
   async delete(@Param('id') id: string, @Request() req) {
     return this.offersService.delete(id, req.user.userId);

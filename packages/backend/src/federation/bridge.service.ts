@@ -1,7 +1,8 @@
-import { Injectable, Logger, BadRequestException } from '@nestjs/common';
+import { Injectable, Logger, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { SemillaService } from './semilla.service';
 import { DIDService } from './did.service';
+import { BridgeSecurityService } from './bridge-security.service';
 
 /**
  * Bridge Service
@@ -76,6 +77,7 @@ export class BridgeService {
     private prisma: PrismaService,
     private semillaService: SemillaService,
     private didService: DIDService,
+    private bridgeSecurity: BridgeSecurityService,
   ) {}
 
   /**
@@ -87,6 +89,20 @@ export class BridgeService {
     targetChain: BridgeChain,
     externalAddress: string,
   ): Promise<BridgeTransaction> {
+    // 🛡️ SECURITY CHECK - Run all security validations first
+    const securityCheck = await this.bridgeSecurity.checkBridgeAllowed(
+      userDID,
+      amount,
+      targetChain,
+      externalAddress,
+    );
+
+    if (!securityCheck.allowed) {
+      throw new ForbiddenException(
+        securityCheck.reason || 'Bridge transaction not allowed',
+      );
+    }
+
     // Validate chain support
     const chainConfig = this.CHAIN_CONFIG[targetChain];
     if (!chainConfig) {

@@ -1,0 +1,64 @@
+import {
+  Injectable,
+  NestInterceptor,
+  ExecutionContext,
+  CallHandler,
+  Logger,
+} from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
+import { Request } from 'express';
+
+@Injectable()
+export class LoggingInterceptor implements NestInterceptor {
+  private readonly logger = new Logger('API');
+
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const request = context.switchToHttp().getRequest<Request>();
+    const { method, url, body, query, params } = request;
+    const userId = (request as any).user?.userId;
+    const startTime = Date.now();
+
+    // Log API call with context
+    const logContext = {
+      method,
+      url,
+      userId,
+      hasBody: !!Object.keys(body || {}).length,
+      hasQuery: !!Object.keys(query || {}).length,
+      hasParams: !!Object.keys(params || {}).length,
+    };
+
+    this.logger.debug(`API Call: ${method} ${url}`, JSON.stringify(logContext));
+
+    return next.handle().pipe(
+      tap(() => {
+        const duration = Date.now() - startTime;
+        this.logger.debug(
+          `API Success: ${method} ${url} completed in ${duration}ms`,
+          JSON.stringify({ ...logContext, duration })
+        );
+      }),
+      catchError((error) => {
+        const duration = Date.now() - startTime;
+
+        // Log error with full context
+        this.logger.error(
+          `API Error: ${method} ${url} failed after ${duration}ms`,
+          JSON.stringify({
+            ...logContext,
+            duration,
+            error: {
+              message: error.message,
+              status: error.status,
+              stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+            },
+          })
+        );
+
+        // Re-throw to let global exception filter handle it
+        throw error;
+      })
+    );
+  }
+}

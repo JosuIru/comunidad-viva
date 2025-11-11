@@ -10,9 +10,10 @@ import {
 } from '@ant-design/icons';
 import axios from 'axios';
 import SemillaBalance from './SemillaBalance';
-import FederatedFeed from './FederatedFeed';
-import CirculosParticipation from './CirculosParticipation';
-import ProofOfHelpCard from './ProofOfHelpCard';
+// TODO: Implement these components
+// import FederatedFeed from './FederatedFeed';
+// import CirculosParticipation from './CirculosParticipation';
+// import ProofOfHelpCard from './ProofOfHelpCard';
 
 const { TabPane } = Tabs;
 
@@ -182,7 +183,7 @@ const EcosystemDashboard: React.FC = () => {
       </Card>
 
       {/* Main Content Tabs */}
-      <Tabs defaultActiveKey="feed" size="large">
+      <Tabs defaultActiveKey="semilla" size="large">
         <TabPane
           tab={
             <span>
@@ -191,7 +192,9 @@ const EcosystemDashboard: React.FC = () => {
           }
           key="feed"
         >
-          <FederatedFeed />
+          <div style={{ padding: '24px', textAlign: 'center' }}>
+            <p>Feed federado - Próximamente</p>
+          </div>
         </TabPane>
 
         <TabPane
@@ -213,7 +216,9 @@ const EcosystemDashboard: React.FC = () => {
           }
           key="circulos"
         >
-          <CirculosParticipation />
+          <div style={{ padding: '24px', textAlign: 'center' }}>
+            <p>Círculos de Conciencia - Próximamente</p>
+          </div>
         </TabPane>
 
         <TabPane
@@ -224,7 +229,9 @@ const EcosystemDashboard: React.FC = () => {
           }
           key="poh"
         >
-          <ProofOfHelpCard />
+          <div style={{ padding: '24px', textAlign: 'center' }}>
+            <p>Proof-of-Help - Próximamente</p>
+          </div>
         </TabPane>
       </Tabs>
 

@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { useTranslations } from 'next-intl';
+import { CubeIcon, MapPinIcon, ClockIcon } from '@heroicons/react/24/outline';
 
 interface GroupBuyCardProps {
   groupBuy: any;
@@ -11,6 +13,7 @@ interface GroupBuyCardProps {
 }
 
 export default function GroupBuyCard({ groupBuy, onJoin, onViewDetails }: GroupBuyCardProps) {
+  const t = useTranslations('groupBuyCard');
   const deadline = new Date(groupBuy.deadline);
   const timeLeft = formatDistanceToNow(deadline, { locale: es });
   const progressPercent = (groupBuy.currentParticipants / groupBuy.minParticipants) * 100;
@@ -37,12 +40,12 @@ export default function GroupBuyCard({ groupBuy, onJoin, onViewDetails }: GroupB
           {/* Status badge */}
           {isActive && (
             <span className="px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-              ¡Activa!
+              {t('status.active')}
             </span>
           )}
           {isFull && (
             <span className="px-3 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full">
-              Llena
+              {t('status.full')}
             </span>
           )}
         </div>
@@ -58,7 +61,7 @@ export default function GroupBuyCard({ groupBuy, onJoin, onViewDetails }: GroupB
         <div className="mb-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-gray-600">
-              {groupBuy.currentParticipants} / {groupBuy.minParticipants} participantes mínimos
+              {groupBuy.currentParticipants} / {groupBuy.minParticipants} {t('minParticipants')}
             </span>
             <span className="text-gray-900 font-medium">
               {Math.round(progressPercent)}%
@@ -73,7 +76,7 @@ export default function GroupBuyCard({ groupBuy, onJoin, onViewDetails }: GroupB
             ></div>
           </div>
           <p className="text-xs text-gray-500 mt-1">
-            Máximo: {groupBuy.maxParticipants} personas
+            {t('maxParticipants', { max: groupBuy.maxParticipants })}
           </p>
         </div>
 
@@ -82,22 +85,22 @@ export default function GroupBuyCard({ groupBuy, onJoin, onViewDetails }: GroupB
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-blue-900">
-                Precio actual: {groupBuy.currentTier?.pricePerUnit}€/ud
+                {t('currentPrice', { price: groupBuy.currentTier?.pricePerUnit })}
               </p>
               {groupBuy.currentTier?.savings > 0 && (
                 <p className="text-xs text-blue-700">
-                  {groupBuy.currentTier.savings}% de ahorro
+                  {t('savings', { percent: groupBuy.currentTier.savings })}
                 </p>
               )}
             </div>
             {groupBuy.nextTier && (
               <div className="text-right">
-                <p className="text-xs text-blue-700">Siguiente nivel:</p>
+                <p className="text-xs text-blue-700">{t('nextLevel')}</p>
                 <p className="text-sm font-bold text-blue-900">
                   {groupBuy.nextTier.pricePerUnit}€/ud
                 </p>
                 <p className="text-xs text-blue-600">
-                  ({groupBuy.nextTier.minQuantity - groupBuy.totalQuantity} uds más)
+                  {t('moreUnits', { units: groupBuy.nextTier.minQuantity - groupBuy.totalQuantity })}
                 </p>
               </div>
             )}
@@ -108,7 +111,7 @@ export default function GroupBuyCard({ groupBuy, onJoin, onViewDetails }: GroupB
         {groupBuy.priceBreaks && groupBuy.priceBreaks.length > 0 && (
           <div className="mb-4">
             <p className="text-xs font-medium text-gray-700 mb-2">
-              Descuentos por volumen:
+              {t('volumeDiscounts')}
             </p>
             <div className="flex gap-2">
               {groupBuy.priceBreaks.map((tier: any, index: number) => {
@@ -123,7 +126,7 @@ export default function GroupBuyCard({ groupBuy, onJoin, onViewDetails }: GroupB
                     }`}
                   >
                     <p className="font-bold">{tier.pricePerUnit}€</p>
-                    <p className="text-[10px] opacity-90">{tier.minQuantity}+ uds</p>
+                    <p className="text-[10px] opacity-90">{t('unitsOrMore', { units: tier.minQuantity })}</p>
                   </div>
                 );
               })}
@@ -134,16 +137,16 @@ export default function GroupBuyCard({ groupBuy, onJoin, onViewDetails }: GroupB
         {/* Location & deadline */}
         <div className="flex flex-wrap gap-3 text-xs text-gray-600 mb-4">
           <span className="flex items-center gap-1">
-            <span>📦</span>
-            {groupBuy.totalQuantity || 0} unidades pedidas
+            <CubeIcon className="w-4 h-4" />
+            {groupBuy.totalQuantity || 0} {t('unitsOrdered')}
           </span>
           <span className="flex items-center gap-1">
-            <span>📍</span>
-            Recogida: {groupBuy.pickupAddress}
+            <MapPinIcon className="w-4 h-4" />
+            {t('pickup', { location: groupBuy.pickupAddress })}
           </span>
           <span className="flex items-center gap-1">
-            <span>⏰</span>
-            Cierra en {timeLeft}
+            <ClockIcon className="w-4 h-4" />
+            {t('closesIn', { time: timeLeft })}
           </span>
         </div>
 
@@ -153,14 +156,14 @@ export default function GroupBuyCard({ groupBuy, onJoin, onViewDetails }: GroupB
             onClick={() => onViewDetails?.(groupBuy.id)}
             className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
           >
-            Ver detalles
+            {t('buttons.viewDetails')}
           </button>
           {!isFull && (
             <button
               onClick={() => onJoin?.(groupBuy.id)}
               className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
             >
-              Unirme
+              {t('buttons.join')}
             </button>
           )}
         </div>

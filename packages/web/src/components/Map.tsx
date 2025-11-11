@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { useTranslations } from 'next-intl';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { isValidImageSrc, handleImageError } from '@/lib/imageUtils';
 
 // Fix for default marker icons in Next.js
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -60,6 +62,20 @@ function ChangeView({ center, zoom }: { center: [number, number]; zoom: number }
   return null;
 }
 
+function ScrollWheelHandler({ enabled }: { enabled: boolean }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (enabled) {
+      map.scrollWheelZoom.enable();
+    } else {
+      map.scrollWheelZoom.disable();
+    }
+  }, [enabled, map]);
+
+  return null;
+}
+
 export default function Map({
   center = [42.8125, -1.6458], // Navarra (Pamplona)
   zoom = 13,
@@ -67,32 +83,75 @@ export default function Map({
   height = '500px',
   onPinClick,
 }: MapProps) {
+  const t = useTranslations('map');
   const [mounted, setMounted] = useState(false);
+  const [scrollEnabled, setScrollEnabled] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Detect clicks outside the map
+  useEffect(() => {
+    if (!scrollEnabled) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const mapContainer = document.querySelector('.leaflet-container');
+      if (mapContainer && !mapContainer.contains(e.target as Node)) {
+        setScrollEnabled(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [scrollEnabled]);
+
   if (!mounted) {
     return (
       <div
-        className="bg-gray-200 rounded-lg flex items-center justify-center"
+        className="bg-gray-200 dark:bg-gray-800 rounded-lg flex items-center justify-center"
         style={{ height }}
       >
-        <div className="text-gray-600">Cargando mapa...</div>
+        <div className="text-gray-600 dark:text-gray-400">{t('loading')}</div>
       </div>
     );
   }
 
   return (
-    <div className="rounded-lg overflow-hidden shadow-lg" style={{ height }}>
+    <div
+      className="relative z-0 rounded-lg overflow-hidden shadow-lg"
+      style={{ height }}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
+      {/* Overlay cuando el scroll está desactivado */}
+      {!scrollEnabled && isHovering && (
+        <div
+          className="absolute inset-0 z-[1000] flex items-center justify-center pointer-events-none"
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
+        >
+          <div className="bg-black/70 text-white px-4 py-2 rounded-lg text-sm font-medium">
+            {t('clickToEnableScroll')}
+          </div>
+        </div>
+      )}
+
       <MapContainer
         center={center}
         zoom={zoom}
-        style={{ height: '100%', width: '100%' }}
-        scrollWheelZoom={true}
+        style={{ height: '100%', width: '100%', zIndex: 1 }}
+        scrollWheelZoom={false}
+        whenReady={(map) => {
+          map.target.on('click', () => {
+            setScrollEnabled(true);
+          });
+        }}
       >
         <ChangeView center={center} zoom={zoom} />
+        <ScrollWheelHandler enabled={scrollEnabled} />
 
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -113,32 +172,29 @@ export default function Map({
             }}
           >
             <Popup maxWidth={300} minWidth={250}>
-              <div className="p-2">
-                {pin.image && (
+              <div className="p-2 dark:bg-gray-800">
+                {isValidImageSrc(pin.image) && (
                   <div className="mb-2">
                     <img
                       src={pin.image}
                       alt={pin.title}
                       className="w-full h-32 object-cover rounded"
                       style={{ maxWidth: '100%', display: 'block' }}
-                      onError={(e) => {
-                        console.error('Error loading image:', pin.image);
-                        (e.target as HTMLImageElement).style.display = 'none';
-                      }}
+                      onError={handleImageError}
                     />
                   </div>
                 )}
-                <h3 className="font-semibold text-gray-900 mb-1">{pin.title}</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">{pin.title}</h3>
                 {pin.description && (
-                  <p className="text-sm text-gray-600 mb-2">{pin.description}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{pin.description}</p>
                 )}
                 {pin.link && (
                   <a
                     href={pin.link}
-                    className="text-sm text-green-600 hover:underline inline-block"
+                    className="text-sm text-green-600 dark:text-green-400 hover:underline inline-block"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    Ver detalles →
+                    {t('viewDetails')}
                   </a>
                 )}
               </div>

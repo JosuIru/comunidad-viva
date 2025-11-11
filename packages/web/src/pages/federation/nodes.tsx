@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
+import { getI18nProps } from '@/lib/i18n';
 import {
   ServerIcon,
   GlobeAltIcon,
@@ -411,3 +412,5 @@ export default function NodesNetwork() {
     </Layout>
   );
 }
+
+export const getStaticProps = async (context: any) => getI18nProps(context);

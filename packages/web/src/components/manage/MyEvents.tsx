@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import { AcademicCapIcon, SparklesIcon, TrophyIcon, TicketIcon, CalendarIcon, CheckIcon } from '@heroicons/react/24/outline';
 
 interface Event {
   id: string;
@@ -57,14 +58,14 @@ export default function MyEvents() {
   };
 
   const getTypeIcon = (type: string) => {
-    const icons: { [key: string]: string } = {
-      WORKSHOP: '🎓',
-      SOCIAL: '🎉',
-      SPORT: '⚽',
-      CULTURAL: '🎭',
-      OTHER: '📅',
+    const iconComponents: { [key: string]: JSX.Element } = {
+      WORKSHOP: <AcademicCapIcon className="h-8 w-8" />,
+      SOCIAL: <SparklesIcon className="h-8 w-8" />,
+      SPORT: <TrophyIcon className="h-8 w-8" />,
+      CULTURAL: <TicketIcon className="h-8 w-8" />,
+      OTHER: <CalendarIcon className="h-8 w-8" />,
     };
-    return icons[type] || '📅';
+    return iconComponents[type] || <CalendarIcon className="h-8 w-8" />;
   };
 
   if (isLoading) {
@@ -78,11 +79,13 @@ export default function MyEvents() {
   if (events.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="text-6xl mb-4">📅</div>
-        <h3 className="text-xl font-bold text-gray-900 mb-2">
+        <div className="flex justify-center mb-4">
+          <CalendarIcon className="h-24 w-24 text-gray-400" />
+        </div>
+        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
           No has creado eventos aún
         </h3>
-        <p className="text-gray-600 mb-6">
+        <p className="text-gray-600 dark:text-gray-400 mb-6">
           Organiza eventos para reunir a la comunidad
         </p>
         <Link
@@ -98,7 +101,7 @@ export default function MyEvents() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
           Mis Eventos ({events.length})
         </h2>
         <Link
@@ -117,41 +120,41 @@ export default function MyEvents() {
           return (
             <div
               key={event.id}
-              className={`bg-white border rounded-lg p-6 hover:shadow-md transition-shadow ${
-                isPast ? 'border-gray-200 opacity-75' : 'border-gray-200'
+              className={`bg-white dark:bg-gray-800 border rounded-lg p-6 hover:shadow-md transition-shadow ${
+                isPast ? 'border-gray-200 dark:border-gray-700 opacity-75' : 'border-gray-200 dark:border-gray-700'
               }`}
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="text-3xl">{getTypeIcon(event.type)}</span>
+                    <div className="text-gray-600 dark:text-gray-400">{getTypeIcon(event.type)}</div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                         {event.title}
                       </h3>
                       <div className="flex items-center gap-2 mt-1">
                         {isPast && (
-                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300">
                             Finalizado
                           </span>
                         )}
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
                           {event.category}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  <p className="text-gray-600 mb-4">{event.description}</p>
+                  <p className="text-gray-600 dark:text-gray-400 mb-4">{event.description}</p>
 
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-                    <div className="flex items-center gap-2 text-gray-600">
+                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                       {new Date(event.startsAt).toLocaleString()}
                     </div>
-                    <div className="flex items-center gap-2 text-gray-600">
+                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -209,14 +212,14 @@ export default function MyEvents() {
       {/* Attendees Modal */}
       {showAttendeesModal && selectedEvent && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-              <h3 className="text-xl font-bold text-gray-900">
+          <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                 Asistentes ({selectedEvent.attendees.length})
               </h3>
               <button
                 onClick={() => setShowAttendeesModal(false)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -226,7 +229,7 @@ export default function MyEvents() {
 
             <div className="p-6">
               {selectedEvent.attendees.length === 0 ? (
-                <p className="text-center text-gray-500 py-8">
+                <p className="text-center text-gray-500 dark:text-gray-400 py-8">
                   Aún no hay personas registradas en este evento
                 </p>
               ) : (
@@ -234,18 +237,18 @@ export default function MyEvents() {
                   {selectedEvent.attendees.map(({ user, checkedInAt }) => (
                     <div
                       key={user.id}
-                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                      className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
                     >
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center text-white font-bold">
                           {user.name?.charAt(0).toUpperCase() || '?'}
                         </div>
                         <div>
-                          <div className="font-semibold text-gray-900">{user.name}</div>
-                          <div className="text-sm text-gray-600">
+                          <div className="font-semibold text-gray-900 dark:text-gray-100">{user.name}</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">
                             {checkedInAt ? (
-                              <span className="text-green-600">
-                                ✓ Asistió {new Date(checkedInAt).toLocaleString()}
+                              <span className="text-green-600 flex items-center gap-1">
+                                <CheckIcon className="h-4 w-4" /> Asistió {new Date(checkedInAt).toLocaleString()}
                               </span>
                             ) : (
                               <span className="text-gray-500">Registrado</span>

@@ -582,6 +582,10 @@ export class HybridLayerService {
       },
     });
 
+    if (!user) {
+      throw new BadRequestException('Usuario no encontrado');
+    }
+
     return {
       ...user,
       layer: user.economicLayer,

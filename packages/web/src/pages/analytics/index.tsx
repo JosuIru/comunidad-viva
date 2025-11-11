@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
+import { getI18nProps } from '@/lib/i18n';
 import {
   ChartBarIcon,
   UsersIcon,
   CurrencyDollarIcon,
-  TrendingUpIcon,
+  ArrowTrendingUpIcon,
   ArrowDownTrayIcon,
   CalendarIcon,
   GlobeAltIcon,
@@ -162,7 +163,7 @@ export default function AnalyticsDashboard() {
             </button>
           </div>
           <p className="text-gray-600 dark:text-gray-400">
-            Métricas e insights de la comunidad
+            Mï¿½tricas e insights de la comunidad
           </p>
         </div>
 
@@ -185,7 +186,7 @@ export default function AnalyticsDashboard() {
                     : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
-                Última Semana
+                ï¿½ltima Semana
               </button>
               <button
                 onClick={() => handleDateRangeChange('month')}
@@ -195,7 +196,7 @@ export default function AnalyticsDashboard() {
                     : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
-                Último Mes
+                ï¿½ltimo Mes
               </button>
               <button
                 onClick={() => handleDateRangeChange('year')}
@@ -205,7 +206,7 @@ export default function AnalyticsDashboard() {
                     : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
-                Último Año
+                ï¿½ltimo Aï¿½o
               </button>
             </div>
 
@@ -216,7 +217,7 @@ export default function AnalyticsDashboard() {
                 onChange={(e) => setStartDate(e.target.value)}
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
               />
-              <span className="self-center text-gray-500">’</span>
+              <span className="self-center text-gray-500">ï¿½</span>
               <input
                 type="date"
                 value={endDate}
@@ -260,7 +261,7 @@ export default function AnalyticsDashboard() {
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="bg-green-500 w-12 h-12 rounded-lg flex items-center justify-center">
-                    <TrendingUpIcon className="h-6 w-6 text-white" />
+                    <ArrowTrendingUpIcon className="h-6 w-6 text-white" />
                   </div>
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
@@ -270,7 +271,7 @@ export default function AnalyticsDashboard() {
                   {metrics.totalTransactions.toLocaleString()}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                  En el período seleccionado
+                  En el perï¿½odo seleccionado
                 </p>
               </div>
 
@@ -282,7 +283,7 @@ export default function AnalyticsDashboard() {
                   </div>
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
-                  Créditos Circulados
+                  Crï¿½ditos Circulados
                 </p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white">
                   {metrics.totalCreditsCirculated.toLocaleString()}
@@ -306,7 +307,7 @@ export default function AnalyticsDashboard() {
                   {metrics.communityEngagement.toFixed(0)}%
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                  Retención: {metrics.retentionRate.toFixed(0)}%
+                  Retenciï¿½n: {metrics.retentionRate.toFixed(0)}%
                 </p>
               </div>
             </div>
@@ -323,7 +324,7 @@ export default function AnalyticsDashboard() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                        <span className="text-xl">=æ</span>
+                        <span className="text-xl">=ï¿½</span>
                       </div>
                       <div>
                         <p className="text-sm font-medium text-gray-900 dark:text-white">
@@ -342,7 +343,7 @@ export default function AnalyticsDashboard() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
-                        <span className="text-xl">=Å</span>
+                        <span className="text-xl">=ï¿½</span>
                       </div>
                       <div>
                         <p className="text-sm font-medium text-gray-900 dark:text-white">
@@ -387,7 +388,7 @@ export default function AnalyticsDashboard() {
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm text-gray-600 dark:text-gray-400">
-                        Tasa de Retención
+                        Tasa de Retenciï¿½n
                       </span>
                       <span className="text-sm font-semibold text-gray-900 dark:text-white">
                         {metrics.retentionRate.toFixed(1)}%
@@ -482,27 +483,27 @@ export default function AnalyticsDashboard() {
             {/* Insights Box */}
             <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900 dark:to-purple-900 dark:bg-opacity-20 rounded-lg p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                =¡ Insights Clave
+                =ï¿½ Insights Clave
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
                   <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-2">
-                    =È Crecimiento
+                    =ï¿½ Crecimiento
                   </h4>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
                     {metrics.growthRate > 10
-                      ? 'La comunidad está creciendo rápidamente. Considera expandir recursos.'
-                      : 'Crecimiento estable. Enfócate en retención y engagement.'}
+                      ? 'La comunidad estï¿½ creciendo rï¿½pidamente. Considera expandir recursos.'
+                      : 'Crecimiento estable. Enfï¿½cate en retenciï¿½n y engagement.'}
                   </p>
                 </div>
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
                   <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-2">
-                    =° Economía
+                    =ï¿½ Economï¿½a
                   </h4>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
                     {metrics.averageCreditsPerUser > 100
-                      ? 'Alta circulación de créditos. La economía es saludable.'
-                      : 'Considera incentivar más transacciones para mejorar la economía.'}
+                      ? 'Alta circulaciï¿½n de crï¿½ditos. La economï¿½a es saludable.'
+                      : 'Considera incentivar mï¿½s transacciones para mejorar la economï¿½a.'}
                   </p>
                 </div>
               </div>
@@ -515,7 +516,7 @@ export default function AnalyticsDashboard() {
               No hay datos disponibles
             </h3>
             <p className="mt-2 text-gray-600 dark:text-gray-400">
-              Selecciona un rango de fechas para ver las métricas
+              Selecciona un rango de fechas para ver las mï¿½tricas
             </p>
           </div>
         )}
@@ -523,3 +524,5 @@ export default function AnalyticsDashboard() {
     </Layout>
   );
 }
+
+export const getStaticProps = async (context: any) => getI18nProps(context);

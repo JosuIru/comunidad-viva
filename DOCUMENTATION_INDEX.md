@@ -453,14 +453,14 @@ Contiene toda la filosofía y descripción detallada de funcionalidades.
 
 **Formato APA:**
 ```
-Comunidad Viva Contributors. (2025). Comunidad Viva: Plataforma de Economía
+Truk Contributors. (2025). Truk: Plataforma de Economía
 Solidaria y Transformación Social - Whitepaper Técnico v1.0.
 https://github.com/comunidad-viva
 ```
 
 **Formato IEEE:**
 ```
-Comunidad Viva Contributors, "Comunidad Viva: Plataforma de Economía Solidaria
+Truk Contributors, "Truk: Plataforma de Economía Solidaria
 y Transformación Social - Whitepaper Técnico," Version 1.0, Jan. 2025.
 [Online]. Available: https://github.com/comunidad-viva
 ```
@@ -520,7 +520,7 @@ Esta documentación es el resultado de:
 
 **Última actualización**: Octubre 2025
 **Versión**: 1.2
-**Mantenido por**: Comunidad Viva Contributors
+**Mantenido por**: Truk Contributors
 
 ---
 

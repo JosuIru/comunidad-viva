@@ -1,6 +1,6 @@
 # Sistema de Roles y Permisos
 
-Este documento describe el sistema de autorización basado en roles implementado en Comunidad Viva.
+Este documento describe el sistema de autorización basado en roles implementado en Truk.
 
 ## Tabla de Contenidos
 

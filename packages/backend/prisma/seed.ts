@@ -29,7 +29,7 @@ async function main() {
         password: hashedPassword,
         name: 'María García',
         bio: 'Activista comunitaria, organizadora de eventos locales. Me encanta ayudar a los vecinos.',
-        avatar: 'https://i.pravatar.cc/150?img=1',
+        avatar: 'null',
         role: 'CITIZEN',
         lat: 42.9940,
         lng: -1.7217,
@@ -56,7 +56,7 @@ async function main() {
         password: hashedPassword,
         name: 'Juan Martínez',
         bio: 'Carpintero y manitas. Ofrezco reparaciones y clases de bricolaje.',
-        avatar: 'https://i.pravatar.cc/150?img=12',
+        avatar: 'null',
         role: 'CITIZEN',
         lat: 42.8931,
         lng: -1.6322,
@@ -83,7 +83,7 @@ async function main() {
         password: hashedPassword,
         name: 'Ana López',
         bio: 'Profesora de idiomas. Ofrezco clases de inglés y francés.',
-        avatar: 'https://i.pravatar.cc/150?img=5',
+        avatar: 'null',
         role: 'CITIZEN',
         lat: 42.9701,
         lng: -1.7545,
@@ -110,7 +110,7 @@ async function main() {
         password: hashedPassword,
         name: 'Tienda Eco Local',
         bio: 'Comercio de productos ecológicos y locales. Apoyamos la economía circular.',
-        avatar: 'https://i.pravatar.cc/150?img=20',
+        avatar: 'null',
         role: 'MERCHANT',
         lat: 42.8073,
         lng: -1.5397,
@@ -133,7 +133,7 @@ async function main() {
         password: hashedPassword,
         name: 'Carlos Ruiz',
         bio: 'Organizador de eventos comunitarios y talleres.',
-        avatar: 'https://i.pravatar.cc/150?img=8',
+        avatar: 'null',
         role: 'CITIZEN',
         lat: 42.9732,
         lng: -1.5205,
@@ -160,7 +160,7 @@ async function main() {
         password: hashedPassword,
         name: 'Kepa Etxeberria',
         bio: 'Artzaina eta gaztagintzailea. Gazta ekologikoa eta bertakoa ekoizten dut.',
-        avatar: 'https://i.pravatar.cc/150?img=14',
+        avatar: 'null',
         role: 'MERCHANT',
         lat: 42.85,
         lng: -2.05,
@@ -186,7 +186,7 @@ async function main() {
         password: hashedPassword,
         name: 'Javier Arana',
         bio: 'Agricultor ecológico. Verduras de temporada y cereales antiguos.',
-        avatar: 'https://i.pravatar.cc/150?img=33',
+        avatar: 'null',
         role: 'MERCHANT',
         lat: 42.55,
         lng: -1.75,
@@ -212,7 +212,7 @@ async function main() {
         password: hashedPassword,
         name: 'Mikel Zubiria',
         bio: 'Burdingintzailea. Tresna eta objektu artisauak egiten ditut burdinarekin.',
-        avatar: 'https://i.pravatar.cc/150?img=51',
+        avatar: 'null',
         role: 'CITIZEN',
         lat: 42.75,
         lng: -2.25,
@@ -238,7 +238,7 @@ async function main() {
         password: hashedPassword,
         name: 'Aitziber Landa',
         bio: 'Erlezaina. Eztia eta ezti-produktuak saltzen ditut.',
-        avatar: 'https://i.pravatar.cc/150?img=44',
+        avatar: 'null',
         role: 'MERCHANT',
         lat: 42.76,
         lng: -2.24,
@@ -326,7 +326,7 @@ async function main() {
     prisma.userBadge.create({
       data: {
         userId: users[0].id,
-        badgeType: 'ORGANIZER',
+        badgeType: 'ORGANIZER_20',
         metadata: { eventsOrganized: 15 },
       },
     }),
@@ -340,7 +340,7 @@ async function main() {
     prisma.userBadge.create({
       data: {
         userId: users[4].id,
-        badgeType: 'ORGANIZER',
+        badgeType: 'ORGANIZER_20',
         metadata: { eventsOrganized: 20 },
       },
     }),
@@ -387,63 +387,142 @@ async function main() {
   console.log('✓ Creadas conexiones');
 
   // ==========================================
+  // COMUNIDADES - MUST BE CREATED BEFORE OFFERS/EVENTS
+  // ==========================================
+  console.log('🏘️  Creando comunidades...');
+
+  const communities = await Promise.all([
+    // Comunidad 1: Barrio de Gracia (Pamplona) - OPEN
+    prisma.community.create({
+      data: {
+        slug: 'gracia-barcelona',
+        name: 'Barrio de Gracia',
+        description: 'Comunidad colaborativa de economía local en el corazón de Pamplona. Unidos para compartir recursos, conocimientos y crear una economía más humana.',
+        location: 'Pamplona, España',
+        lat: 42.8340,
+        lng: -1.6234,
+        radiusKm: 2.5,
+        type: 'NEIGHBORHOOD',
+        visibility: 'OPEN',
+        requiresApproval: false,
+        allowExternalOffers: true,
+        primaryColor: '#4CAF50',
+        language: 'es',
+        currency: 'EUR',
+        logo: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=200&h=200&fit=crop',
+        bannerImage: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=1200&h=400&fit=crop',
+      },
+    }),
+
+    // Comunidad 2: Bermeo (Bizkaia) - OPEN
+    prisma.community.create({
+      data: {
+        slug: 'bermeo',
+        name: 'Bermeo',
+        description: 'Herri honen bizilagun guztiak elkarlanean. Gure ekonomia lokala indartzeko eta harreman sozialak sendotzeko.',
+        location: 'Bermeo, Bizkaia',
+        lat: 43.4203,
+        lng: -2.7262,
+        radiusKm: 5,
+        type: 'VILLAGE',
+        visibility: 'OPEN',
+        requiresApproval: false,
+        allowExternalOffers: true,
+        primaryColor: '#FF5722',
+        language: 'eu',
+        currency: 'EUR',
+        logo: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=200&h=200&fit=crop',
+        bannerImage: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&h=400&fit=crop',
+      },
+    }),
+
+    // Comunidad 3: Cooperativa Sants - PRIVATE
+    prisma.community.create({
+      data: {
+        slug: 'coop-sants',
+        name: 'Cooperativa Sants',
+        description: 'Cooperativa de vivienda con economía interna solidaria. Sistema de intercambio de recursos y servicios entre socios.',
+        location: 'Sants, Pamplona',
+        lat: 42.7815,
+        lng: -1.6596,
+        radiusKm: 1,
+        type: 'CUSTOM',
+        visibility: 'PRIVATE',
+        requiresApproval: true,
+        allowExternalOffers: false,
+        primaryColor: '#9C27B0',
+        language: 'es',
+        currency: 'EUR',
+        logo: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=200&h=200&fit=crop',
+      },
+    }),
+
+    // Comunidad 4: Pamplona Centro - PUBLIC
+    prisma.community.create({
+      data: {
+        slug: 'madrid-centro',
+        name: 'Pamplona Centro',
+        description: 'Red de economía colaborativa en el centro de Pamplona. Conectando vecinos, comercios y organizaciones para un futuro más sostenible.',
+        location: 'Centro, Pamplona',
+        lat: 42.8521,
+        lng: -1.6527,
+        radiusKm: 3,
+        type: 'NEIGHBORHOOD',
+        visibility: 'PUBLIC',
+        requiresApproval: true,
+        allowExternalOffers: true,
+        primaryColor: '#FFC107',
+        language: 'es',
+        currency: 'EUR',
+        logo: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=200&h=200&fit=crop',
+        bannerImage: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=1200&h=400&fit=crop',
+      },
+    }),
+  ]);
+
+  console.log(`✓ Creadas ${communities.length} comunidades`);
+
+  // ==========================================
   // OFERTAS
   // ==========================================
   console.log('🛍️  Creando ofertas...');
 
   const offers = await Promise.all([
-    // Producto
+    // ========== PRODUCTOS ==========
+
+    // 1. Producto - Alimentación
     prisma.offer.create({
       data: {
-        userId: users[3].id,
+        userId: users[6].id, // Javier Arana - Agricultor
+        communityId: communities[3].id, // Pamplona Centro
         type: 'PRODUCT',
-        category: 'Alimentos',
-        title: 'Verduras ecológicas de temporada',
-        description: 'Verduras frescas cultivadas sin pesticidas. Disponibles: tomates, lechugas, calabacines.',
+        category: 'Alimentación',
+        title: 'Verduras ecológicas y cereales antiguos',
+        description: 'Verduras de temporada cultivadas sin químicos. Trigo sarraceno, espelta y otras variedades tradicionales de Navarra. Recogida en la finca o entrega en Pamplona.',
         images: ['https://images.unsplash.com/photo-1540420773420-3366772f4999'],
-        priceEur: 3.50,
-        priceCredits: 35,
-        stock: 20,
-        lat: users[3].lat,
-        lng: users[3].lng,
-        address: users[3].address,
-        tags: ['ecológico', 'local', 'temporada'],
+        priceEur: 4.50,
+        priceCredits: 45,
+        stock: 30,
+        lat: users[6].lat,
+        lng: users[6].lng,
+        address: users[6].address,
+        tags: ['verduras', 'ecológico', 'cereales', 'km0', 'navarra'],
         status: 'ACTIVE',
         featured: true,
-        views: 45,
-        interested: 12,
+        views: 35,
+        interested: 14,
       },
     }),
 
-    // Servicio
+    // 2. Producto - Alimentación (Queso)
     prisma.offer.create({
       data: {
-        userId: users[1].id,
-        type: 'SERVICE',
-        category: 'Reparación',
-        title: 'Reparación de muebles',
-        description: 'Arreglo todo tipo de muebles de madera. Restauración y barnizado.',
-        images: ['https://images.unsplash.com/photo-1556909114-f6e7ad7d3136'],
-        priceEur: 25,
-        priceCredits: 250,
-        lat: users[1].lat,
-        lng: users[1].lng,
-        address: users[1].address,
-        tags: ['reparación', 'carpintería', 'reciclaje'],
-        status: 'ACTIVE',
-        views: 30,
-        interested: 8,
-      },
-    }),
-
-    // Ofertas de Navarra - Queso de Andia
-    prisma.offer.create({
-      data: {
-        userId: users[5].id, // Kepa Etxeberria
+        userId: users[5].id, // Kepa Etxeberria - Quesero
+        communityId: communities[3].id, // Pamplona Centro
         type: 'PRODUCT',
-        category: 'Alimentos',
+        category: 'Alimentación',
         title: 'Gazta ekologikoa / Queso artesano de oveja',
-        description: 'Andiako ardiekin egindako gazta artisaua. 100% naturala eta ekologikoa. / Queso artesano elaborado con leche de ovejas de la Sierra de Andía.',
+        description: 'Queso artesano elaborado con leche de ovejas de la Sierra de Andía. 100% natural y ecológico. Curación de 6 meses.',
         images: ['https://images.unsplash.com/photo-1452195100486-9cc805987862'],
         priceEur: 12,
         priceCredits: 120,
@@ -459,40 +538,18 @@ async function main() {
       },
     }),
 
-    // Verduras de Valdizarbe
+    // 3. Producto - Alimentación (Miel)
     prisma.offer.create({
       data: {
-        userId: users[6].id, // Javier Arana
+        userId: users[8].id, // Aitziber Landa - Apicultora
+        communityId: communities[2].id, // Coop Sants
         type: 'PRODUCT',
-        category: 'Alimentos',
-        title: 'Verduras ecológicas y cereales antiguos',
-        description: 'Verduras de temporada cultivadas sin químicos. Trigo sarraceno, espelta y otras variedades tradicionales de Navarra.',
-        images: ['https://images.unsplash.com/photo-1518843875459-f738682238a6'],
-        priceEur: 4,
-        priceCredits: 40,
-        stock: 30,
-        lat: users[6].lat,
-        lng: users[6].lng,
-        address: users[6].address,
-        tags: ['verduras', 'ecológico', 'cereales', 'km0', 'navarra'],
-        status: 'ACTIVE',
-        featured: true,
-        views: 35,
-        interested: 14,
-      },
-    }),
-
-    // Miel de Améscoa
-    prisma.offer.create({
-      data: {
-        userId: users[8].id, // Aitziber Landa
-        type: 'PRODUCT',
-        category: 'Alimentos',
+        category: 'Alimentación',
         title: 'Eztia / Miel de montaña de Améscoa',
-        description: 'Ameskoako mendietako eztia. Ekoizpen artisaua eta ekologikoa. / Miel de flores de montaña del valle de Améscoa.',
+        description: 'Miel de flores de montaña del valle de Améscoa. Producción artesanal y ecológica. Tarro de 500g.',
         images: ['https://images.unsplash.com/photo-1587049352846-4a222e784443'],
-        priceEur: 8,
-        priceCredits: 80,
+        priceEur: 8.50,
+        priceCredits: 85,
         stock: 25,
         lat: users[8].lat,
         lng: users[8].lng,
@@ -505,14 +562,154 @@ async function main() {
       },
     }),
 
-    // Herrería artesana de Améscoa
+    // 4. Producto - Hogar
     prisma.offer.create({
       data: {
-        userId: users[7].id, // Mikel Zubiria
+        userId: users[0].id, // María García
+        communityId: communities[0].id, // Gracia-Barcelona
+        type: 'PRODUCT',
+        category: 'Hogar',
+        title: 'Muebles restaurados de segunda mano',
+        description: 'Mesa de madera maciza restaurada, ideal para comedor o cocina. Medidas: 140x80cm. Estado impecable.',
+        images: ['https://images.unsplash.com/photo-1556909114-f6e7ad7d3136'],
+        priceEur: 80,
+        priceCredits: 800,
+        stock: 1,
+        lat: users[0].lat,
+        lng: users[0].lng,
+        address: users[0].address,
+        tags: ['muebles', 'reciclaje', 'segunda-mano', 'sostenible'],
+        status: 'ACTIVE',
+        views: 22,
+        interested: 5,
+      },
+    }),
+
+    // 5. Producto - Electrónica
+    prisma.offer.create({
+      data: {
+        userId: users[2].id, // Ana López
+        communityId: communities[1].id, // Bermeo
+        type: 'PRODUCT',
+        category: 'Electrónica',
+        title: 'Portátil Lenovo ThinkPad renovado',
+        description: 'Portátil Lenovo ThinkPad T480 renovado. i5-8250U, 8GB RAM, SSD 256GB. Perfecto estado, batería nueva.',
+        images: ['https://images.unsplash.com/photo-1496181133206-80ce9b88a853'],
+        priceEur: 320,
+        priceCredits: 3200,
+        stock: 1,
+        lat: users[2].lat,
+        lng: users[2].lng,
+        address: users[2].address,
+        tags: ['electrónica', 'portátil', 'renovado', 'segunda-mano'],
+        status: 'ACTIVE',
+        views: 48,
+        interested: 12,
+      },
+    }),
+
+    // 6. Producto - Ropa
+    prisma.offer.create({
+      data: {
+        userId: users[3].id, // Tienda Eco Local
+        communityId: communities[0].id, // Gracia-Barcelona
+        type: 'PRODUCT',
+        category: 'Ropa',
+        title: 'Ropa sostenible y de comercio justo',
+        description: 'Camisetas de algodón orgánico certificado. Varias tallas y colores disponibles. Producción ética.',
+        images: ['https://images.unsplash.com/photo-1521572163474-6864f9cf17ab'],
+        priceEur: 18,
+        priceCredits: 180,
+        stock: 50,
+        lat: users[3].lat,
+        lng: users[3].lng,
+        address: users[3].address,
+        tags: ['ropa', 'ecológico', 'comercio-justo', 'sostenible'],
+        status: 'ACTIVE',
+        featured: true,
+        views: 41,
+        interested: 15,
+      },
+    }),
+
+    // ========== SERVICIOS ==========
+
+    // 7. Servicio - Hogar
+    prisma.offer.create({
+      data: {
+        userId: users[1].id, // Juan Martínez - Carpintero
+        communityId: communities[1].id, // Bermeo
         type: 'SERVICE',
-        category: 'Artesanía',
+        category: 'Hogar',
+        title: 'Reparación y restauración de muebles',
+        description: 'Arreglo todo tipo de muebles de madera. Restauración, barnizado, tapizado. 20 años de experiencia.',
+        images: ['https://images.unsplash.com/photo-1556909114-f6e7ad7d3136'],
+        priceEur: 25,
+        priceCredits: 250,
+        lat: users[1].lat,
+        lng: users[1].lng,
+        address: users[1].address,
+        tags: ['reparación', 'carpintería', 'reciclaje', 'muebles'],
+        status: 'ACTIVE',
+        views: 30,
+        interested: 8,
+      },
+    }),
+
+    // 8. Servicio - Educación
+    prisma.offer.create({
+      data: {
+        userId: users[2].id, // Ana López - Profesora
+        communityId: communities[0].id, // Gracia-Barcelona
+        type: 'SERVICE',
+        category: 'Educación',
+        title: 'Clases de inglés y francés',
+        description: 'Profesora titulada ofrece clases particulares de inglés y francés para todos los niveles. Presencial u online.',
+        images: ['https://images.unsplash.com/photo-1503676260728-1c00da094a0b'],
+        priceEur: 15,
+        priceCredits: 150,
+        lat: users[2].lat,
+        lng: users[2].lng,
+        address: users[2].address,
+        tags: ['educación', 'idiomas', 'inglés', 'francés'],
+        status: 'ACTIVE',
+        featured: true,
+        views: 62,
+        interested: 18,
+      },
+    }),
+
+    // 9. Servicio - Transporte
+    prisma.offer.create({
+      data: {
+        userId: users[4].id, // Carlos Ruiz
+        communityId: communities[3].id, // Pamplona Centro
+        type: 'SERVICE',
+        category: 'Transporte',
+        title: 'Coche compartido Pamplona-Zaragoza',
+        description: 'Viajo regularmente entre Pamplona y Zaragoza. 3 plazas disponibles. Comparte gastos de gasolina.',
+        images: ['https://images.unsplash.com/photo-1449965408869-eaa3f722e40d'],
+        priceEur: 8,
+        priceCredits: 80,
+        lat: users[4].lat,
+        lng: users[4].lng,
+        address: users[4].address,
+        tags: ['transporte', 'coche-compartido', 'sostenible', 'blablacar'],
+        status: 'ACTIVE',
+        views: 27,
+        interested: 6,
+      },
+    }),
+
+    // 10. Servicio - Otros (Herrería)
+    prisma.offer.create({
+      data: {
+        userId: users[7].id, // Mikel Zubiria - Herrero
+        communityId: communities[2].id, // Coop Sants
+        type: 'SERVICE',
+        category: 'Otros',
         title: 'Burdin-lanak / Trabajos de herrería artesanal',
-        description: 'Tresnak, dekorazioa eta konponketak burdinarekin. / Herramientas, decoración y reparaciones en hierro forjado.',
+        description: 'Herramientas, decoración y reparaciones en hierro forjado. Trabajos a medida.',
         images: ['https://images.unsplash.com/photo-1530105186532-c4e119c1b5f5'],
         priceEur: 35,
         priceCredits: 350,
@@ -523,6 +720,29 @@ async function main() {
         status: 'ACTIVE',
         views: 18,
         interested: 6,
+      },
+    }),
+
+    // 11. Servicio - Jardinería
+    prisma.offer.create({
+      data: {
+        userId: users[0].id, // María García
+        communityId: communities[0].id, // Gracia-Barcelona
+        type: 'SERVICE',
+        category: 'Jardinería',
+        title: 'Cuidado de huertos urbanos y jardines',
+        description: 'Ofrezco servicios de jardinería, cuidado de huertos urbanos, poda, plantación. Asesoramiento en agricultura ecológica.',
+        images: ['https://images.unsplash.com/photo-1416879595882-3373a0480b5b'],
+        priceEur: 20,
+        priceCredits: 200,
+        lat: users[0].lat,
+        lng: users[0].lng,
+        address: users[0].address,
+        tags: ['jardinería', 'huertos', 'ecológico', 'plantas'],
+        status: 'ACTIVE',
+        featured: true,
+        views: 39,
+        interested: 10,
       },
     }),
   ]);
@@ -961,8 +1181,10 @@ async function main() {
       data: {
         offerId: eventOffers[0].id,
         organizerId: users[4].id,
+        communityId: communities[2].id, // Coop Sants
         title: 'Mercadillo de trueque mensual',
         description: 'Trae lo que ya no uses y llévate lo que necesites. ¡Sin dinero!',
+        image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d',
         lat: 42.7331,
         lng: -1.6727,
         address: 'Plaza del Carmen, Pamplona',
@@ -978,8 +1200,10 @@ async function main() {
       data: {
         offerId: eventOffers[1].id,
         organizerId: users[0].id,
+        communityId: communities[3].id, // Pamplona Centro
         title: 'Taller de compostaje urbano',
         description: 'Aprende a hacer compost en casa y reducir tus residuos',
+        image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09',
         lat: 42.7853,
         lng: -1.7818,
         address: 'Centro Comunitario Lavapiés',
@@ -995,8 +1219,10 @@ async function main() {
       data: {
         offerId: eventOffers[2].id,
         organizerId: users[1].id,
+        communityId: communities[1].id, // Bermeo
         title: 'Concierto comunitario de folk',
         description: 'Tarde de música en directo con artistas locales',
+        image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745',
         lat: 42.8167,
         lng: -1.6432,
         address: 'Parque de la Taconera, Pamplona',
@@ -1012,8 +1238,10 @@ async function main() {
       data: {
         offerId: eventOffers[3].id,
         organizerId: users[2].id,
+        communityId: communities[3].id, // Pamplona Centro
         title: 'Yoga en el parque',
         description: 'Sesión de yoga matutina al aire libre. Trae tu esterilla.',
+        image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773',
         lat: 42.8234,
         lng: -1.6512,
         address: 'Parque Yamaguchi, Pamplona',
@@ -1031,6 +1259,7 @@ async function main() {
         organizerId: users[3].id,
         title: 'Taller de cocina vegetariana',
         description: 'Aprende recetas saludables y sostenibles',
+        image: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d',
         lat: 42.7985,
         lng: -1.6312,
         address: 'Centro Cívico Iturrama, Pamplona',
@@ -1048,6 +1277,7 @@ async function main() {
         organizerId: users[4].id,
         title: 'Charla sobre permacultura',
         description: 'Introducción a la permacultura y diseño de huertos urbanos',
+        image: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399',
         lat: 42.8456,
         lng: -1.6723,
         address: 'Casa de la Juventud, Pamplona',
@@ -1065,6 +1295,7 @@ async function main() {
         organizerId: users[0].id,
         title: 'Taller de pintura mural comunitaria',
         description: 'Pintemos juntos un mural en el barrio',
+        image: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b',
         lat: 42.8089,
         lng: -1.6589,
         address: 'Plaza San Francisco, Pamplona',
@@ -1082,6 +1313,7 @@ async function main() {
         organizerId: users[1].id,
         title: 'Taller de reparación de electrónicos',
         description: 'Repair Café: trae tu aparato roto y aprende a repararlo',
+        image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789',
         lat: 42.7712,
         lng: -1.6145,
         address: 'Biblioteca de Iturrama, Pamplona',
@@ -1099,6 +1331,7 @@ async function main() {
         organizerId: users[2].id,
         title: 'Encuentro de vecinos de San Juan',
         description: 'Café y charla entre vecinos del barrio',
+        image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622',
         lat: 42.8301,
         lng: -1.6389,
         address: 'Bar Txoko, Pamplona',
@@ -1116,6 +1349,7 @@ async function main() {
         organizerId: users[3].id,
         title: 'Cuentacuentos en el parque',
         description: 'Tarde de cuentos y juegos para niños',
+        image: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9',
         lat: 42.8178,
         lng: -1.6298,
         address: 'Parque de la Ciudadela, Pamplona',
@@ -1133,6 +1367,7 @@ async function main() {
         organizerId: users[4].id,
         title: 'Carrera solidaria por el barrio',
         description: 'Carrera de 5km para promover el deporte y recaudar fondos',
+        image: 'https://images.unsplash.com/photo-1452626038306-9aae5e071dd3',
         lat: 42.7923,
         lng: -1.6756,
         address: 'Paseo Fluvial del Arga, Pamplona',
@@ -1151,6 +1386,7 @@ async function main() {
         organizerId: users[5].id,
         title: 'Ruta guiada por la Sierra de Andía',
         description: 'Excursión por los hayedos de Andía con un pastor local. Aprende sobre la trashumancia y el pastoreo tradicional.',
+        image: 'https://images.unsplash.com/photo-1551632811-561732d1e306',
         lat: 42.85,
         lng: -2.05,
         address: 'Lezaun, Sierra de Andía',
@@ -1168,6 +1404,7 @@ async function main() {
         organizerId: users[7].id,
         title: 'Taller de herrería tradicional',
         description: 'Aprende técnicas ancestrales de forja en la fragua de Améscoa',
+        image: 'https://images.unsplash.com/photo-1533488069317-1ce38b68fb67',
         lat: 42.76,
         lng: -2.24,
         address: 'Zudaire, Valle de Améscoa',
@@ -1185,6 +1422,7 @@ async function main() {
         organizerId: users[0].id,
         title: 'Mercado de productores de Tierra Estella',
         description: 'Mercado mensual de productos locales y artesanía. Txistorra, queso, miel, pan artesano...',
+        image: 'https://images.unsplash.com/photo-1488459716781-31db52582fe9',
         lat: 42.67,
         lng: -2.03,
         address: 'Plaza de los Fueros, Estella-Lizarra',
@@ -1202,6 +1440,7 @@ async function main() {
         organizerId: users[1].id,
         title: 'Auzolan: Limpieza del río Ega',
         description: 'Trabajo comunitario para limpiar las orillas del río Ega en Estella',
+        image: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
         lat: 42.672,
         lng: -2.025,
         address: 'Río Ega, Estella-Lizarra',
@@ -1219,6 +1458,7 @@ async function main() {
         organizerId: users[8].id,
         title: 'Taller de apicultura en Urbasa',
         description: 'Conoce el mundo de las abejas y la producción de miel en la sierra de Urbasa',
+        image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644',
         lat: 42.82,
         lng: -2.08,
         address: 'Olazti/Olazagutía, Urbasa',
@@ -1237,6 +1477,7 @@ async function main() {
         organizerId: users[2].id,
         title: 'Charla sobre economía circular en Ostatua',
         description: 'Debate abierto sobre economía circular y consumo responsable en el local comunitario de Arizala',
+        image: 'https://images.unsplash.com/photo-1611284446314-60a58ac0deb9',
         lat: 42.68,
         lng: -1.45,
         address: 'Ostatua, Arizala',
@@ -2046,228 +2287,6 @@ El primer sábado de cada mes en el centro comunitario.`,
   // console.log('✓ Creado happy hour');
 
   // ==========================================
-  // COMUNIDADES
-  // ==========================================
-  console.log('🏘️  Creando comunidades...');
-
-  const communities = await Promise.all([
-    // Comunidad 1: Barrio de Gracia (Pamplona) - OPEN
-    prisma.community.create({
-      data: {
-        slug: 'gracia-barcelona',
-        name: 'Barrio de Gracia',
-        description: 'Comunidad colaborativa de economía local en el corazón de Pamplona. Unidos para compartir recursos, conocimientos y crear una economía más humana.',
-        location: 'Pamplona, España',
-        lat: 42.8340,
-        lng: -1.6234,
-        radiusKm: 2.5,
-        type: 'NEIGHBORHOOD',
-        visibility: 'OPEN',
-        requiresApproval: false,
-        allowExternalOffers: true,
-        primaryColor: '#4CAF50',
-        language: 'es',
-        currency: 'EUR',
-        logo: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=200&h=200&fit=crop',
-        bannerImage: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=1200&h=400&fit=crop',
-      },
-    }),
-
-    // Comunidad 2: Bermeo (Bizkaia) - OPEN
-    prisma.community.create({
-      data: {
-        slug: 'bermeo',
-        name: 'Bermeo',
-        description: 'Herri honen bizilagun guztiak elkarlanean. Gure ekonomia lokala indartzeko eta harreman sozialak sendotzeko.',
-        location: 'Bermeo, Bizkaia',
-        lat: 43.4203,
-        lng: -2.7262,
-        radiusKm: 5,
-        type: 'VILLAGE',
-        visibility: 'OPEN',
-        requiresApproval: false,
-        allowExternalOffers: true,
-        primaryColor: '#FF5722',
-        language: 'eu',
-        currency: 'EUR',
-        logo: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=200&h=200&fit=crop',
-        bannerImage: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&h=400&fit=crop',
-      },
-    }),
-
-    // Comunidad 3: Cooperativa Sants - PRIVATE
-    prisma.community.create({
-      data: {
-        slug: 'coop-sants',
-        name: 'Cooperativa Sants',
-        description: 'Cooperativa de vivienda con economía interna solidaria. Sistema de intercambio de recursos y servicios entre socios.',
-        location: 'Sants, Pamplona',
-        lat: 42.7815,
-        lng: -1.6596,
-        radiusKm: 1,
-        type: 'CUSTOM',
-        visibility: 'PRIVATE',
-        requiresApproval: true,
-        allowExternalOffers: false,
-        primaryColor: '#9C27B0',
-        language: 'es',
-        currency: 'EUR',
-        logo: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=200&h=200&fit=crop',
-      },
-    }),
-
-    // Comunidad 4: Uribe Kosta - FEDERATED
-    prisma.community.create({
-      data: {
-        slug: 'uribe-kosta',
-        name: 'Uribe Kosta',
-        description: 'Eskualde osoa lotzen duen ekonomia-sarea. Hainbat herri federatuta ekonomia zirkularrean.',
-        location: 'Uribe Kosta, Bizkaia',
-        lat: 43.3833,
-        lng: -2.9833,
-        radiusKm: 15,
-        type: 'COUNTY',
-        visibility: 'FEDERATED',
-        requiresApproval: false,
-        allowExternalOffers: true,
-        primaryColor: '#00BCD4',
-        language: 'eu',
-        currency: 'EUR',
-        logo: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop',
-        bannerImage: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=400&fit=crop',
-      },
-    }),
-
-    // Comunidad 5: Pamplona Centro - PUBLIC
-    prisma.community.create({
-      data: {
-        slug: 'madrid-centro',
-        name: 'Pamplona Centro',
-        description: 'Red de economía colaborativa en el centro de Pamplona. Conectando vecinos, comercios y organizaciones para un futuro más sostenible.',
-        location: 'Centro, Pamplona',
-        lat: 42.8521,
-        lng: -1.6527,
-        radiusKm: 3,
-        type: 'NEIGHBORHOOD',
-        visibility: 'PUBLIC',
-        requiresApproval: true,
-        allowExternalOffers: true,
-        primaryColor: '#FFC107',
-        language: 'es',
-        currency: 'EUR',
-        logo: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=200&h=200&fit=crop',
-        bannerImage: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=1200&h=400&fit=crop',
-      },
-    }),
-
-    // Comunidad 6: Mancomunidad de Andia - OPEN
-    prisma.community.create({
-      data: {
-        slug: 'mancomunidad-andia',
-        name: 'Mancomunidad de Andia',
-        description: 'Herriak elkartuta ekonomia zirkularrean. Andiako mendilerroko herriak, baliabideak eta zerbitzuak partekatzen.',
-        location: 'Sierra de Andía, Navarra',
-        lat: 42.85,
-        lng: -2.05,
-        radiusKm: 12,
-        type: 'COUNTY',
-        visibility: 'OPEN',
-        requiresApproval: false,
-        allowExternalOffers: true,
-        primaryColor: '#2E7D32',
-        language: 'eu',
-        currency: 'EUR',
-        logo: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop',
-        bannerImage: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=400&fit=crop',
-      },
-    }),
-
-    // Comunidad 7: Valdizarbe - FEDERATED
-    prisma.community.create({
-      data: {
-        slug: 'valdizarbe',
-        name: 'Valdizarbe',
-        description: 'Comarca de Valdizarbe unida en economía local. Desde Artajona hasta Tafalla, compartiendo recursos y conocimientos.',
-        location: 'Valdizarbe, Navarra',
-        lat: 42.55,
-        lng: -1.75,
-        radiusKm: 18,
-        type: 'COUNTY',
-        visibility: 'FEDERATED',
-        requiresApproval: false,
-        allowExternalOffers: true,
-        primaryColor: '#D32F2F',
-        language: 'es',
-        currency: 'EUR',
-        logo: 'https://images.unsplash.com/photo-1464207687429-7505649dae38?w=200&h=200&fit=crop',
-        bannerImage: 'https://images.unsplash.com/photo-1464207687429-7505649dae38?w=1200&h=400&fit=crop',
-      },
-    }),
-
-    // Comunidad 8: Améscoa / Ameskoa - OPEN
-    prisma.community.create({
-      data: {
-        slug: 'ameskoa',
-        name: 'Améscoa / Ameskoa',
-        description: 'Ibar margaria, herri txikiak batera. Ameskoako harana, tokiko ekonomia eta elkartasuna indartuz.',
-        location: 'Valle de Améscoa, Navarra',
-        lat: 42.75,
-        lng: -2.25,
-        radiusKm: 10,
-        type: 'CUSTOM',
-        visibility: 'OPEN',
-        requiresApproval: false,
-        allowExternalOffers: true,
-        primaryColor: '#558B2F',
-        language: 'eu',
-        currency: 'EUR',
-        logo: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=200&h=200&fit=crop',
-        bannerImage: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1200&h=400&fit=crop',
-      },
-    }),
-  ]);
-
-  console.log(`✓ Creadas ${communities.length} comunidades`);
-
-  // Asignando usuarios a comunidades
-  // Nota: Los usuarios solo pueden estar en una comunidad a la vez (communityId es opcional en User)
-  console.log('👥 Asignando usuarios a comunidades...');
-
-  await Promise.all([
-    // María en Pamplona Centro (fundadora)
-    prisma.user.update({
-      where: { id: users[0].id },
-      data: { communityId: communities[4].id }, // Pamplona Centro
-    }),
-
-    // Juan en Bermeo (fundador)
-    prisma.user.update({
-      where: { id: users[1].id },
-      data: { communityId: communities[1].id }, // Bermeo
-    }),
-
-    // Ana en Pamplona Centro (miembro)
-    prisma.user.update({
-      where: { id: users[2].id },
-      data: { communityId: communities[4].id }, // Pamplona Centro
-    }),
-
-    // Tienda en Gracia (miembro)
-    prisma.user.update({
-      where: { id: users[3].id },
-      data: { communityId: communities[0].id }, // Gracia
-    }),
-
-    // Carlos en Coop Sants (fundador)
-    prisma.user.update({
-      where: { id: users[4].id },
-      data: { communityId: communities[2].id }, // Coop Sants
-    }),
-  ]);
-
-  console.log('✓ Asignados usuarios a comunidades');
-
-  // ==========================================
   // MUTUAL AID: NECESIDADES Y PROYECTOS
   // ==========================================
   console.log('\n🤝 Creando necesidades y proyectos comunitarios...');
@@ -2366,7 +2385,7 @@ El primer sábado de cada mes en el centro comunitario.`,
     prisma.need.create({
       data: {
         creatorId: users[2].id, // Ana
-        communityId: communities[4].id, // Pamplona Centro
+        communityId: communities[3].id, // Pamplona Centro
         scope: 'PERSONAL',
         category: 'URGENT',
         type: 'FOOD',
@@ -2439,7 +2458,7 @@ El primer sábado de cada mes en el centro comunitario.`,
     prisma.communityProject.create({
       data: {
         creatorId: users[0].id, // María
-        communityId: communities[4].id, // Pamplona Centro
+        communityId: communities[3].id, // Pamplona Centro
         type: 'EDUCATION',
         title: 'Construir escuela primaria en Akosombo, Ghana',
         description: 'Proyecto para construir una escuela que beneficiará a 200 niños que actualmente no tienen acceso a educación.',
@@ -2465,7 +2484,7 @@ El primer sábado de cada mes en el centro comunitario.`,
           tejas: '500 unidades',
           pupitres: '50 unidades',
         },
-        participatingCommunities: [communities[4].id],
+        participatingCommunities: [communities[3].id],
         volunteersNeeded: 20,
         startDate: new Date('2026-01-01'),
         endDate: new Date('2026-12-31'),
@@ -2510,7 +2529,7 @@ El primer sábado de cada mes en el centro comunitario.`,
           tuberias: '1000m',
           tanques: '5 unidades 1000L',
         },
-        participatingCommunities: [communities[1].id, communities[4].id],
+        participatingCommunities: [communities[1].id, communities[3].id],
         volunteersNeeded: 15,
         startDate: new Date('2025-11-01'),
         endDate: new Date('2026-06-30'),
@@ -2722,7 +2741,7 @@ El primer sábado de cada mes en el centro comunitario.`,
     prisma.temporaryHousing.create({
       data: {
         hostId: users[0].id, // María
-        communityId: communities[4].id, // Pamplona Centro
+        communityId: communities[3].id, // Pamplona Centro
         type: 'EMERGENCY',
         title: 'Vivienda de emergencia para familias',
         description: 'Piso disponible para familias en situación de vulnerabilidad temporal. Acompañamiento social incluido.',

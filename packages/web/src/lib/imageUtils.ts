@@ -1,8 +1,47 @@
 /**
+ * Validates if an image source is valid
+ * @param src - The image source to validate
+ * @returns true if the image source is valid, false otherwise
+ */
+export function isValidImageSrc(src: string | null | undefined): boolean {
+  if (!src) return false;
+  if (src === 'null' || src === 'undefined') return false;
+  if (src.trim() === '') return false;
+  return true;
+}
+
+/**
+ * Gets a valid image source or returns a fallback
+ * @param src - The image source to validate
+ * @param fallback - Optional fallback image URL
+ * @returns The valid image source or fallback, or null if neither is valid
+ */
+export function getValidImageSrc(
+  src: string | null | undefined,
+  fallback?: string
+): string | null {
+  if (isValidImageSrc(src)) return src!;
+  if (fallback && isValidImageSrc(fallback)) return fallback;
+  return null;
+}
+
+/**
+ * Error handler for broken images
+ * @param e - The error event
+ */
+export function handleImageError(e: React.SyntheticEvent<HTMLImageElement>) {
+  const img = e.target as HTMLImageElement;
+  img.style.display = 'none';
+}
+
+/**
  * Converts relative image URLs to absolute URLs pointing to the backend
  */
 export function getImageUrl(url: string | undefined | null): string {
   if (!url) return '';
+
+  // Validate the image source first
+  if (!isValidImageSrc(url)) return '';
 
   // If it's already an absolute URL, return as is
   if (url.startsWith('http://') || url.startsWith('https://')) {
@@ -29,5 +68,5 @@ export function getImageUrl(url: string | undefined | null): string {
  */
 export function getImageUrls(urls: string[] | undefined | null): string[] {
   if (!urls || !Array.isArray(urls)) return [];
-  return urls.map(getImageUrl);
+  return urls.filter(isValidImageSrc).map(getImageUrl);
 }

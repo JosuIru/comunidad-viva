@@ -94,22 +94,7 @@ export class HousingService {
       where.exchangeType = filters.exchangeType as ExchangeType;
     }
 
-    // Geographic search
-    if (filters?.lat && filters?.lng && filters?.radiusKm) {
-      // This is a simple bounding box, not a true radius search
-      // For production, use PostGIS or similar
-      const kmToDegrees = filters.radiusKm / 111;
-      where.lat = {
-        gte: parseFloat(filters.lat) - kmToDegrees,
-        lte: parseFloat(filters.lat) + kmToDegrees,
-      };
-      where.lng = {
-        gte: parseFloat(filters.lng) - kmToDegrees,
-        lte: parseFloat(filters.lng) + kmToDegrees,
-      };
-    }
-
-    const spaces = await this.prisma.spaceBank.findMany({
+    let spaces = await this.prisma.spaceBank.findMany({
       where,
       include: {
         owner: {
@@ -129,6 +114,15 @@ export class HousingService {
         createdAt: 'desc',
       },
     });
+
+    // Apply proximity filter using Haversine formula
+    if (filters?.nearLat && filters?.nearLng && filters?.maxDistance && filters.maxDistance > 0) {
+      spaces = spaces.filter((space) => {
+        if (!space.lat || !space.lng) return false;
+        const distance = this.calculateDistance(filters.nearLat, filters.nearLng, space.lat, space.lng);
+        return distance <= filters.maxDistance;
+      });
+    }
 
     return spaces;
   }
@@ -403,6 +397,95 @@ export class HousingService {
     return housing;
   }
 
+  async updateHousing(housingId: string, userId: string, data: any) {
+    const housing = await this.prisma.temporaryHousing.findUnique({
+      where: { id: housingId },
+    });
+
+    if (!housing) {
+      throw new NotFoundException('Alojamiento no encontrado');
+    }
+
+    if (housing.hostId !== userId) {
+      throw new ForbiddenException('No tienes permisos para modificar este alojamiento');
+    }
+
+    const updated = await this.prisma.temporaryHousing.update({
+      where: { id: housingId },
+      data: {
+        ...(data.title && { title: data.title }),
+        ...(data.description && { description: data.description }),
+        ...(data.images && { images: data.images }),
+        ...(data.address && { address: data.address }),
+        ...(data.lat && { lat: data.lat }),
+        ...(data.lng && { lng: data.lng }),
+        ...(data.accessInstructions && { accessInstructions: data.accessInstructions }),
+        ...(data.beds && { beds: data.beds }),
+        ...(data.bathrooms && { bathrooms: data.bathrooms }),
+        ...(data.squareMeters && { squareMeters: data.squareMeters }),
+        ...(data.amenities && { amenities: data.amenities }),
+        ...(data.houseRules && { houseRules: data.houseRules }),
+        ...(data.availableFrom && { availableFrom: new Date(data.availableFrom) }),
+        ...(data.availableTo && { availableTo: new Date(data.availableTo) }),
+        ...(data.minNights && { minNights: data.minNights }),
+        ...(data.maxNights && { maxNights: data.maxNights }),
+        ...(data.pricePerNight !== undefined && { pricePerNight: data.pricePerNight }),
+        ...(data.creditsPerNight !== undefined && { creditsPerNight: data.creditsPerNight }),
+        ...(data.hoursPerNight !== undefined && { hoursPerNight: data.hoursPerNight }),
+        ...(data.isFree !== undefined && { isFree: data.isFree }),
+        ...(data.minReputation && { minReputation: data.minReputation }),
+        ...(data.requiresApproval !== undefined && { requiresApproval: data.requiresApproval }),
+        ...(data.maxGuests && { maxGuests: data.maxGuests }),
+        ...(data.status && { status: data.status }),
+      },
+      include: {
+        host: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+      },
+    });
+
+    return updated;
+  }
+
+  async deleteHousing(housingId: string, userId: string) {
+    const housing = await this.prisma.temporaryHousing.findUnique({
+      where: { id: housingId },
+    });
+
+    if (!housing) {
+      throw new NotFoundException('Alojamiento no encontrado');
+    }
+
+    if (housing.hostId !== userId) {
+      throw new ForbiddenException('No tienes permisos para eliminar este alojamiento');
+    }
+
+    // Verificar que no tenga reservas activas
+    const activeBookings = await this.prisma.housingBooking.count({
+      where: {
+        housingId,
+        status: {
+          in: ['PENDING', 'APPROVED', 'CONFIRMED', 'CHECKED_IN'],
+        },
+      },
+    });
+
+    if (activeBookings > 0) {
+      throw new BadRequestException('No se puede eliminar un alojamiento con reservas activas');
+    }
+
+    await this.prisma.temporaryHousing.delete({
+      where: { id: housingId },
+    });
+
+    return { message: 'Alojamiento eliminado exitosamente' };
+  }
+
   async findHousing(filters?: any) {
     const where: any = {
       status: HousingStatus.ACTIVE,
@@ -434,20 +517,7 @@ export class HousingService {
       where.isFree = filters.isFree === 'true';
     }
 
-    // Geographic search
-    if (filters?.lat && filters?.lng && filters?.radiusKm) {
-      const kmToDegrees = filters.radiusKm / 111;
-      where.lat = {
-        gte: parseFloat(filters.lat) - kmToDegrees,
-        lte: parseFloat(filters.lat) + kmToDegrees,
-      };
-      where.lng = {
-        gte: parseFloat(filters.lng) - kmToDegrees,
-        lte: parseFloat(filters.lng) + kmToDegrees,
-      };
-    }
-
-    const housing = await this.prisma.temporaryHousing.findMany({
+    let housing = await this.prisma.temporaryHousing.findMany({
       where,
       include: {
         host: {
@@ -468,6 +538,15 @@ export class HousingService {
         createdAt: 'desc',
       },
     });
+
+    // Apply proximity filter using Haversine formula
+    if (filters?.nearLat && filters?.nearLng && filters?.maxDistance && filters.maxDistance > 0) {
+      housing = housing.filter((house) => {
+        if (!house.lat || !house.lng) return false;
+        const distance = this.calculateDistance(filters.nearLat, filters.nearLng, house.lat, house.lng);
+        return distance <= filters.maxDistance;
+      });
+    }
 
     return housing;
   }
@@ -1185,12 +1264,32 @@ export class HousingService {
   // ============================================
 
   async findAllSolutions(filters?: any) {
-    // Fetch all housing types in parallel
-    const [spaces, housing, coops] = await Promise.all([
-      this.findSpaces(filters),
-      this.findHousing(filters),
-      this.findCoops(filters),
-    ]);
+    // Extract solutionType filter separately from other filters
+    const solutionType = filters?.type;
+
+    // Create filters without the 'type' field to avoid conflicts
+    const { type, ...cleanFilters } = filters || {};
+
+    // Fetch based on solutionType filter
+    let spaces = [];
+    let housing = [];
+    let coops = [];
+
+    // Only fetch the specific solution type if specified
+    if (!solutionType || solutionType === 'SPACE_BANK') {
+      spaces = await this.findSpaces(cleanFilters);
+    }
+
+    if (!solutionType || solutionType === 'TEMPORARY_HOUSING') {
+      housing = await this.findHousing(cleanFilters);
+    }
+
+    if (!solutionType || solutionType === 'HOUSING_COOP') {
+      coops = await this.findCoops(cleanFilters);
+    }
+
+    // Community Guarantee doesn't have a list endpoint yet, so skip it
+    // Will add when COMMUNITY_GUARANTEE listings are needed
 
     // Transform to unified format with type discriminator
     const solutions = [
@@ -1214,11 +1313,117 @@ export class HousingService {
       })),
     ];
 
-    // Apply type filter if specified
-    if (filters?.type) {
-      return solutions.filter((s) => s.solutionType === filters.type);
+    return solutions;
+  }
+
+  async findSolutionById(id: string) {
+    // Try to find in each housing type table
+    // Check SpaceBank first
+    try {
+      const space = await this.findSpaceById(id);
+      if (space) {
+        return {
+          ...space,
+          solutionType: 'SPACE_BANK',
+          latitude: space.lat,
+          longitude: space.lng,
+        };
+      }
+    } catch (error) {
+      // Not found in SpaceBank, continue
     }
 
-    return solutions;
+    // Check TemporaryHousing
+    try {
+      const housing = await this.findHousingById(id);
+      if (housing) {
+        return {
+          ...housing,
+          solutionType: 'TEMPORARY_HOUSING',
+          latitude: housing.lat,
+          longitude: housing.lng,
+        };
+      }
+    } catch (error) {
+      // Not found in TemporaryHousing, continue
+    }
+
+    // Check HousingCoop
+    try {
+      const coop = await this.findCoopById(id);
+      if (coop) {
+        return {
+          ...coop,
+          solutionType: 'HOUSING_COOP',
+          latitude: coop.lat,
+          longitude: coop.lng,
+        };
+      }
+    } catch (error) {
+      // Not found in HousingCoop
+    }
+
+    // If not found in any table, throw NotFoundException
+    throw new NotFoundException('Housing solution not found');
+  }
+
+  async joinSolution(userId: string, solutionId: string, data: any) {
+    // First, determine what type of solution this is
+    const solution = await this.findSolutionById(solutionId);
+
+    switch (solution.solutionType) {
+      case 'SPACE_BANK':
+        // For spaces, we need booking information
+        if (!data.startTime || !data.endTime) {
+          throw new BadRequestException(
+            'Se requieren startTime y endTime para reservar un espacio',
+          );
+        }
+        return this.bookSpace(userId, solutionId, data);
+
+      case 'TEMPORARY_HOUSING':
+        // For temporary housing, we need check-in/out dates
+        if (!data.checkIn || !data.checkOut) {
+          throw new BadRequestException(
+            'Se requieren checkIn y checkOut para reservar alojamiento',
+          );
+        }
+        return this.bookHousing(userId, solutionId, data);
+
+      case 'HOUSING_COOP':
+        // For coops, we need application info
+        return this.joinCoop(userId, solutionId, {
+          message: data.message || '',
+          skills: data.skills || [],
+          commitmentLevel: data.commitmentLevel,
+          availability: data.availability,
+        });
+
+      default:
+        throw new BadRequestException(
+          `No se puede unir a soluciones de tipo ${solution.solutionType}`,
+        );
+    }
+  }
+
+  /**
+   * Calculate distance between two coordinates using Haversine formula
+   */
+  private calculateDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
+    const R = 6371; // Earth's radius in km
+    const dLat = this.toRadians(lat2 - lat1);
+    const dLng = this.toRadians(lng2 - lng1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.toRadians(lat1)) *
+        Math.cos(this.toRadians(lat2)) *
+        Math.sin(dLng / 2) *
+        Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  private toRadians(degrees: number): number {
+    return degrees * (Math.PI / 180);
   }
 }

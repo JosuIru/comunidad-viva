@@ -106,7 +106,7 @@ export default function ReferralsPage() {
     if (!referralData?.code) return;
 
     const referralLink = `${window.location.origin}/signup?ref=${referralData.code}`;
-    const message = `¡Únete a Comunidad Viva! Una plataforma revolucionaria para la economía colaborativa. Usa mi código de referido: ${referralLink}`;
+    const message = `¡Únete a Truk! Una plataforma revolucionaria para la economía colaborativa. Usa mi código de referido: ${referralLink}`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
 
     window.open(whatsappUrl, '_blank');
@@ -116,7 +116,7 @@ export default function ReferralsPage() {
     if (!referralData?.code) return;
 
     const referralLink = `${window.location.origin}/signup?ref=${referralData.code}`;
-    const message = `¡Únete a Comunidad Viva! Una plataforma revolucionaria para la economía colaborativa. Usa mi código de referido: ${referralLink}`;
+    const message = `¡Únete a Truk! Una plataforma revolucionaria para la economía colaborativa. Usa mi código de referido: ${referralLink}`;
     const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(message)}`;
 
     window.open(telegramUrl, '_blank');
@@ -148,13 +148,13 @@ export default function ReferralsPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'PENDING':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-yellow-100 text-yellow-800 dark:text-yellow-400';
       case 'ACTIVE':
         return 'bg-green-100 text-green-800';
       case 'REWARDED':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-blue-100 text-blue-800 dark:text-blue-400';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-100 dark:bg-gray-800 text-gray-800';
     }
   };
 
@@ -175,8 +175,8 @@ export default function ReferralsPage() {
   const nextTier = getNextTier();
 
   return (
-    <Layout title="Sistema de Referidos - Comunidad Viva">
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+    <Layout title="Sistema de Referidos - Truk">
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
         {/* Header */}
         <div className="bg-gradient-to-r from-green-600 via-teal-600 to-blue-600 text-white">
           <div className="container mx-auto px-4 py-12">
@@ -191,28 +191,28 @@ export default function ReferralsPage() {
           {/* Stats Overview */}
           {stats && (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <div className="bg-white rounded-lg shadow-lg p-6 text-center">
-                <div className="text-4xl font-bold text-green-600">{stats.totalReferrals}</div>
-                <div className="text-sm text-gray-600 mt-1">Total Referidos</div>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center">
+                <div className="text-4xl font-bold text-green-600 dark:text-green-400">{stats.totalReferrals}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Total Referidos</div>
               </div>
-              <div className="bg-white rounded-lg shadow-lg p-6 text-center">
-                <div className="text-4xl font-bold text-blue-600">{stats.activeReferrals}</div>
-                <div className="text-sm text-gray-600 mt-1">Activos</div>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center">
+                <div className="text-4xl font-bold text-blue-600 dark:text-blue-400">{stats.activeReferrals}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Activos</div>
               </div>
-              <div className="bg-white rounded-lg shadow-lg p-6 text-center">
-                <div className="text-4xl font-bold text-purple-600">{stats.totalRewards}</div>
-                <div className="text-sm text-gray-600 mt-1">Puntos Ganados</div>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center">
+                <div className="text-4xl font-bold text-purple-600 dark:text-purple-400">{stats.totalRewards}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Puntos Ganados</div>
               </div>
-              <div className="bg-white rounded-lg shadow-lg p-6 text-center">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center">
                 <div className="text-4xl font-bold text-orange-600">{currentTier.name}</div>
-                <div className="text-sm text-gray-600 mt-1">Nivel Actual</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">Nivel Actual</div>
               </div>
             </div>
           )}
 
           {/* Referral Code Section */}
-          <div className="bg-white rounded-lg shadow-xl p-8 mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-center">
               Tu Código de Referido
             </h2>
 
@@ -220,7 +220,7 @@ export default function ReferralsPage() {
               <>
                 <div className="bg-gradient-to-r from-green-100 to-blue-100 border-2 border-green-300 rounded-lg p-6 mb-6">
                   <div className="text-center mb-4">
-                    <div className="text-sm text-gray-600 mb-2">Tu link de referido:</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Tu link de referido:</div>
                     <div className="text-2xl font-mono font-bold text-green-700 break-all">
                       {window.location.origin}/signup?ref={referralData.code}
                     </div>
@@ -255,14 +255,14 @@ export default function ReferralsPage() {
           </div>
 
           {/* Current Tier & Progress */}
-          <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Tu Nivel de Referidos</h2>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Tu Nivel de Referidos</h2>
 
             <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-6 mb-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900">{currentTier.name}</h3>
-                  <p className="text-gray-600">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{currentTier.name}</h3>
+                  <p className="text-gray-600 dark:text-gray-400">
                     Multiplicador: ×{currentTier.bonusMultiplier}
                   </p>
                 </div>
@@ -270,11 +270,11 @@ export default function ReferralsPage() {
               </div>
 
               <div className="mb-4">
-                <h4 className="font-semibold text-gray-900 mb-2">Beneficios actuales:</h4>
+                <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Beneficios actuales:</h4>
                 <ul className="space-y-1">
                   {currentTier.perks.map((perk, index) => (
-                    <li key={index} className="text-gray-700 flex items-center gap-2">
-                      <span className="text-green-600">✓</span>
+                    <li key={index} className="text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                      <span className="text-green-600 dark:text-green-400">✓</span>
                       {perk}
                     </li>
                   ))}
@@ -284,24 +284,24 @@ export default function ReferralsPage() {
 
             {nextTier && stats && (
               <div className="bg-purple-50 border-2 border-purple-200 rounded-lg p-6">
-                <h4 className="font-bold text-purple-900 mb-3">
+                <h4 className="font-bold text-purple-900 dark:text-purple-300 mb-3">
                   🎯 Próximo Nivel: {nextTier.name}
                 </h4>
                 <div className="mb-3">
                   <div className="flex justify-between text-sm mb-2">
-                    <span className="text-gray-600">Progreso</span>
-                    <span className="font-bold text-gray-900">
+                    <span className="text-gray-600 dark:text-gray-400">Progreso</span>
+                    <span className="font-bold text-gray-900 dark:text-gray-100">
                       {stats.totalReferrals} / {nextTier.minReferrals} referidos
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3">
                     <div
                       className="h-3 rounded-full bg-gradient-to-r from-green-500 to-blue-500 transition-all"
                       style={{ width: `${Math.min(getProgressToNextTier(), 100)}%` }}
                     ></div>
                   </div>
                 </div>
-                <div className="text-sm text-purple-800">
+                <div className="text-sm text-purple-800 dark:text-purple-400">
                   Faltan {nextTier.minReferrals - stats.totalReferrals} referidos para alcanzar {nextTier.name}
                 </div>
               </div>
@@ -310,15 +310,15 @@ export default function ReferralsPage() {
             {!nextTier && (
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 text-center">
                 <div className="text-4xl mb-2">👑</div>
-                <h4 className="font-bold text-yellow-900 mb-2">¡Nivel Máximo Alcanzado!</h4>
-                <p className="text-yellow-800">Has llegado al nivel más alto del sistema de referidos</p>
+                <h4 className="font-bold text-yellow-900 dark:text-yellow-300 mb-2">¡Nivel Máximo Alcanzado!</h4>
+                <p className="text-yellow-800 dark:text-yellow-400">Has llegado al nivel más alto del sistema de referidos</p>
               </div>
             )}
           </div>
 
           {/* All Tiers */}
-          <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Todos los Niveles</h2>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Todos los Niveles</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {tiers.sort((a, b) => a.minReferrals - b.minReferrals).map((tier, index) => (
                 <div
@@ -326,28 +326,28 @@ export default function ReferralsPage() {
                   className={`rounded-lg p-6 border-2 ${
                     stats && stats.totalReferrals >= tier.minReferrals
                       ? 'bg-gradient-to-br from-green-50 to-blue-50 border-green-300'
-                      : 'bg-gray-50 border-gray-200'
+                      : 'bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-700'
                   }`}
                 >
                   <div className="text-center mb-4">
                     <div className="text-4xl mb-2">
                       {index === 0 ? '🌱' : index === 1 ? '🌿' : index === 2 ? '🌳' : '👑'}
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900">{tier.name}</h3>
-                    <p className="text-sm text-gray-600">{tier.minReferrals}+ referidos</p>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{tier.name}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{tier.minReferrals}+ referidos</p>
                   </div>
 
                   <div className="mb-3">
-                    <div className="text-center text-2xl font-bold text-green-600">
+                    <div className="text-center text-2xl font-bold text-green-600 dark:text-green-400">
                       ×{tier.bonusMultiplier}
                     </div>
-                    <div className="text-center text-xs text-gray-600">Multiplicador</div>
+                    <div className="text-center text-xs text-gray-600 dark:text-gray-400">Multiplicador</div>
                   </div>
 
                   <ul className="space-y-1">
                     {tier.perks.map((perk, perkIndex) => (
-                      <li key={perkIndex} className="text-xs text-gray-700 flex items-start gap-1">
-                        <span className="text-green-600 mt-0.5">✓</span>
+                      <li key={perkIndex} className="text-xs text-gray-700 dark:text-gray-300 flex items-start gap-1">
+                        <span className="text-green-600 dark:text-green-400 mt-0.5">✓</span>
                         <span>{perk}</span>
                       </li>
                     ))}
@@ -367,25 +367,25 @@ export default function ReferralsPage() {
 
           {/* Referrals List */}
           {referrals && referrals.length > 0 && (
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Tus Referidos</h2>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Tus Referidos</h2>
               <div className="space-y-4">
                 {referrals.map((referral) => (
                   <div
                     key={referral.id}
-                    className="bg-gray-50 rounded-lg p-4 flex items-center justify-between"
+                    className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 flex items-center justify-between"
                   >
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-400 rounded-full flex items-center justify-center text-white text-xl font-bold">
                         {referral.referredUserName.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <h4 className="font-bold text-gray-900">{referral.referredUserName}</h4>
-                        <p className="text-sm text-gray-600">
+                        <h4 className="font-bold text-gray-900 dark:text-gray-100">{referral.referredUserName}</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
                           Registrado: {new Date(referral.createdAt).toLocaleDateString()}
                         </p>
                         {referral.activatedAt && (
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
                             Activado: {new Date(referral.activatedAt).toLocaleDateString()}
                           </p>
                         )}
@@ -397,7 +397,7 @@ export default function ReferralsPage() {
                         {getStatusText(referral.status)}
                       </span>
                       {referral.rewardEarned > 0 && (
-                        <div className="text-sm text-green-600 font-semibold mt-1">
+                        <div className="text-sm text-green-600 dark:text-green-400 font-semibold mt-1">
                           +{referral.rewardEarned} puntos
                         </div>
                       )}
@@ -409,43 +409,43 @@ export default function ReferralsPage() {
           )}
 
           {/* How it Works */}
-          <div className="mt-8 bg-white rounded-lg shadow-lg p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">¿Cómo funciona el Sistema de Referidos?</h3>
+          <div className="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">¿Cómo funciona el Sistema de Referidos?</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div className="text-center">
                 <div className="text-4xl mb-3">1️⃣</div>
                 <h4 className="font-bold mb-2">Comparte</h4>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Copia tu link de referido y compártelo con amigos
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">2️⃣</div>
                 <h4 className="font-bold mb-2">Se Registran</h4>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Tus amigos usan tu link para crear su cuenta
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">3️⃣</div>
                 <h4 className="font-bold mb-2">Se Activan</h4>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Cuando completan acciones, se vuelven referidos activos
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">4️⃣</div>
                 <h4 className="font-bold mb-2">Ganas Puntos</h4>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Recibes puntos y subes de nivel con más referidos
                 </p>
               </div>
             </div>
 
             <div className="mt-8 bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
-              <h4 className="font-bold text-blue-900 mb-3">💡 Tips para más referidos</h4>
-              <ul className="text-sm text-blue-800 space-y-2">
-                <li>• Comparte tu experiencia personal con Comunidad Viva</li>
+              <h4 className="font-bold text-blue-900 dark:text-blue-300 mb-3">💡 Tips para más referidos</h4>
+              <ul className="text-sm text-blue-800 dark:text-blue-400 space-y-2">
+                <li>• Comparte tu experiencia personal con Truk</li>
                 <li>• Explica cómo la plataforma puede ayudar a tus amigos</li>
                 <li>• Usa redes sociales y grupos de WhatsApp/Telegram</li>
                 <li>• Entre más referidos activos, mayor tu multiplicador de recompensas</li>
@@ -458,4 +458,4 @@ export default function ReferralsPage() {
   );
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

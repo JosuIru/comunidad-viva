@@ -6,6 +6,8 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { PrismaModule } from './prisma/prisma.module';
 import { RequestLoggerMiddleware } from './common/request-logger.middleware';
+import { SanitizeMiddleware } from './common/middleware/sanitize.middleware';
+import { RedisThrottlerStorage } from './common/redis-throttler-storage.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { CommunitiesModule } from './communities/communities.module';
@@ -33,24 +35,30 @@ import { MutualAidModule } from './mutual-aid/mutual-aid.module';
 import { FederationModule } from './federation/federation.module';
 import { WebSocketModule } from './websocket/websocket.module';
 import { AchievementsModule } from './achievements/achievements.module';
+import { InstallerModule } from './installer/installer.module';
+import { CommunityPacksModule } from './community-packs/community-packs.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     EventEmitterModule.forRoot(),
     ScheduleModule.forRoot(),  // Re-enabled - testing if crypto error is resolved
-    ThrottlerModule.forRoot([
-      {
-        name: 'default',
-        ttl: 60000, // 60 seconds
-        limit: 100, // 100 requests per minute (global default)
-      },
-      {
-        name: 'strict',
-        ttl: 60000, // 60 seconds
-        limit: 10, // 10 requests per minute (for auth endpoints)
-      },
-    ]),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          name: 'default',
+          ttl: 60000, // 60 seconds
+          limit: 100, // 100 requests per minute (global default)
+        },
+        {
+          name: 'strict',
+          ttl: 60000, // 60 seconds
+          limit: 10, // 10 requests per minute (for auth endpoints)
+        },
+      ],
+      // Use Redis storage for distributed rate limiting (falls back to memory)
+      storage: new RedisThrottlerStorage(),
+    }),
     PrismaModule,
     HealthModule,
     AuthModule,
@@ -79,6 +87,8 @@ import { AchievementsModule } from './achievements/achievements.module';
     FederationModule,  // Gailu Labs Federation: DID, SEMILLA, ActivityPub, Círculos
     WebSocketModule,  // Real-time notifications and live updates
     AchievementsModule,  // Sistema completo de achievements/badges con 70+ badges
+    InstallerModule,  // Instalador gráfico estilo WordPress
+    CommunityPacksModule,  // Community onboarding packs for organized groups
   ],
   providers: [
     {
@@ -90,7 +100,7 @@ import { AchievementsModule } from './achievements/achievements.module';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(RequestLoggerMiddleware)
-      .forRoutes('*'); // Apply to all routes
+      .apply(SanitizeMiddleware, RequestLoggerMiddleware)
+      .forRoutes('*'); // Apply to all routes (sanitize first, then log)
   }
 }

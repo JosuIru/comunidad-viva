@@ -65,12 +65,21 @@ describe('CreditsService', () => {
 
   describe('grantCredits', () => {
     it('should grant credits successfully', async () => {
-      const updatedUser = { ...mockUser, credits: 110 };
+      const updatedUser = { credits: 110 };
 
       prismaService.user.findUnique.mockResolvedValue(mockUser);
       prismaService.creditTransaction.findMany.mockResolvedValue([]);
       prismaService.creditTransaction.findFirst.mockResolvedValue(null);
-      prismaService.$transaction.mockResolvedValue([updatedUser, mockTransaction]);
+      prismaService.$transaction.mockImplementation((callback) => {
+        return callback({
+          user: {
+            update: jest.fn().mockResolvedValue(updatedUser),
+          },
+          creditTransaction: {
+            create: jest.fn().mockResolvedValue(mockTransaction),
+          },
+        });
+      });
 
       const result = await service.grantCredits(
         'user-123',
@@ -121,12 +130,21 @@ describe('CreditsService', () => {
 
     it('should detect level up', async () => {
       const lowCreditUser = { ...mockUser, credits: 40 };
-      const updatedUser = { ...mockUser, credits: 50 }; // Crosses to level 2 (Brote)
+      const updatedUser = { credits: 50 }; // Crosses to level 2 (Brote)
 
       prismaService.user.findUnique.mockResolvedValue(lowCreditUser);
       prismaService.creditTransaction.findMany.mockResolvedValue([]);
       prismaService.creditTransaction.findFirst.mockResolvedValue(null);
-      prismaService.$transaction.mockResolvedValue([updatedUser, mockTransaction]);
+      prismaService.$transaction.mockImplementation((callback) => {
+        return callback({
+          user: {
+            update: jest.fn().mockResolvedValue(updatedUser),
+          },
+          creditTransaction: {
+            create: jest.fn().mockResolvedValue(mockTransaction),
+          },
+        });
+      });
 
       const result = await service.grantCredits(
         'user-123',
@@ -143,10 +161,16 @@ describe('CreditsService', () => {
       prismaService.user.findUnique.mockResolvedValue(mockUser);
       prismaService.creditTransaction.findMany.mockResolvedValue([]);
       prismaService.creditTransaction.findFirst.mockResolvedValue(null);
-      prismaService.$transaction.mockResolvedValue([
-        { ...mockUser, credits: 200 },
-        mockTransaction,
-      ]);
+      prismaService.$transaction.mockImplementation((callback) => {
+        return callback({
+          user: {
+            update: jest.fn().mockResolvedValue({ credits: 200 }),
+          },
+          creditTransaction: {
+            create: jest.fn().mockResolvedValue(mockTransaction),
+          },
+        });
+      });
 
       const result = await service.grantCredits(
         'user-123',
@@ -160,11 +184,20 @@ describe('CreditsService', () => {
 
   describe('spendCredits', () => {
     it('should spend credits successfully', async () => {
-      const updatedUser = { ...mockUser, credits: 90 };
+      const updatedUser = { credits: 90 };
       const spendTransaction = { ...mockTransaction, amount: -10, balance: 90 };
 
-      prismaService.user.findUnique.mockResolvedValue(mockUser);
-      prismaService.$transaction.mockResolvedValue([updatedUser, spendTransaction]);
+      prismaService.$transaction.mockImplementation((callback) => {
+        return callback({
+          user: {
+            findUnique: jest.fn().mockResolvedValue(mockUser),
+            update: jest.fn().mockResolvedValue(updatedUser),
+          },
+          creditTransaction: {
+            create: jest.fn().mockResolvedValue(spendTransaction),
+          },
+        });
+      });
 
       const result = await service.spendCredits(
         'user-123',
@@ -179,7 +212,13 @@ describe('CreditsService', () => {
     });
 
     it('should throw NotFoundException when user not found', async () => {
-      prismaService.user.findUnique.mockResolvedValue(null);
+      prismaService.$transaction.mockImplementation((callback) => {
+        return callback({
+          user: {
+            findUnique: jest.fn().mockResolvedValue(null),
+          },
+        });
+      });
 
       await expect(
         service.spendCredits('non-existent', 10, CreditReason.PURCHASE)
@@ -188,7 +227,14 @@ describe('CreditsService', () => {
 
     it('should throw BadRequestException when insufficient credits', async () => {
       const poorUser = { ...mockUser, credits: 5 };
-      prismaService.user.findUnique.mockResolvedValue(poorUser);
+
+      prismaService.$transaction.mockImplementation((callback) => {
+        return callback({
+          user: {
+            findUnique: jest.fn().mockResolvedValue(poorUser),
+          },
+        });
+      });
 
       await expect(
         service.spendCredits('user-123', 10, CreditReason.PURCHASE)
@@ -414,6 +460,163 @@ describe('CreditsService', () => {
       expect(prismaService.user.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           orderBy: { credits: 'desc' },
+        })
+      );
+    });
+  });
+
+  describe('Concurrency Tests - Atomic Transactions', () => {
+    // Nota: Estos tests verifican que el código usa transacciones atómicas correctamente.
+    // Los tests unitarios no pueden simular race conditions reales, pero verifican
+    // que las transacciones se usen correctamente. Para tests de integración reales
+    // con concurrencia, se necesitaría una base de datos real.
+
+    it('should use atomic transaction for grantCredits', async () => {
+      const transactionCallback = jest.fn(async (tx) => {
+        return {
+          updatedUser: { credits: 110 },
+          creditTransaction: mockTransaction,
+        };
+      });
+
+      prismaService.user.findUnique.mockResolvedValue(mockUser);
+      prismaService.creditTransaction.findMany.mockResolvedValue([]);
+      prismaService.creditTransaction.findFirst.mockResolvedValue(null);
+      prismaService.$transaction.mockImplementation((callback) => {
+        return callback({
+          user: {
+            update: jest.fn().mockResolvedValue({ credits: 110 }),
+          },
+          creditTransaction: {
+            create: jest.fn().mockResolvedValue(mockTransaction),
+          },
+        });
+      });
+
+      await service.grantCredits(
+        'user-123',
+        10,
+        CreditReason.EVENT_ATTENDANCE
+      );
+
+      // Verificar que $transaction fue llamado con una función callback
+      expect(prismaService.$transaction).toHaveBeenCalledWith(
+        expect.any(Function)
+      );
+    });
+
+    it('should use atomic transaction for spendCredits', async () => {
+      prismaService.$transaction.mockImplementation((callback) => {
+        return callback({
+          user: {
+            findUnique: jest.fn().mockResolvedValue(mockUser),
+            update: jest.fn().mockResolvedValue({ credits: 90 }),
+          },
+          creditTransaction: {
+            create: jest.fn().mockResolvedValue({
+              ...mockTransaction,
+              amount: -10,
+              balance: 90,
+            }),
+          },
+        });
+      });
+
+      await service.spendCredits(
+        'user-123',
+        10,
+        CreditReason.PURCHASE
+      );
+
+      // Verificar que $transaction fue llamado con una función callback
+      expect(prismaService.$transaction).toHaveBeenCalledWith(
+        expect.any(Function)
+      );
+    });
+
+    it('should validate balance inside transaction for spendCredits', async () => {
+      const poorUser = { ...mockUser, credits: 5 };
+
+      prismaService.$transaction.mockImplementation((callback) => {
+        return callback({
+          user: {
+            findUnique: jest.fn().mockResolvedValue(poorUser),
+          },
+        });
+      });
+
+      // Debe lanzar error DENTRO de la transacción
+      await expect(
+        service.spendCredits('user-123', 10, CreditReason.PURCHASE)
+      ).rejects.toThrow(BadRequestException);
+
+      // La transacción debe haber sido llamada
+      expect(prismaService.$transaction).toHaveBeenCalled();
+    });
+
+    it('should use increment operation in grantCredits', async () => {
+      const mockUpdate = jest.fn().mockResolvedValue({ credits: 110 });
+
+      prismaService.user.findUnique.mockResolvedValue(mockUser);
+      prismaService.creditTransaction.findMany.mockResolvedValue([]);
+      prismaService.creditTransaction.findFirst.mockResolvedValue(null);
+      prismaService.$transaction.mockImplementation((callback) => {
+        return callback({
+          user: {
+            update: mockUpdate,
+          },
+          creditTransaction: {
+            create: jest.fn().mockResolvedValue(mockTransaction),
+          },
+        });
+      });
+
+      await service.grantCredits(
+        'user-123',
+        10,
+        CreditReason.EVENT_ATTENDANCE
+      );
+
+      // Verificar que se usa increment en lugar de asignar un valor calculado
+      expect(mockUpdate).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            credits: { increment: 10 },
+          }),
+        })
+      );
+    });
+
+    it('should use decrement operation in spendCredits', async () => {
+      const mockUpdate = jest.fn().mockResolvedValue({ credits: 90 });
+
+      prismaService.$transaction.mockImplementation((callback) => {
+        return callback({
+          user: {
+            findUnique: jest.fn().mockResolvedValue(mockUser),
+            update: mockUpdate,
+          },
+          creditTransaction: {
+            create: jest.fn().mockResolvedValue({
+              ...mockTransaction,
+              amount: -10,
+            }),
+          },
+        });
+      });
+
+      await service.spendCredits(
+        'user-123',
+        10,
+        CreditReason.PURCHASE
+      );
+
+      // Verificar que se usa decrement en lugar de asignar un valor calculado
+      expect(mockUpdate).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            credits: { decrement: 10 },
+          }),
         })
       );
     });

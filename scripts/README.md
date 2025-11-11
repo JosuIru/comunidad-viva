@@ -1,6 +1,6 @@
 # Scripts de Mantenimiento
 
-Scripts utilitarios para el mantenimiento y administración de Comunidad Viva.
+Scripts utilitarios para el mantenimiento y administración de Truk.
 
 ## Backup de Base de Datos
 
@@ -34,7 +34,7 @@ Crea un backup comprimido de la base de datos PostgreSQL con timestamp.
 **Ejemplo de salida:**
 ```
 ================================
-  Comunidad Viva - DB Backup
+  Truk - DB Backup
 ================================
 
 Database: comunidad_viva
@@ -96,7 +96,7 @@ Restaura la base de datos desde un backup comprimido.
 **Salida:**
 ```
 ================================
-  Comunidad Viva - DB Restore
+  Truk - DB Restore
 ================================
 
 ⚠️  WARNING: This will REPLACE all data in the database!
@@ -152,7 +152,7 @@ Backup cada 6 horas:
 Crear `/etc/systemd/system/comunidad-backup.service`:
 ```ini
 [Unit]
-Description=Comunidad Viva Database Backup
+Description=Truk Database Backup
 After=postgresql.service
 
 [Service]
@@ -167,7 +167,7 @@ StandardError=append:/var/log/comunidad-backup.log
 Crear `/etc/systemd/system/comunidad-backup.timer`:
 ```ini
 [Unit]
-Description=Comunidad Viva Daily Backup Timer
+Description=Truk Daily Backup Timer
 Requires=comunidad-backup.service
 
 [Timer]

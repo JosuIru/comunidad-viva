@@ -1,37 +1,106 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useTranslations } from 'next-intl';
+import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+
+declare global {
+  interface Window {
+    ethereum?: any;
+    solana?: any;
+  }
+}
+import {
+  LockOpenIcon,
+  LockClosedIcon,
+  SparklesIcon,
+  UserIcon,
+  PencilSquareIcon,
+  ArrowRightOnRectangleIcon,
+  HomeIcon,
+  CalendarDaysIcon,
+  UsersIcon,
+  HandRaisedIcon,
+  BoltIcon,
+  ShoppingCartIcon,
+  CurrencyDollarIcon,
+  ChartBarIcon,
+  DocumentTextIcon,
+  ArrowsRightLeftIcon,
+  RectangleStackIcon,
+  BookOpenIcon,
+  PuzzlePieceIcon,
+} from '@heroicons/react/24/outline';
 import LanguageSelector from './LanguageSelector';
+import ThemeToggle from './ThemeToggle';
+import Avatar from './Avatar';
+import Button from './Button';
+import WalletModal from './WalletModal';
+import EconomicLayerBadge, { EconomicLayer } from './EconomicLayerBadge';
+import { api } from '@/lib/api';
+import { logger } from '@/lib/logger';
 
 export default function Navbar() {
   const router = useRouter();
   const t = useTranslations('nav');
   const tAuth = useTranslations('auth');
+  const tCommon = useTranslations('common');
+  const tCredits = useTranslations('credits');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showPlatformMenu, setShowPlatformMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [userName, setUserName] = useState('Usuario');
+  const [showMobileGamification, setShowMobileGamification] = useState(false);
+  const [showMobileEconomy, setShowMobileEconomy] = useState(false);
+  const [userName, setUserName] = useState(() => t('userMenu.defaultName'));
+  const [userId, setUserId] = useState<string | null>(null);
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [showWalletMenu, setShowWalletMenu] = useState(false);
+  const [showWalletConnectModal, setShowWalletConnectModal] = useState(false);
+  const [economicLayer, setEconomicLayer] = useState<EconomicLayer>('TRADITIONAL');
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
+    const storedUserId = localStorage.getItem('user_id');
     setIsAuthenticated(!!token);
+    setUserId(storedUserId);
 
-    // Get user name from localStorage
     const userStr = localStorage.getItem('user');
+    const defaultName = t('userMenu.defaultName');
     if (userStr) {
       try {
         const user = JSON.parse(userStr);
-        setUserName(user.name || 'Usuario');
+        setUserName(user?.name || defaultName);
+        // Check if user has wallet address
+        if (user?.walletAddress) {
+          setWalletAddress(user.walletAddress);
+        }
+        // Load economic layer
+        if (user?.economicLayer) {
+          setEconomicLayer(user.economicLayer as EconomicLayer);
+        }
       } catch (e) {
-        console.error('Error parsing user:', e);
+        logger.error('Error parsing user data from localStorage', { error: e });
+        setUserName(defaultName);
       }
+    } else {
+      setUserName(defaultName);
     }
-  }, []);
+  }, [t]);
 
-  // Close mobile menu on route change
+  // Fetch user's credit balance
+  const { data: balanceData } = useQuery({
+    queryKey: ['credits', 'balance', userId],
+    queryFn: async () => {
+      const response = await api.get('/credits/balance');
+      return response.data;
+    },
+    enabled: !!userId && isAuthenticated,
+    refetchInterval: 30000, // Refresh every 30 seconds
+  });
+
   useEffect(() => {
     const handleRouteChange = () => {
       setShowMobileMenu(false);
@@ -44,7 +113,6 @@ export default function Navbar() {
     };
   }, [router]);
 
-  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -53,6 +121,13 @@ export default function Navbar() {
       }
       if (!target.closest('.user-dropdown')) {
         setShowUserMenu(false);
+      }
+      if (!target.closest('.wallet-dropdown')) {
+        setShowWalletMenu(false);
+      }
+      // Close economic layer dropdown when clicking outside
+      if (!target.closest('.economic-layer-dropdown')) {
+        // The component handles its own state, but we could add a ref here if needed
       }
     };
 
@@ -70,224 +145,246 @@ export default function Navbar() {
     router.push('/');
   };
 
+  const handleDisconnectWallet = async () => {
+    try {
+      await api.post('/auth/web3/disconnect-wallet');
+      // Update local user data
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        delete user.walletAddress;
+        delete user.walletType;
+        localStorage.setItem('user', JSON.stringify(user));
+        setWalletAddress(null);
+        toast.success('Wallet desconectada exitosamente');
+      }
+    } catch (error: any) {
+      logger.error('Error disconnecting wallet', { error, response: error.response?.data });
+      toast.error(error.response?.data?.message || 'Error al desconectar wallet');
+    }
+    setShowWalletMenu(false);
+  };
+
+  const handleConnectWallet = () => {
+    setShowWalletConnectModal(true);
+  };
+
+  const connectMetaMask = async () => {
+    if (typeof window === 'undefined' || !window.ethereum) {
+      toast.error('MetaMask no está instalado');
+      return;
+    }
+
+    try {
+      setShowWalletConnectModal(false);
+
+      // Request account access
+      const accounts = await window.ethereum.request({
+        method: 'eth_requestAccounts',
+      });
+
+      const walletAddressToLink = accounts[0];
+
+      // Request nonce from backend
+      const nonceResponse = await api.post('/auth/web3/request-nonce', {
+        walletAddress: walletAddressToLink,
+        walletType: 'METAMASK',
+      });
+
+      const { message } = nonceResponse.data;
+
+      // Sign message with MetaMask
+      const signature = await window.ethereum.request({
+        method: 'personal_sign',
+        params: [message, walletAddressToLink],
+      });
+
+      // Link wallet to existing account
+      const linkResponse = await api.post('/auth/web3/link-wallet', {
+        walletAddress: walletAddressToLink,
+        signature,
+        walletType: 'METAMASK',
+      });
+
+      // Update local user data
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        user.walletAddress = walletAddressToLink;
+        user.walletType = 'METAMASK';
+        localStorage.setItem('user', JSON.stringify(user));
+        setWalletAddress(walletAddressToLink);
+      }
+
+      toast.success('Wallet conectada exitosamente');
+    } catch (error: any) {
+      logger.error('MetaMask connection failed', {
+        error,
+        message: error.message,
+        response: error.response?.data
+      });
+      toast.error(error.response?.data?.message || error.message || 'Error al conectar wallet');
+    }
+  };
+
+  const connectPhantom = async () => {
+    if (typeof window === 'undefined' || !window.solana?.isPhantom) {
+      toast.error('Phantom no está instalado');
+      return;
+    }
+
+    try {
+      setShowWalletConnectModal(false);
+
+      // Connect to Phantom
+      const resp = await window.solana.connect();
+      const walletAddressToLink = resp.publicKey.toString();
+
+      // Request nonce from backend
+      const nonceResponse = await api.post('/auth/web3/request-nonce', {
+        walletAddress: walletAddressToLink,
+        walletType: 'PHANTOM',
+      });
+
+      const { message } = nonceResponse.data;
+
+      // Sign message with Phantom
+      const encodedMessage = new TextEncoder().encode(message);
+      const signedMessage = await window.solana.signMessage(encodedMessage, 'utf8');
+      const signature = Buffer.from(signedMessage.signature).toString('base64');
+
+      // Link wallet to existing account
+      const linkResponse = await api.post('/auth/web3/link-wallet', {
+        walletAddress: walletAddressToLink,
+        signature,
+        walletType: 'PHANTOM',
+      });
+
+      // Update local user data
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        user.walletAddress = walletAddressToLink;
+        user.walletType = 'PHANTOM';
+        localStorage.setItem('user', JSON.stringify(user));
+        setWalletAddress(walletAddressToLink);
+      }
+
+      toast.success('Wallet conectada exitosamente');
+    } catch (error: any) {
+      logger.error('Phantom wallet connection failed', {
+        error,
+        message: error.message,
+        response: error.response?.data
+      });
+      toast.error(error.response?.data?.message || error.message || 'Error al conectar wallet');
+    }
+  };
+
+  // Memoized helper to format wallet addresses
+  const formatWalletAddress = useCallback((address: string) => {
+    if (address.length <= 12) return address;
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  }, []);
+
+  // Memoized wallet options to prevent recreation on every render
+  const walletOptions = useMemo(() => [
+    {
+      name: 'MetaMask',
+      icon: '🦊',
+      description: 'La billetera más popular para Ethereum y EVM chains',
+      isInstalled: typeof window !== 'undefined' && typeof window.ethereum !== 'undefined',
+      installUrl: 'https://metamask.io/download/',
+      onConnect: connectMetaMask,
+    },
+    {
+      name: 'Phantom',
+      icon: '👻',
+      description: 'Billetera líder para Solana y multi-chain',
+      isInstalled: typeof window !== 'undefined' && typeof window.solana !== 'undefined' && window.solana.isPhantom,
+      installUrl: 'https://phantom.app/',
+      onConnect: connectPhantom,
+    },
+    {
+      name: 'WalletConnect',
+      icon: '🔗',
+      description: 'Conecta con 300+ billeteras móviles',
+      isInstalled: false,
+      installUrl: 'https://walletconnect.com/',
+      onConnect: async () => {
+        toast.info('WalletConnect próximamente disponible');
+      },
+    },
+  ], [connectMetaMask, connectPhantom]);
+
   return (
-    <nav className="bg-white border-b border-gray-200">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          <Link href="/" className="text-2xl font-bold text-blue-600">
-            {t('title')}
-          </Link>
+    <>
+      {/* Top Bar - Usuario, Theme, Idioma */}
+      <div className="py-2 bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-end h-10 gap-4">
+            {/* Economic Layer Badge - Show for authenticated users */}
+            {isAuthenticated && (
+              <EconomicLayerBadge layer={economicLayer} showDropdown={true} />
+            )}
 
-          {/* Hamburger Button - Mobile Only */}
-          <button
-            onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100"
-            aria-label="Menu"
-          >
-            <svg
-              className="w-6 h-6 text-gray-700"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              {showMobileMenu ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-6">
-            <Link href="/" className="text-gray-700 hover:text-blue-600">
-              {t('home')}
-            </Link>
-            <Link href="/offers" className="text-gray-700 hover:text-blue-600">
-              {t('offers')}
-            </Link>
-            <Link href="/events" className="text-gray-700 hover:text-blue-600">
-              {t('events')}
-            </Link>
-
-            <Link href="/communities" className="text-gray-700 hover:text-blue-600">
-              🏘️ Comunidades
-            </Link>
-
-            <Link href="/docs" className="text-gray-700 hover:text-blue-600 font-medium">
-              📚 Documentación
-            </Link>
-
-            <div className="relative dropdown-menu">
-              <button
-                onClick={() => setShowPlatformMenu(!showPlatformMenu)}
-                className="flex items-center gap-1 text-gray-700 hover:text-blue-600 font-medium"
-              >
-                🚀 Plataforma
-                <svg
-                  className={`w-4 h-4 transition-transform ${showPlatformMenu ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+            {/* Wallet Indicator */}
+            {isAuthenticated && walletAddress && (
+              <div className="relative wallet-dropdown">
+                <button
+                  onClick={() => setShowWalletMenu(!showWalletMenu)}
+                  className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all shadow-sm text-xs font-medium"
+                  title="Wallet Web3 conectada"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
+                  <LockClosedIcon className="h-4 w-4" />
+                  <span className="hidden sm:inline">{formatWalletAddress(walletAddress)}</span>
+                  <svg
+                    className={`w-3 h-3 transition-transform ${showWalletMenu ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
 
-              {showPlatformMenu && (
-                <div className="absolute top-full right-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-xl py-3 dropdown-menu" style={{ zIndex: 500 }}>
-                    {/* Gamification Section */}
-                    <div className="px-4 py-2">
-                      <div className="text-xs font-bold text-purple-600 mb-2">🎮 GAMIFICACIÓN</div>
-                      <Link
-                        href="/gamification/challenges"
-                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        🏆 Challenges & Leaderboard
-                      </Link>
-                      <Link
-                        href="/gamification/swipe"
-                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        💝 Swipe & Match
-                      </Link>
-                      <Link
-                        href="/gamification/flash-deals"
-                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        ⚡ Flash Deals
-                      </Link>
-                      <Link
-                        href="/gamification/group-buys"
-                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        🛒 Compras Grupales
-                      </Link>
-                      <Link
-                        href="/gamification/referrals"
-                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 rounded"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        🌟 Referidos
-                      </Link>
+                {showWalletMenu && (
+                  <div className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2 z-50 wallet-dropdown">
+                    <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Wallet conectada</p>
+                      <p className="text-sm font-mono text-gray-900 dark:text-gray-100 break-all">
+                        {walletAddress}
+                      </p>
                     </div>
-
-                    <div className="border-t border-gray-200 my-2"></div>
-
-                    {/* Economy Section */}
-                    <div className="px-4 py-2">
-                      <div className="text-xs font-bold text-blue-600 mb-2">💰 ECONOMÍA</div>
-                      <Link
-                        href="/hybrid/dashboard"
-                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        🦎 Sistema Híbrido
-                      </Link>
-                      <Link
-                        href="/hybrid/events"
-                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 rounded"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        🎉 Celebraciones
-                      </Link>
-                      <Link
-                        href="/economy/dashboard"
-                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        📊 Dashboard Económico
-                      </Link>
-                      <Link
-                        href="/bridge"
-                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        🌉 Blockchain Bridges
-                      </Link>
-                    </div>
-
-                    <div className="border-t border-gray-200 my-2"></div>
-
-                    {/* Governance Section */}
-                    <div className="px-4 py-2">
-                      <div className="text-xs font-bold text-indigo-600 mb-2">🏛️ GOBERNANZA</div>
-                      <Link
-                        href="/governance/proposals"
-                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        📜 Propuestas
-                      </Link>
-                      <Link
-                        href="/governance/delegation"
-                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        🗳️ Delegación de Votos
-                      </Link>
-                    </div>
-
-                    <div className="border-t border-gray-200 my-2"></div>
-
-                    {/* Housing & Mutual Aid Section */}
-                    <div className="px-4 py-2">
-                      <div className="text-xs font-bold text-green-600 mb-2">🏠 VIVIENDA Y AYUDA</div>
-                      <Link
-                        href="/housing"
-                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 rounded"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        🏡 Vivienda Comunitaria
-                      </Link>
-                      <Link
-                        href="/mutual-aid"
-                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 rounded"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        🤝 Ayuda Mutua
-                      </Link>
-                    </div>
-
-                    <div className="border-t border-gray-200 my-2"></div>
-
-                    {/* Docs & Features */}
-                    <div className="px-4 py-2">
-                      <Link
-                        href="/features"
-                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded font-medium"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        ✨ Todas las funcionalidades
-                      </Link>
-                      <Link
-                        href="/docs"
-                        className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        📚 Documentación
-                      </Link>
-                    </div>
+                    <button
+                      onClick={handleDisconnectWallet}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                    >
+                      <LockOpenIcon className="h-5 w-5" />
+                      <span>Desconectar Wallet</span>
+                    </button>
                   </div>
                 )}
               </div>
+            )}
 
-            {isAuthenticated && (
+            {/* Theme Toggle */}
+            <ThemeToggle />
+
+            {/* Language Selector */}
+            <LanguageSelector />
+
+            {/* User Menu */}
+            {isAuthenticated ? (
               <div className="relative user-dropdown">
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
                   className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                 >
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
-                    {userName.charAt(0).toUpperCase()}
-                  </div>
-                  <span className="text-gray-700 font-medium hidden lg:block">{userName}</span>
+                  <Avatar name={userName} size="sm" />
+                  <span className="text-sm text-gray-700 dark:text-gray-300 font-medium hidden sm:block">{userName}</span>
                   <svg
-                    className={`w-4 h-4 text-gray-600 transition-transform ${showUserMenu ? 'rotate-180' : ''}`}
+                    className={`w-3 h-3 text-gray-600 dark:text-gray-400 transition-transform ${showUserMenu ? 'rotate-180' : ''}`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -297,306 +394,655 @@ export default function Navbar() {
                 </button>
 
                 {showUserMenu && (
-                  <div className="absolute top-full right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl py-2 z-50 user-dropdown">
+                  <div className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2 z-50 user-dropdown">
+                    {/* Credit Balance Section - Always show */}
+                    <div className="px-4 py-3 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-b border-gray-200 dark:border-gray-700">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">{tCredits('balance')}</p>
+                          <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                            {balanceData?.balance ?? 0}
+                          </p>
+                        </div>
+                        <div className="text-3xl">{balanceData?.level?.badge || <SparklesIcon className="h-8 w-8 text-green-500" />}</div>
+                      </div>
+                      {balanceData?.level && (
+                        <div className="mt-2">
+                          <div className="flex items-center justify-between text-xs mb-1">
+                            <span className="text-gray-600 dark:text-gray-400 font-medium">
+                              Nivel {balanceData.level.level}
+                            </span>
+                            {balanceData.nextLevel && (
+                              <span className="text-green-600 dark:text-green-400">
+                                {Math.round(balanceData.progress)}%
+                              </span>
+                            )}
+                          </div>
+                          {balanceData.nextLevel && (
+                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                              <div
+                                className="bg-green-500 dark:bg-green-400 h-1.5 rounded-full transition-all duration-500"
+                                style={{ width: `${balanceData.progress}%` }}
+                              ></div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
                     <Link
                       href="/profile"
-                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                      className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400"
                       onClick={() => setShowUserMenu(false)}
                     >
-                      <span className="text-xl">👤</span>
-                      <span className="font-medium">Mi Perfil</span>
+                      <UserIcon className="h-5 w-5" />
+                      <span>{t('userMenu.profile')}</span>
                     </Link>
                     <Link
                       href="/manage"
-                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                      className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400"
                       onClick={() => setShowUserMenu(false)}
                     >
-                      <span className="text-xl">📝</span>
-                      <span className="font-medium">Gestionar Contenido</span>
+                      <PencilSquareIcon className="h-5 w-5" />
+                      <span>{t('userMenu.manage')}</span>
                     </Link>
-                    <div className="border-t border-gray-200 my-2"></div>
+
+                    {/* Wallet Connection Option */}
+                    {walletAddress ? (
+                      <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">
+                        <div className="mb-2">
+                          <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Wallet conectada</p>
+                          <p className="text-xs font-mono text-gray-900 dark:text-gray-100 break-all">
+                            {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => {
+                            handleDisconnectWallet();
+                            setShowUserMenu(false);
+                          }}
+                          className="w-full flex items-center gap-3 px-3 py-1.5 text-xs text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
+                        >
+                          <LockOpenIcon className="h-4 w-4" />
+                          <span>Desconectar Wallet</span>
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          handleConnectWallet();
+                          setShowUserMenu(false);
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 border-t border-gray-200 dark:border-gray-700"
+                      >
+                        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                        </svg>
+                        <span>Conectar Wallet Web3</span>
+                      </button>
+                    )}
+
+                    <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
                     <button
                       onClick={() => {
                         handleLogout();
                         setShowUserMenu(false);
                       }}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-colors"
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
                     >
-                      <span className="text-xl">🚪</span>
-                      <span className="font-medium">{t('logout')}</span>
+                      <ArrowRightOnRectangleIcon className="h-5 w-5" />
+                      <span>{t('logout')}</span>
                     </button>
                   </div>
                 )}
               </div>
-            )}
-
-            {!isAuthenticated && (
-              <>
-                <Link
-                  href="/auth/login"
-                  className="px-4 py-2 text-gray-700 hover:text-blue-600"
-                >
-                  {t('login')}
+            ) : (
+              <div className="flex items-center gap-2">
+                <Link href="/auth/login">
+                  <Button variant="ghost" size="sm">
+                    {t('login')}
+                  </Button>
                 </Link>
-                <Link
-                  href="/auth/register"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                >
-                  {t('register')}
-                </Link>
-              </>
-            )}
-
-            {/* Selector de idioma */}
-            <LanguageSelector />
-          </div>
-        </div>
-
-        {/* Mobile Menu */}
-        {showMobileMenu && (
-          <div className="md:hidden border-t border-gray-200 py-4">
-            <div className="flex flex-col space-y-3">
-              <Link
-                href="/"
-                className="px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
-                onClick={() => setShowMobileMenu(false)}
-              >
-                {t('home')}
-              </Link>
-              <Link
-                href="/offers"
-                className="px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
-                onClick={() => setShowMobileMenu(false)}
-              >
-                {t('offers')}
-              </Link>
-              <Link
-                href="/events"
-                className="px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
-                onClick={() => setShowMobileMenu(false)}
-              >
-                {t('events')}
-              </Link>
-              <Link
-                href="/communities"
-                className="px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
-                onClick={() => setShowMobileMenu(false)}
-              >
-                🏘️ Comunidades
-              </Link>
-              <Link
-                href="/docs"
-                className="px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg font-medium"
-                onClick={() => setShowMobileMenu(false)}
-              >
-                📚 Documentación
-              </Link>
-              {isAuthenticated && (
-                <>
-                  <div className="border-t border-gray-200 pt-3 mt-2">
-                    <div className="px-4 py-2 text-xs font-bold text-purple-600">
-                      🎮 GAMIFICACIÓN
-                    </div>
-                    <Link
-                      href="/gamification/challenges"
-                      className="px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 rounded-lg block"
-                      onClick={() => setShowMobileMenu(false)}
-                    >
-                      🏆 Challenges
-                    </Link>
-                    <Link
-                      href="/gamification/swipe"
-                      className="px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 rounded-lg block"
-                      onClick={() => setShowMobileMenu(false)}
-                    >
-                      💝 Swipe & Match
-                    </Link>
-                    <Link
-                      href="/gamification/flash-deals"
-                      className="px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 rounded-lg block"
-                      onClick={() => setShowMobileMenu(false)}
-                    >
-                      ⚡ Flash Deals
-                    </Link>
-                    <Link
-                      href="/gamification/group-buys"
-                      className="px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 rounded-lg block"
-                      onClick={() => setShowMobileMenu(false)}
-                    >
-                      🛒 Compras Grupales
-                    </Link>
-                    <Link
-                      href="/gamification/referrals"
-                      className="px-4 py-2 text-sm text-gray-700 hover:bg-green-50 rounded-lg block"
-                      onClick={() => setShowMobileMenu(false)}
-                    >
-                      🌟 Referidos
-                    </Link>
-                  </div>
-
-                  <div className="border-t border-gray-200 pt-3 mt-2">
-                    <div className="px-4 py-2 text-xs font-bold text-blue-600">
-                      💰 ECONOMÍA
-                    </div>
-                    <Link
-                      href="/hybrid/dashboard"
-                      className="px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 rounded-lg block"
-                      onClick={() => setShowMobileMenu(false)}
-                    >
-                      🦎 Sistema Híbrido
-                    </Link>
-                    <Link
-                      href="/hybrid/events"
-                      className="px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 rounded-lg block"
-                      onClick={() => setShowMobileMenu(false)}
-                    >
-                      🎉 Celebraciones
-                    </Link>
-                    <Link
-                      href="/economy/dashboard"
-                      className="px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 rounded-lg block"
-                      onClick={() => setShowMobileMenu(false)}
-                    >
-                      📊 Dashboard Económico
-                    </Link>
-                    <Link
-                      href="/bridge"
-                      className="px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-lg block"
-                      onClick={() => setShowMobileMenu(false)}
-                    >
-                      🌉 Blockchain Bridges
-                    </Link>
-                  </div>
-
-                  <div className="border-t border-gray-200 pt-3 mt-2">
-                    <div className="px-4 py-2 text-xs font-bold text-indigo-600">
-                      🏛️ GOBERNANZA
-                    </div>
-                    <Link
-                      href="/governance/proposals"
-                      className="px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 rounded-lg block"
-                      onClick={() => setShowMobileMenu(false)}
-                    >
-                      📜 Propuestas
-                    </Link>
-                    <Link
-                      href="/governance/delegation"
-                      className="px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 rounded-lg block"
-                      onClick={() => setShowMobileMenu(false)}
-                    >
-                      🗳️ Delegación
-                    </Link>
-                  </div>
-
-                  <div className="border-t border-gray-200 pt-3 mt-2">
-                    <div className="px-4 py-2 text-xs font-bold text-green-600">
-                      🏠 VIVIENDA Y AYUDA
-                    </div>
-                    <Link
-                      href="/housing"
-                      className="px-4 py-2 text-sm text-gray-700 hover:bg-green-50 rounded-lg block"
-                      onClick={() => setShowMobileMenu(false)}
-                    >
-                      🏡 Vivienda Comunitaria
-                    </Link>
-                    <Link
-                      href="/mutual-aid"
-                      className="px-4 py-2 text-sm text-gray-700 hover:bg-yellow-50 rounded-lg block"
-                      onClick={() => setShowMobileMenu(false)}
-                    >
-                      🤝 Ayuda Mutua
-                    </Link>
-                  </div>
-
-                  <div className="border-t border-gray-200 pt-3 mt-2">
-                    {/* User Section */}
-                    <div className="px-4 py-3 mb-2">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
-                          {userName.charAt(0).toUpperCase()}
-                        </div>
-                        <div>
-                          <p className="font-semibold text-gray-900">{userName}</p>
-                          <p className="text-xs text-gray-500">Ver perfil</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <Link
-                      href="/profile"
-                      className="px-4 py-2 text-gray-700 hover:bg-blue-50 rounded-lg block flex items-center gap-2"
-                      onClick={() => setShowMobileMenu(false)}
-                    >
-                      <span className="text-xl">👤</span>
-                      <span>Mi Perfil</span>
-                    </Link>
-                    <Link
-                      href="/manage"
-                      className="px-4 py-2 text-gray-700 hover:bg-blue-50 rounded-lg block flex items-center gap-2"
-                      onClick={() => setShowMobileMenu(false)}
-                    >
-                      <span className="text-xl">📝</span>
-                      <span>Gestionar Contenido</span>
-                    </Link>
-                    <button
-                      onClick={() => {
-                        handleLogout();
-                        setShowMobileMenu(false);
-                      }}
-                      className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg flex items-center gap-2 mt-2"
-                    >
-                      <span className="text-xl">🚪</span>
-                      <span>{t('logout')}</span>
-                    </button>
-                  </div>
-                </>
-              )}
-
-              {/* Links para todos */}
-              <div className="border-t border-gray-200 pt-3 mt-2">
-                <Link
-                  href="/features"
-                  className="px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg block"
-                  onClick={() => setShowMobileMenu(false)}
-                >
-                  ✨ Funcionalidades
-                </Link>
-                <Link
-                  href="/docs"
-                  className="px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg block"
-                  onClick={() => setShowMobileMenu(false)}
-                >
-                  📚 {t('docs')}
+                <Link href="/auth/register">
+                  <Button variant="primary" size="sm">
+                    {t('register')}
+                  </Button>
                 </Link>
               </div>
+            )}
+          </div>
+        </div>
+      </div>
 
-              {!isAuthenticated && (
-                <div className="border-t border-gray-200 pt-3 mt-2 space-y-2">
-                  <Link
-                    href="/auth/login"
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    {t('login')}
-                  </Link>
-                  <Link
-                    href="/auth/register"
-                    className="block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-center"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    {t('register')}
-                  </Link>
-                </div>
-              )}
+      {/* Main Navigation */}
+      <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <Link href="/" className="flex items-center group">
+              <div className="relative w-40 h-14 transition-transform group-hover:scale-105">
+                {/* Logo oscuro para light mode */}
+                <Image
+                  src="/logo.png"
+                  alt="Truk"
+                  fill
+                  sizes="160px"
+                  className="object-contain object-left dark:hidden"
+                  priority
+                />
+                {/* Logo claro para dark mode */}
+                <Image
+                  src="/logo-light.png"
+                  alt="Truk"
+                  fill
+                  sizes="160px"
+                  className="object-contain object-left hidden dark:block"
+                  priority
+                />
+              </div>
+            </Link>
 
-              {/* Selector de idioma en mobile */}
-              <div className="border-t border-gray-200 pt-3 mt-2">
-                <LanguageSelector />
+            {/* Hamburger Button - Mobile Only */}
+            <button
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+              aria-label={tCommon('menu')}
+            >
+              <svg
+                className="w-6 h-6 text-gray-700 dark:text-gray-300"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                {showMobileMenu ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+
+            {/* Desktop Menu */}
+            <div className="hidden md:flex items-center gap-1 lg:gap-2">
+              {/* Navegación Principal */}
+              <Link href="/" className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition whitespace-nowrap">
+                {t('home')}
+              </Link>
+              <Link href="/offers" className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition whitespace-nowrap">
+                {t('offers')}
+              </Link>
+              <Link href="/events" className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition whitespace-nowrap">
+                {t('events')}
+              </Link>
+              <Link href="/housing" className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition whitespace-nowrap">
+                {t('platform.items.housing')}
+              </Link>
+              <Link href="/communities" className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition whitespace-nowrap">
+                {t('communities')}
+              </Link>
+
+              {/* Economía Viva - TRUK's crown jewel */}
+              <Link
+                href="/hybrid/dashboard"
+                className="px-3 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 rounded-md transition whitespace-nowrap font-semibold shadow-sm"
+                title="Sistema Híbrido de Economía Viva - La revolución TRUK"
+              >
+                💚 Economía Viva
+              </Link>
+
+              {/* Más - Dropdown con todo organizado */}
+              <div className="relative dropdown-menu">
+                <button
+                  onClick={() => setShowPlatformMenu(!showPlatformMenu)}
+                  className="flex items-center gap-1 px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition font-medium"
+                >
+                  Más
+                  <svg
+                    className={`w-4 h-4 transition-transform ${showPlatformMenu ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {showPlatformMenu && (
+                  <div className="absolute top-full right-0 mt-2 w-72 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2 dropdown-menu z-50 max-h-[80vh] overflow-y-auto">
+                    {/* Colaboración */}
+                    <div className="px-3 py-1">
+                      <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">🤝 Colaboración</p>
+                      <Link
+                        href="/mutual-aid"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 rounded-md transition"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        <HandRaisedIcon className="h-5 w-5" />
+                        {t('platform.items.mutualAid')}
+                      </Link>
+                      <Link
+                        href="/timebank"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-amber-50 dark:hover:bg-amber-900/20 hover:text-amber-600 dark:hover:text-amber-400 rounded-md transition"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Banco de Tiempo
+                      </Link>
+                    </div>
+
+                    <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+
+                    {/* Gamificación */}
+                    <div className="px-3 py-1">
+                      <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">🎮 Gamificación</p>
+                      <Link
+                        href="/gamification/challenges"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 rounded-md transition"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        <BoltIcon className="h-5 w-5" />
+                        {t('platform.items.challenges')}
+                      </Link>
+                      <Link
+                        href="/gamification/swipe"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-pink-50 dark:hover:bg-pink-900/20 hover:text-pink-600 dark:hover:text-pink-400 rounded-md transition"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        <SparklesIcon className="h-5 w-5" />
+                        {t('platform.items.swipe')}
+                      </Link>
+                      <Link
+                        href="/gamification/flash-deals"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 hover:text-yellow-600 dark:hover:text-yellow-400 rounded-md transition"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        <BoltIcon className="h-5 w-5" />
+                        {t('platform.items.flashDeals')}
+                      </Link>
+                      <Link
+                        href="/gamification/group-buys"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 rounded-md transition"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        <ShoppingCartIcon className="h-5 w-5" />
+                        {t('platform.items.groupBuys')}
+                      </Link>
+                      <Link
+                        href="/gamification/referrals"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-600 dark:hover:text-green-400 rounded-md transition"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        <UsersIcon className="h-5 w-5" />
+                        {t('platform.items.referrals')}
+                      </Link>
+                    </div>
+
+                    <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+
+                    {/* Economía & Gobernanza */}
+                    <div className="px-3 py-1">
+                      <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">⚖️ Economía & Gobernanza</p>
+                      <Link
+                        href="/flow-economics"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 rounded-md transition"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        <ChartBarIcon className="h-5 w-5" />
+                        {t('platform.items.economyDashboard')}
+                      </Link>
+                      <Link
+                        href="/bridge"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-md transition"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        <ArrowsRightLeftIcon className="h-5 w-5" />
+                        {t('platform.items.bridge')}
+                      </Link>
+                      <Link
+                        href="/governance/proposals"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 rounded-md transition"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        <DocumentTextIcon className="h-5 w-5" />
+                        {t('platform.items.proposals')}
+                      </Link>
+                      <Link
+                        href="/governance/delegation"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-md transition"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        <RectangleStackIcon className="h-5 w-5" />
+                        {t('platform.items.delegation')}
+                      </Link>
+                    </div>
+
+                    <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+
+                    {/* Comunidad */}
+                    <div className="px-3 py-1">
+                      <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">🌍 Comunidad</p>
+                      <Link
+                        href="/impacto"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-600 dark:hover:text-green-400 rounded-md transition"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        <ChartBarIcon className="h-5 w-5" />
+                        Impacto
+                      </Link>
+                      <Link
+                        href="/red-comunidades"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 rounded-md transition"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Red de Comunidades
+                      </Link>
+                      <Link
+                        href="/hybrid/celebrations"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 rounded-md transition"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        <SparklesIcon className="h-5 w-5" />
+                        {t('platform.items.hybridEvents')}
+                      </Link>
+                    </div>
+
+                    <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+
+                    {/* Documentación */}
+                    <div className="px-3 py-1">
+                      <Link
+                        href="/docs"
+                        className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-md transition"
+                        onClick={() => setShowPlatformMenu(false)}
+                      >
+                        <BookOpenIcon className="h-5 w-5" />
+                        {t('platform.items.allFeatures')}
+                      </Link>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
-        )}
-      </div>
-    </nav>
+
+          {/* Mobile Menu - Reorganizado */}
+          {showMobileMenu && (
+            <div className="md:hidden border-t border-gray-200 dark:border-gray-700 py-4">
+              <div className="flex flex-col space-y-1">
+                {/* Main Navigation */}
+                <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  Principal
+                </div>
+                <Link
+                  href="/"
+                  className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  <HomeIcon className="h-5 w-5" />
+                  <span>{t('home')}</span>
+                </Link>
+                <Link
+                  href="/offers"
+                  className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  <ShoppingCartIcon className="h-5 w-5" />
+                  <span>{t('offers')}</span>
+                </Link>
+                <Link
+                  href="/events"
+                  className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  <CalendarDaysIcon className="h-5 w-5" />
+                  <span>{t('events')}</span>
+                </Link>
+                <Link
+                  href="/housing"
+                  className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
+                  <span>{t('platform.items.housing')}</span>
+                </Link>
+                <Link
+                  href="/communities"
+                  className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  <UsersIcon className="h-5 w-5" />
+                  <span>{t('communities')}</span>
+                </Link>
+
+                {/* Economía Viva - TRUK's crown jewel */}
+                <Link
+                  href="/hybrid/dashboard"
+                  className="mx-3 my-2 px-3 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 rounded-lg transition-all flex items-center gap-2 font-semibold shadow-md"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                  <span>💚 Economía Viva</span>
+                  <svg className="h-4 w-4 ml-auto" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </Link>
+
+                {/* Colaboración Section */}
+                <div className="mt-4">
+                  <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    🤝 Colaboración
+                  </div>
+                  <Link
+                    href="/mutual-aid"
+                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    <HandRaisedIcon className="h-5 w-5" />
+                    <span>{t('platform.items.mutualAid')}</span>
+                  </Link>
+                  <Link
+                    href="/timebank"
+                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Banco de Tiempo</span>
+                  </Link>
+                </div>
+
+                {/* Gamification Section - Collapsible */}
+                <div className="mt-4">
+                  <button
+                    onClick={() => setShowMobileGamification(!showMobileGamification)}
+                    className="w-full flex items-center justify-between px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <PuzzlePieceIcon className="h-5 w-5" />
+                      <span className="font-medium">🎮 {t('platform.gamification')}</span>
+                    </span>
+                    <svg
+                      className={`w-5 h-5 transition-transform ${showMobileGamification ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {showMobileGamification && (
+                    <div className="ml-4 mt-1 flex flex-col space-y-1 border-l-2 border-purple-200 dark:border-purple-800 pl-2">
+                      <Link
+                        href="/gamification/challenges"
+                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        <BoltIcon className="h-5 w-5" />
+                        <span>{t('platform.items.challenges')}</span>
+                      </Link>
+                      <Link
+                        href="/gamification/swipe"
+                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        <SparklesIcon className="h-5 w-5" />
+                        <span>{t('platform.items.swipe')}</span>
+                      </Link>
+                      <Link
+                        href="/gamification/flash-deals"
+                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        <BoltIcon className="h-5 w-5" />
+                        <span>{t('platform.items.flashDeals')}</span>
+                      </Link>
+                      <Link
+                        href="/gamification/group-buys"
+                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        <ShoppingCartIcon className="h-5 w-5" />
+                        <span>{t('platform.items.groupBuys')}</span>
+                      </Link>
+                      <Link
+                        href="/gamification/referrals"
+                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        <UsersIcon className="h-5 w-5" />
+                        <span>{t('platform.items.referrals')}</span>
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+                {/* Economy & Governance Section - Collapsible */}
+                <div className="mt-2">
+                  <button
+                    onClick={() => setShowMobileEconomy(!showMobileEconomy)}
+                    className="w-full flex items-center justify-between px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <ChartBarIcon className="h-5 w-5" />
+                      <span className="font-medium">⚖️ {t('platform.economy')}</span>
+                    </span>
+                    <svg
+                      className={`w-5 h-5 transition-transform ${showMobileEconomy ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {showMobileEconomy && (
+                    <div className="ml-4 mt-1 flex flex-col space-y-1 border-l-2 border-green-200 dark:border-green-800 pl-2">
+                      <Link
+                        href="/flow-economics"
+                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        <ChartBarIcon className="h-5 w-5" />
+                        <span>{t('platform.items.economyDashboard')}</span>
+                      </Link>
+                      <Link
+                        href="/bridge"
+                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        <ArrowsRightLeftIcon className="h-5 w-5" />
+                        <span>{t('platform.items.bridge')}</span>
+                      </Link>
+                      <Link
+                        href="/governance/proposals"
+                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        <DocumentTextIcon className="h-5 w-5" />
+                        <span>{t('platform.items.proposals')}</span>
+                      </Link>
+                      <Link
+                        href="/governance/delegation"
+                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        <RectangleStackIcon className="h-5 w-5" />
+                        <span>{t('platform.items.delegation')}</span>
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+                {/* Comunidad Section */}
+                <div className="mt-4">
+                  <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    🌍 Comunidad
+                  </div>
+                  <Link
+                    href="/impacto"
+                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    <ChartBarIcon className="h-5 w-5" />
+                    <span>Impacto</span>
+                  </Link>
+                  <Link
+                    href="/red-comunidades"
+                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Red de Comunidades</span>
+                  </Link>
+                  <Link
+                    href="/hybrid/celebrations"
+                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    <SparklesIcon className="h-5 w-5" />
+                    <span>{t('platform.items.hybridEvents')}</span>
+                  </Link>
+                </div>
+
+                {/* Documentation */}
+                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <Link
+                    href="/docs"
+                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    <BookOpenIcon className="h-5 w-5" />
+                    <span>{t('platform.items.allFeatures')}</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </nav>
+
+      {/* Wallet Connection Modal */}
+      <WalletModal
+        isOpen={showWalletConnectModal}
+        onClose={() => setShowWalletConnectModal(false)}
+        wallets={walletOptions}
+        title="Vincular Billetera Web3"
+        subtitle="Vincula tu billetera Web3 a tu cuenta existente"
+      />
+    </>
   );
 }

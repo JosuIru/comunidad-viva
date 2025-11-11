@@ -2,7 +2,7 @@
 
 ## La Revolución Suave: Una App, Infinitas Conciencias
 
-Este documento describe la implementación del **Sistema Híbrido de Capas**, la característica más revolucionaria de Comunidad Viva: permite que la misma aplicación funcione simultáneamente en múltiples paradigmas económicos.
+Este documento describe la implementación del **Sistema Híbrido de Capas**, la característica más revolucionaria de Truk: permite que la misma aplicación funcione simultáneamente en múltiples paradigmas económicos.
 
 ---
 

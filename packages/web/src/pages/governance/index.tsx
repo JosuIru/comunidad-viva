@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import Link from 'next/link';
+import { getI18nProps } from '@/lib/i18n';
 import {
   ChartBarIcon,
   DocumentTextIcon,
@@ -350,7 +351,7 @@ export default function GovernanceDashboardPage() {
                 💡 Sobre el Sistema de Gobernanza
               </h3>
               <p className="text-gray-700 dark:text-gray-300 mb-4">
-                Comunidad Viva utiliza un sistema híbrido de gobernanza que combina votación cuadrática,
+                Truk utiliza un sistema híbrido de gobernanza que combina votación cuadrática,
                 democracia líquida y Proof of Help para decisiones justas y descentralizadas.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -386,3 +387,5 @@ export default function GovernanceDashboardPage() {
     </Layout>
   );
 }
+
+export const getStaticProps = async (context: any) => getI18nProps(context);

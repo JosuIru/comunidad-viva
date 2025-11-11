@@ -32,22 +32,22 @@ export default function ManagePage() {
   ];
 
   return (
-    <Layout title={`${t('title')} - Comunidad Viva`}>
-      <div className="min-h-screen bg-gray-50 py-8">
+    <Layout title={`${t('title')} - Truk`}>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="container mx-auto px-4">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">
               {t('title')}
             </h1>
-            <p className="text-lg text-gray-600">
-              Administra tus ofertas, eventos y perfil en un solo lugar
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              {t('description')}
             </p>
           </div>
 
           {/* Tabs */}
-          <div className="bg-white rounded-lg shadow-sm mb-6">
-            <div className="border-b border-gray-200">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm mb-6">
+            <div className="border-b border-gray-200 dark:border-gray-700">
               <nav className="-mb-px flex overflow-x-auto">
                 {tabs.map((tab) => (
                   <button
@@ -59,7 +59,7 @@ export default function ManagePage() {
                     className={`whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm flex items-center gap-2 ${
                       activeTab === tab.id
                         ? 'border-blue-500 text-blue-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                     }`}
                   >
                     <span className="text-xl">{tab.icon}</span>
@@ -71,7 +71,7 @@ export default function ManagePage() {
           </div>
 
           {/* Tab Content */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
             {activeTab === 'offers' && <MyOffers />}
             {activeTab === 'events' && <MyEvents />}
             {activeTab === 'timebank' && <MyTimeBank />}
@@ -82,4 +82,4 @@ export default function ManagePage() {
   );
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

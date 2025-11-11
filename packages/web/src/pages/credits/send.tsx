@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { getI18nProps } from '@/lib/i18n';
 import { useRouter } from 'next/router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 
 interface User {
   id: string;
@@ -24,23 +25,41 @@ interface FlowPreview {
 export default function SendCreditsPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const t = useTranslations('creditsSend');
+  const userLocale = router.locale || 'es';
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [recipientId, setRecipientId] = useState('');
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const numberFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat(userLocale, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }),
+    [userLocale]
+  );
+  const decimalFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat(userLocale, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+    [userLocale]
+  );
 
   // Get current user
   useEffect(() => {
     const userStr = localStorage.getItem('user');
     if (!userStr) {
-      toast.error('Debes iniciar sesión');
+      toast.error(t('toasts.loginRequired'));
       router.push('/auth/login');
       return;
     }
     const user = JSON.parse(userStr);
     setCurrentUserId(user.id);
-  }, [router]);
+  }, [router, t]);
 
   // Fetch current user profile
   const { data: currentUser } = useQuery<User>({
@@ -112,7 +131,7 @@ export default function SendCreditsPage() {
       return response.data;
     },
     onSuccess: (data) => {
-      toast.success(data.message || 'Créditos enviados exitosamente');
+      toast.success(data.message || t('toasts.success'));
       queryClient.invalidateQueries({ queryKey: ['profile', currentUserId] });
       // Reset form
       setRecipientId('');
@@ -122,7 +141,7 @@ export default function SendCreditsPage() {
       setTimeout(() => router.push('/profile'), 1500);
     },
     onError: (error: any) => {
-      const message = error.response?.data?.message || 'Error al enviar créditos';
+      const message = error.response?.data?.message || t('toasts.error');
       toast.error(message);
     },
   });
@@ -131,17 +150,17 @@ export default function SendCreditsPage() {
     e.preventDefault();
 
     if (!recipientId) {
-      toast.error('Selecciona un destinatario');
+      toast.error(t('toasts.selectRecipient'));
       return;
     }
 
     if (!amount || parseFloat(amount) <= 0) {
-      toast.error('Ingresa un monto válido');
+      toast.error(t('toasts.invalidAmount'));
       return;
     }
 
     if (parseFloat(amount) > (currentUser?.credits || 0)) {
-      toast.error('No tienes suficientes créditos');
+      toast.error(t('toasts.insufficientCredits'));
       return;
     }
 
@@ -153,7 +172,7 @@ export default function SendCreditsPage() {
   };
 
   return (
-    <Layout title="Enviar Créditos - Comunidad Viva">
+    <Layout title={t('layout.title')}>
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="container mx-auto px-4 max-w-2xl">
           <div className="mb-6">
@@ -161,27 +180,29 @@ export default function SendCreditsPage() {
               onClick={() => router.back()}
               className="text-blue-600 hover:text-blue-700 flex items-center gap-2"
             >
-              ← Volver
+              {t('nav.back')}
             </button>
           </div>
 
           {/* Current Balance */}
           <div className="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg shadow p-6 text-white mb-6">
-            <div className="text-sm text-white/80">Tu balance actual</div>
-            <div className="text-4xl font-bold mt-2">{currentUser?.credits || 0} créditos</div>
+            <div className="text-sm text-white/80">{t('balance.label')}</div>
+            <div className="text-4xl font-bold mt-2">
+              {t('balance.amount', { amount: numberFormatter.format(currentUser?.credits || 0) })}
+            </div>
           </div>
 
           {/* Send Form */}
           <div className="bg-white rounded-lg shadow p-6">
             <h1 className="text-2xl font-bold text-gray-900 mb-6">
-              Enviar Créditos con Multiplicador de Flujo
+              {t('form.title')}
             </h1>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Recipient Email Input */}
               <div>
                 <label htmlFor="recipientEmail" className="block text-sm font-medium text-gray-700 mb-2">
-                  Email del destinatario <span className="text-red-500">*</span>
+                  {t('form.recipient.label')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="recipientEmail"
@@ -196,15 +217,15 @@ export default function SendCreditsPage() {
                         if (data && data.id) {
                           setRecipientId(data.id);
                         } else {
-                          toast.error('Usuario no encontrado');
+                          toast.error(t('toasts.userNotFound'));
                         }
                       } catch (error) {
-                        toast.error('Usuario no encontrado');
+                        toast.error(t('toasts.userNotFound'));
                       }
                     }
                   }}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="usuario@ejemplo.com"
+                  placeholder={t('form.recipient.placeholder')}
                   required
                 />
               </div>
@@ -219,7 +240,9 @@ export default function SendCreditsPage() {
                     <div>
                       <div className="font-semibold text-gray-900">{recipient.name}</div>
                       <div className="text-sm text-gray-600">{recipient.email}</div>
-                      <div className="text-sm text-gray-500">Balance: {recipient.credits} créditos</div>
+                      <div className="text-sm text-gray-500">
+                        {t('recipient.balance', { amount: numberFormatter.format(recipient.credits) })}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -228,7 +251,7 @@ export default function SendCreditsPage() {
               {/* Amount */}
               <div>
                 <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-2">
-                  Cantidad <span className="text-red-500">*</span>
+                  {t('form.amount.label')} <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="amount"
@@ -238,18 +261,18 @@ export default function SendCreditsPage() {
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="0"
+                  placeholder={t('form.amount.placeholder')}
                   required
                 />
                 {currentUser && amount && parseFloat(amount) > currentUser.credits && (
-                  <p className="text-red-500 text-sm mt-1">No tienes suficientes créditos</p>
+                  <p className="text-red-500 text-sm mt-1">{t('form.amount.insufficient')}</p>
                 )}
               </div>
 
               {/* Description */}
               <div>
                 <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-                  Mensaje (opcional)
+                  {t('form.description.label')}
                 </label>
                 <textarea
                   id="description"
@@ -257,7 +280,7 @@ export default function SendCreditsPage() {
                   onChange={(e) => setDescription(e.target.value)}
                   rows={3}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  placeholder="Ej: Gracias por tu ayuda..."
+                  placeholder={t('form.description.placeholder')}
                 />
               </div>
 
@@ -265,45 +288,47 @@ export default function SendCreditsPage() {
               {preview && (
                 <div className="p-6 bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-200 rounded-lg">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                    ✨ Preview del Multiplicador de Flujo
+                    {t('preview.title')}
                   </h3>
 
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-700">Envías</span>
+                      <span className="text-gray-700">{t('preview.send')}</span>
                       <span className="text-xl font-bold text-gray-900">
-                        {preview.baseAmount} créditos
+                        {t('balance.amount', { amount: numberFormatter.format(preview.baseAmount) })}
                       </span>
                     </div>
 
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-700">Multiplicador de flujo</span>
+                      <span className="text-gray-700">{t('preview.multiplier')}</span>
                       <span className="text-xl font-bold text-purple-600">
-                        {preview.flowMultiplier.toFixed(2)}x
+                        {decimalFormatter.format(preview.flowMultiplier)}x
                       </span>
                     </div>
 
                     <div className="h-px bg-gray-300"></div>
 
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-700 font-semibold">Destinatario recibe</span>
+                      <span className="text-gray-700 font-semibold">{t('preview.receive')}</span>
                       <span className="text-2xl font-bold text-green-600">
-                        {preview.totalValue} créditos
+                        {t('balance.amount', { amount: numberFormatter.format(preview.totalValue) })}
                       </span>
                     </div>
 
                     {preview.bonusValue > 0 && (
                       <div className="p-3 bg-green-100 border border-green-300 rounded text-sm">
                         <span className="text-green-800 font-medium">
-                          🎁 Bonus de {preview.bonusValue} créditos generados por el flujo económico
+                          {t('preview.bonus', {
+                            bonus: numberFormatter.format(preview.bonusValue),
+                          })}
                         </span>
                       </div>
                     )}
 
                     <div className="flex justify-between items-center text-sm">
-                      <span className="text-gray-600">Contribución a pool comunitario (2%)</span>
+                      <span className="text-gray-600">{t('preview.pool')}</span>
                       <span className="text-gray-700 font-medium">
-                        {preview.poolContribution} créditos
+                        {t('balance.amount', { amount: numberFormatter.format(preview.poolContribution) })}
                       </span>
                     </div>
                   </div>
@@ -313,13 +338,12 @@ export default function SendCreditsPage() {
               {/* Info Box */}
               <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <h4 className="text-sm font-semibold text-blue-900 mb-2">
-                  💡 ¿Cómo funciona el Multiplicador de Flujo?
+                  {t('info.title')}
                 </h4>
                 <ul className="text-sm text-blue-800 space-y-1">
-                  <li>• Cuando envías créditos a alguien con menos balance, se genera valor extra</li>
-                  <li>• Mayor diferencia de balance = mayor multiplicador (hasta 1.5x)</li>
-                  <li>• El 2% va al pool comunitario para ayudar a quien lo necesite</li>
-                  <li>• Fomenta la circulación y generosidad en la comunidad</li>
+                  {(t.raw('info.items') as string[]).map((item, index) => (
+                    <li key={index}>• {item}</li>
+                  ))}
                 </ul>
               </div>
 
@@ -330,7 +354,7 @@ export default function SendCreditsPage() {
                   disabled={sendMutation.isPending || !preview || parseFloat(amount) > (currentUser?.credits || 0)}
                   className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {sendMutation.isPending ? 'Enviando...' : 'Enviar Créditos'}
+                  {sendMutation.isPending ? t('form.submit.pending') : t('form.submit.default')}
                 </button>
               </div>
             </form>
@@ -341,4 +365,4 @@ export default function SendCreditsPage() {
   );
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Put,
+  Delete,
   Body,
   Param,
   Query,
@@ -11,6 +12,13 @@ import {
 } from '@nestjs/common';
 import { HousingService } from './housing.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { OwnershipGuard } from '../common/guards/ownership.guard';
+import { EmailVerifiedGuard } from '../auth/guards/email-verified.guard';
+import { CheckOwnership } from '../common/decorators/check-ownership.decorator';
+import { CreateSpaceDto } from './dto/create-space.dto';
+import { CreateHousingDto } from './dto/create-housing.dto';
+import { UpdateSpaceDto } from './dto/update-space.dto';
+import { UpdateHousingDto } from './dto/update-housing.dto';
 
 @Controller('housing')
 export class HousingController {
@@ -19,6 +27,37 @@ export class HousingController {
   // ============================================
   // UNIFIED SOLUTIONS - All housing types
   // ============================================
+
+  @Get('solutions/:id')
+  findSolutionById(@Param('id') id: string) {
+    return this.housingService.findSolutionById(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('solutions/:id/join')
+  joinSolution(@Request() req, @Param('id') id: string, @Body() body: any) {
+    return this.housingService.joinSolution(req.user.userId, id, body);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('solutions')
+  createSolution(@Request() req, @Body() body: any) {
+    const { solutionType, ...data } = body;
+
+    // Route to specific creation method based on solution type
+    switch (solutionType) {
+      case 'SPACE_BANK':
+        return this.housingService.createSpace(req.user.userId, data);
+      case 'TEMPORARY_HOUSING':
+        return this.housingService.createHousing(req.user.userId, data);
+      case 'HOUSING_COOP':
+        return this.housingService.createCoop(req.user.userId, data);
+      case 'COMMUNITY_GUARANTEE':
+        return this.housingService.requestGuarantee(req.user.userId, data);
+      default:
+        throw new Error(`Unknown solution type: ${solutionType}`);
+    }
+  }
 
   @Get('solutions')
   findAllSolutions(
@@ -41,9 +80,9 @@ export class HousingController {
   // SPACE BANK - Banco de Espacios
   // ============================================
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, EmailVerifiedGuard)
   @Post('spaces')
-  createSpace(@Request() req, @Body() body) {
+  createSpace(@Request() req, @Body() body: CreateSpaceDto) {
     return this.housingService.createSpace(req.user.userId, body);
   }
 
@@ -106,9 +145,9 @@ export class HousingController {
   // TEMPORARY HOUSING - Hospedaje Temporal
   // ============================================
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, EmailVerifiedGuard)
   @Post('temporary')
-  createHousing(@Request() req, @Body() body) {
+  createHousing(@Request() req, @Body() body: CreateHousingDto) {
     return this.housingService.createHousing(req.user.userId, body);
   }
 
@@ -142,6 +181,20 @@ export class HousingController {
   @Get('temporary/:id')
   findHousingById(@Param('id') id: string) {
     return this.housingService.findHousingById(id);
+  }
+
+  @UseGuards(JwtAuthGuard, OwnershipGuard)
+  @CheckOwnership('housingListing')
+  @Put('temporary/:id')
+  updateHousing(@Request() req, @Param('id') id: string, @Body() body: UpdateHousingDto) {
+    return this.housingService.updateHousing(id, req.user.userId, body);
+  }
+
+  @UseGuards(JwtAuthGuard, OwnershipGuard)
+  @CheckOwnership('housingListing')
+  @Delete('temporary/:id')
+  deleteHousing(@Request() req, @Param('id') id: string) {
+    return this.housingService.deleteHousing(id, req.user.userId);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -188,7 +241,7 @@ export class HousingController {
   // HOUSING COOPERATIVES - Cooperativas
   // ============================================
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, EmailVerifiedGuard)
   @Post('coops')
   createCoop(@Request() req, @Body() body) {
     return this.housingService.createCoop(req.user.userId, body);

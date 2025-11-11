@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { TrophyIcon, FireIcon, StarIcon } from '@heroicons/react/24/outline';
+import { getI18nProps } from '@/lib/i18n';
 
 interface LeaderboardEntry {
   id: string;
@@ -223,3 +224,5 @@ export default function LeaderboardPage() {
     </Layout>
   );
 }
+
+export const getStaticProps = async (context: any) => getI18nProps(context);

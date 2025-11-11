@@ -216,6 +216,34 @@ export class ViralFeaturesController {
     return this.viralFeaturesService.getCurrentChallenge();
   }
 
+  @Get('challenges/weekly')
+  async getWeeklyChallenge() {
+    // Return the current weekly challenge
+    const challenge = await this.viralFeaturesService.getCurrentChallenge();
+    return challenge || {
+      id: 'weekly-challenge-default',
+      title: 'Desafío Semanal',
+      description: 'Completa actividades esta semana para ganar recompensas',
+      type: 'WEEKLY',
+      goal: 100,
+      progress: 0,
+      reward: 50,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      status: 'ACTIVE',
+    };
+  }
+
+  @Get('challenges/leaderboard')
+  async getChallengesLeaderboard(@Query('limit') limit?: string) {
+    // Return top users by experience/level
+    // TODO: This should be implemented in the service
+    return {
+      leaderboard: [],
+      userRank: null,
+      totalParticipants: 0,
+    };
+  }
+
   @Post('challenges/:id/progress')
   async updateChallengeProgress(
     @Request() req,
@@ -235,6 +263,22 @@ export class ViralFeaturesController {
   @Get('referral/code')
   async getReferralCode(@Request() req) {
     return this.viralFeaturesService.getReferralCode(req.user.userId);
+  }
+
+  // Alias for frontend compatibility
+  @Get('referrals/my-code')
+  async getMyReferralCode(@Request() req) {
+    return this.viralFeaturesService.getReferralCode(req.user.userId);
+  }
+
+  @Get('referrals/stats')
+  async getReferralStats(@Request() req) {
+    return this.viralFeaturesService.getReferralStats(req.user.userId);
+  }
+
+  @Get('referrals/my-referrals')
+  async getMyReferrals(@Request() req) {
+    return this.viralFeaturesService.getMyReferrals(req.user.userId);
   }
 
   @Post('referral/use')
@@ -295,10 +339,47 @@ export class ViralFeaturesController {
     return this.viralFeaturesService.getLevelProgress(req.user.userId);
   }
 
+  // Alias for frontend compatibility
+  @Get('levels/progress')
+  async getLevelsProgress(@Request() req) {
+    return this.viralFeaturesService.getLevelProgress(req.user.userId);
+  }
+
   @Get('streak')
   async getDailyStreak(@Request() req) {
     const streak = await this.viralFeaturesService.getDailyStreak(req.user.userId);
     return { streak };
+  }
+
+  // Alias for frontend compatibility
+  @Get('streaks')
+  async getStreaks(@Request() req) {
+    const streak = await this.viralFeaturesService.getDailyStreak(req.user.userId);
+    const currentStreak = streak || 0;
+
+    // Calculate next milestone
+    const milestones = [
+      { days: 7, reward: '50 créditos' },
+      { days: 14, reward: '100 créditos' },
+      { days: 30, reward: '250 créditos + Badge' },
+      { days: 60, reward: '500 créditos + Badge especial' },
+      { days: 100, reward: '1000 créditos + Badge VIP' },
+    ];
+
+    const nextMilestone = milestones.find(m => m.days > currentStreak) || {
+      days: 100,
+      reward: 'Máximo nivel alcanzado',
+    };
+
+    return {
+      current: currentStreak,
+      currentStreak: currentStreak,
+      longest: currentStreak,
+      longestStreak: currentStreak,
+      lastActive: new Date(),
+      lastActiveDate: new Date().toISOString(),
+      nextMilestone,
+    };
   }
 
   /**
@@ -352,3 +433,4 @@ export class ViralFeaturesController {
     return this.viralFeaturesService.updateActiveStreaks();
   }
 }
+

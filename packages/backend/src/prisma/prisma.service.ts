@@ -29,6 +29,13 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 
   async onModuleInit() {
     await this.connectWithRetry();
+
+    // Configurar nivel de aislamiento para transacciones críticas
+    // PostgreSQL por defecto usa READ COMMITTED, que es suficiente para la mayoría de casos
+    // ya que estamos usando operaciones atómicas (increment/decrement) en Prisma.
+    // SERIALIZABLE sería más estricto pero tiene impacto en performance.
+    // READ COMMITTED + increment/decrement atómico = protección contra race conditions
+    this.logger.log('Using READ COMMITTED isolation level (default) with atomic operations');
   }
 
   async onModuleDestroy() {

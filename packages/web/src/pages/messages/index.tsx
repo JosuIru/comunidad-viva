@@ -75,7 +75,7 @@ export default function Messages() {
   return (
     <Layout>
       <Head>
-        <title>Mensajes - Comunidad Viva</title>
+        <title>Mensajes - Truk</title>
       </Head>
 
       <div className="max-w-4xl mx-auto px-4 py-8">
@@ -161,4 +161,4 @@ export default function Messages() {
   );
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

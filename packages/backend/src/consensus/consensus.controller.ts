@@ -7,9 +7,14 @@ import {
   UseGuards,
   Request,
   Query,
+  Delete,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { EmailVerifiedGuard } from '../auth/guards/email-verified.guard';
+import { OwnershipGuard } from '../common/guards/ownership.guard';
+import { RequireEmailVerification } from '../common/decorators/require-email-verification.decorator';
+import { CheckOwnership } from '../common/decorators/check-ownership.decorator';
 import { ProofOfHelpService } from './proof-of-help.service';
 
 @ApiTags('consensus')
@@ -72,7 +77,8 @@ export class ConsensusController {
   // ============================================
 
   @Post('proposals')
-  @UseGuards(JwtAuthGuard)
+  @RequireEmailVerification()
+  @UseGuards(JwtAuthGuard, EmailVerifiedGuard)
   @ApiOperation({ summary: 'Create a Community Improvement Proposal (CIP)' })
   async createProposal(
     @Request() req,
@@ -96,7 +102,8 @@ export class ConsensusController {
   }
 
   @Post('proposals/:proposalId/vote')
-  @UseGuards(JwtAuthGuard)
+  @RequireEmailVerification()
+  @UseGuards(JwtAuthGuard, EmailVerifiedGuard)
   @ApiOperation({ summary: 'Vote on a proposal using quadratic voting' })
   async voteProposal(
     @Request() req,
@@ -150,6 +157,17 @@ export class ConsensusController {
   @ApiOperation({ summary: 'Get proposal comments' })
   async getProposalComments(@Param('proposalId') proposalId: string) {
     return this.pohService.getProposalComments(proposalId);
+  }
+
+  @Delete('proposals/:id')
+  @UseGuards(JwtAuthGuard, OwnershipGuard)
+  @CheckOwnership('proposal')
+  @ApiOperation({ summary: 'Delete proposal (creator only)' })
+  @ApiResponse({ status: 200, description: 'Proposal deleted successfully' })
+  @ApiResponse({ status: 403, description: 'Not authorized to delete this proposal' })
+  @ApiResponse({ status: 404, description: 'Proposal not found' })
+  async deleteProposal(@Param('id') id: string, @Request() req) {
+    return this.pohService.deleteProposal(id, req.user.userId);
   }
 
   // ============================================
@@ -209,6 +227,56 @@ export class ConsensusController {
   @ApiOperation({ summary: 'Get governance dashboard with statistics' })
   async getDashboard() {
     return this.pohService.getGovernanceDashboard();
+  }
+
+  // ============================================
+  // DELEGATION
+  // ============================================
+
+  @Get('delegation/available')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Get available delegates' })
+  async getAvailableDelegates(@Request() req) {
+    return this.pohService.getAvailableDelegates(req.user.userId);
+  }
+
+  @Get('delegation/my-delegations')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Get my delegations' })
+  async getMyDelegations(@Request() req) {
+    return this.pohService.getMyDelegations(req.user.userId);
+  }
+
+  @Get('delegation/stats')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Get delegation statistics' })
+  async getDelegationStats(@Request() req) {
+    return this.pohService.getDelegationStats(req.user.userId);
+  }
+
+  @Post('delegation/delegate')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Create a delegation' })
+  async createDelegation(
+    @Request() req,
+    @Body() body: { delegateId: string; category?: string; votingPower: number },
+  ) {
+    return this.pohService.createDelegation(
+      req.user.userId,
+      body.delegateId,
+      body.votingPower,
+      body.category,
+    );
+  }
+
+  @Post('delegation/revoke/:delegationId')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Revoke a delegation' })
+  async revokeDelegation(
+    @Request() req,
+    @Param('delegationId') delegationId: string,
+  ) {
+    return this.pohService.revokeDelegation(req.user.userId, delegationId);
   }
 
   // ============================================

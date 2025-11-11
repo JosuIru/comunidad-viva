@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
-import { useRouter } from 'next/router';
+import { useTranslations } from 'next-intl';
+import { ClockIcon } from '@heroicons/react/24/outline';
 
 interface FlashDeal {
   id: string;
@@ -27,8 +28,8 @@ interface FlashDeal {
 }
 
 export default function FlashDeals() {
-  const router = useRouter();
   const queryClient = useQueryClient();
+  const t = useTranslations('flashDeals');
 
   // Fetch active flash deals
   const { data: deals = [], isLoading } = useQuery<FlashDeal[]>({
@@ -47,13 +48,13 @@ export default function FlashDeals() {
       return data;
     },
     onSuccess: () => {
-      toast.success('¡Deal activado! Muestra esto en el comercio 🎉', {
+      toast.success(t('toastSuccess'), {
         duration: 5000,
       });
       queryClient.invalidateQueries({ queryKey: ['flash-deals'] });
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al activar el deal');
+      toast.error(error.response?.data?.message || t('toastError'));
     },
   });
 
@@ -68,12 +69,14 @@ export default function FlashDeals() {
   if (deals.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="text-6xl mb-4">⏰</div>
+        <div className="flex justify-center mb-4">
+          <ClockIcon className="h-16 w-16 text-gray-400" />
+        </div>
         <h3 className="text-xl font-bold text-gray-900 mb-2">
-          No hay Flash Deals activos ahora
+          {t('empty.title')}
         </h3>
         <p className="text-gray-600">
-          Los deals aparecen a las 10am, 2pm y 8pm. ¡Vuelve pronto!
+          {t('empty.description')}
         </p>
       </div>
     );
@@ -83,10 +86,10 @@ export default function FlashDeals() {
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-900">
-          🔥 Flash Deals
+          {t('header.title')}
         </h2>
         <div className="text-sm text-gray-600">
-          {deals.length} {deals.length === 1 ? 'deal activo' : 'deals activos'}
+          {t('header.count', { count: deals.length })}
         </div>
       </div>
 
@@ -114,6 +117,7 @@ function FlashDealCard({
   isRedeeming: boolean;
 }) {
   const [timeLeft, setTimeLeft] = useState('');
+  const t = useTranslations('flashDeals');
 
   useEffect(() => {
     const updateTimer = () => {
@@ -122,7 +126,7 @@ function FlashDealCard({
       const distance = expires - now;
 
       if (distance < 0) {
-        setTimeLeft('Expirado');
+        setTimeLeft(t('timer.expired'));
         return;
       }
 
@@ -132,8 +136,8 @@ function FlashDealCard({
 
       setTimeLeft(
         hours > 0
-          ? `${hours}h ${minutes}m`
-          : `${minutes}m ${seconds}s`
+          ? t('timer.hoursMinutes', { hours, minutes })
+          : t('timer.minutesSeconds', { minutes, seconds })
       );
     };
 
@@ -141,7 +145,7 @@ function FlashDealCard({
     const interval = setInterval(updateTimer, 1000);
 
     return () => clearInterval(interval);
-  }, [deal.expiresAt]);
+  }, [deal.expiresAt, t]);
 
   const remaining = deal.maxRedemptions - deal.currentRedemptions;
   const percentUsed = (deal.currentRedemptions / deal.maxRedemptions) * 100;
@@ -166,7 +170,7 @@ function FlashDealCard({
             </svg>
             {timeLeft}
           </span>
-          <span className="text-sm opacity-90">restantes</span>
+          <span className="text-sm opacity-90">{t('timer.label')}</span>
         </div>
       </div>
 
@@ -205,11 +209,11 @@ function FlashDealCard({
         <div className="mb-4">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm font-medium text-gray-700">
-              {remaining} de {deal.maxRedemptions} disponibles
+              {t('stock.remaining', { remaining, total: deal.maxRedemptions })}
             </span>
             {isAlmostGone && !isSoldOut && (
               <span className="text-xs font-bold text-red-600 animate-pulse">
-                ¡Últimas unidades!
+                {t('stock.almostGone')}
               </span>
             )}
           </div>
@@ -243,14 +247,14 @@ function FlashDealCard({
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
-              Activando...
+              {t('button.loading')}
             </span>
           ) : isSoldOut ? (
-            'Agotado'
+            t('button.soldOut')
           ) : deal.status !== 'ACTIVE' ? (
-            'Expirado'
+            t('button.expired')
           ) : (
-            '🔥 Activar Deal'
+            t('button.active')
           )}
         </button>
       </div>

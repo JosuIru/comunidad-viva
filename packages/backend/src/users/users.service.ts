@@ -68,6 +68,17 @@ export class UsersService {
         badges: true,
         generosityScore: true,
         flowPower: true,
+        communityId: true,
+        community: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+            logo: true,
+            lat: true,
+            lng: true,
+          },
+        },
       },
     });
   }

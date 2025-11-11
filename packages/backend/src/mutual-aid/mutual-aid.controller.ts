@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Put,
+  Delete,
   Body,
   Param,
   Query,
@@ -11,6 +12,12 @@ import {
 } from '@nestjs/common';
 import { MutualAidService } from './mutual-aid.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { OwnershipGuard } from '../common/guards/ownership.guard';
+import { CheckOwnership } from '../common/decorators/check-ownership.decorator';
+import { CreateNeedDto } from './dto/create-need.dto';
+import { CreateProjectDto } from './dto/create-project.dto';
+import { UpdateNeedDto } from './dto/update-need.dto';
+import { UpdateProjectDto } from './dto/update-project.dto';
 
 @Controller('mutual-aid')
 export class MutualAidController {
@@ -22,7 +29,7 @@ export class MutualAidController {
 
   @UseGuards(JwtAuthGuard)
   @Post('needs')
-  createNeed(@Request() req, @Body() body) {
+  createNeed(@Request() req, @Body() body: CreateNeedDto) {
     return this.mutualAidService.createNeed(req.user.userId, body);
   }
 
@@ -70,13 +77,22 @@ export class MutualAidController {
     return this.mutualAidService.contributeToNeed(req.user.userId, id, body);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, OwnershipGuard)
+  @CheckOwnership('mutualAidNeed')
   @Put('needs/:id')
-  updateNeed(@Request() req, @Param('id') id: string, @Body() body) {
+  updateNeed(@Request() req, @Param('id') id: string, @Body() body: UpdateNeedDto) {
     return this.mutualAidService.updateNeed(req.user.userId, id, body);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, OwnershipGuard)
+  @CheckOwnership('mutualAidNeed')
+  @Delete('needs/:id')
+  deleteNeed(@Request() req, @Param('id') id: string) {
+    return this.mutualAidService.deleteNeed(req.user.userId, id);
+  }
+
+  @UseGuards(JwtAuthGuard, OwnershipGuard)
+  @CheckOwnership('mutualAidNeed')
   @Post('needs/:id/close')
   closeNeed(@Request() req, @Param('id') id: string) {
     return this.mutualAidService.closeNeed(req.user.userId, id);
@@ -88,7 +104,7 @@ export class MutualAidController {
 
   @UseGuards(JwtAuthGuard)
   @Post('projects')
-  createProject(@Request() req, @Body() body) {
+  createProject(@Request() req, @Body() body: CreateProjectDto) {
     return this.mutualAidService.createProject(req.user.userId, body);
   }
 
@@ -142,19 +158,36 @@ export class MutualAidController {
     );
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, OwnershipGuard)
+  @CheckOwnership('mutualAidProject')
+  @Put('projects/:id')
+  updateProject(@Request() req, @Param('id') id: string, @Body() body: UpdateProjectDto) {
+    return this.mutualAidService.updateProject(req.user.userId, id, body);
+  }
+
+  @UseGuards(JwtAuthGuard, OwnershipGuard)
+  @CheckOwnership('mutualAidProject')
+  @Delete('projects/:id')
+  deleteProject(@Request() req, @Param('id') id: string) {
+    return this.mutualAidService.deleteProject(req.user.userId, id);
+  }
+
+  @UseGuards(JwtAuthGuard, OwnershipGuard)
+  @CheckOwnership('mutualAidProject')
   @Post('projects/:id/phases')
   addProjectPhase(@Request() req, @Param('id') id: string, @Body() body) {
     return this.mutualAidService.addProjectPhase(req.user.userId, id, body);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, OwnershipGuard)
+  @CheckOwnership('mutualAidProject')
   @Post('projects/:id/updates')
   addProjectUpdate(@Request() req, @Param('id') id: string, @Body() body) {
     return this.mutualAidService.addProjectUpdate(req.user.userId, id, body);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, OwnershipGuard)
+  @CheckOwnership('mutualAidProject')
   @Post('projects/:id/impact-reports')
   createImpactReport(@Request() req, @Param('id') id: string, @Body() body) {
     return this.mutualAidService.createImpactReport(req.user.userId, id, body);

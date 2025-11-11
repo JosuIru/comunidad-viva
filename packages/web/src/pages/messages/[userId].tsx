@@ -169,7 +169,7 @@ export default function ChatPage() {
   return (
     <>
       <Head>
-        <title>Chat - Comunidad Viva</title>
+        <title>Chat - Truk</title>
       </Head>
 
       <Layout>
@@ -305,4 +305,4 @@ export async function getStaticPaths() {
   };
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

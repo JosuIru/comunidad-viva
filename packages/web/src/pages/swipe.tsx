@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import SwipeStack from '@/components/SwipeStack';
+import { getI18nProps } from '@/lib/i18n';
 
 export default function SwipePage() {
   const router = useRouter();
@@ -58,3 +59,5 @@ export default function SwipePage() {
     </div>
   );
 }
+
+export const getStaticProps = async (context: any) => getI18nProps(context);

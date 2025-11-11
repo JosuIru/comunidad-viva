@@ -27,8 +27,8 @@ export class SentryService {
 
     try {
       // Dynamic import to avoid errors if @sentry/node is not installed
-      // Use eval to prevent TypeScript from checking this import at compile time
-      const sentryModule = await eval('import("@sentry/node")');
+      // @ts-ignore - Optional dependency
+      const sentryModule = await import('@sentry/node');
       this.sentry = sentryModule;
 
       const config: SentryConfig = {

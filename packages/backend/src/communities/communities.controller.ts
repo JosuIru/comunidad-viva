@@ -33,8 +33,22 @@ export class CommunitiesController {
     @Query('type') type?: string,
     @Query('visibility') visibility?: CommunityVisibility,
     @Query('search') search?: string,
+    @Query('nearLat') nearLatStr?: string,
+    @Query('nearLng') nearLngStr?: string,
+    @Query('maxDistance') maxDistanceStr?: string,
   ) {
-    return this.communitiesService.findAll({ type, visibility, search });
+    const nearLat = nearLatStr ? parseFloat(nearLatStr) : undefined;
+    const nearLng = nearLngStr ? parseFloat(nearLngStr) : undefined;
+    const maxDistance = maxDistanceStr ? parseFloat(maxDistanceStr) : undefined;
+
+    return this.communitiesService.findAll({
+      type,
+      visibility,
+      search,
+      nearLat,
+      nearLng,
+      maxDistance,
+    });
   }
 
   @Get('slug/:slug')
@@ -153,5 +167,15 @@ export class CommunitiesController {
   ) {
     const limitNum = limit ? parseInt(limit) : 20;
     return this.communitiesService.getCommunityActivity(id, limitNum);
+  }
+
+  @Get(':id/offers')
+  getCommunityOffers(
+    @Param('id') id: string,
+    @Query('status') status?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const limitNum = limit ? parseInt(limit) : 50;
+    return this.communitiesService.getCommunityOffers(id, status, limitNum);
   }
 }

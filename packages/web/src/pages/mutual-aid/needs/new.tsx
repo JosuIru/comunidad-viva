@@ -5,6 +5,8 @@ import toast from 'react-hot-toast';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
+import { useFormValidation } from '@/hooks/useFormValidation';
+import { createNeedSchema, type CreateNeedFormData } from '@/lib/validations';
 
 const SCOPE_OPTIONS = [
   { value: 'PERSONAL', label: 'Personal', description: 'Necesidad individual' },
@@ -26,17 +28,28 @@ const TYPE_OPTIONS = [
 
 export default function NewNeedPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    scope: 'PERSONAL',
-    type: 'FOOD',
-    title: '',
-    description: '',
-    location: '',
-    targetEur: '',
-    targetCredits: '',
-    targetHours: '',
-    neededSkills: '',
-    urgencyLevel: '5',
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+
+  // Initialize form validation
+  const {
+    formData,
+    errors,
+    isSubmitting,
+    handleChange,
+    handleBlur,
+    validateForm,
+  } = useFormValidation<CreateNeedFormData>({
+    schema: createNeedSchema,
+    initialData: {
+      title: '',
+      description: '',
+      scope: 'INDIVIDUAL',
+      type: 'FOOD',
+      urgencyLevel: 'MEDIUM',
+      resourceTypes: ['EUR'],
+      neededSkills: [],
+      images: [],
+    },
   });
 
   const createMutation = useMutation({
@@ -53,70 +66,53 @@ export default function NewNeedPage() {
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const payload: any = {
-      scope: formData.scope,
-      type: formData.type,
-      title: formData.title,
-      description: formData.description,
-      location: formData.location,
-      urgencyLevel: parseInt(formData.urgencyLevel),
-      resourceTypes: [],
-    };
-
-    if (formData.targetEur) {
-      payload.targetEur = parseFloat(formData.targetEur);
-      payload.resourceTypes.push('EUR');
-    }
-
-    if (formData.targetCredits) {
-      payload.targetCredits = parseInt(formData.targetCredits);
-      payload.resourceTypes.push('CREDITS');
-    }
-
-    if (formData.targetHours) {
-      payload.targetHours = parseFloat(formData.targetHours);
-      payload.resourceTypes.push('TIME_HOURS');
-    }
-
-    if (formData.neededSkills) {
-      payload.neededSkills = formData.neededSkills.split('\n').filter(Boolean);
-      if (!payload.resourceTypes.includes('SKILLS')) {
-        payload.resourceTypes.push('SKILLS');
+    // Validate form
+    const validation = validateForm();
+    if (!validation.success) {
+      const firstError = Object.values(validation.errors)[0];
+      if (firstError) {
+        toast.error(firstError);
       }
-    }
-
-    if (payload.resourceTypes.length === 0) {
-      toast.error('Debes especificar al menos un tipo de recurso necesario');
       return;
     }
+
+    // Prepare need data with validated data
+    const payload: any = {
+      title: validation.data.title,
+      description: validation.data.description,
+      scope: validation.data.scope,
+      type: validation.data.type,
+      urgencyLevel: validation.data.urgencyLevel,
+      resourceTypes: validation.data.resourceTypes,
+      ...(validation.data.targetEur && { targetEur: validation.data.targetEur }),
+      ...(validation.data.targetCredits && { targetCredits: validation.data.targetCredits }),
+      ...(validation.data.targetHours && { targetHours: validation.data.targetHours }),
+      ...(validation.data.neededSkills && validation.data.neededSkills.length > 0 && { neededSkills: validation.data.neededSkills }),
+      ...(validation.data.location && { location: validation.data.location }),
+      ...(validation.data.lat && { lat: validation.data.lat }),
+      ...(validation.data.lng && { lng: validation.data.lng }),
+    };
 
     createMutation.mutate(payload);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
   return (
     <Layout>
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <div className="bg-white rounded-lg shadow-sm p-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6">
                 Publicar Necesidad
               </h1>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Scope */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Alcance *
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -127,12 +123,12 @@ export default function NewNeedPage() {
                         onClick={() => setFormData({ ...formData, scope: option.value })}
                         className={`p-3 border-2 rounded-lg text-left transition ${
                           formData.scope === option.value
-                            ? 'border-blue-600 bg-blue-50'
-                            : 'border-gray-200 hover:border-gray-300'
+                            ? 'border-blue-600 bg-blue-50 dark:bg-blue-900'
+                            : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
                         }`}
                       >
-                        <div className="font-semibold text-gray-900">{option.label}</div>
-                        <div className="text-xs text-gray-600 mt-1">{option.description}</div>
+                        <div className="font-semibold text-gray-900 dark:text-gray-100">{option.label}</div>
+                        <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">{option.description}</div>
                       </button>
                     ))}
                   </div>
@@ -140,7 +136,7 @@ export default function NewNeedPage() {
 
                 {/* Type */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Tipo de Necesidad *
                   </label>
                   <select
@@ -148,7 +144,7 @@ export default function NewNeedPage() {
                     value={formData.type}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                   >
                     {TYPE_OPTIONS.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -160,7 +156,7 @@ export default function NewNeedPage() {
 
                 {/* Title */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Título *
                   </label>
                   <input
@@ -169,14 +165,14 @@ export default function NewNeedPage() {
                     value={formData.title}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                     placeholder="Ej: Necesito ayuda con..."
                   />
                 </div>
 
                 {/* Description */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Descripción *
                   </label>
                   <textarea
@@ -185,14 +181,14 @@ export default function NewNeedPage() {
                     onChange={handleChange}
                     required
                     rows={4}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                     placeholder="Describe tu necesidad con el mayor detalle posible..."
                   />
                 </div>
 
                 {/* Location */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Ubicación *
                   </label>
                   <input
@@ -201,14 +197,14 @@ export default function NewNeedPage() {
                     value={formData.location}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                     placeholder="Ej: Madrid, España"
                   />
                 </div>
 
                 {/* Urgency Level */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Nivel de Urgencia: {formData.urgencyLevel}/10
                   </label>
                   <input
@@ -220,7 +216,7 @@ export default function NewNeedPage() {
                     max="10"
                     className="w-full"
                   />
-                  <div className="flex justify-between text-xs text-gray-600">
+                  <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400">
                     <span>Baja</span>
                     <span>Media</span>
                     <span>Alta</span>
@@ -228,17 +224,17 @@ export default function NewNeedPage() {
                 </div>
 
                 {/* Resources Needed */}
-                <div className="border-t pt-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                <div className="border-t dark:border-gray-700 pt-6">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
                     Recursos Necesarios
                   </h3>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                     Especifica al menos un tipo de recurso que necesitas
                   </p>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                         Euros (€)
                       </label>
                       <input
@@ -248,13 +244,13 @@ export default function NewNeedPage() {
                         onChange={handleChange}
                         min="0"
                         step="0.01"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                         placeholder="0"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                         Créditos
                       </label>
                       <input
@@ -263,13 +259,13 @@ export default function NewNeedPage() {
                         value={formData.targetCredits}
                         onChange={handleChange}
                         min="0"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                         placeholder="0"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                         Horas
                       </label>
                       <input
@@ -279,7 +275,7 @@ export default function NewNeedPage() {
                         onChange={handleChange}
                         min="0"
                         step="0.5"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                         placeholder="0"
                       />
                     </div>
@@ -288,7 +284,7 @@ export default function NewNeedPage() {
 
                 {/* Needed Skills */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     Habilidades Necesarias
                   </label>
                   <textarea
@@ -296,7 +292,7 @@ export default function NewNeedPage() {
                     value={formData.neededSkills}
                     onChange={handleChange}
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                     placeholder="Una habilidad por línea&#10;Ej: carpintería&#10;fontanería&#10;electricidad"
                   />
                 </div>
@@ -306,7 +302,7 @@ export default function NewNeedPage() {
                   <button
                     type="button"
                     onClick={() => router.back()}
-                    className="flex-1 px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-semibold"
+                    className="flex-1 px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition font-semibold"
                   >
                     Cancelar
                   </button>
@@ -327,4 +323,4 @@ export default function NewNeedPage() {
   );
 }
 
-export const getStaticProps = getI18nProps;
+export const getStaticProps = async (context: any) => getI18nProps(context);

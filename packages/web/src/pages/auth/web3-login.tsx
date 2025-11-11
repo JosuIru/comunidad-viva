@@ -3,6 +3,7 @@ import Layout from '@/components/Layout';
 import Web3WalletButton from '@/components/Web3WalletButton';
 import Link from 'next/link';
 import { WalletIcon, ShieldCheckIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import { getI18nProps } from '@/lib/i18n';
 
 export default function Web3LoginPage() {
   const [error, setError] = useState<string>('');
@@ -152,3 +153,5 @@ export default function Web3LoginPage() {
     </Layout>
   );
 }
+
+export const getStaticProps = async (context: any) => getI18nProps(context);

@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { WinstonLoggerService } from '../common/winston-logger.service';
+import { AuditLoggerService } from '../common/audit-logger.service';
 import * as bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 
@@ -12,16 +13,21 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
+    private auditLogger: AuditLoggerService,
   ) {}
 
-  async validateUser(email: string, password: string): Promise<any> {
+  async validateUser(email: string, password: string, ip?: string, userAgent?: string): Promise<any> {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) {
+      // Log failed login attempt
+      await this.auditLogger.logFailedLogin(email, 'User not found', ip, userAgent);
       throw new UnauthorizedException('Invalid credentials');
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
+      // Log failed login attempt
+      await this.auditLogger.logFailedLogin(email, 'Invalid password', ip, userAgent);
       throw new UnauthorizedException('Invalid credentials');
     }
 
@@ -29,7 +35,7 @@ export class AuthService {
     return result;
   }
 
-  async login(user: any, twoFactorToken?: string) {
+  async login(user: any, twoFactorToken?: string, ip?: string, userAgent?: string) {
     // Check if 2FA is enabled
     if (user.twoFactorEnabled && !twoFactorToken) {
       this.logger.debug('2FA required for login', { userId: user.id });
@@ -45,6 +51,8 @@ export class AuthService {
       const isValid = await twoFactorService.verifyTwoFactorToken(user.id, twoFactorToken);
 
       if (!isValid) {
+        // Log failed 2FA attempt
+        await this.auditLogger.logTwoFactorFailed(user.id, ip, userAgent);
         throw new UnauthorizedException('Invalid 2FA code');
       }
 
@@ -61,6 +69,15 @@ export class AuthService {
 
     // Generate refresh token
     const refreshToken = await this.generateRefreshToken(user.id);
+
+    // Log successful login
+    await this.auditLogger.logLogin(
+      user.id,
+      user.email,
+      ip,
+      userAgent,
+      user.twoFactorEnabled
+    );
 
     this.logger.debug('User logged in successfully', { userId: user.id, email: user.email });
 
@@ -86,7 +103,7 @@ export class AuthService {
     password: string;
     name: string;
     phone?: string;
-  }) {
+  }, ip?: string, userAgent?: string) {
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
     const user = await this.prisma.user.create({
@@ -96,8 +113,11 @@ export class AuthService {
       },
     });
 
+    // Log registration
+    await this.auditLogger.logRegister(user.id, user.email, ip, userAgent);
+
     const { password: _, ...userWithoutPassword } = user;
-    return this.login(userWithoutPassword);
+    return this.login(userWithoutPassword, undefined, ip, userAgent);
   }
 
   /**
@@ -159,7 +179,7 @@ export class AuthService {
    * Refresh access token using a valid refresh token
    * Implements token rotation: old token is revoked and new tokens are issued
    */
-  async refreshAccessToken(refreshToken: string) {
+  async refreshAccessToken(refreshToken: string, ip?: string, userAgent?: string) {
     const { refreshTokenId, user } = await this.validateRefreshToken(refreshToken);
 
     // Revoke the old refresh token (token rotation)
@@ -177,6 +197,9 @@ export class AuthService {
 
     const newRefreshToken = await this.generateRefreshToken(user.id);
 
+    // Log token refresh
+    await this.auditLogger.logTokenRefresh(user.id, ip, userAgent);
+
     this.logger.debug('Tokens refreshed successfully', { userId: user.id });
 
     return {
@@ -189,7 +212,7 @@ export class AuthService {
   /**
    * Revoke a refresh token (logout)
    */
-  async revokeRefreshToken(token: string): Promise<void> {
+  async revokeRefreshToken(token: string, ip?: string, userAgent?: string): Promise<void> {
     const tokens = await this.prisma.refreshToken.findMany({
       where: {
         revokedAt: null,
@@ -203,6 +226,9 @@ export class AuthService {
           where: { id: storedToken.id },
           data: { revokedAt: new Date() },
         });
+
+        // Log logout
+        await this.auditLogger.logLogout(storedToken.userId, ip, userAgent);
 
         this.logger.debug('Refresh token revoked', { tokenId: storedToken.id });
         return;

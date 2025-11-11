@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { ethers } from 'ethers';
@@ -7,6 +7,7 @@ import bs58 from 'bs58';
 
 @Injectable()
 export class Web3AuthService {
+  private readonly logger = new Logger(Web3AuthService.name);
   private nonces: Map<string, { nonce: string; expiresAt: Date }> = new Map();
 
   constructor(
@@ -206,7 +207,7 @@ export class Web3AuthService {
       const recoveredAddress = ethers.verifyMessage(message, signature);
       return recoveredAddress.toLowerCase() === expectedAddress.toLowerCase();
     } catch (error) {
-      console.error('Ethereum signature verification error:', error);
+      this.logger.error('Ethereum signature verification failed', error.stack, { expectedAddress });
       return false;
     }
   }
@@ -230,7 +231,7 @@ export class Web3AuthService {
         publicKeyBytes,
       );
     } catch (error) {
-      console.error('Solana signature verification error:', error);
+      this.logger.error('Solana signature verification failed', error.stack, { publicKey });
       return false;
     }
   }

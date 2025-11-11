@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 
 interface UserProfile {
   id: string;
@@ -20,6 +21,7 @@ interface UserProfile {
 }
 
 export default function ProfileEditPage() {
+  const t = useTranslations('profileEdit');
   const router = useRouter();
   const queryClient = useQueryClient();
   const [userId, setUserId] = useState<string | null>(null);
@@ -37,13 +39,13 @@ export default function ProfileEditPage() {
   useEffect(() => {
     const userStr = localStorage.getItem('user');
     if (!userStr) {
-      toast.error('Debes iniciar sesión');
+      toast.error(t('auth.mustLogin'));
       router.push('/auth/login');
       return;
     }
     const user = JSON.parse(userStr);
     setUserId(user.id);
-  }, [router]);
+  }, [router, t]);
 
   // Fetch user profile
   const { data: profile, isLoading } = useQuery<UserProfile>({
@@ -74,7 +76,7 @@ export default function ProfileEditPage() {
       return response.data;
     },
     onSuccess: (data) => {
-      toast.success('Perfil actualizado correctamente');
+      toast.success(t('success.profileUpdated'));
       // Update localStorage user
       const userStr = localStorage.getItem('user');
       if (userStr) {
@@ -85,7 +87,7 @@ export default function ProfileEditPage() {
       router.push('/');
     },
     onError: (error: any) => {
-      const message = error.response?.data?.message || 'Error al actualizar perfil';
+      const message = error.response?.data?.message || t('errors.updateProfile');
       toast.error(message);
     },
   });
@@ -96,20 +98,20 @@ export default function ProfileEditPage() {
 
     // Validate file type
     if (!file.type.match(/\/(jpg|jpeg|png|gif|webp)$/)) {
-      toast.error('Solo se permiten archivos de imagen (JPG, PNG, GIF, WebP)');
+      toast.error(t('errors.invalidImage'));
       return;
     }
 
     // Validate file size (5MB)
     if (file.size > 5 * 1024 * 1024) {
-      toast.error('El archivo no puede superar 5MB');
+      toast.error(t('errors.imageTooLarge'));
       return;
     }
 
     setUploadingAvatar(true);
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const formData = new FormData();
       formData.append('file', file);
 
@@ -122,14 +124,14 @@ export default function ProfileEditPage() {
       });
 
       if (!response.ok) {
-        throw new Error('Error al subir la imagen');
+        throw new Error(t('errors.imageUploadError'));
       }
 
       const data = await response.json();
       setAvatar(data.url);
-      toast.success('Imagen subida correctamente');
+      toast.success(t('success.imageUploaded'));
     } catch (error: any) {
-      toast.error(error.message || 'Error al subir la imagen');
+      toast.error(error.message || t('errors.imageUploadError'));
     } finally {
       setUploadingAvatar(false);
     }
@@ -139,7 +141,7 @@ export default function ProfileEditPage() {
     e.preventDefault();
 
     if (!name.trim()) {
-      toast.error('El nombre es obligatorio');
+      toast.error(t('errors.nameRequired'));
       return;
     }
 
@@ -172,90 +174,90 @@ export default function ProfileEditPage() {
     return (
       <Layout>
         <div className="min-h-screen flex items-center justify-center">
-          <p className="text-gray-600">No se pudo cargar el perfil</p>
+          <p className="text-gray-600">{t('errors.loadProfile')}</p>
         </div>
       </Layout>
     );
   }
 
   return (
-    <Layout title="Editar Perfil - Comunidad Viva">
-      <div className="min-h-screen bg-gray-50 py-8">
+    <Layout title={t('layout.title')}>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div className="container mx-auto px-4 max-w-2xl">
           <div className="mb-6">
             <button
               onClick={() => router.back()}
               className="text-blue-600 hover:text-blue-700 flex items-center gap-2"
             >
-              ← Volver
+              ← {t('back')}
             </button>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <h1 className="text-2xl font-bold text-gray-900 mb-6">Editar Perfil</h1>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">{t('heading')}</h1>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name */}
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                  Nombre <span className="text-red-500">*</span>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('form.name.label')} <span className="text-red-500">{t('form.name.required')}</span>
                 </label>
                 <input
                   id="name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Tu nombre"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder={t('form.name.placeholder')}
                   required
                 />
               </div>
 
               {/* Email (read-only) */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  Email
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('form.email.label')}
                 </label>
                 <input
                   id="email"
                   type="email"
                   value={profile.email}
                   disabled
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
                 />
-                <p className="text-xs text-gray-500 mt-1">El email no se puede modificar</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t('form.email.cannotModify')}</p>
               </div>
 
               {/* Bio */}
               <div>
-                <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-2">
-                  Biografía
+                <label htmlFor="bio" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('form.bio.label')}
                 </label>
                 <textarea
                   id="bio"
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
                   rows={4}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  placeholder="Cuéntanos sobre ti..."
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  placeholder={t('form.bio.placeholder')}
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  Máximo 500 caracteres ({bio.length}/500)
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  {t('form.bio.maxChars', { count: bio.length })}
                 </p>
               </div>
 
               {/* Address */}
               <div>
-                <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
-                  Dirección
+                <label htmlFor="address" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t('form.address.label')}
                 </label>
                 <input
                   id="address"
                   type="text"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Calle, número, ciudad..."
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder={t('form.address.placeholder')}
                 />
               </div>
 
@@ -263,17 +265,17 @@ export default function ProfileEditPage() {
               <div>
                 <label
                   htmlFor="neighborhood"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
-                  Barrio/Vecindario
+                  {t('form.neighborhood.label')}
                 </label>
                 <input
                   id="neighborhood"
                   type="text"
                   value={neighborhood}
                   onChange={(e) => setNeighborhood(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Tu barrio"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder={t('form.neighborhood.placeholder')}
                 />
               </div>
 
@@ -281,20 +283,20 @@ export default function ProfileEditPage() {
               <div>
                 <label
                   htmlFor="interests"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
-                  Intereses
+                  {t('form.interests.label')}
                 </label>
                 <input
                   id="interests"
                   type="text"
                   value={interestsInput}
                   onChange={(e) => setInterestsInput(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Música, deportes, cocina... (separados por comas)"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder={t('form.interests.placeholder')}
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  Separa tus intereses con comas. Ejemplo: música, deportes, cocina
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  {t('form.interests.helper')}
                 </p>
                 {interestsInput && (
                   <div className="flex flex-wrap gap-2 mt-3">
@@ -316,13 +318,13 @@ export default function ProfileEditPage() {
 
               {/* Avatar placeholder */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Avatar</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('form.avatar.label')}</label>
                 <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                  <div className="w-20 h-20 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center overflow-hidden">
                     {avatar ? (
                       <img src={avatar} alt="Avatar" className="w-full h-full object-cover" />
                     ) : (
-                      <span className="text-gray-400 text-2xl">
+                      <span className="text-gray-400 dark:text-gray-500 text-2xl">
                         {name.charAt(0).toUpperCase() || '?'}
                       </span>
                     )}
@@ -344,31 +346,31 @@ export default function ProfileEditPage() {
                           : 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer'
                       }`}
                     >
-                      {uploadingAvatar ? 'Subiendo...' : 'Subir imagen'}
+                      {uploadingAvatar ? t('form.avatar.uploading') : t('form.avatar.upload')}
                     </label>
-                    <p className="text-xs text-gray-500 mt-1">
-                      JPG, PNG, GIF o WebP. Máximo 5MB.
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      {t('form.avatar.fileTypes')}
                     </p>
                   </div>
                 </div>
               </div>
 
               {/* Divider */}
-              <div className="border-t border-gray-200 pt-6">
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
                 <div className="flex gap-4">
                   <button
                     type="submit"
                     disabled={updateMutation.isPending}
                     className="flex-1 py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {updateMutation.isPending ? 'Guardando...' : 'Guardar cambios'}
+                    {updateMutation.isPending ? t('form.submitting') : t('form.submit')}
                   </button>
                   <button
                     type="button"
                     onClick={() => router.back()}
-                    className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium transition-colors"
+                    className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 font-medium transition-colors"
                   >
-                    Cancelar
+                    {t('form.cancel')}
                   </button>
                 </div>
               </div>
@@ -376,11 +378,10 @@ export default function ProfileEditPage() {
           </div>
 
           {/* Additional info */}
-          <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h3 className="text-sm font-semibold text-blue-900 mb-2">💡 Consejo</h3>
-            <p className="text-sm text-blue-800">
-              Un perfil completo te ayuda a conectar mejor con tu comunidad. Comparte tus
-              intereses y habilidades para encontrar colaboraciones significativas.
+          <div className="mt-6 bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+            <h3 className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-2">{t('tip.title')}</h3>
+            <p className="text-sm text-blue-800 dark:text-blue-200">
+              {t('tip.description')}
             </p>
           </div>
         </div>
@@ -389,4 +390,4 @@ export default function ProfileEditPage() {
   );
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

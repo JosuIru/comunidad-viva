@@ -40,6 +40,7 @@ interface HousingMapProps {
 export default function HousingMap({ housings, onMarkerClick, center = [40.416775, -3.703790], zoom = 13 }: HousingMapProps) {
   useEffect(() => {
     // Import leaflet CSS
+    // @ts-ignore - CSS import
     import('leaflet/dist/leaflet.css');
 
     // Fix for default marker icons in Next.js

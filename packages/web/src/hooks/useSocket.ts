@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useWebSocket } from '../contexts/WebSocketContext';
+import { logger } from '@/lib/logger';
 
 interface Notification {
   type: string;
@@ -15,6 +16,7 @@ interface UseSocketReturn {
   leaveRoom: (room: string) => void;
   clearNotifications: () => void;
   on: (event: string, listener: (data: any) => void) => () => void;
+  off: (event: string, listener: (data: any) => void) => void;
   emit: (event: string, data?: any) => void;
 }
 
@@ -31,7 +33,7 @@ export const useSocket = (): UseSocketReturn => {
   // Subscribe to notifications from WebSocket
   useEffect(() => {
     const unsubscribe = webSocketContext.onNotification((notification: any) => {
-      console.log('[useSocket] Notification received:', notification);
+      logger.debug('Notification received', { notification });
       setNotifications((prev) => [...prev, {
         type: notification.type || 'notification',
         data: notification.data || notification,
@@ -56,7 +58,7 @@ export const useSocket = (): UseSocketReturn => {
       const postId = room.replace('post:', '');
       webSocketContext.subscribeToPost(postId);
     } else {
-      console.warn('[useSocket] Unknown room type:', room);
+      logger.warn('Unknown room type', { room });
     }
   }, [webSocketContext]);
 
@@ -69,7 +71,7 @@ export const useSocket = (): UseSocketReturn => {
       const postId = room.replace('post:', '');
       webSocketContext.unsubscribeFromPost(postId);
     } else {
-      console.warn('[useSocket] Unknown room type:', room);
+      logger.warn('Unknown room type', { room });
     }
   }, [webSocketContext]);
 
@@ -94,7 +96,7 @@ export const useSocket = (): UseSocketReturn => {
       case 'message:new':
         return webSocketContext.onMessageNew(listener);
       default:
-        console.warn('[useSocket] Unknown event type:', event);
+        logger.warn('Unknown event type', { event });
         return () => {};
     }
   }, [webSocketContext]);
@@ -106,9 +108,15 @@ export const useSocket = (): UseSocketReturn => {
     } else if (event === 'typing:stop') {
       webSocketContext.stopTyping(data || {});
     } else {
-      console.warn('[useSocket] Cannot emit unknown event:', event);
+      logger.warn('Cannot emit unknown event', { event });
     }
   }, [webSocketContext]);
+
+  // Unsubscribe from events (dummy implementation)
+  const off = useCallback((_event: string, _listener: (data: any) => void) => {
+    // The actual unsubscription is handled by the return value of `on`
+    // This is a placeholder for API compatibility
+  }, []);
 
   return {
     socket: webSocketContext.socket,
@@ -118,6 +126,7 @@ export const useSocket = (): UseSocketReturn => {
     leaveRoom,
     clearNotifications,
     on,
+    off,
     emit,
   };
 };

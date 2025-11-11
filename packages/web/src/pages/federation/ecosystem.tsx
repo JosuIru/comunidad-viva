@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
+import { getI18nProps } from '@/lib/i18n';
 import {
   ChartBarIcon,
   GlobeAltIcon,
@@ -9,7 +10,7 @@ import {
   UserGroupIcon,
   ServerIcon,
   SparklesIcon,
-  TrendingUpIcon,
+  ArrowTrendingUpIcon,
 } from '@heroicons/react/24/outline';
 
 interface EcosystemStats {
@@ -95,7 +96,7 @@ export default function EcosystemDashboard() {
     {
       title: 'Transacciones',
       value: semillaStats?.totalTransactions || 0,
-      icon: TrendingUpIcon,
+      icon: ArrowTrendingUpIcon,
       color: 'bg-orange-500',
       suffix: 'total',
     },
@@ -374,3 +375,5 @@ export default function EcosystemDashboard() {
     </Layout>
   );
 }
+
+export const getStaticProps = async (context: any) => getI18nProps(context);

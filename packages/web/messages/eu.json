@@ -1,6 +1,6 @@
 {
   "nav": {
-    "title": "Bizirik Komunitatea",
+    "title": "Truk",
     "home": "Hasiera",
     "offers": "Eskaintzak",
     "events": "Ekitaldiak",
@@ -9,6 +9,7 @@
     "economy": "Ekonomia",
     "manage": "Kudeatu",
     "profile": "Profila",
+    "communities": "Komunitateak",
     "logout": "Irten",
     "login": "Hasi saioa",
     "register": "Erregistratu",
@@ -19,7 +20,44 @@
     "weeklyChallenges": "Asteko Erronkak",
     "economicDashboard": "Ekonomia Panela",
     "sendCredits": "Kreditoak Bidali",
-    "communityPools": "Komunitateko Putzuak"
+    "communityPools": "Komunitateko Putzuak",
+    "platform": {
+      "label": "Plataforma",
+      "main": "Nagusia",
+      "gamification": "Gamifikazioa",
+      "economy": "Ekonomia & Gobernantza",
+      "economyGovernance": "Ekonomia & Gobernantza",
+      "hybrid": "Hibridoa",
+      "sections": {
+        "gamification": "🎮 GAMIFIKAZIOA",
+        "economy": "💰 EKONOMIA",
+        "governance": "🏛️ GOBERNANTZA",
+        "housing": "🏠 ETXEBIZITZA ETA LAGUNTZA"
+      },
+      "items": {
+        "challenges": "Challenges & Leaderboard",
+        "swipe": "Swipe & Match",
+        "flashDeals": "Flash Deals",
+        "groupBuys": "Talde Erosketak",
+        "referrals": "Erreferentziak",
+        "hybridDashboard": "Sistema Hibridoa",
+        "hybridEvents": "Ospakizunak",
+        "economyDashboard": "Ekonomia Dashboard",
+        "bridge": "Blockchain Bridges",
+        "proposals": "Proposamenak",
+        "delegation": "Boto Delegazioa",
+        "housing": "Etxebizitza",
+        "mutualAid": "Laguntza Mutuala",
+        "allFeatures": "Funtzionalitate guztiak",
+        "features": "✨ Funtzionalitateak"
+      }
+    },
+    "userMenu": {
+      "defaultName": "Erabiltzailea",
+      "profile": "Nire Profila",
+      "manage": "Edukia Kudeatu",
+      "viewProfile": "Profila ikusi"
+    }
   },
   "auth": {
     "sessionClosed": "Saioa itxita"
@@ -33,6 +71,7 @@
     "delete": "Ezabatu",
     "search": "Bilatu",
     "filter": "Iragazi",
+    "filters": "Iragazkiak",
     "loading": "Kargatzen...",
     "loadingOffers": "Eskaintzak kargatzen...",
     "error": "Errorea gertatu da",
@@ -46,6 +85,7 @@
   },
   "offers": {
     "title": "Eskaintzak",
+    "subtitle": "Aurkitu zure komunitateko produktuak eta zerbitzuak",
     "newOffer": "+ Eskaintza Berria",
     "create": "Eskaintza berria sortu",
     "myOffers": "Nire eskaintzak",
@@ -79,7 +119,16 @@
     "myEvents": "Nire ekitaldiak",
     "date": "Data",
     "time": "Ordua",
-    "participants": "Parte-hartzaileak"
+    "participants": "Parte-hartzaileak",
+    "pageTitle": "Komunitateko Ekitaldiak",
+    "pageSubtitle": "Parte hartu, ikasi eta konektatu zure komunitatearekin",
+    "loading": "Ekitaldiak kargatzen...",
+    "noEvents": "Ez dago hurrengo ekitaldirik",
+    "createFirst": "Sortu lehen ekitaldia",
+    "credits": "kredituak",
+    "attendees": "partaideak",
+    "organizedBy": "Antolatuta",
+    "organizer": "Antolatzailea"
   },
   "credits": {
     "balance": "Saldoa",
@@ -100,6 +149,3382 @@
     "myOffers": "Nire Eskaintzak",
     "myEvents": "Nire Ekitaldiak",
     "timeBank": "Denbora Bankua",
-    "myProfile": "Nire Profila"
+    "myProfile": "Nire Profila",
+    "description": "Kudeatu zure eskaintzak, ekitaldiak eta denbora bankuko zerbitzuak"
+  },
+  "swipe": {
+    "title": "Swipe eta Bat-etortzea",
+    "subtitle": "Konektatu lagundu dezakezuten eta lagun diezazuketen pertsonekin",
+    "stats": {
+      "totalSwipes": "Guztizko Swipeak",
+      "likesGiven": "Emandako Likeak",
+      "matches": "Bat-etortzeak",
+      "superLikesToday": "Super Likeak gaur"
+    },
+    "tabs": {
+      "discover": "Aurkitu",
+      "matches": "Bat-etortzeak"
+    },
+    "level": "Maila",
+    "mutualConnections": "konexio komunak",
+    "credits": "Kredituak",
+    "reputation": "Ospea",
+    "exchanges": "Trukeak",
+    "activeOffers": "eskaintza aktibo",
+    "responseRate": "erantzuna",
+    "aboutMe": "Niri buruz",
+    "languages": "Hizkuntzak",
+    "interests": "Interesak",
+    "canHelpWith": "Lagundu dezaket honekin",
+    "needHelpWith": "Laguntza behar dut honekin",
+    "memberSince": "Kide hemendik",
+    "noInterest": "Ez zait interesatzen",
+    "superLike": "Super Like",
+    "interested": "Interesatzen zait",
+    "keyboardHints": "Erabili teklatu-geziak: ← Ez, ↑ Super Like, → Bai",
+    "noMoreProfiles": {
+      "title": "Ez dago profil gehiagorik orain",
+      "description": "Itzuli geroago konexio berriak aurkitzeko",
+      "refresh": "Freskatu"
+    },
+    "matchesTab": {
+      "title": "Bat-etortzeak",
+      "matchSince": "Bat-etortzea hemendik",
+      "continueChat": "Txata jarraitu",
+      "startChat": "Txata hasi",
+      "empty": {
+        "title": "Ez duzu oraindik bat-etortzerik",
+        "description": "Hasi swipe egiten konexioak aurkitzeko",
+        "action": "Aurkitu Pertsonak"
+      }
+    },
+    "howItWorks": {
+      "title": "Nola funtzionatzen du Swipe eta Bat-etortzeak?",
+      "step1": {
+        "title": "Aurkitu",
+        "description": "Ikusi interes eta behar osagarriak dituzten pertsonen profilak"
+      },
+      "step2": {
+        "title": "Swipe",
+        "description": "Irrist egin eskuinera interesatzen bazaizu, ezkerrera ez bada"
+      },
+      "step3": {
+        "title": "Bat-etortzea",
+        "description": "Biek like ematen baduzue, bat-etortze bat da!"
+      },
+      "step4": {
+        "title": "Konektatu",
+        "description": "Txateatu eta koordinatu nola lagundu elkarri"
+      }
+    },
+    "tips": {
+      "title": "Aholkuak bat-etortze hobeetarako",
+      "tip1": "Bete zure profila eskaintzen eta behar duzunari buruzko informazioarekin",
+      "tip2": "Zehaztu zure gaitasunei eta interesai buruz",
+      "tip3": "Erabili Super Likeak estrategikoki (eguneko 3)",
+      "tip4": "Konexio komunek bat-etortzearen probabilitatea handitzen dute"
+    },
+    "matchModal": {
+      "title": "Bat-etortze bat da!",
+      "description": "{name}ri ere interesatzen zaio",
+      "startChat": "Txata hasi",
+      "keepDiscovering": "Aurkitzen jarraitu"
+    },
+    "errors": {
+      "noSuperLikes": "Ez daukazu Super Likerik geratzen gaur",
+      "swipeError": "Errorea swipe prozesatzean"
+    },
+    "loading": "Kargatzen...",
+    "chatSoon": "Txat-funtzionalitatea laster"
+  },
+  "flashDeals": {
+    "title": "Flash Eskaintzak",
+    "subtitle": "Denbora mugatuko eskaintza bizkorrak - Ez galdu!",
+    "happyHour": {
+      "active": "Happy Hour Aktiboa!",
+      "multiplier": "Biderkatzailea",
+      "endsIn": "Amaitzen da"
+    },
+    "infoCards": {
+      "limitedTime": {
+        "title": "Denbora Mugatua",
+        "description": "2-4 ordu deal bakoitzeko"
+      },
+      "discount": {
+        "title": "% 70 OFF arte",
+        "description": "Deskontua ikaragarria"
+      },
+      "limitedStock": {
+        "title": "Stock Mugatua",
+        "description": "Lehenik iritsi, lehenik zerbitzu"
+      }
+    },
+    "deal": {
+      "off": "OFF",
+      "originalPrice": "Jatorrizko prezioa",
+      "savings": "Aurrezten duzu",
+      "stockAvailable": "Stock eskuragarri",
+      "merchant": "Merkataria",
+      "claimNow": "Erreklamatu orain",
+      "soldOut": "Agortuta",
+      "onlyRemaining": "Bakarrik {count} geratzen dira!"
+    },
+    "noDeal": {
+      "title": "Ez dago Flash Deal aktiborik",
+      "description": "Flash dealak automatikoki aldatzen dira egunean 3 aldiz",
+      "hint": "Itzuli laster eskaintzak ez galtzeko"
+    },
+    "howItWorks": {
+      "title": "Nola funtzionatzen dute Flash Dealak?",
+      "step1": {
+        "title": "Aurkitu Deal bat",
+        "description": "Arakatu eskaintza aktiboak eta hautatu gehien interesatzen zaizuna"
+      },
+      "step2": {
+        "title": "Erreklamatu Azkar",
+        "description": "Egin klik \"Erreklamatu\" stocka agortu aurretik"
+      },
+      "step3": {
+        "title": "Lortu zure Kodea",
+        "description": "Deskontua erabiltzeko kode bakarra jasoko duzu"
+      },
+      "step4": {
+        "title": "Jarri Harremanetan Saltzailearekin",
+        "description": "Erabili kodea merkatariarekin harremanetan jartzen zarenean"
+      }
+    },
+    "claimModal": {
+      "title": "Baieztatu Flash Deal",
+      "discount": "Deskontua",
+      "important": "Garrantzitsua",
+      "expiresIn": "Kodea iraungitzen da",
+      "onceOnly": "Deal hau behin bakarrik erreklamatu dezakezu",
+      "contactSeller": "Jarri harremanetan saltzailearekin zure kodea erabiltzeko",
+      "cancel": "Utzi",
+      "claim": "Erreklamatu",
+      "claiming": "Erreklamatzen..."
+    },
+    "success": "Flash deal erreklamatuta! Kodea: {code}",
+    "error": "Errorea flash deal erreklamatzean",
+    "loading": "Kargatzen..."
+  },
+  "dailySeed": {
+    "title": "🌱 Eguneko Hazia",
+    "toast": {
+      "success": "Zorionak! {credits} kreditu irabazi dituzu",
+      "error": "Errorea erronka osatzerakoan",
+      "alreadyCompleted": "Gaurko erronka dagoeneko osatu duzu"
+    },
+    "participants": "{count, plural, one {Pertsona batek erronka hau osatu du} other {{count} pertsonek erronka hau osatu dute}}",
+    "button": {
+      "completed": "✓ Osatua",
+      "loading": "Osatzen...",
+      "action": "Osatu (+{credits} kreditu)"
+    }
+  },
+  "web3Wallet": {
+    "errors": {
+      "metamaskNotInstalled": "MetaMask ez dago instalatuta. Instalatu https://metamask.io helbidean",
+      "phantomNotInstalled": "Phantom ez dago instalatuta. Instalatu https://phantom.app helbidean",
+      "metaConnect": "Errorea MetaMask-ekin konektatzean",
+      "phantomConnect": "Errorea Phantom-ekin konektatzean"
+    },
+    "alerts": {
+      "metaWelcome": "Ongi etorri! Zure kontua MetaMask-ekin sortu da.",
+      "metaLoginSuccess": "MetaMask-ekin autentifikazioa arrakastatsua!",
+      "phantomWelcome": "Ongi etorri! Zure kontua Phantom-ekin sortu da.",
+      "phantomLoginSuccess": "Phantom-ekin autentifikazioa arrakastatsua!",
+      "linkSuccess": "Wallet-a ongi lotu da!"
+    },
+    "empty": {
+      "description": "Ez da Web3 walletik detektatu. Instalatu bat jarraitzeko:",
+      "installMetaMask": "MetaMask instalatu",
+      "installPhantom": "Phantom instalatu"
+    },
+    "intro": {
+      "login": "Konektatu zure Web3 wallet-a saioa hasteko edo erregistratzeko",
+      "link": "Lotu zure Web3 wallet-a zure kontura"
+    },
+    "buttons": {
+      "connecting": "Konektatzen...",
+      "meta": "MetaMask-ekin konektatu",
+      "phantom": "Phantom-ekin konektatu"
+    },
+    "footer": {
+      "terms": "Wallet-a konektatzean, zerbitzu-baldintzak onartzen dituzu"
+    }
+  },
+  "landing": {
+    "hero": {
+      "title": "Aurreztu dirua, partekatu baliabideak, indartu zure komunitatea",
+      "subtitle": "Auzokoak konektatzen dituen lankidetza ekonomiaren plataforma zerbitzuak trukatzeko, baliabideak partekatzeko eta komunitate sendoagoa eraikitzeko.",
+      "cta": {
+        "primary": "Batu doako",
+        "secondary": "Gehiago jakin"
+      },
+      "trust": "✓ Doakoa · ✓ Komisionik gabe · ✓ 100% lokala"
+    },
+    "features": {
+      "title": "Behar duzun guztia leku bakarrean",
+      "subtitle": "Hiru zutabe zure ekonomia lokala eraldatzeko",
+      "marketplace": {
+        "title": "Marketplace Lokala",
+        "description": "Erosi, saldu eta trukatu zure auzokoeekin. Bitartekaririk gabe, komisionik gabe.",
+        "benefit1": "Produktu eta zerbitzu lokalen eskaintzak",
+        "benefit2": "Ordainketa €tan edo kreditu komunitariotan",
+        "benefit3": "Erreputazio eta berrikuspen egiaztatuak"
+      },
+      "timebank": {
+        "title": "Denbora Bankua",
+        "description": "Trukatu gaitasunak eta denbora. Zure denboraren ordu bat beste baten denbora ordu bat balio du.",
+        "benefit1": "Ordu 1 = kreditu 1, denendako berdin",
+        "benefit2": "Ikasi gaitasun berriak doan",
+        "benefit3": "Lagundu eta jaso laguntza zure komunitatetik"
+      },
+      "community": {
+        "title": "Laguntza Sarea",
+        "description": "Parte hartu ekitaldietan, elkarren laguntzako proiektuetan eta komunitateko erabakietan.",
+        "benefit1": "Ekitaldi eta jarduera lokalak",
+        "benefit2": "Elkarren laguntzako proiektuak",
+        "benefit3": "Gobernaritza partehartzailea"
+      }
+    },
+    "impact": {
+      "title": "Gure inpaktu kolektiboa",
+      "subtitle": "Elkarrekin ekonomia justu eta jasangarriagoa eraikitzen ari gara"
+    },
+    "howItWorks": {
+      "title": "Nola funtzionatzen du?",
+      "subtitle": "Hasi 5 minutu baino gutxiagotan",
+      "step1": {
+        "title": "Erregistratu doako",
+        "description": "Sortu zure kontua 2 minututan. Email bat edo zure Web3 wallet-a behar duzu bakarrik."
+      },
+      "step2": {
+        "title": "Esploratu zure komunitatea",
+        "description": "Deskubritu zure inguruko eskaintzak, zerbitzuak eta ekitaldiak mapa interaktiboan."
+      },
+      "step3": {
+        "title": "Konektatu eta elkarlanean",
+        "description": "Trukatu, partekatu, lagundu eta parte hartu zure komunitate lokalean."
+      },
+      "step4": {
+        "title": "Irabazi eta aurreztu",
+        "description": "Metatu kredituak, igo mailaz eta aurreztu dirua zure auzoari indarra ematen diozun bitartean."
+      }
+    },
+    "finalCta": {
+      "title": "Prest zaude zure ekonomia lokala eraldatzeko?",
+      "subtitle": "Batu dagoeneko dirua aurrezten eta komunitatea eraikitzen ari diren ehunka pertsonari.",
+      "button": "Hasi orain",
+      "subtitle2": "Doakoa da · Ez da kreditu txartelik behar"
+    },
+    "footer": {
+      "rights": "Eskubide guztiak gordeta",
+      "privacy": "Pribatutasuna",
+      "terms": "Baldintzak"
+    }
+  },
+  "feed": {
+    "toast": {
+      "created": "Argitalpena sortuta!",
+      "error": "Errorea argitalpena sortzean",
+      "writeFirst": "Idatzi zerbait lehenik"
+    },
+    "errors": {
+      "load": "Errorea feed-a kargatzean"
+    },
+    "scope": {
+      "title": "🌍 Feedaren esparrua",
+      "filters": {
+        "local": {
+          "label": "Nire auzoa",
+          "description": "Zure auzoko argitalpenak"
+        },
+        "community": {
+          "label": "Nire komunitatea",
+          "description": "Zure komunitateko argitalpenak"
+        },
+        "region": {
+          "label": "Eskualdea",
+          "description": "Zure eskualdeko argitalpenak"
+        },
+        "global": {
+          "label": "Globala",
+          "description": "Argitalpen guztiak"
+        }
+      }
+    },
+    "types": {
+      "all": "📋 Guztiak",
+      "STORY": "Istorioa",
+      "NEED": "Beharrizana",
+      "OFFER": "Eskaintza",
+      "THANKS": "Eskerrak",
+      "ACHIEVEMENT": "Lorpena",
+      "MILESTONE": "Mugarri",
+      "TIP": "Aholkua"
+    },
+    "create": {
+      "prompt": "💬 Zer partekatu nahi duzu zure komunitatearekin?",
+      "placeholder": "Idatzi zure argitalpena...",
+      "cancel": "Utzi",
+      "submit": "Argitaratu",
+      "submitting": "Argitaratzen...",
+      "open": "Argitalpena sortu",
+      "emptyTitle": "Ez dago oraindik argitalpenik",
+      "emptyDescription": "Izan lehena zure komunitatearekin zerbait partekatzen"
+    },
+    "explore": {
+      "offers": "Eskaintzak arakatu"
+    },
+    "loading": "Argitalpenak kargatzen...",
+    "helped": "{count, plural, one {{count} pertsona lagundua} other {{count} pertsona lagunduak}}"
+  },
+  "timebankStats": {
+    "errors": {
+      "load": "Errorea estatistikak kargatzean"
+    },
+    "title": "Nire Denbora Bankuko estatistikak",
+    "metrics": {
+      "hoursProvided": "Emandako orduak",
+      "hoursReceived": "Jasotako orduak",
+      "transactions": "Trukeak",
+      "rating": "Batez besteko balorazioa",
+      "ratingCount": "({count, plural, one {{count} balorazio} other {{count} balorazio}})"
+    },
+    "balance": {
+      "title": "Orduen balantzea",
+      "description": "Emandako eta jasotako orduen arteko aldea",
+      "unit": "h"
+    },
+    "motivation": {
+      "tipTitle": "💡 Ba al zenekien...?",
+      "tipDescription": "Denbora bankuak zure komunitatearekin gaitasunak trukatzeko aukera ematen dizu. Hasi ondo egiten dakizun zerbait eskainiz!",
+      "greatTitle": "🌟 Lan bikaina!",
+      "greatDescription": "Zure balorazio altuak komunitatearekiko konpromisoa erakusten du. Horrela jarraitu!"
+    }
+  },
+  "magicOnboarding": {
+    "steps": {
+      "welcome": {
+        "title": "Ongi etorri Truk-era!",
+        "description": "Zure lankidetza ekonomia lokaleko plataforma. Deskubritu, konektatu eta partekatu zure komunitatearekin."
+      },
+      "exploreOffers": {
+        "title": "Deskubritu zure komunitatea",
+        "description": "Arakatu eskaintzak, zerbitzuak eta zure inguruko pertsonak mapa interaktiboan."
+      },
+      "joinCommunity": {
+        "title": "Batu eta parte hartu",
+        "description": "Joan ekitaldietara, ezagutu auzokoak eta hasi kreditu komunitarioak erabiltzen."
+      },
+      "completed": {
+        "title": "Dena prest!",
+        "description": "Dagoeneko komunitateko kide aktiboa zara. Orain zure lehen eskaintza sor dezakezu edo gehiago esploratu. Irabazi 50 kreditu bonusa!"
+      }
+    },
+    "toast": {
+      "completed": "Onboarding-a osatua! 🎉 50 kreditu bonus irabazi dituzu"
+    },
+    "buttons": {
+      "skip": "Saltatu ✕",
+      "previous": "← Aurrekoa",
+      "next": "Hurrengoa",
+      "goNow": "Joan orain →",
+      "complete": "Hasi esploratzen! 🚀",
+      "createOffer": "Sortu nire lehen eskaintza"
+    },
+    "progress": {
+      "step": "Pausoa {current}/{total}",
+      "percent": "Osatuta {percent}%"
+    },
+    "reward": "🎁 Osatu onboarding-a eta jaso 50 kreditu bonus!"
+  },
+  "adminCommunities": {
+    "layout": {
+      "title": "Admin - Komunitateen Kudeaketa",
+      "loadingTitle": "Admin - Komunitateak"
+    },
+    "loading": {
+      "text": "Kargatzen..."
+    },
+    "toasts": {
+      "createSuccess": "Komunitatea arrakastaz sortu da!",
+      "createError": "Errorea komunitatea sortzean",
+      "locationRequired": "Sartu kokalekua lehenik mesedez",
+      "geocodeSuccess": "Koordenatuak ongi eskuratu dira",
+      "geocodeNotFound": "Ez da kokapen honetarako koordenaturik aurkitu",
+      "geocodeError": "Errorea koordenatuak eskuratzean"
+    },
+    "header": {
+      "title": "Komunitateen Kudeaketa",
+      "description": "Kudeatu eta sortu zure komunitate lokal berriak",
+      "new": "+ Komunitate berria",
+      "cancel": "✕ Utzi"
+    },
+    "form": {
+      "title": "Komunitate berria sortu",
+      "fields": {
+        "name": {
+          "label": "Izena *",
+          "placeholder": "Adib.: Graciako Auzoa"
+        },
+        "slug": {
+          "label": "Slug (URL) *",
+          "placeholder": "gracia-barcelona",
+          "auto": "Auto"
+        },
+        "description": {
+          "label": "Deskribapena",
+          "placeholder": "Deskribatu zure komunitatea..."
+        },
+        "location": {
+          "label": "Kokapena",
+          "placeholder": "Bartzelona, Espainia",
+          "button": "📍 Lortu koordenatuak"
+        },
+        "radius": "Erradioa (km)",
+        "latitude": {
+          "label": "Latitudea",
+          "autoFilled": "✓ Auto-osatua",
+          "placeholder": "41.4036"
+        },
+        "longitude": {
+          "label": "Longitudea",
+          "autoFilled": "✓ Auto-osatua",
+          "placeholder": "2.1589"
+        },
+        "primaryColor": "Kolore nagusia",
+        "type": "Mota *",
+        "visibility": "Ikusgarritasuna *",
+        "language": "Hizkuntza",
+        "currency": "Moneta"
+      },
+      "checkboxes": {
+        "requiresApproval": "Kide berriek eskuzko onarpena behar dute",
+        "allowExternalOffers": "Konektatutako komunitateen eskaintzak baimendu"
+      },
+      "actions": {
+        "cancel": "Utzi",
+        "submit": "Komunitatea sortu",
+        "submitting": "Sortzen..."
+      }
+    },
+    "selects": {
+      "typeOptions": {
+        "NEIGHBORHOOD": "Auzoa",
+        "VILLAGE": "Herria",
+        "TOWN": "Hiria",
+        "COUNTY": "Konderria",
+        "REGION": "Eskualdea",
+        "CUSTOM": "Pertsonalizatua"
+      },
+      "visibilityOptions": {
+        "PRIVATE": "Pribatua",
+        "PUBLIC": "Publikoa (baimenarekin)",
+        "OPEN": "Irekia (edonork batu daiteke)",
+        "FEDERATED": "Federatua"
+      },
+      "languageOptions": {
+        "es": "Gaztelania",
+        "eu": "Euskara",
+        "ca": "Katalana",
+        "gl": "Galiziera",
+        "en": "Ingelesa"
+      },
+      "currencyOptions": {
+        "EUR": "EUR (€)",
+        "USD": "USD ($)",
+        "GBP": "GBP (£)"
+      }
+    },
+    "list": {
+      "title": "{count, plural, one {Komunitate bakarra ({count})} other {Komunitateak ({count})}}",
+      "locationUnknown": "Kokalekurik gabe",
+      "members": "{count, plural, one {{count} kide} other {{count} kide}}",
+      "offers": "{count, plural, one {{count} eskaintza} other {{count} eskaintza}}"
+    },
+    "empty": {
+      "title": "Ez dago oraindik komunitaterik sortuta",
+      "description": "Sortu lehen komunitatea goiko botoia erabiliz"
+    }
+  },
+  "creditsSend": {
+    "layout": {
+      "title": "Kredituak Bidali - Comunidad Viva"
+    },
+    "nav": {
+      "back": "← Itzuli"
+    },
+    "toasts": {
+      "loginRequired": "Saioa hasi behar duzu",
+      "success": "Kredituak arrakastaz bidali dira",
+      "error": "Errorea kredituak bidaltzean",
+      "selectRecipient": "Hautatu hartzaile bat",
+      "invalidAmount": "Sartu baliozko zenbatekoa",
+      "insufficientCredits": "Ez daukazu nahikoa kreditu",
+      "userNotFound": "Erabiltzailea ez da aurkitu"
+    },
+    "balance": {
+      "label": "Zure uneko balantzea",
+      "amount": "{amount} kreditu"
+    },
+    "form": {
+      "title": "Kredituak bidali Fluxu Biderkatzailearekin",
+      "recipient": {
+        "label": "Hartzailearen emaila",
+        "placeholder": "erabiltzailea@adierazlea.com"
+      },
+      "amount": {
+        "label": "Zenbatekoa",
+        "placeholder": "0",
+        "insufficient": "Ez daukazu nahikoa kreditu"
+      },
+      "description": {
+        "label": "Mezua (aukerakoa)",
+        "placeholder": "Adib.: Eskerrik asko zure laguntzagatik..."
+      },
+      "submit": {
+        "default": "Kredituak bidali",
+        "pending": "Bidaltzen..."
+      }
+    },
+    "preview": {
+      "title": "✨ Fluxu Biderkatzailearen aurreikuspena",
+      "send": "Bidaltzen duzu",
+      "multiplier": "Fluxuaren biderkatzailea",
+      "receive": "Hartzaileak jasotzen du",
+      "bonus": "🎁 Fluxu ekonomikoak sortutako {bonus} kreditu bonus",
+      "pool": "Komunitate-pool-eko ekarpena (2%)"
+    },
+    "recipient": {
+      "balance": "Balantzea: {amount} kreditu"
+    },
+    "info": {
+      "title": "💡 Nola funtzionatzen du Fluxu Biderkatzaileak?",
+      "items": [
+        "Balantze txikiagoa duen norbaiti kredituak bidaltzen dizkiozunean, balio gehigarria sortzen da",
+        "Balantze arteko alde handiagoak = biderkatzaile handiagoa (gehienez 1.5x)",
+        "2% komunitate-pool-era doa beharra dutenak laguntzeko",
+        "Komunitatean zirkulazioa eta eskuzabaltasuna sustatzen ditu"
+      ]
+    }
+  },
+  "offerDetail": {
+    "layout": {
+      "title": "{title} - Comunidad Viva",
+      "loadingTitle": "Eskaintza - Comunidad Viva"
+    },
+    "toasts": {
+      "markInterested": "Interes gisa markatuta",
+      "unmarkInterested": "Interesa kendu da",
+      "markError": "Errorea interesa markatzean",
+      "loginContact": "Harremanetan jartzeko saioa hasi behar duzu",
+      "selfContact": "Ezin duzu zeure buruarekin harremanetan jarri",
+      "loginInterest": "Interesa markatzeko saioa hasi behar duzu",
+      "userNotFound": "Erabiltzailea ez da aurkitu"
+    },
+    "buttons": {
+      "back": "← Itzuli",
+      "contact": "Jarri harremanetan",
+      "processing": "Prozesatzen...",
+      "alreadyInterested": "✓ Dagoeneko interesatzen zait",
+      "interest": "Interesatzen zait",
+      "viewProfile": "Profila ikusi"
+    },
+    "sections": {
+      "noImage": "Irudirik gabe",
+      "locationTitle": "Kokapena",
+      "locationValue": "📍 {address}",
+      "offeredBy": "Nork eskaintzen du",
+      "userFallback": "Erabiltzailea"
+    },
+    "stats": {
+      "views": "👁️ {count, plural, one {{count} ikuspen} other {{count} ikuspen}}",
+      "interested": "⭐ {count, plural, one {{count} interesdun} other {{count} interesdun}}",
+      "date": "📅 {date}"
+    },
+    "price": {
+      "credits": "{amount} kreditu"
+    },
+    "info": {
+      "notFound": "Eskaintza ez da aurkitu"
+    },
+    "tags": {
+      "type": {
+        "PRODUCT": "Produktua",
+        "SERVICE": "Zerbitzua",
+        "TIME_BANK": "Denbora bankua",
+        "GROUP_BUY": "Erosketa kolektiboa",
+        "EVENT": "Ekitaldia",
+        "DONATION": "Dohaintza"
+      }
+    }
+  },
+  "offerCreate": {
+    "layout": {
+      "title": "Eskaintza Berria Sortu - Comunidad Viva"
+    },
+    "toasts": {
+      "addressRequired": "Sartu helbidea lehenik mesedez",
+      "geocodeSuccess": "Koordenatuak ongi eskuratu dira",
+      "geocodeNotFound": "Ez da koordenaturik aurkitu helbide honetarako",
+      "geocodeError": "Errorea koordenatuak eskuratzean",
+      "uploadError": "Errorea irudia igotzean: {name}",
+      "createSuccess": "Eskaintza arrakastaz sortu da!",
+      "createError": "Errorea eskaintza sortzean"
+    },
+    "headings": {
+      "title": "Eskaintza Berria Sortu"
+    },
+    "form": {
+      "title": {
+        "label": "Izenburua *",
+        "placeholder": "Adib.: Egoera onean dagoen bizikleta"
+      },
+      "description": {
+        "label": "Deskribapena *",
+        "placeholder": "Deskribatu zure eskaintza xehetasunez..."
+      },
+      "type": "Mota *",
+      "category": "Kategoria *",
+      "typeOptions": {
+        "PRODUCT": "Produktua",
+        "SERVICE": "Zerbitzua",
+        "TIME_BANK": "Denbora Bankua",
+        "GROUP_BUY": "Erosketa Kolektiboa",
+        "EVENT": "Ekitaldia"
+      },
+      "categories": [
+        "Garraioa",
+        "Elektronika",
+        "Etxea",
+        "Lorategia",
+        "Hezkuntza",
+        "Osasuna",
+        "Elikadura",
+        "Arropa",
+        "Zerbitzuak",
+        "Beste batzuk"
+      ],
+      "categoryPlaceholder": "Hautatu...",
+      "priceEur": {
+        "label": "Prezioa (EUR)",
+        "placeholder": "0.00"
+      },
+      "priceCredits": {
+        "label": "Prezioa (Kredituak)",
+        "placeholder": "0"
+      },
+      "stock": {
+        "label": "Stocka",
+        "placeholder": "1"
+      },
+      "address": {
+        "label": "Helbidea",
+        "placeholder": "Kale Nagusia 1, Donostia",
+        "button": "📍 Lortu koordenatuak",
+        "help": "Sartu helbidea eta egin klik \"Lortu koordenatuak\" botoian lat/lng automatikoki betetzeko"
+      },
+      "lat": {
+        "label": "Latitudea (mapan agertzeko)",
+        "placeholder": "Adib.: 43.318333",
+        "help": "Latitude koordinatua"
+      },
+      "lng": {
+        "label": "Longitudea (mapan agertzeko)",
+        "placeholder": "Adib.: -1.981231",
+        "help": "Longitude koordinatua"
+      },
+      "tags": {
+        "label": "Etiketak (komaz bereiziak)",
+        "placeholder": "bizikleta, garraioa, ekologikoa"
+      },
+      "images": {
+        "label": "Irudiak",
+        "previewAlt": "Aurrebista {index}"
+      },
+      "submit": {
+        "default": "Eskaintza Sortu",
+        "pending": "Sortzen..."
+      },
+      "cancel": "Utzi"
+    }
+  },
+  "privacy": {
+    "title": "Pribatutasun Politika",
+    "updated": "Azken eguneraketa: 2025eko martxoa",
+    "intro": "Comunidad Viva-n zure datuen babesa oso serio hartzen dugu. Dokumentu honek azaltzen du zer informazio biltzen dugun, nola erabiltzen dugun eta zein eskubide dituzun.",
+    "sections": [
+      {
+        "title": "1. Biltzen dugun informazioa",
+        "paragraphs": [
+          "Plataformak eta Web3 integrazioek behar duten gutxieneko informazioa soilik biltzen dugu, komunitateko esperientzia hobetzeko eta trukeak errazteko."
+        ],
+        "bullets": [
+          "Erregistro-datuak: izena, posta elektronikoa, hizkuntza hobetsia eta zure komunitatea.",
+          "Erabilera-informazioa: plataformako jarduera, sortzen dituzun eskaintzak, parte hartzen dituzun ekitaldiak eta kredituen transferentziak.",
+          "Partekatzen duzun edukia: borondatez igotzen dituzun testuak, irudiak eta iruzkinak.",
+          "Wallet Web3ekin lotutako identifikatzaileak eta blockchain sareetako helbideak, MetaMask, Phantom edo antzeko hornitzaileak konektatzea aukeratzen baduzu."
+        ]
+      },
+      {
+        "title": "2. Nola erabiltzen dugun informazioa",
+        "paragraphs": [
+          "Datuak komunitate barruko elkarreragina errazteko, zure Web3 identitatea kudeatzeko eta plataforma segurua mantentzeko erabiltzen ditugu.",
+          "Trazabilitatea beharrezkoa denean (adibidez, kredituen mugimenduak edo gamifikazioko erregistroak) transakzioak kontratu adimendunetan edo blockchainetan grabatu ditzakegu.",
+          "Plataformaren erabilera modu agregatuan aztertzen dugu funtzionalitateak hobetzeko, iruzur saiakerak detektatzeko eta komunitate ekimen berriak abiarazteko."
+        ]
+      },
+      {
+        "title": "3. Informazioa noiz partekatzen dugun",
+        "paragraphs": [
+          "Ez dugu zure datu pertsonalik saltzen. Hirugarrenenarekin bakarrik partekatzen dugu zerbitzua emateko ezinbestekoa denean edo legeak hala agintzen duenean."
+        ],
+        "bullets": [
+          "Ostalaritza, posta edo ordainketak prozesatzen laguntzen diguten hornitzaile teknologikoak.",
+          "Zuk esplizituki baimena ematen duzunean integrazio espezifiko baterako.",
+          "Agintari eskudun batek modu legezkian eskatzen duenean.",
+          "Blockchain transakzioak argitaratzeko ezinbestekoak diren zerbitzu deszentralizatuak (nodoak, esploratzaileak edo biltegiratze sareak), informazioa minimizatzeko printzipioak errespetatuz."
+        ]
+      },
+      {
+        "title": "4. Zure eskubideak",
+        "paragraphs": [
+          "Edozein momentutan eska dezakezu zure datuetara sarbidea, zuzenketa edo ezabatzea.",
+          "Baja hartzen baduzu, zure datuak ezabatuko edo anonimizatuko ditugu, legeak gordetzea eskatzen duen salbuespenekin."
+        ]
+      },
+      {
+        "title": "5. Kontserbazioa eta segurtasuna",
+        "paragraphs": [
+          "Informazioa zerbitzua emateko, indarrean dagoen araudia betetzeko eta blockchain eragiketen trazabilitatea mantentzeko behar dugun denboran gordetzen dugu.",
+          "Neurri tekniko eta antolaketakoak (zifratzea, babeskopiak, sarbideen kontrola) aplikatzen ditugu zure datuak sarbide ez baimenduetatik, galeratik edo aldaketetatik babesteko.",
+          "Kontuan izan blockchain sareetan argitaratutako transakzioak aldaezinak eta publikoak izan daitezkeela; horregatik, katean informazio ezinbestekoa bakarrik argitaratzen dugu."
+        ]
+      }
+    ],
+    "contact": {
+      "title": "Kontaktua",
+      "paragraphs": [
+        "Politika honi buruz zalantzarik baduzu edo zure eskubideak baliatu nahi badituzu, idatzi privacy@comunidad.viva helbidera."
+      ]
+    }
+  },
+  "terms": {
+    "title": "Erabilera Baldintzak",
+    "updated": "Azken eguneraketa: 2025eko martxoa",
+    "intro": "Baldintza hauek Comunidad Viva-ren erabilera arautzen dute. Kontua sortu eta plataforman parte hartzean, hemen jasotako baldintzak onartzen dituzu.",
+    "sections": [
+      {
+        "title": "1. Baldintzen onarpena",
+        "paragraphs": [
+          "Plataforma erabiltzeak baldintza hauek eta eguneraketak oso-osorik onartzea dakar. Ados ez bazaude, edozein unetan utz dezakezu zerbitzua erabiltzea."
+        ]
+      },
+      {
+        "title": "2. Kontua eta segurtasuna",
+        "paragraphs": [
+          "Zure identifikazio-datuen eta kontuaren informazioaren konfidentzialtasuna mantentzeko arduraduna zara.",
+          "Baimenik gabeko erabilerarik edo segurtasun gorabeherarik antzemanez gero, berehala jakinarazi behar diguzu."
+        ]
+      },
+      {
+        "title": "3. Eskaintzak eta parte-hartzea",
+        "paragraphs": [
+          "Publikatzen dituzun eskaintzek, ekitaldiek edo zerbitzuek indarrean dagoen araudia eta komunitateko arauak bete behar dituzte.",
+          "Zuk partekatzen duzun edukiaren, wallet-ekin sinatzen dituzun transakzioen eta beste erabiltzaileekin egiten dituzun akordioen erantzule zuzena zara, kate barruan zein kanpoan."
+        ]
+      },
+      {
+        "title": "4. Komunitateko kredituak",
+        "paragraphs": [
+          "Comunidad Viva-ko kredituak ez dira diru fiat-a ezta finantza tresnak ere.",
+          "Haien xedea komunitate barruko trukea sustatzea da, eta ezin dira plataformatik kanpo diruaren truke trukatzea.",
+          "Kreditu edo sariak kontratu adimendunetan edo blockchain sareetan islatzen direnean, haien babesa zure wallet-aren segurtasunaren araberakoa izango da."
+        ]
+      },
+      {
+        "title": "5. Komunitateak sortutako edukia",
+        "paragraphs": [
+          "Plataforma ustiatzeko beharrezkoa den neurrian, partekatzen duzun edukia ostatatzeko eta erakusteko lizentzia mugatua ematen diguzu.",
+          "Legearen edo komunitate arauen kontra doan edukia kendu dezakegu."
+        ]
+      },
+      {
+        "title": "6. Erantzukizunaren mugaketa",
+        "paragraphs": [
+          "Comunidad Viva \"dagoen bezala\" eskaintzen da eta ez dugu bermatzen zerbitzua etenik gabea edo akatsik gabea izango denik.",
+          "Ez gara erabiltzaileen arteko akordio edo transakzioen, ezta zure wallet-en edo gako pribatuen kudeaketaren erantzule.",
+          "Blockchain-eko eragiketak behin betikoak dira; sinatu aurretik informazioa berrikusi eta gailu seguruak erabiltzearen ardura zurea da."
+        ]
+      },
+      {
+        "title": "7. Baldintzen aldaketak",
+        "paragraphs": [
+          "Funtzionalitate berriak gehitzean edo araudiak hala eskatzen duenean baldintza hauek eguneratu ditzakegu.",
+          "Aldaketa garrantzitsuen berri emango dugu eta plataforman jarraitzen baduzu, baldintza berriak onartutzat joko dira."
+        ]
+      },
+      {
+        "title": "8. Aplikatu beharreko legea eta kontaktua",
+        "paragraphs": [
+          "Baldintza hauek Espainiako legeria aplikatuz interpretatzen dira.",
+          "Edozein kontsultatarako idatzi legal@comunidad.viva helbidera."
+        ]
+      }
+    ]
+  },
+  "eventDetail": {
+    "layout": {
+      "title": "{title} - Comunidad Viva",
+      "loadingTitle": "Ekitaldia - Comunidad Viva"
+    },
+    "toasts": {
+      "registerSuccess": "Ekitaldian arrakastaz erregistratu zara",
+      "registerError": "Errorea ekitaldian erregistratzean",
+      "organizerNotFound": "Ezin izan da antolatzailea aurkitu",
+      "loginContact": "Antolatzailearekin harremanetan jartzeko saioa hasi behar duzu",
+      "selfContact": "Ezin duzu zeure buruarekin harremanetan jarri",
+      "loginRegister": "Ekitaldira erregistratzeko saioa hasi behar duzu",
+      "capacityReached": "Ekitaldiak bere gehienezko edukiera lortu du",
+      "alreadyRegistered": "Dagoeneko erregistratuta zaude ekitaldi honetan"
+    },
+    "loading": {
+      "text": "Ekitaldia kargatzen..."
+    },
+    "notFound": {
+      "title": "Ekitaldia ez da aurkitu",
+      "description": "Barkatu, ezin izan dugu bila zabiltzan ekitaldia aurkitu.",
+      "button": "Ikusi ekitaldi guztiak"
+    },
+    "buttons": {
+      "back": "← Itzuli",
+      "contact": "Jarri harremanetan antolatzailearekin",
+      "register": "Izena eman",
+      "registering": "Erregistratzen...",
+      "registered": "✓ Erregistratuta",
+      "capacityFull": "Edukiera beteta"
+    },
+    "status": {
+      "finished": "Amaituta",
+      "reward": "Parte hartu eta {credits} kreditu irabazi"
+    },
+    "sections": {
+      "schedule": {
+        "start": "Hasiera",
+        "end": "Amaiera"
+      },
+      "location": {
+        "title": "Kokapena",
+        "value": "{address}"
+      },
+      "imageFallback": "Ekitaldia",
+      "attendeeFallback": "Erabiltzailea",
+      "organizerFallback": "Antolatzailea",
+      "description": "Deskribapena",
+      "capacity": {
+        "label": "Edukiera",
+        "value": "{current} / {capacity} parte-hartzaile"
+      },
+      "attendees": "Parte-hartzaileak ({count})",
+      "meta": {
+        "attendees": "👥 {count, plural, one {Parte-hartzaile {count}} other {Parte-hartzaile {count}}}",
+        "published": "📅 Argitaratua {date}"
+      },
+      "organizer": "Antolatzailea",
+      "details": {
+        "title": "Xehetasunak",
+        "type": "Ekitaldi mota",
+        "startDate": "Hasiera data",
+        "endDate": "Amaiera data",
+        "availableSpots": "Plaza libreak"
+      }
+    },
+    "badges": {
+      "type": {
+        "WORKSHOP": "Tailerra",
+        "CONFERENCE": "Hitzaldia",
+        "MEETUP": "Topaketa",
+        "SOCIAL": "Gizarte ekitaldia",
+        "VOLUNTEER": "Borondatezkoa",
+        "OTHER": "Beste bat"
+      },
+      "reward": "+{credits} kreditu"
+    }
+  },
+  "weeklyChallenges": {
+    "empty": {
+      "title": "Ez dago erronka aktiborik",
+      "description": "Asteko erronkak astelehenetan hasten dira. Itzuli laster!"
+    },
+    "badges": {
+      "weekly": "Asteko Erronka",
+      "daysRemaining": "{count, plural, one {{count} egun geratzen da} other {{count} egun geratzen dira}}"
+    },
+    "reward": {
+      "target": "Helburua"
+    },
+    "leaderboard": {
+      "title": "🥇 Lideren taula",
+      "participants": "{count, plural, one {{count} parte-hartzaile} other {{count} parte-hartzaile}}",
+      "empty": "Izan lehena erronkan parte hartzen",
+      "progress": "Aurrerapena: {progress} / {target}",
+      "points": "⭐ {score} puntu",
+      "completed": "✓ Osatua"
+    },
+    "positions": {
+      "first": {
+        "title": "1. Tokia",
+        "description": "Sari osoa + 50 kreditu gehigarri"
+      },
+      "second": {
+        "title": "2. Tokia",
+        "description": "Sari osoa + 30 kreditu gehigarri"
+      },
+      "third": {
+        "title": "3. Tokia",
+        "description": "Sari osoa + 20 kreditu gehigarri"
+      }
+    },
+    "instructions": {
+      "title": "💡 Nola parte hartu",
+      "HELP_STREAK": [
+        "Osatu truke edo zerbitzuak pertsona desberdinekin",
+        "Pertsona desberdin bakoitzak puntu bat balio du",
+        "Mantendu streak-a kide berriei lagunduz"
+      ],
+      "ECO_WARRIOR": [
+        "Egin ekintza iraunkorrak objektuak partekatuz",
+        "Parte hartu erosketetan eta jarduera ekologikoetan",
+        "Ekintza berde bakoitzak puntuak gehitzen ditu"
+      ],
+      "CONNECTOR": [
+        "Konektatu komunitateko kide berriekin",
+        "Erabili swipe sistema match-ak egiteko",
+        "Parte hartu komunitateko ekitaldietan"
+      ],
+      "TRANSACTION_MASTER": [
+        "Osatu truke arrakastatsuak plataforman",
+        "Eskaini eta eskatu zerbitzuak",
+        "Transakzio bakoitz osatzeak puntu bat ematen du"
+      ],
+      "default": [
+        "Parte hartu aktiboki komunitatean",
+        "Osatu erronkari lotutako jarduerak",
+        "Egiaztatu zure jakinarazpenak eguneratzeetarako"
+      ]
+    }
+  },
+  "languageSelector": {
+    "ariaLabel": "Hizkuntza aldatu",
+    "languages": {
+      "es": "Gaztelania",
+      "eu": "Euskara",
+      "en": "Ingelesa",
+      "ca": "Katalana"
+    }
+  },
+  "quickActions": {
+    "title": "Ekintza Azkarrak",
+    "createOffer": "+ Eskaintza Sortu",
+    "createEvent": "+ Ekitaldia Sortu",
+    "timeBank": "Denbora Bankua",
+    "publishNeed": "+ Beharra Argitaratu",
+    "createProject": "+ Proiektua Sortu",
+    "housingCommunity": "🏡 Komunitateko Etxebizitza",
+    "viewMutualAid": "🤝 Ikusi Elkar-laguntza"
+  },
+  "home": {
+    "viewToggle": {
+      "map": "Mapa",
+      "feed": "Feed"
+    },
+    "noLocations": "Ez dago erakusteko kokalekurik",
+    "groupbuy": {
+      "fallbackTitle": "Talde Erosketa"
+    }
+  },
+  "map": {
+    "loading": "Mapa kargatzen...",
+    "clickToEnableScroll": "Egin klik mapan zoom-a scroll-arekin aktibatzeko",
+    "viewDetails": "Ikusi xehetasunak →"
+  },
+  "communityStats": {
+    "activeUsers": "Erabiltzaile Aktiboak",
+    "hoursShared": "Partekatutako Orduak",
+    "totalSavings": "Guztira Aurreztua",
+    "co2Avoided": "CO2 Saihestua"
+  },
+  "register": {
+    "title": "Batu Comunidad Viva-ra",
+    "subtitle": "Sortu zure kontua eta hasi lankidetzan",
+    "form": {
+      "fullName": {
+        "label": "Izen osoa *",
+        "placeholder": "Jon Perez"
+      },
+      "email": {
+        "label": "Emaila *",
+        "placeholder": "zure@email.com"
+      },
+      "phone": {
+        "label": "Telefonoa (aukerakoa)",
+        "placeholder": "+34 600 000 000"
+      },
+      "password": {
+        "label": "Pasahitza *",
+        "placeholder": "••••••••",
+        "toggleHide": "Ezkutatu pasahitza",
+        "toggleShow": "Erakutsi pasahitza"
+      },
+      "confirmPassword": {
+        "label": "Berretsi pasahitza *",
+        "placeholder": "••••••••"
+      },
+      "submit": "Kontua sortu",
+      "submitting": "Kontua sortzen..."
+    },
+    "hasAccount": "Dagoeneko konturik baduzu?",
+    "loginLink": "Hasi saioa hemen",
+    "orRegisterWith": "Edo erregistratu honekin",
+    "web3": {
+      "successNew": "Kontua wallet-arekin arrakastaz sortu da!",
+      "successExisting": "Saioa wallet-arekin arrakastaz hasi da!"
+    },
+    "errors": {
+      "passwordMismatch": "Pasahitzak ez datoz bat",
+      "passwordTooShort": "Pasahitzak gutxienez 6 karaktere izan behar ditu",
+      "createFailed": "Errorea kontua sortzean"
+    },
+    "success": "Kontua arrakastaz sortu da!"
+  },
+  "login": {
+    "title": "Hasi saioa",
+    "form": {
+      "email": {
+        "label": "Emaila",
+        "placeholder": "zure@email.com"
+      },
+      "password": {
+        "label": "Pasahitza",
+        "placeholder": "••••••••",
+        "toggleShow": "Pasahitza erakutsi",
+        "toggleHide": "Pasahitza ezkutatu"
+      },
+      "submit": "Hasi saioa",
+      "submitting": "Saioa hasten..."
+    },
+    "success": "Saioa behar bezala hasi da!",
+    "errors": {
+      "loginFailed": "Errorea saioa hasterakoan"
+    },
+    "noAccount": "Ez duzu konturik?",
+    "registerLink": "Erregistratu",
+    "divider": "Edo jarraitu honekin"
+  },
+  "timebank": {
+    "title": "Denbora Bankua",
+    "subtitle": "Partekatu zure gaitasunak eta ikasi beste batzuetatik",
+    "stats": {
+      "hoursShared": "Partekatutako Orduak",
+      "hoursReceived": "Jasotako Orduak",
+      "exchanges": "Trukeak",
+      "pending": "Zain"
+    },
+    "tabs": {
+      "offers": "Eskaintza Eskuragarriak",
+      "exchanges": "Nire Trukeak"
+    },
+    "loading": {
+      "offers": "Eskaintzak kargatzen...",
+      "exchanges": "Trukeak kargatzen..."
+    },
+    "empty": {
+      "offers": "Ez dago eskaintza eskuragarririk",
+      "exchanges": "Ez duzu oraindik trukerik"
+    },
+    "estimatedHours": "⏱️ {hours}h inguru",
+    "canTeach": "👨‍🏫 Irakatsi dezake",
+    "roles": {
+      "provider": "Hornitzailea",
+      "requester": "Eskatzailea"
+    }
+  },
+  "managePage": {
+    "description": "Kudeatu zure eskaintzak, ekitaldiak eta profila leku bakarrean"
+  },
+  "mutualAid": {
+    "title": "Elkar-laguntza",
+    "subtitle": "Partekatu beharrizanak eta komunitate proiektuak GIHrekin lerrokatuta",
+    "tabs": {
+      "needs": "Beharrizanak",
+      "projects": "Komunitateko Proiektuak"
+    },
+    "filter": {
+      "title": "Iragazi Garapen Iraunkorrerako Helburuen (GIH) arabera",
+      "show": "Erakutsi",
+      "hide": "Ezkutatu",
+      "all": "Guztiak",
+      "filtering": "Iragazten:",
+      "clear": "Garbitu"
+    },
+    "buttons": {
+      "publishNeed": "+ Beharra Argitaratu",
+      "createProject": "+ Proiektua Sortu",
+      "viewAll": "Ikusi Proiektu Guztiak"
+    },
+    "badges": {
+      "urgent": "Premiazkoa"
+    },
+    "contributions": "ekarpenak",
+    "beneficiaries": "onuradunak",
+    "empty": {
+      "needs": {
+        "title": "Ez dago beharrizanik argitaratuta",
+        "description": "Izan lehena beharrizan bat argitaratzen",
+        "button": "Beharra Argitaratu"
+      },
+      "projects": {
+        "title": "Ez dago komunitateko proiekturik",
+        "titleWithFilter": "Ez dago GIH {sdg}rako proiekturik",
+        "description": "Sortu lehenengo komunitateko proiektua",
+        "descriptionWithFilter": "Saiatu beste helburu batekin...",
+        "button": "Proiektua Sortu"
+      }
+    },
+    "sdg": {
+      "title": "Garapen Iraunkorrerako Helburuak (GIH)",
+      "description": "Elkar-laguntzako proiektuak NBEren Garapen Iraunkorrerako Helburuekin lerrokatuta daude, komunitatean eta ingurumenean eragin positiboa sustatuz.",
+      "1": "Pobreziaren amaiera",
+      "2": "Goserik ez",
+      "3": "Osasuna eta ongizatea",
+      "4": "Kalitatezko hezkuntza",
+      "5": "Genero berdintasuna",
+      "6": "Ur garbia eta saneamendua",
+      "7": "Energia eskuragarri eta garbia",
+      "8": "Lan duina eta hazkunde ekonomikoa",
+      "9": "Industria, berrikuntza eta azpiegitura",
+      "10": "Desberdintasunen murrizketa",
+      "11": "Hiri eta komunitate iraunkorrak",
+      "12": "Ekoizpen eta kontsumo arduratsua",
+      "13": "Klimaren aurkako ekintza",
+      "14": "Itsaspeko bizitza",
+      "15": "Lurrezko ekosistemen bizitza",
+      "16": "Bakea, justizia eta erakunde sendoak",
+      "17": "Helburuak lortzeko aliantzak"
+    },
+    "scope": {
+      "PERSONAL": "Pertsonala",
+      "COMMUNITY": "Komunitarioa",
+      "REGIONAL": "Eskualdekoa",
+      "GLOBAL": "Globala"
+    },
+    "needType": {
+      "FOOD": "Elikagaiak",
+      "HOUSING": "Etxebizitza",
+      "HEALTH": "Osasuna",
+      "EDUCATION": "Hezkuntza",
+      "TRANSPORT": "Garraioa",
+      "CARE": "Zaintza",
+      "LEGAL": "Legala",
+      "FINANCIAL": "Finantzarioa",
+      "EMPLOYMENT": "Enplegua",
+      "OTHER": "Beste bat"
+    },
+    "projectType": {
+      "COMMUNITY_SERVICE": "Komunitateko Zerbitzua",
+      "INFRASTRUCTURE": "Azpiegitura",
+      "EDUCATION": "Hezkuntza",
+      "HEALTH": "Osasuna",
+      "ENVIRONMENT": "Ingurumena",
+      "CULTURAL": "Kulturala",
+      "ECONOMIC": "Ekonomikoa",
+      "SOCIAL": "Soziala",
+      "OTHER": "Beste bat"
+    },
+    "progress": "Aurrerakuntza"
+  },
+  "eventCreate": {
+    "layout": {
+      "title": "Ekitaldi Berria Sortu - Comunidad Viva"
+    },
+    "heading": "Ekitaldi Berria Sortu",
+    "form": {
+      "title": {
+        "label": "Ekitaldiaren Izenburua *",
+        "placeholder": "Adib.: Baratze hirikoiaren tailerra"
+      },
+      "description": {
+        "label": "Deskribapena *",
+        "placeholder": "Deskribatu ekitaldia, zer jarduera egongo diren..."
+      },
+      "startDate": {
+        "label": "Hasiera Data eta Ordua *"
+      },
+      "endDate": {
+        "label": "Amaiera Data eta Ordua *"
+      },
+      "address": {
+        "label": "Helbidea",
+        "placeholder": "Kale Nagusia 1, Donostia",
+        "button": "📍 Lortu koordenatuak"
+      },
+      "lat": {
+        "label": "Latitudea",
+        "placeholder": "Adib.: 43.318333"
+      },
+      "lng": {
+        "label": "Longitudea",
+        "placeholder": "Adib.: -1.981231"
+      },
+      "capacity": {
+        "label": "Gehienezko edukiera",
+        "placeholder": "Gehienezko parte-hartzaile kopurua"
+      },
+      "rewardCredits": {
+        "label": "Sari kredituak",
+        "placeholder": "0"
+      },
+      "images": {
+        "label": "Ekitaldiaren irudiak"
+      },
+      "submit": "Ekitaldia sortu",
+      "submitting": "Sortzen...",
+      "cancel": "Utzi"
+    },
+    "errors": {
+      "getCoordinates": "Errorea koordenatuak lortzean",
+      "uploadImage": "Errorea irudia igotzean: {name}",
+      "createEvent": "Errorea ekitaldia sortzean"
+    }
+  },
+  "profilePage": {
+    "title": "{name}ren Profila - Comunidad Viva",
+    "defaultUser": "Erabiltzailea",
+    "yourName": "Zure izena",
+    "aboutPlaceholder": "Kontaiguzu zuri buruz...",
+    "auth": {
+      "mustLogin": "Saioa hasi behar duzu",
+      "sessionClosed": "Saioa itxita"
+    },
+    "success": {
+      "profileUpdated": "Profila eguneratuta"
+    },
+    "errors": {
+      "updateProfile": "Errorea profila eguneratzean"
+    },
+    "stats": {
+      "saved": "Aurreztua",
+      "hoursShared": "Partekatutako Orduak",
+      "co2Avoided": "CO₂ Saihestua",
+      "peopleHelped": "Lagundutako Pertsonak"
+    },
+    "sections": {
+      "myCommunity": "Nire Komunitatea",
+      "activeMember": "Kide aktiboa",
+      "notInCommunity": "Ez zara oraindik komunitateko kide",
+      "exploreCommunities": "Komunitateak arakatu",
+      "skills": "Gaitasunak",
+      "noSkills": "Ez duzu oraindik gaitasunik gehitu",
+      "badges": "Insigniak",
+      "noBadges": "Ez duzu oraindik insigniarik irabazi",
+      "levelProgress": "Mailaren Aurrerapena",
+      "nextLevel": "Hurrengo maila:"
+    },
+    "level": "{level} maila",
+    "credits": "{credits} kreditu",
+    "semilla": "{balance} SEMILLA",
+    "experience": "{exp} XP",
+    "buttons": {
+      "editProfile": "Profila editatu",
+      "logout": "Itxi saioa",
+      "viewCommunity": "Ikusi komunitatea",
+      "cancel": "Utzi",
+      "save": "Gorde",
+      "saving": "Gordetzen..."
+    },
+    "badges": {
+      "verified": "✓ Egiaztatua"
+    }
+  },
+  "profileEdit": {
+    "layout": {
+      "title": "Profila Editatu - Comunidad Viva"
+    },
+    "heading": "Profila Editatu",
+    "back": "Atzera",
+    "auth": {
+      "mustLogin": "Saioa hasi behar duzu"
+    },
+    "success": {
+      "profileUpdated": "Profila behar bezala eguneratuta",
+      "imageUploaded": "Irudia behar bezala kargatuta"
+    },
+    "errors": {
+      "updateProfile": "Errorea profila eguneratzean",
+      "loadProfile": "Ezin izan da profila kargatu",
+      "nameRequired": "Izena derrigorrezkoa da",
+      "invalidImage": "Irudi fitxategiak bakarrik onartzen dira (JPG, PNG, GIF, WebP)",
+      "imageTooLarge": "Fitxategiak ezin du 5MB gainditu",
+      "imageUploadError": "Errorea irudia kargatzerakoan"
+    },
+    "form": {
+      "name": {
+        "label": "Izena",
+        "placeholder": "Zure izena",
+        "required": "*"
+      },
+      "email": {
+        "label": "Emaila",
+        "cannotModify": "Emaila ezin da aldatu"
+      },
+      "bio": {
+        "label": "Biografia",
+        "placeholder": "Kontaiguzu zuri buruz...",
+        "maxChars": "Gehienez 500 karaktere ({count}/500)"
+      },
+      "address": {
+        "label": "Helbidea",
+        "placeholder": "Kalea, zenbakia, hiria..."
+      },
+      "neighborhood": {
+        "label": "Auzoa/Ingurua",
+        "placeholder": "Zure auzoa"
+      },
+      "interests": {
+        "label": "Interesak",
+        "placeholder": "Musika, kirolak, sukaldaritza... (komaz bereizita)",
+        "helper": "Bereizi zure interesak komaz. Adibidea: musika, kirolak, sukaldaritza"
+      },
+      "avatar": {
+        "label": "Avatarra",
+        "upload": "Irudia kargatu",
+        "uploading": "Kargatzen...",
+        "fileTypes": "JPG, PNG, GIF edo WebP. Gehienez 5MB."
+      },
+      "submit": "Aldaketak gorde",
+      "submitting": "Gordetzen...",
+      "cancel": "Utzi"
+    },
+    "tip": {
+      "title": "💡 Aholkua",
+      "description": "Profil oso batek hobeto konektatzen laguntzen dizu zure komunitatearekin. Partekatu zure interesak eta gaitasunak elkarlanak esanguratsuak aurkitzeko."
+    }
+  },
+  "governance": {
+    "proposals": {
+      "layout": {
+        "title": "Komunitateko Proposamenak - Comunidad Viva"
+      },
+      "header": {
+        "title": "🏛️ Komunitateko Proposamenak",
+        "subtitle": "Gobernantza deszentralizatu sistema - Proof of Help"
+      },
+      "reputation": {
+        "title": "Zure Ospeaketa",
+        "level": "Berria",
+        "privilegesTitle": "Pribilegoak",
+        "requirementInfo": "💡 20+ ospea behar duzu proposamenak sortzeko. Oraingoa: {current}"
+      },
+      "toasts": {
+        "createSuccess": "Proposamena arrakastaz sortuta!",
+        "createError": "Errorea proposamena sortzean",
+        "voteSuccess": "Botoa arrakastaz erregistratuta!",
+        "voteError": "Errorea bozkatzean",
+        "reputationRequired": "20+ ospea behar duzu proposamenak sortzeko"
+      },
+      "filters": {
+        "all": "Guztiak",
+        "discussion": "Eztabaidan",
+        "voting": "Bozketan",
+        "approved": "Onartuta"
+      },
+      "buttons": {
+        "newProposal": "+ Proposamen Berria"
+      },
+      "loading": "Kargatzen...",
+      "empty": {
+        "title": "Ez dago proposamenik",
+        "description": "Izan lehena komunitateko proposamen bat sortzen",
+        "button": "Lehen Proposamena Sortu"
+      },
+      "status": {
+        "DISCUSSION": "Eztabaidan",
+        "VOTING": "Bozketa Aktiboa",
+        "APPROVED": "Onartuta",
+        "REJECTED": "Baztertuta"
+      },
+      "type": {
+        "FEATURE": "✨ Funtzionalitate Berria",
+        "RULE_CHANGE": "⚖️ Arau Aldaketa",
+        "FUND_ALLOCATION": "💰 Funts Esleipena",
+        "PARTNERSHIP": "🤝 Elkartasuna"
+      },
+      "meta": {
+        "author": "Anonimoa",
+        "budget": "€{amount}"
+      },
+      "voting": {
+        "votesFor": "Alde: {count}",
+        "votesAgainst": "Kontra: {count}"
+      },
+      "actions": {
+        "viewDetails": "Xehetasunak Ikusi",
+        "voteNow": "Orain Bozkatu",
+        "alreadyVoted": "✓ Dagoeneko bozkatu duzu"
+      },
+      "form": {
+        "title": {
+          "label": "Izenburua",
+          "placeholder": "Zure proposamenaren izenburu laburra"
+        },
+        "description": {
+          "label": "Deskribapena",
+          "placeholder": "Deskribatu xehetasunez zure proposamena"
+        },
+        "implementation": {
+          "label": "Inplementazio Plana",
+          "placeholder": "Nola inplementatuko da proposamen hau?"
+        },
+        "budget": {
+          "label": "Beharrezko Aurrekontua (€)",
+          "placeholder": "0"
+        },
+        "typeLabel": "Proposamen Mota",
+        "typeOptions": {
+          "FEATURE": "Funtzionalitate Berria",
+          "RULE_CHANGE": "Arau Aldaketa",
+          "FUND_ALLOCATION": "Funts Esleipena",
+          "PARTNERSHIP": "Elkartasuna"
+        },
+        "processInfo": {
+          "title": "📋 Proposamen Prozesua",
+          "step1": "Eztabaida fasea: 3 egun",
+          "step2": "Bozketa fasea: 4 egun",
+          "step3": "Threshold-a lortzen badu (% 10 erabiltzaile aktibo) → Onartuta"
+        },
+        "cancel": "Utzi",
+        "submit": "Proposamena Sortu",
+        "submitting": "Sortzen..."
+      },
+      "voteModal": {
+        "title": "Proposamena Bozkatu",
+        "quadraticTitle": "📊 Bozketa Koadratikoa",
+        "quadraticInfo": "Bozkatzearen kostua koadratikoki handitzen da: Puntu 1 bozkatzea = kreditu 1, 5 puntu = 25 kreditu, 10 puntu = 100 kreditu",
+        "pointsLabel": "Bozkatzeko puntuak: {points}",
+        "costLabel": "Kostua:",
+        "costAmount": "{cost} kreditu",
+        "cancel": "Utzi",
+        "confirm": "Botoa Baieztatu",
+        "confirming": "Bozkatzen..."
+      },
+      "modal": {
+        "newProposal": "Komunitateko Proposamen Berria"
+      }
+    },
+    "delegation": {
+      "layout": {
+        "title": "Botoen Delegazioa - Truk"
+      },
+      "header": {
+        "title": "Botoen Delegazioa",
+        "subtitle": "Delegatu zure botoa adituetan zure izenean boto dezan"
+      },
+      "stats": {
+        "activeDelegations": "Delegazio Aktiboak",
+        "delegatedPower": "Delegatutako Boterea",
+        "receivedDelegations": "Jasotako Delegazioak",
+        "totalManaged": "Guztira Kudeatuta"
+      },
+      "info": {
+        "title": "Zer da Botoen Delegazioa?",
+        "description": "Delegatu zure botoaren boterea gai espezifikoetan esperientzia duten pertsonengan. Edozein unetan ezeztatu dezakezu delegazioa eta zuzenean bozkatzen jarraitu nahi duzunean."
+      },
+      "tabs": {
+        "availableDelegates": "Delegatu Eskuragarriak",
+        "myDelegations": "Nire Delegazioak"
+      },
+      "categories": {
+        "all": "Kategoria Guztiak",
+        "technology": "Teknologia",
+        "economy": "Ekonomia",
+        "governance": "Gobernantza",
+        "development": "Garapena",
+        "community": "Komunitatea",
+        "sustainability": "Jasangarritasuna"
+      },
+      "reputation": {
+        "expert": "Aditua",
+        "advanced": "Aurreratua",
+        "trusted": "Fidagarria",
+        "new": "Berria"
+      },
+      "delegateCard": {
+        "reputation": "Ospea",
+        "delegations": "Delegazioak",
+        "success": "Arrakasta",
+        "expertise": "Esperientzia Arloak"
+      },
+      "toasts": {
+        "delegateSuccess": "Delegazioa arrakastaz sortua!",
+        "delegateError": "Errorea delegazioa sortzean",
+        "revokeSuccess": "Delegazioa arrakastaz ezeztatua",
+        "revokeError": "Errorea delegazioa ezeztatzean"
+      }
+    }
+  },
+  "groupBuyDetail": {
+    "errors": {
+      "load": "Errorea erosketa kolektiboa kargatzean"
+    },
+    "loading": "Erosketa kolektiboa kargatzen...",
+    "back": "Itzuli",
+    "status": {
+      "active": "Erosketa aktiboa!",
+      "full": "Beteta"
+    },
+    "progress": {
+      "participants": "{current} / {min} gutxieneko parte-hartzaileak",
+      "maxParticipants": "Gehienez: {max} pertsona"
+    },
+    "sections": {
+      "description": "Deskribapena",
+      "currentPrice": "Uneko prezioa",
+      "pricePerUnit": "unitateko",
+      "savings": "{percent}% aurrezten duzu oinarrizko prezioaren aldean",
+      "nextDiscount": "Hurrengo deskontua!",
+      "unitsNeeded": "{units} unitate falta dira",
+      "volumeDiscounts": "Bolumen deskontuak",
+      "fromUnits": "{units} unidate",
+      "details": "Xehetasunak",
+      "totalQuantity": "Guztizko kopurua",
+      "unitsOrdered": "eskatutako unitateak",
+      "pickupPoint": "Bilketa puntua",
+      "closingDate": "Izena emateko itxiera",
+      "in": "{time}n",
+      "category": "Kategoria",
+      "participants": "Parte-hartzaileak ({count})",
+      "unit": "unitate",
+      "units": "unitateak",
+      "committed": "Konpromisoa: {amount}€"
+    },
+    "actions": {
+      "join": "Erosketara batu",
+      "full": "Erosketa osoa"
+    }
+  },
+  "matches": {
+    "title": "Nire Matchak",
+    "back": "Atzera",
+    "loading": "Kargatzen...",
+    "noMatches": {
+      "title": "Oraindik ez duzu matchik",
+      "description": "Hasi eskaintzak mugitzen konexioak aurkitzeko",
+      "action": "Eskaintzak Aurkitu"
+    },
+    "summary": "🎉 {count} {count, plural, =1 {match duzu} other {match dituzu}}",
+    "superMatch": "⭐ Super Match",
+    "matchDate": "Match:",
+    "buttons": {
+      "sendMessage": "💬 Mezua Bidali",
+      "viewProfile": "Profila Ikusi"
+    }
+  },
+  "navbar": {
+    "housing": "🏡 Etxebizitza",
+    "mutualAid": "🤝 Elkar-laguntza",
+    "appearance": "Itxura"
+  },
+  "footer": {
+    "title": "Comunidad Viva",
+    "description": "Ekonomia kolaboratibo lokaleko plataforma, pertsonak baliabideak, zerbitzuak eta ezagutzak partekatzeko konektatzen dituena.",
+    "sections": {
+      "resources": {
+        "title": "Baliabideak",
+        "generalDocs": "Dokumentazio Orokorra",
+        "apiReference": "API Erreferentzia",
+        "guides": "Gidak eta Tutorialak",
+        "features": "Funtzionalitateak"
+      },
+      "community": {
+        "title": "Komunitatea",
+        "communities": "Komunitateak",
+        "events": "Ekitaldiak",
+        "offers": "Eskaintzak",
+        "housing": "Etxebizitza",
+        "mutualAid": "Elkar-laguntza"
+      },
+      "legal": {
+        "title": "Legala eta Laguntza",
+        "privacy": "Pribatutasuna",
+        "terms": "Erabilera Baldintzak",
+        "reportBug": "Akatsa Jakinarazi",
+        "contact": "Kontaktua"
+      }
+    },
+    "tagline": "Komunitate sendoagoak eta iraunkorragoak eraikitzen",
+    "copyright": "Maitasunez eginda komunitate lokalentzat"
+  },
+  "groupBuyCard": {
+    "status": {
+      "active": "Aktiboa!",
+      "full": "Beteta"
+    },
+    "minParticipants": "gutxieneko parte-hartzaileak",
+    "maxParticipants": "Gehienez: {max} pertsona",
+    "currentPrice": "Uneko prezioa: {price}€/ud",
+    "savings": "{percent}% aurrezpena",
+    "nextLevel": "Hurrengo maila:",
+    "moreUnits": "({units} unitate gehiago)",
+    "volumeDiscounts": "Bolumen deskontuak:",
+    "unitsOrMore": "{units}+ ud",
+    "unitsOrdered": "eskatutako unitateak",
+    "pickup": "Bilketa: {location}",
+    "closesIn": "Ixten da {time}n",
+    "buttons": {
+      "viewDetails": "Ikusi xehetasunak",
+      "join": "Batu"
+    }
+  },
+  "communities": {
+    "viewAll": "Ikusi komunitate guztiak",
+    "pageTitle": "Tokiko Komunitateak",
+    "pageSubtitle": "Aurkitu eta batu ekonomia kolaboratiboaren komunitateetara zure inguruan",
+    "search": {
+      "label": "Bilatu",
+      "placeholder": "Izena edo kokalekua..."
+    },
+    "filters": {
+      "type": "Mota",
+      "visibility": "Ikusgarritasuna",
+      "all": "Guztiak",
+      "allFeminine": "Guztiak"
+    },
+    "types": {
+      "NEIGHBORHOOD": "Auzoa",
+      "VILLAGE": "Herria",
+      "TOWN": "Hiria",
+      "COUNTY": "Eskualdea",
+      "REGION": "Eskualdea",
+      "CUSTOM": "Pertsonalizatua"
+    },
+    "visibility": {
+      "PRIVATE": "Pribatua",
+      "PUBLIC": "Publikoa",
+      "OPEN": "Irekia",
+      "FEDERATED": "Federatua"
+    },
+    "notFound": {
+      "message": "Ez duzu zure komunitatea aurkitzen?",
+      "action": "Sortu zuk"
+    },
+    "stats": {
+      "activeCommunities": "Komunitate Aktiboak",
+      "totalMembers": "Kide Guztira",
+      "activeOffers": "Eskaintza Aktiboak"
+    },
+    "loading": "Komunitateak kargatzen...",
+    "empty": {
+      "title": "Ez dago oraindik komunitaterik",
+      "description": "Izan lehena komunitate lokala sortzen",
+      "action": "Sortu Komunitatea"
+    },
+    "card": {
+      "viewCommunity": "Ikusi komunitatea"
+    },
+    "cta": {
+      "title": "Komunitateak kudeatu nahi dituzu?",
+      "description": "Sortu eta administratu ekonomia kolaboratiboko komunitate lokalak. Konektatu auzokoak, antolatu ekitaldiak eta eraiki elkarlaguntzarako sareak.",
+      "action": "Joan Kudeaketa Panelera"
+    }
+  },
+  "communityDetail": {
+    "loading": {
+      "title": "Kargatzen...",
+      "text": "Komunitatea kargatzen..."
+    },
+    "notFound": {
+      "title": "Komunitatea ez da aurkitu",
+      "description": "Bilatzen ari zaren komunitatea ez da existitzen",
+      "button": "Ikusi komunitate guztiak"
+    },
+    "type": {
+      "NEIGHBORHOOD": "Auzoa",
+      "VILLAGE": "Herria",
+      "TOWN": "Hiria",
+      "COUNTY": "Konderria",
+      "REGION": "Eskualdea",
+      "CUSTOM": "Pertsonalizatua"
+    },
+    "visibility": {
+      "PRIVATE": "Pribatua",
+      "PUBLIC": "Publikoa",
+      "OPEN": "Irekia",
+      "FEDERATED": "Federatua"
+    },
+    "about": {
+      "title": "Komunitate honi buruz",
+      "communityType": "Komunitate mota",
+      "access": "Sarbidea",
+      "accessOpen": "Komunitate irekia - Edonork batu daiteke",
+      "accessPublic": "Komunitate publikoa - Onarpen beharra da batzeko",
+      "accessPrivate": "Komunitate pribatua - Gonbidapenez bakarrik",
+      "accessFederated": "Komunitate federatua - Beste komunitateekin konektatuta",
+      "externalOffers": "Kanpoko eskaintzak",
+      "externalOffersText": "Komunitate honek konektatutako komunitateen eskaintzak ikusten uzten du",
+      "language": "Hizkuntza",
+      "currency": "Moneta"
+    },
+    "stats": {
+      "members": "kideak",
+      "activeOffers": "eskaintza aktibo",
+      "radius": "km-ko erradioa",
+      "membersLabel": "Kideak:",
+      "offersLabel": "Eskaintzak:",
+      "created": "Sortua:",
+      "statistics": "Estatistikak"
+    },
+    "members": {
+      "title": "Kideak",
+      "helps": "laguntzak",
+      "activeSince": "Aktiboa hemendik"
+    },
+    "activity": {
+      "title": "Azkeneko jarduera",
+      "loading": "Jarduera kargatzen...",
+      "empty": "Ez dago azkeneko jarduerarik komunitate honetan"
+    },
+    "actions": {
+      "title": "Ekintzak",
+      "viewOffers": "Ikusi eskaintzak",
+      "viewEvents": "Ikusi ekitaldiak",
+      "needs": "Beharrizanak",
+      "projects": "Proiektuak",
+      "housing": "Etxebizitza",
+      "governance": "Gobernantza"
+    },
+    "share": {
+      "title": "Komunitate hau gustatzen zaizu?",
+      "description": "Partekatu zure lagun eta bizilagunei",
+      "button": "Partekatu"
+    },
+    "joinModal": {
+      "title": "{name}-era batu",
+      "requiresApproval": "⚠️ Komunitate honek eskuzko onarpena behar du. Zure eskaera administratzaileek berrikusi egingo dute.",
+      "openCommunity": "✅ Berehala batu zaitezke komunitate irekia honera",
+      "benefits": "Komunitate honera batuz gero hauek egin ahal izango dituzu:",
+      "benefitsList": {
+        "offers": "✓ Komunitateko eskaintza esklusiboak ikusi",
+        "events": "✓ Bertako ekitaldietan parte hartu",
+        "connect": "✓ Bizilaguekin konektatu",
+        "vote": "✓ Komunitateko erabakietan bozkatu"
+      },
+      "joining": "Batzen...",
+      "join": "Baieztatu"
+    },
+    "toasts": {
+      "joinSuccess": "Komunitatera batu zara!",
+      "joinError": "Errorea komunitatera batzean"
+    },
+    "buttons": {
+      "join": "Komunitatera batu",
+      "viewOffers": "Ikusi eskaintzak",
+      "viewAll": "Ikusi guztiak →",
+      "seeOffers": "🛍️ Ikusi eskaintzak",
+      "seeEvents": "📅 Ikusi ekitaldiak",
+      "cancel": "Utzi"
+    }
+  },
+  "economy": {
+    "dashboard": {
+      "pageTitle": "Ekonomia Aginte-panela - Comunidad Viva",
+      "title": "Flow Ekonomiaren Aginte-panela",
+      "subtitle": "Zure komunitatearen ekonomia osasunaren denbora errealeko metrikak",
+      "errors": {
+        "loadMetrics": "Ezin izan dira metrikak kargatu"
+      },
+      "giniIndex": {
+        "label": "Gini Indizea (Berdintasun Ekonomikoa)",
+        "measuring": "Berdintasun ekonomikoa neurtzen...",
+        "scale": "0 = Berdintasun perfektua | 1 = Desberdintasun muturreko"
+      },
+      "metrics": {
+        "activeUsers": "Erabiltzaile Aktiboak",
+        "generousUsers": "{count} erabiltzaile eskuzabal",
+        "averageBalance": "Batez Besteko Balantzea",
+        "median": "Mediana: {amount}",
+        "wealthConcentration": "Aberastasunaren Kontzentrazioa",
+        "top10": "Goiko % 10ek du",
+        "communityPools": "Komunitateko Putzuak",
+        "creditsAvailable": "Kreditu eskuragarriak"
+      },
+      "flow": {
+        "transactionsToday": "Gaurko Transakzioak",
+        "averageMultiplier": "Batez besteko biderkatzailea: {multiplier}x",
+        "valueGenerated": "Sortutako Balioa",
+        "creditsCreated": "Fluxuak sortutako kredituak"
+      },
+      "quickActions": {
+        "title": "Ekintza Azkarrak",
+        "sendCredits": "Bidali Kredituak",
+        "viewPools": "Ikusi Putzuak"
+      },
+      "pools": {
+        "title": "Komunitateko Putzuak",
+        "balance": "Balantzea",
+        "received": "Jasota",
+        "distributed": "Banatuta"
+      },
+      "healthIndicators": {
+        "title": "Ekonomia Osasunaren Adierazleak",
+        "giniIndex": "Gini Indizea",
+        "wealthConcentration": "Aberastasunaren Kontzentrazioa (Goiko % 10)",
+        "flowMultiplier": "Batez Besteko Fluxu Biderkatzailea"
+      },
+      "info": {
+        "title": "Zer da Flow Ekonomia?",
+        "description": "Flow Ekonomia aberastasunaren zirkulazioa sustatzeko eta desberdintasuna murrizteko diseinatutako sistema ekonomikoa da. Kredituak balantze handietatik txikietara fluxu egiten dutenean, balio gehigarria sortzen da biderkatzaileen bidez.",
+        "bullet1": "Fluxu biderkatzaileak: gehienez 1.5x balantze altuetik baxuetara transakzioetan",
+        "bullet2": "Komunitateko putzuak: transakzio bakoitzaren % 2 ondasun komunera doa",
+        "bullet3": "Gini Indizea: berdintasun ekonomikoa neurtzen du (helburua: 0.4 azpitik mantendu)",
+        "bullet4": "Eskuzabaltasuna sariturik: ematea komunitatean zure eragina handitzen du"
+      }
+    }
+  },
+  "housing": {
+    "solutionTypes": {
+      "SPACE_BANK": "Espazioen Bankua",
+      "TEMPORARY_HOUSING": "Aldi Baterako Etxebizitza",
+      "HOUSING_COOP": "Etxebizitza Kooperatiba",
+      "COMMUNITY_GUARANTEE": "Komunitatearen Abala"
+    },
+    "status": {
+      "ACTIVE": "Aktiboa",
+      "FILLED": "Beteta",
+      "CLOSED": "Itxita"
+    },
+    "title": "Komunitateko Etxebizitza",
+    "subtitle": "Elkartasunezko eta lankidetzazko etxebizitza-soluzioak",
+    "buttons": {
+      "createSolution": "+ Sortu Soluzio"
+    },
+    "filters": {
+      "all": "Guztiak"
+    },
+    "capacity": "Edukiera:",
+    "capacityPeople": "pertsona",
+    "members": "kide",
+    "monthlyContribution": "€/hilabetean",
+    "empty": {
+      "title": "Ez dago etxebizitza-soluziorik eskuragarri",
+      "description": "Izan zaitez lehena komunitateko etxebizitza-soluzioa sortzen",
+      "button": "Sortu Soluzio"
+    }
+  },
+  "hybrid": {
+    "dashboard": {
+      "title": "Sistema Hibridoa - Comunidad Viva",
+      "header": {
+        "title": "🔄 Geruza Ekonomikoen Sistema Hibridoa",
+        "subtitle": "Aukeratu nola parte hartu nahi duzun ekonomia kolaboratiboan"
+      },
+      "currentLayer": {
+        "label": "Zure uneko geruza",
+        "changeButton": "Geruzaz Aldatu"
+      },
+      "layers": {
+        "traditional": {
+          "name": "Tradizionala",
+          "description": "Sistema kapitalista prezio finko batekin",
+          "feature1": "Prezioak €tan eta kredituetan",
+          "feature2": "Transakzio tradizionalak",
+          "feature3": "Iruzkinak eta ospea"
+        },
+        "transitional": {
+          "name": "Trantsiziokoa",
+          "description": "Pixkanakako opari ekonomia",
+          "feature1": "\"Ordaindu jaso zenuen hori\"",
+          "feature2": "Pay-it-forward sistema",
+          "feature3": "Fabore katea"
+        },
+        "giftPure": {
+          "name": "Opari Garbia",
+          "description": "Opari ekonomia garbia, diru ostekoa",
+          "feature1": "Preziorik eta jarraipen-sistemarik gabe",
+          "feature2": "Ugaritasuna partekatu",
+          "feature3": "Beharrizanak adierazi"
+        },
+        "chameleon": {
+          "name": "Kamaleoiak",
+          "description": "Modu esperimentala",
+          "feature1": "Probatu geruza desberdinak",
+          "feature2": "Konpromisorik gabe",
+          "feature3": "Arakatzeko ezin hobea"
+        }
+      },
+      "stats": {
+        "title": "📊 Komunitatearen Banaketa",
+        "people": "{count, plural, one {{count} pertsona} other {{count} pertsona}}",
+        "threshold": {
+          "title": "Atalasea Lortuta!",
+          "message": "Komunitatearen % {percent}k opari ekonomia garbian bizi da. Komunitate osoa GIFT_PURE moduera migratu nahi duzue?"
+        }
+      },
+      "allLayers": {
+        "title": "🔄 Geruza Eskuragarri Guztiak",
+        "currentBadge": "✓ Zure uneko geruza"
+      },
+      "quickActions": {
+        "celebrations": {
+          "title": "🎉 Ugaritasunaren Ospakizunak",
+          "description": "Ospatu zure komunitateak baliabideak eskuzabaltasunez partekatzen dituenean",
+          "button": "Ikusi Ospakizunak"
+        },
+        "bridge": {
+          "title": "🌉 Bridge Events",
+          "description": "Probatu aldi batez beste geruza ekonomiko batekin",
+          "button": "Ikusi Esperimentuak"
+        }
+      },
+      "migrationModal": {
+        "title": "Migratu Beste Geruza Ekonomiko batera",
+        "description": "Aukeratu zein geruzara migratu nahi duzun eta azaldu zergatik. Zure erabakia edozein unetan itzulgarria da.",
+        "reasonLabel": "Zergatik nahi duzu geruzaz aldatu?",
+        "reasonPlaceholder": "Azaldu zure motibazioa migratzeko...",
+        "cancel": "Utzi",
+        "confirm": "Migrazioa Berretsi",
+        "migrating": "Migratzen..."
+      },
+      "toasts": {
+        "migrationSuccess": "Migrazio arrakastatsua! Ongi etorri zure geruza ekonomiko berrira",
+        "migrationError": "Errorea geruzaz migratzean",
+        "selectLayer": "Hautatu geruza bat",
+        "explainReason": "Azaldu zergatik nahi duzun migratu"
+      }
+    },
+    "celebrations": {
+      "header": {
+        "title": "🎉 Komunitateko Ospakizunak",
+        "subtitle": "Ugaritasunak beharrizanak aurkitzen dituen momentu magikoak. Gure komunitatean eskuzabaltasunaren eta elkartasunaren ospakizun anonimoak."
+      },
+      "stats": {
+        "recentCelebrations": "Azkenaldiko ospakizunak",
+        "peopleInvolved": "Parte-hartzaile kopurua",
+        "communityMagic": "Komunitatearen magia"
+      },
+      "empty": {
+        "title": "Oraindik ez dago ospakizunik",
+        "description": "Ospakizunak hemen agertuko dira komunitateak ugaritasuna partekatzen duenean eta beharrizanak modu anonimo eta eskuzabalean betetzen dituenean."
+      },
+      "participants": "{count, plural, one {Gutxi gorabehera pertsona {count}ek parte hartu zuen} other {Gutxi gorabehera {count} pertsonek parte hartu zuten}}",
+      "time": {
+        "fewMinutes": "Duela minutu batzuk",
+        "hoursAgo": "Duela {hours, plural, one {{hours} ordu} other {{hours} ordu}}",
+        "yesterday": "Atzo",
+        "locale": "eu-ES"
+      },
+      "info": {
+        "title": "Zergatik dira anonimoak?",
+        "description": "Ospakizunak anonimoak dira jasotzen dutenen duintasuna eta ematen dutenen apaltasuna babesteko. Garrantzitsua ez da nor parte hartu zuen, baizik eta komunitatea bildu zela beharrizan bat betetzeko. Horrela elkartasuna ospatzen dugu inor seinalatu gabe."
+      }
+    }
+  },
+  "challenges": {
+    "title": "Erronkak eta Gamifikazioa",
+    "subtitle": "Osatu erronkak, igo maila eta irabazi sariak",
+    "tabs": {
+      "challenges": "Erronkak",
+      "leaderboard": "Sailkapena",
+      "level": "Nire Maila",
+      "streak": "Sekuentzia"
+    },
+    "weeklyChallenge": "Asteko Erronka",
+    "timeRemaining": "geratzen da",
+    "progress": "Aurrerabidea",
+    "howToComplete": "Nola osatu erronka hau?",
+    "challengeTypes": {
+      "HELP_3_NEIGHBORS": "Lagundu 3 auzo desberdinei denbora bankua erabiliz aste honetan",
+      "CREATE_5_OFFERS": "Sortu 5 eskaintza berri edozein kategorian",
+      "ATTEND_2_EVENTS": "Parte hartu 2 komunitateko ekitaldi desberdinetan"
+    },
+    "noActiveChallenge": {
+      "title": "Ez dago erronka aktiborik",
+      "description": "Hurrengo asteko erronka laster hasiko da"
+    },
+    "flashDealsCard": {
+      "title": "Flash Eskaintzak",
+      "description": "Denbora mugatuaren eskaintza bizkorrak",
+      "details": "Deskontua %70ra arte • 2-4 orduko bakarrik"
+    },
+    "swipeCard": {
+      "title": "Swipe eta Bat-etortzea",
+      "description": "Aurkitu eskaintzak Tinder moduan",
+      "details": "Like • Dislike • Super Like"
+    },
+    "leaderboardTitle": "Asteko Sailkapena",
+    "leaderboardSubtitle": "Aste honetako onenak",
+    "myPosition": "Zure Posizioa",
+    "points": "puntu",
+    "top10": "TOP 10",
+    "levelTitle": "Zure Maila",
+    "xp": "XP",
+    "activeBenefits": "Onura Aktiboak",
+    "nextBenefits": "Hurrengo Onurak",
+    "levelBenefits": {
+      "level1": "Premium ekitaldietarako sarbidea",
+      "level2": "Deskontua %10 guztian",
+      "level3": "Badge esklusibo",
+      "level10": "VIP sarbide osoa"
+    },
+    "streakTitle": "Uneko Sekuentzia",
+    "consecutiveDays": "egun jarraian",
+    "bestStreak": "Sekuentzia Onena",
+    "days": "egun",
+    "multiplier": "Biderkatzailea",
+    "nextMilestone": "Hurrengo Milestone",
+    "streakMilestones": "Sekuentziaren Mugarriak",
+    "milestones": {
+      "7days": "Badge \"Aste Osoa\"",
+      "14days": "Badge \"Bi Aste\"",
+      "30days": "Badge \"Hilabete Bat\"",
+      "60days": "Badge \"Bi Hilabete\"",
+      "90days": "Badge \"Hiru Hilabete\""
+    },
+    "loading": "Kargatzen..."
+  },
+  "groupBuys": {
+    "title": "Erosketa Kolektiboak",
+    "subtitle": "Batu besteekin eta lortu deskontua hobeak",
+    "createButton": "Sortu Erosketa Kolektiboa",
+    "infoCards": {
+      "morePeople": {
+        "title": "Jende Gehiago",
+        "description": "Deskontua handiagoa"
+      },
+      "discount": {
+        "title": "%50 OFF arte",
+        "description": "Deskontua progresiboak"
+      },
+      "winWin": {
+        "title": "Win-Win",
+        "description": "Guztiek aurrezten dute"
+      }
+    },
+    "filters": {
+      "all": "Guztiak",
+      "active": "Aktiboak",
+      "completed": "Osatuta"
+    },
+    "card": {
+      "off": "OFF",
+      "product": "Produktua",
+      "savings": "Aurrezten duzu",
+      "participants": "Parte-hartzaileak",
+      "minRequired": "Gutxienez {min} parte-hartzaile behar dira",
+      "nextLevel": "Hurrengo maila",
+      "moreNeeded": "{count} pertsona falta dira",
+      "timeRemaining": "geratzen da",
+      "merchant": "Merkataria",
+      "joinNow": "Batu orain",
+      "leavePurchase": "Irten Erosketatik",
+      "purchaseFull": "Erosketa Beteta",
+      "completed": "Erosketa Osatuta"
+    },
+    "status": {
+      "ACTIVE": "ACTIVE",
+      "COMPLETED": "COMPLETED",
+      "CANCELLED": "CANCELLED"
+    },
+    "empty": {
+      "title": "Ez dago erosketa kolektiborik",
+      "active": "Sortu lehenengoa edo itxaron beste norbaitek sortu dezan",
+      "other": "Aldatu iragazkia beste erosketa batzuk ikusteko",
+      "createButton": "Sortu Erosketa Kolektiboa"
+    },
+    "howItWorks": {
+      "title": "Nola funtzionatzen dute Erosketa Kolektiboak?",
+      "step1": {
+        "title": "Aurkitu edo Sortu",
+        "description": "Bilatu erosketa kolektibo aktiboa edo sortu berri bat"
+      },
+      "step2": {
+        "title": "Batu",
+        "description": "Egin klik \"Batu\" parte hartzeko"
+      },
+      "step3": {
+        "title": "Itxaron",
+        "description": "Jende gehiago = deskontua handiagoa guztientzat"
+      },
+      "step4": {
+        "title": "Erosi",
+        "description": "Jarri harremanetan saltzailearekin azken deskontua erabiliz"
+      }
+    },
+    "progressiveDiscounts": {
+      "title": "Deskontua Progresiboak",
+      "description": "Deskontua automatikoki handitzen da parte-hartzaileen kopuruaren arabera:",
+      "people": "pertsona",
+      "off": "OFF"
+    },
+    "joinModal": {
+      "title": "Batu Erosketa Kolektibora",
+      "currentDiscount": "Uneko deskontua",
+      "important": "Garrantzitsua",
+      "improveDiscount": "Deskontua hobetu daiteke jende gehiago batzen bada",
+      "expires": "Erosketa iraungitzen da",
+      "minRequired": "Gutxienez {min} parte-hartzaile behar dira",
+      "codeOnComplete": "Kode bat jasoko duzu erosketa osatzen denean",
+      "cancel": "Utzi",
+      "confirm": "Baieztatu",
+      "joining": "Batzen..."
+    },
+    "createModal": {
+      "title": "Sortu Erosketa Kolektiboa",
+      "form": {
+        "title": "Izenburua",
+        "titlePlaceholder": "Adib.: Produktu organikoen Pakea",
+        "description": "Deskribapena",
+        "descriptionPlaceholder": "Deskribatu zer dakarren erosketa kolektiboak",
+        "product": "Produktua",
+        "productPlaceholder": "Produktuaren izen espezifikoa",
+        "basePrice": "Oinarri Prezioa (€)",
+        "duration": "Iraupena (orduak)",
+        "minParticipants": "Gutx. Parte-hartzaileak",
+        "maxParticipants": "Geh. Parte-hartzaileak",
+        "discountTiers": "Deskontuaren Mailak",
+        "people": "pertsona",
+        "off": "% OFF"
+      },
+      "cancel": "Utzi",
+      "create": "Sortu Erosketa Kolektiboa",
+      "creating": "Sortzen..."
+    },
+    "success": {
+      "joined": "Erosketa kolektibora batu zara!",
+      "left": "Erosketa kolektiboa utzi duzu",
+      "created": "Erosketa kolektiboa arrakastaz sortuta!"
+    },
+    "errors": {
+      "join": "Errorea erosketa kolektibora batzean",
+      "leave": "Errorea erosketa kolektibotik irtetean",
+      "create": "Errorea erosketa kolektiboa sortzean"
+    },
+    "loading": "Kargatzen..."
+  },
+  "referrals": {
+    "title": "Erreferituen Sistema",
+    "subtitle": "Gonbidatu lagunak eta irabazi sariak komunitatea handitzen lagunduz",
+    "stats": {
+      "totalReferrals": "Guztizko Erreferituak",
+      "active": "Aktiboak",
+      "pointsEarned": "Irabazitako Puntuak",
+      "currentLevel": "Uneko Maila"
+    },
+    "referralCode": {
+      "title": "Zure Erreferitu Kodea",
+      "yourLink": "Zure erreferitu esteka:",
+      "copy": "Kopiatu Esteka",
+      "copied": "Kopiatuta!",
+      "shareWhatsApp": "Partekatu WhatsApp-en",
+      "shareTelegram": "Partekatu Telegram-en"
+    },
+    "yourLevel": {
+      "title": "Zure Erreferituen Maila",
+      "multiplier": "Biderkatzailea",
+      "currentBenefits": "Uneko onurak:",
+      "nextLevel": "Hurrengo Maila",
+      "progress": "Aurrerabidea",
+      "referrals": "erreferituak",
+      "needed": "{count} erreferitu falta dira {level} lortzeko",
+      "maxLevel": {
+        "title": "Maila Maximoa Lortuta!",
+        "description": "Erreferitu sistemaren maila altuena lortu duzu"
+      }
+    },
+    "allLevels": {
+      "title": "Maila Guztiak",
+      "referralsMin": "erreferituak",
+      "multiplier": "Biderkatzailea",
+      "unlocked": "Desblokeatuta"
+    },
+    "tiers": {
+      "beginner": {
+        "name": "Hasiberria",
+        "perks": [
+          "10 puntu erreferitu aktibo bakoitzeko"
+        ]
+      },
+      "connector": {
+        "name": "Konektorea",
+        "perks": [
+          "12 puntu erreferitu bakoitzeko",
+          "Badge berezia"
+        ]
+      },
+      "ambassador": {
+        "name": "Enbaxadorea",
+        "perks": [
+          "15 puntu erreferitu bakoitzeko",
+          "VIP ekitaldietarako sarbidea",
+          "Urrezko badge"
+        ]
+      },
+      "leader": {
+        "name": "Komunitateko Liderra",
+        "perks": [
+          "20 puntu erreferitu bakoitzeko",
+          "Sari esklusiboak",
+          "Aitorpen publikoa",
+          "Platinozko badge"
+        ]
+      }
+    },
+    "myReferrals": {
+      "title": "Zure Erreferituak",
+      "registered": "Erregistratua:",
+      "activated": "Aktibatuta:",
+      "status": {
+        "PENDING": "Zain",
+        "ACTIVE": "Aktiboa",
+        "REWARDED": "Saritu"
+      },
+      "points": "puntu"
+    },
+    "howItWorks": {
+      "title": "Nola funtzionatzen du Erreferituen Sistemak?",
+      "step1": {
+        "title": "Partekatu",
+        "description": "Kopiatu zure erreferitu esteka eta partekatu laguntekin"
+      },
+      "step2": {
+        "title": "Erregistratu",
+        "description": "Zure lagunek zure esteka erabiltzen dute kontua sortzeko"
+      },
+      "step3": {
+        "title": "Aktibatu",
+        "description": "Ekintzak osatzen dituztenean, erreferitu aktibo bihurtzen dira"
+      },
+      "step4": {
+        "title": "Irabazi Puntuak",
+        "description": "Jasotzen dituzu puntuak eta maila igotzen erreferitu gehiagorekin"
+      }
+    },
+    "tips": {
+      "title": "Aholkuak erreferitu gehiagorako",
+      "tip1": "Partekatu zure esperientzia pertsonala Comunidad Viva-rekin",
+      "tip2": "Azaldu nola lagundu dezakeen plataformak zure lagunei",
+      "tip3": "Erabili sare sozialak eta WhatsApp/Telegram taldeak",
+      "tip4": "Erreferitu aktibo gehiago, zure sariak biderkatzaile handiagoa"
+    },
+    "success": {
+      "linkCopied": "Esteka arbelean kopiatuta!"
+    },
+    "errors": {
+      "copyLink": "Errorea esteka kopiatzean"
+    }
+  },
+  "docs": {
+    "title": "Dokumentazioa - Komunitate Bizia",
+    "header": {
+      "title": "📚 Dokumentazioa",
+      "subtitle": "Komunitate Biziari buruz jakin behar duzun guztia: gure eginkizuna, ezaugarriak, plataforma nola erabili eta nola lagundu."
+    },
+    "tabs": {
+      "about": "Komunitate Biziari buruz",
+      "features": "Ezaugarriak",
+      "hybrid": "Sistema Hibridoa",
+      "gamification": "Gamifikazioa",
+      "governance": "PoH Gobernantza",
+      "downloads": "Dokumentuak",
+      "guide": "Erabilpen Gida",
+      "tech": "Teknologia",
+      "deployment": "Deployment",
+      "contribute": "Lagundu"
+    },
+    "about": {
+      "whatIs": {
+        "title": "Zer da Komunitate Bizia?",
+        "intro": "Komunitate Bizia tokiko ekonomia lankidetzan oinarritutako sare soziala da, zure komunitateko jendea konektatzen duena baliabideak, zerbitzuak, ezagutzak eta esperientziak partekatzeko.",
+        "description": "Gure plataformak trukeak errazten ditu diru tradizionalaren beharrik gabe, konfiantza, elkartasun eta elkarren arteko laguntza harremanak sustatuz auzokideen artean."
+      },
+      "mission": {
+        "title": "Gure Eginkizuna",
+        "strengthen": {
+          "title": "Tokiko komunitatea indartu",
+          "description": "Auzokideen artean lotura sendoak sortu, lankidetza eta elkarren ezagutza sustatuz."
+        },
+        "circular": {
+          "title": "Ekonomia zirkularra sustatu",
+          "description": "Hondakinak murriztu objektuei bigarren bizitza emanez eta aprobetxatzen ez diren baliabideak partekatuz."
+        },
+        "access": {
+          "title": "Sarbide bidezkoa erraztú",
+          "description": "Ondasunak eta zerbitzuak hesi ekonomikorik gabe eskuragarri jarri komunitateko kreditu sistema baten bidez."
+        },
+        "sustainability": {
+          "title": "Iraunkortasuna bultzatu",
+          "description": "Aztarna ekologikoa murriztu tokiko kontsumoa eta erosketa baino trukea lehenetsiz."
+        }
+      },
+      "principles": {
+        "title": "Oinarrizko Printziprioak",
+        "reciprocity": {
+          "title": "🤝 Erreziprokotasuna",
+          "description": "Komunitateari ematen diozuna hainbat modutan itzultzen zaizu"
+        },
+        "trust": {
+          "title": "⭐ Konfiantza",
+          "description": "Eskuzabaltasunean eta fidagarritasunean oinarritutako erreputazio sistema"
+        },
+        "democracy": {
+          "title": "🗳️ Demokrazia",
+          "description": "Erabaki garrantzitsuak komunitateko adostasunez hartzen dira"
+        },
+        "transparency": {
+          "title": "🌐 Gardentasuna",
+          "description": "Kode irekia eta komunitatearen kudeaketa ikusgaia"
+        }
+      }
+    },
+    "features": {
+      "offersAndServices": {
+        "title": "🛍️ Eskaintzak eta Zerbitzuak",
+        "description": "Argitaratu eta aurkitu ondasunen, zerbitzuen, objektuen maileguen edo trukeen eskaintzak.",
+        "timeBank": {
+          "title": "Denbora Bankua:",
+          "description": "Eskaini zure denbora eta gaitasunak (klaseak, konponketak, zaintzak)"
+        },
+        "localMarket": {
+          "title": "Tokiko Merkasua:",
+          "description": "Saldu edo trukatu objektuak kredituak edo euroak erabiliz"
+        },
+        "loans": {
+          "title": "Maieguak:",
+          "description": "Partekatu tresnak, liburuak edo edozein objektu aldi baterako"
+        },
+        "geolocation": {
+          "title": "Geolokalizazioa:",
+          "description": "Aurkitu zure ondoko eskaintzak mapa interaktiboan"
+        }
+      },
+      "creditsSystem": {
+        "title": "💰 Komunitateko Kreditu Sistema",
+        "description": "Kredituak gure tokiko moneta birtuala dira, dirurik gabeko trukeak errazten dituztenak.",
+        "howItWorks": {
+          "title": "Nola funtzionatzen dute kredituek?",
+          "initialBalance": "• Erregistratzerakoan hasierako kreditu-saldoa jasotzen duzu",
+          "earnCredits": "• Kredituak irabazten dituzu zerbitzuak eskainiz eta komunitateari lagunduz",
+          "spendCredits": "• Kredituak gastatzen dituzu beste kideen zerbitzuak eta ondasunak eskuratuz",
+          "noRealMoney": "• Ezin dira diru errealera bihurtu - komunitatean bakarrik dute balioa"
+        }
+      },
+      "events": {
+        "title": "📅 Komunitateko Ekitaldiak",
+        "description": "Antolatu eta parte hartu komunitateko loturak sendotzen dituzten jardueretan.",
+        "workshops": {
+          "title": "Tailerrak eta Klaseak",
+          "description": "Ikasi eta irakatsi gaitasunak"
+        },
+        "social": {
+          "title": "Gizarte Topaketek",
+          "description": "Ezagutu zure auzokideak"
+        },
+        "volunteering": {
+          "title": "Boluntariotza",
+          "description": "Hobetu zure tokiko ingurunea"
+        },
+        "parties": {
+          "title": "Festak",
+          "description": "Ospatu komunitatearekin"
+        }
+      },
+      "socialFeatures": {
+        "title": "💜 Gizarte Ezaugarriak",
+        "messaging": {
+          "title": "Mezu Zuzena",
+          "description": "Komunikatu modu seguruan beste kideekin"
+        },
+        "swipe": {
+          "title": "Eskaintzen Swipe",
+          "description": "Aurkitu eskaintzak modu intuitiboan txartelak lerratuz"
+        },
+        "stories": {
+          "title": "24h Historiak",
+          "description": "Partekatu une iragankorrak komunitatearekin"
+        },
+        "matches": {
+          "title": "Match Sistema",
+          "description": "Konektatu interes berdinak dituzten pertsonekin"
+        }
+      },
+      "groupBuying": {
+        "title": "🛒 Talde Erosketak",
+        "description": "Batu erosketa kolektiboetan prezio hobeak lortzeko eta kostuak murrizteko.",
+        "organize": "• Antolatu handizkako erosketak auzokideekin",
+        "access": "• Sarbidea produktu jasangarrietara prezio hobean",
+        "support": "• Lagundu tokiko ekoizleei eskaera taldekatuak eginez"
+      },
+      "governance": {
+        "title": "🗳️ Komunitateko Gobernantza",
+        "description": "Parte hartu komunitateko erabaki garrantzitsuetan sistema demokratiko baten bidez.",
+        "proposals": {
+          "title": "🏛️ Proposamenak",
+          "description": "Edozein kidek hobekuntza-proposamenak sor ditzake"
+        },
+        "voting": {
+          "title": "👥 Adostasunerako Botazioa",
+          "description": "Akordio kolektiboa bilatzen duen boto sistema"
+        },
+        "transparency": {
+          "title": "📊 Gardentasun Osoa",
+          "description": "Boto-emaile eta erabaki guztiak publikoak dira"
+        }
+      },
+      "reputation": {
+        "title": "⭐ Erreputazio Sistema",
+        "description": "Zure eskuzabaltasun puntuazioak komunitaterako zure ekarpenak islatzen ditu.",
+        "earnPoints": {
+          "title": "Irabazi eskuzabaltasun puntuak:",
+          "completing": "• Eskaintzak eta zerbitzuak osatuz",
+          "participating": "• Komunitateko ekitaldietan parte hartuz",
+          "receiving": "• Balorazio positiboak jasoz",
+          "contributing": "• Komunitatearí erregularki ekarpena eginez",
+          "referring": "• Kide berriak erreferentziatu"
+        }
+      }
+    },
+    "hybrid": {
+      "title": "🔄 Geruza Ekonomiko Hibridoko Sistema",
+      "subtitle": "3 paradigma ekonomiko ezberdinen bizikidetza baketsua ahalbidetzen duen lehen plataforma.",
+      "whatIs": {
+        "title": "Zer da Sistema Hibridoa?",
+        "description": "Ekonomian nola parte hartu nahi duzun aukeratzea ahalbidetzen dizun sistema iraultzailea da: kapitalismo tradizionala, trantsizioko ekonomia, edo opari ekonomia hutsa. Zuk erabakitzen duzu!"
+      },
+      "traditional": {
+        "title": "TRADITIONAL",
+        "description": "Kapitalismo sistema klasikoa",
+        "feature1": "✓ Eurotan eta kredituetan prezioak",
+        "feature2": "✓ Transakzio tradizionalak",
+        "feature3": "✓ Berrikuspanak eta erreputazioa",
+        "feature4": "✓ Tokiko merkataritzarako ideala"
+      },
+      "transitional": {
+        "title": "TRANSITIONAL",
+        "description": "Mailakako opari ekonomia",
+        "feature1": "✓ \"Ordaindu jaso duzuna\"",
+        "feature2": "✓ Pay-it-forward sistema",
+        "feature3": "✓ Mesedeen katea",
+        "feature4": "✓ Trantsiziо leuna"
+      },
+      "giftPure": {
+        "title": "GIFT_PURE",
+        "description": "Opari ekonomia hutsa",
+        "feature1": "✓ Diru-ondokoa, preziorik gabe",
+        "feature2": "✓ Ugaritasuna partekatu",
+        "feature3": "✓ Beharrak adierazi",
+        "feature4": "✓ Jarraipen zero, zor zero"
+      },
+      "chameleon": {
+        "title": "CHAMELEON",
+        "description": "Modu esperimentala",
+        "feature1": "✓ Probatu geruza desberdinak",
+        "feature2": "✓ Bridge ekitaldi tenporalak",
+        "feature3": "✓ Konpromisorik gabe",
+        "feature4": "✓ Esploratzeko ezin hobea"
+      },
+      "mainFeatures": {
+        "title": "Funtzionalitate Nagusiak",
+        "migration": {
+          "title": "🔄 Geruzen Arteko Migrazio Askea",
+          "description": "Aldatu paradigma ekonomikoa nahi duzunean. Zure aukera, zure askatasuna."
+        },
+        "bridge": {
+          "title": "🌉 Bridge Events",
+          "description": "Esperimentatu aldi baterako beste geruza batekin. Adibidez: \"Dirurik gabeko astea\"."
+        },
+        "threshold": {
+          "title": "🎯 Migrazio Atalasea",
+          "description": "Komunitatearen %70 GIFT_PURE-n badago, migrazio kolektiboa proposatzen da."
+        },
+        "celebrations": {
+          "title": "🎉 Ugaritasun Ospakizunak",
+          "description": "Erregistratu eta ospatu komunitateak baliabideak eskuzabalki partekatzen dituenean."
+        }
+      }
+    },
+    "gamification": {
+      "title": "🎮 Gamifikazioa eta Engagement Birala",
+      "subtitle": "Ekonomia lankidetzarako parte-hartzea dibertigarria eta engaiatzailea egiten duen gamifikazio sistema osoa.",
+      "features": {
+        "title": "Gamifikazio Funtzionalitateak",
+        "onboarding": {
+          "title": "📚 Onboarding Gamifikatua",
+          "description": "5 urratseko tutorial interaktiboa sariekin",
+          "step1": "• Osatu zure profila → +10 kreditu",
+          "step2": "• Sortu zure lehen eskaintza → +15 kreditu",
+          "step3": "• Batu komunitate batera → +10 kreditu",
+          "step4": "• Joan ekitaldi batera → +10 kreditu",
+          "step5": "• Osatu zure lehen trukea → +15 kreditu",
+          "bonus": "🎁 Guztia osatzeagatiko bonusa: +50 kreditu guztira"
+        },
+        "flashDeals": {
+          "title": "⚡ Flash Deals",
+          "description": "Denbora mugatuko deskontuak dituzten tximista-eskaintzak",
+          "feature1": "• %30-70-ko deskontuak",
+          "feature2": "• Iraupena: 2-4 ordu",
+          "feature3": "• Kantitate mugatua (scarcity marketing)",
+          "feature4": "• 3 aldiz egunean biraketa automatikoa",
+          "feature5": "• Denbora errealeko push jakinarazpenak"
+        },
+        "stories": {
+          "title": "📖 24h Historiak",
+          "description": "Instagram motako eduki iragankor",
+          "feature1": "• Partekatu argazkiak eta testuak 24 orduz",
+          "feature2": "• Auto-suntsiketa automatikoa",
+          "feature3": "• Ikusketen kontagailua",
+          "feature4": "• Uneak partekatzeko ezin hobea"
+        },
+        "swipe": {
+          "title": "❤️ Swipe & Match",
+          "description": "Aurkitu eskaintzak Tinder moduan",
+          "feature1": "• Lerratu like edo dislike emateko",
+          "feature2": "• Super like 3 kreditugatik",
+          "feature3": "• Match-ak biek interesa dutenean",
+          "feature4": "• Gomendio-algoritmo pertsonalizatua"
+        },
+        "challenges": {
+          "title": "🏆 Challenges (Erronkak)",
+          "description": "Asteko erronkak leaderboard-ekin",
+          "feature1": "• Astero aldatu erronkak",
+          "feature2": "• Denbora errealeko sailkapena",
+          "feature3": "• Top 10-erako bonus berezia",
+          "feature4": "• Motak: auzokideei lagundu, eskaintzak sortu, ekitaldiak"
+        },
+        "referrals": {
+          "title": "🎁 Erreferentzia Sistema",
+          "description": "Gonbidatu lagunak eta irabazi sariak",
+          "feature1": "• Kode pertsonalizatua bakarra",
+          "feature2": "• Zu: +20 kreditu erreferentziatutako bakoitzeko",
+          "feature3": "• Zure laguna: +10 kreditu erregistratzerakoan",
+          "feature4": "• Milestones: 5, 10, 25, 50 erreferentziatuak → Bonus gehigarriak"
+        },
+        "levels": {
+          "title": "📊 Mailak eta XP",
+          "description": "10 mailako progresio sistema",
+          "feature1": "• Irabazi XP ekintza bakoitzeko",
+          "feature2": "• 10 maila desblokeagarri diren perk-ekin",
+          "feature3": "• 5. maila: %10-ko deskontua guztietan",
+          "feature4": "• 10. maila: VIP sarbidea ekitaldietara"
+        },
+        "streaks": {
+          "title": "🔥 Streaks (Sekuentziak)",
+          "description": "Jarraian aktibo dauden egunak",
+          "feature1": "• Mantendu zure sekuentzia aktibo",
+          "feature2": "• Biderkagailua x2-ra arte sarietan",
+          "feature3": "• Milestones: 7, 14, 30, 60, 90 egun",
+          "feature4": "• Badge bereziak iraupenaregatik"
+        },
+        "happyHour": {
+          "title": "⏰ Happy Hour",
+          "description": "Kreditu bikoitzeko aldiak",
+          "feature1": "• Astean 2-3 aldiz aktibatzen da",
+          "feature2": "• Iraupena: 1-2 ordu",
+          "feature3": "• x2 biderkagailua sari guztietan",
+          "feature4": "• Jakinarazpena hasten denean"
+        },
+        "achievements": {
+          "title": "🏆 Achievement Sistema (70+ Badge)",
+          "description": "Progresio automatikoko lorpen eta domina sistema osoa",
+          "categories": {
+            "title": "13 Badge Kategoria:",
+            "help": "• 🤝 Laguntza (10, 50, 100, 500)",
+            "events": "• 🎉 Ekitaldiak (5, 20, 50)",
+            "timebank": "• ⏰ Denbora Bankua (10h, 50h, 200h)",
+            "credits": "• 💰 Irabazitako/gastatutako kredituak",
+            "community": "• 🏘️ Komunitateko parte-hartzea",
+            "governance": "• 🗳️ Gobernantza eta botazioa",
+            "social": "• 🌱 Ekap gizarte sozialak",
+            "creativity": "• 🎨 Sormena eta edukia",
+            "technical": "• 🔧 Gaitasun teknikoak",
+            "environmental": "• 🌍 Ingurumen eragina",
+            "education": "• 📚 Hezkuntza eta ikaskuntza",
+            "generosity": "• 🎁 Eskuzabaltasun muturrekoa",
+            "secret": "• 🏆 Badge sekretú desblokegagarriak"
+          },
+          "rarities": {
+            "title": "Arrotasunak:",
+            "common": "• ⚪ COMMON: Lortzeko errazak (hasiberriak)",
+            "uncommon": "• 🟢 UNCOMMON: Ahalegin ertaina behar dute",
+            "rare": "• 🔵 RARE: Erabiltzaile dedikatuetarako soilik",
+            "epic": "• 🟣 EPIC: Lorpen salbuespenak",
+            "legendary": "• 🟠 LEGENDARY: Zaillenak",
+            "secret": "• 🌈 SECRET: Ezkutuak desblokeatu arte"
+          },
+          "features": {
+            "title": "Ezaugarriak:",
+            "autoCheck": "• ✅ Auto-checking automatikoa ekintza bakoitzaren ondoren",
+            "rewards": "• 🎁 Sariak kreditutan eta XP-tan",
+            "notifications": "• 🔔 Denbora errealeko jakinarazpenak (WebSocket + Email)",
+            "tracking": "• 📊 Progresuaren jarraipen (%0 → %100)",
+            "gallery": "• 🎨 Galeria bisuala kategoria eta arrotasunaren arabera irgaztekin",
+            "newIndicator": "• 🆕 \"Berria\" adierazpena orain desblokatutako badge-etan"
+          }
+        },
+        "creditDecay": {
+          "title": "⏳ Credit Decay (Moneta Herdoilgarria)",
+          "description": "Kredituen zaharkitze programatua zirkulazioa sustatzeko",
+          "decay": "• 📉 Hileko %2-ko zaharkitzea - Kredituek pixkanaka galtzen dute balioa",
+          "expiration": "• ⏰ 12 hilabetera iraungitzea - Erabili gabeko kredituak desagertzen dira",
+          "protection": "• 💸 >100 kredituko salduak soilik eragiten ditu - Erabiltzaile berrientzako babesa",
+          "notifications": {
+            "title": "• 🔔 Jakinarazpen automatikoak:",
+            "thirtyDays": "→ 30 egun lehenago: Iraungitze hurbilaren abisua",
+            "sevenDays": "→ 7 egun lehenago: Gogorarazpen premiatsua",
+            "expired": "→ Iraungi denean: Galdutako kredituen jakinarazpena"
+          },
+          "objective": "• 🎯 Helburua: Fluxu ekonomikoa estimulatu eta metaketa saihestu",
+          "cronJob": "• ⚙️ Eguneko cron job - Goizeko 3:00etan prozesatzeko automatikoa",
+          "transparency": "• 📊 Gardentasun osoa - Profilan ikusgai dagoen historia",
+          "why": {
+            "title": "💡 Zergatik Moneta Herdoilgarria?",
+            "description": "Silvio Gesell-en teoria ekonomikoan inspiratuta, moneta herdoilgarriak diruaren zirkulazioa pizten du metaketa baino, ekonomia aktibagoa eta birbanatzaileagoa sustatuz. Erreziprokotasun ekonomien mekanismo gakoa da."
+          }
+        },
+        "notifications": {
+          "title": "🔔 Denbora Errealeko Jakinarazpen Sistema",
+          "description": "Kanal anitzeko berehalako jakinarazpenak",
+          "websocket": {
+            "title": "🌐 WebSocket (Denbora Erreala):",
+            "badgeUnlocked": "• 🏆 Badge desblokatua → Berehalako toast animatua",
+            "creditsUpdate": "• 💰 Kreditu eguneratzea → Goiko barrako jakinarazpena",
+            "eventConfirmation": "• 📅 Ekitaldi baieztapena → Denbora errealeko alerta",
+            "messages": "• 💬 Mezu zuzenak → Berehalako jakinarazpena",
+            "timebank": "• ⏰ TimeBank eguneratzeak → Erreserben jakinarazpenak",
+            "happyHour": "• 🎁 Happy Hour aktibatua → Banner aplikazio osoan"
+          },
+          "email": {
+            "title": "📧 Email Jakinarazpenak (25+ Txantiloi):",
+            "badgeUnlocked": "• 🏆 Badge Unlocked: Email-a badge arrotasunaren araberako diseinuarekin",
+            "levelUp": "• ⬆️ Level Up: Mailaren igoeraren ospakizuna",
+            "creditDecay": "• ⏳ Credit Decay: Iraungitze-abisuak (30e, 7e)",
+            "eventConfirmation": "• 📅 Event Confirmation: Ekitaldietan erregistratzearen baieztapena",
+            "timebank": "• ⏰ TimeBank: Eskaerak, baieztapenak, osakuntzak",
+            "groupBuy": "• 🛍️ GroupBuy: Parte-hartzaile berriak, erosketa-itxiera",
+            "governance": "• 🗳️ Governance: Proposamen berria, botazioaren emaitza",
+            "community": "• 🏘️ Community: Komunitate berrirako ongi etorria"
+          },
+          "highlights": {
+            "title": "✨ Nabarmendutako Ezaugarriak:",
+            "templates": "• 🎨 HTML txantiloi profesionalak diseynu responsive-arekin",
+            "colors": "• 🎨 Kolore dinamikoak jakinarazpen motaren arabera",
+            "ctas": "• 🔗 CTA-ak (Call-to-action) aplikazioaren esteka zuzenarekin",
+            "multilang": "• 🌍 Hizkuntza aniztasun euskarria (ES/EU)"
+          }
+        }
+      }
+    },
+    "governance": {
+      "title": "🏛️ Gobernantza Deszentralizatua - Proof of Help",
+      "subtitle": "Bitcoin-en inspiratutako adostasun sistema, non \"meatzaritzak\" besteei laguntzea esan nahi duen.",
+      "whatIs": {
+        "title": "Zer da Proof of Help (PoH)?",
+        "description": "Kontsentsuko sistema iraultzialle bat, non \"meatzaritzak\" ez duen energiarik kontsumitzen, baizik eta balio soziala sortzen. Komunitateari laguntzeko ordu bakoitza \"lanaren hash\" bat da.",
+        "mining": {
+          "title": "⛏️ Meatzaritza = Lagundu",
+          "description": "Elektrizitatea erre beharrean, besteei lagunduz \"lanaren hash-a\" sortzen duzu. Zero kontsumu energetikoa, %100 balio soziala."
+        },
+        "trustChain": {
+          "title": "⛓️ Trust Chain",
+          "description": "Laguntza bakoitza tokiko blockchain aldaezin batean erregistratzen da. Gardentasun osoa eta ikuskatzea."
+        },
+        "reputation": {
+          "title": "🏆 Gizarte Erreputazioa",
+          "description": "Zure erreputazioa automatikoki kalkulatzen da zure ekarpenetan oinarrituta. Laguntza gehiago = pribilegi gehiago."
+        }
+      },
+      "reputationSystem": {
+        "title": "Erreputazio Sistema",
+        "description": "Irabazi erreputazioa zure komunitateari lagunduz. Erreputazio gehiago = pribilegi gehiago.",
+        "level1": {
+          "title": "1. Maila: Aktiboa (10+ laguntza)",
+          "privileges": "Pribilegioak:",
+          "privilege1": "✓ Transakzio sinpleak balioztatu",
+          "privilege2": "✓ Proposamenetan botatu",
+          "privilege3": "✓ Moderazioan parte hartu"
+        },
+        "level2": {
+          "title": "2. Maila: Lagunk (50+ laguntza)",
+          "privileges": "Pribilegi:",
+          "privilege1": "✓ Aurrekoa guztia +",
+          "privilege2": "✓ Komunitateko proposamenak balioztatu",
+          "privilege3": "✓ Moderaziorako epaimahaitan parte hartu",
+          "privilege4": "✓ Proposamenak sortu (20+ erreputazioa badauka)"
+        },
+        "level3": {
+          "title": "3. Maila: Adituá (100+ laguntza)",
+          "privileges": "Pribilegioak:",
+          "privilege1": "✓ Aurrekoa guztia +",
+          "privilege2": "✓ Gatazkak konpondu bitartekaritzaile gisa",
+          "privilege3": "✓ Arauen aldaketak proposatu",
+          "privilege4": "✓ Analisi aurreratuerako sarbidea"
+        }
+      },
+      "proposals": {
+        "title": "Komunitateko Proposamenak (CIPs)",
+        "description": "Community Improvement Proposals: 20+ erreputazioa duen edozein kidek komunitateko hobekuntzak proposatu ditzake.",
+        "step1": {
+          "title": "1. Sorkuntza",
+          "description": "Sortu zure proposamena izenburuареkin, deskribapen eta planarekin"
+        },
+        "step2": {
+          "title": "2. Eztabaida (3 egun)",
+          "description": "Komunitateak iruzkinak egiten ditu eta eztabaidatzen du"
+        },
+        "step3": {
+          "title": "3. Botazioa (4 egun)",
+          "description": "Kredituekin botazio koadratikoa"
+        },
+        "step4": {
+          "title": "4. Onartzea",
+          "description": "Atalasera iristen bada → Onartuta"
+        },
+        "quadraticVoting": {
+          "title": "📊 Botazio Koadratikoa",
+          "description": "Sistema gutxi batzuek ez dezaten erabakiak nagusitu:",
+          "point1": "1 puntu = 1² = 1 kreditu",
+          "point5": "5 puntu = 5² = 25 kreditu",
+          "point10": "10 puntu = 10² = 100 kreditu"
+        }
+      },
+      "moderation": {
+        "title": "🛡️ Moderazio Deszentralizatua",
+        "description": "Moderazioa ez du admin batek egiten, komunitateak mini-DAO tenporalen bidez baizik.",
+        "step1": {
+          "title": "Edukia Salatu",
+          "description": "Erabiltzaile batek eduki desegokia salatzen du (spam, iraingarria, etab.)"
+        },
+        "step2": {
+          "title": "Epaimahaiaren Hautaketa",
+          "description": "Sistemak 5-7 pertsona hautatzen ditu: 3 erreputazio altukoa + 2 ausazkoak"
+        },
+        "step3": {
+          "title": "Epaimahaiaren Botazioa",
+          "description": "Epaimahai bakoitzak botatzen du: KEEP (mantendu), REMOVE (kendu), WARN (abisatu)"
+        },
+        "step4": {
+          "title": "Adostasuna (%66)",
+          "description": "%66k REMOVE botatzen badute → Edukia kenduta. Epaimahai zuzenek +1 kreditu irabazten dute"
+        }
+      },
+      "benefits": {
+        "title": "✨ Onurak Sistema Zentralizatuekiko",
+        "noSinglePoint": {
+          "title": "Hutsegite puntu bakarrik gabe",
+          "description": "Plataforma martxan jarraitzen du zerbitzari zentrala huts egiten badu ere"
+        },
+        "resistant": {
+          "title": "Zenturari erresistentea",
+          "description": "Komunitateak erabakitzen du zer eduki den egokia"
+        },
+        "incentives": {
+          "title": "Pizgarri lerrokatuak",
+          "description": "Laguntzeak eta balioztatzeak sari ukigarriak sortzen ditu"
+        },
+        "transparency": {
+          "title": "Gardentasun osoa",
+          "description": "Erabaki guztiak publikoak eta ikuskatzeko modukoak dira"
+        }
+      }
+    },
+    "guide": {
+      "gettingStarted": {
+        "title": "🚀 Lehen Urratsak",
+        "step1": {
+          "title": "Sortu zure kontua",
+          "description": "Erregistratu zure email-arekin. Doan da eta ongi etorriko kredittak jasoko dituzu."
+        },
+        "step2": {
+          "title": "Osatu zure profila",
+          "description": "Gehitu argazki bat, idatzi biografia labur bat eta kontatu zure interesak."
+        },
+        "step3": {
+          "title": "Esploratu mapa",
+          "description": "Aurkitu zure inguruko eskaintzak eta ekitaldiak mapa interaktiboan."
+        },
+        "step4": {
+          "title": "Argitaratu zure lehen eskaintza",
+          "description": "Zerbait partekatzeko? Sortu zure lehen ondasun edo zerbitzu eskaintza."
+        },
+        "step5": {
+          "title": "Konektatu zure komunitatearekin",
+          "description": "Bidali mezuak, joan ekitaldietara eta eraiki konfiantzazko harremanak."
+        }
+      },
+      "createOffer": {
+        "title": "📝 Nola sortu eskaintza bat",
+        "step1": "Klikatu \"Eskaintza Sortu\" menuan edo ekintza azkarreko botoian",
+        "step2": "Hautatu mota: Denbora Bankua, Tokiko Merkasua edo Mailegu",
+        "step3": "Bete izenburua, deskribapen xehatua eta kategoria",
+        "step4": "Ezarri prezioa kreditutan edo eurotan (edo bietan)",
+        "step5": "Igo kalitate argazkiak (aukerakoa baina gomendatua)",
+        "step6": "Gehitu zure kokapena beste batzuek mapan aurkitzeko",
+        "step7": "Argitaratu eta itxaron interesdunak zurekin harremanetan jartzeko"
+      },
+      "organizeEvent": {
+        "title": "🎉 Nola antolatu ekitaldi bat",
+        "step1": "Joan \"Ekitaldiak\" atalera eta klikatu \"Ekitaldia Sortu\"",
+        "step2": "Definitu izenburua, deskribapena eta ekitaldi mota",
+        "step3": "Ezarri hasiera data, amaiera eta kokapena",
+        "step4": "Definitu parte-hartzaileen gehienezko edukiera (aukerakoa)",
+        "step5": "Aukeran, eskaini kredituak sari gisa joateagatik",
+        "step6": "Argitaratu eta sustatu zure ekitaldia komunitatean"
+      },
+      "tips": {
+        "title": "💡 Komunitaterako Aholkuak",
+        "clear": {
+          "title": "✓ Izan argi eta zintzoa",
+          "description": "Deskribatu zehaztasunez zer eskaintzen duzun gaizki-ulertuak saihesteko"
+        },
+        "respond": {
+          "title": "✓ Erantzun azkar",
+          "description": "Erantzun mezuak 24 orduren barruan konfiantza mantentzeko"
+        },
+        "fulfill": {
+          "title": "✓ Bete zure konpromisoak",
+          "description": "Norbaitekin geratzen bazara, errespetatu akurdioak. Zure erreputazioak islatzen du"
+        },
+        "rate": {
+          "title": "✓ Baloratu beste kideak",
+          "description": "Utzi balorazio zintzoak truke bakoitzaren ondoren"
+        },
+        "participate": {
+          "title": "✓ Parte hartu aktiboki",
+          "description": "Joan ekitaldietara, iruzkindu feed-ean eta haztú komunitatea"
+        }
+      },
+      "safety": {
+        "title": "⚠️ Segurtasun Arauak",
+        "noPersonalInfo": "• Ez partekatu informazio pertsonal sentikorra mezu publikoetan",
+        "publicPlaces": "• Akordatu beti trukeak leku publikoetan pertsona ezagutzen ez baduzu",
+        "report": "• Salatu jokabide desegokiak edo susmagarriak berehala",
+        "checkReputation": "• Egiaztatu kidearen erreputazioa truke garrantzitsuak onartu aurretik"
+      }
+    },
+    "tech": {
+      "architecture": {
+        "title": "⚙️ Arkitektura Teknikoa",
+        "description": "Komunitate Bizia teknologia moderno, sendo eta eskalagarriekin eraikita dago.",
+        "frontend": {
+          "title": "Frontend",
+          "nextjs": "Next.js 13+ - React Framework",
+          "typescript": "TypeScript - Type safety",
+          "tailwind": "TailwindCSS - Utility-first estiloak",
+          "reactQuery": "React Query - Datu atzipena",
+          "leaflet": "Leaflet - Mapa interaktiboak"
+        },
+        "backend": {
+          "title": "Backend",
+          "nestjs": "NestJS - Node.js Framework",
+          "prisma": "Prisma ORM - Database toolkit",
+          "postgresql": "PostgreSQL - Datu basea",
+          "redis": "Redis - Cache eta saioak",
+          "jwt": "JWT - Autentikazioa"
+        }
+      },
+      "security": {
+        "title": "🔒 Segurtasuna eta Pribatutasuna",
+        "encryption": {
+          "title": "Komunikazioen Zifraketa",
+          "description": "Komunikazio guztiak HTTPS erabiltzen dute SSL/TLS ziurtagiriekin"
+        },
+        "protection": {
+          "title": "Datuen Babesa",
+          "description": "Pasahitzak bcrypt hash-arekin gordetzen dira eta ez inoiz testu sinplean"
+        },
+        "rateLimiting": {
+          "title": "Rate Limiting",
+          "description": "Indar bruto eta DDoS erasoen aurkako babesa"
+        },
+        "accessControl": {
+          "title": "Sarbide Kontrola",
+          "description": "Rol eta baimen sistema datu sentikorra babesteko"
+        }
+      },
+      "docker": {
+        "title": "🐳 Docker Azpiegitura",
+        "description": "Aplikazio osoa contenitorizatuta dago hedapena eta eskalagarritasuna errazteko.",
+        "servicesTitle": "# Erabilgarri dauden zerbitzuak:",
+        "backendApi": "• Backend API (NestJS) - 4000 Portua",
+        "frontendWeb": "• Frontend Web (Next.js) - 3000 Portua",
+        "postgresql": "• PostgreSQL - 5432 Portua",
+        "redis": "• Redis - 6379 Portua",
+        "nginx": "• Nginx (Ekoizpena) - 80/443 Portuak",
+        "monitoringTitle": "# Monitorização:",
+        "prometheus": "• Prometheus - 9090 Portua",
+        "grafana": "• Grafana - 3001 Portua"
+      },
+      "monitoring": {
+        "title": "📊 Monitorizazioa eta Backup-ak",
+        "monitoring": {
+          "title": "Monitorizazioa",
+          "prometheus": "• Prometheus sistemaren metriketarako",
+          "grafana": "• Grafana datuen bistaratzerako",
+          "alerts": "• Alerta automatikoak hutsegiteak gertatzen direnean",
+          "logs": "• Log zentralizatuak"
+        },
+        "backups": {
+          "title": "Backups",
+          "automatic": "• Backup automatikoak 24 orduro",
+          "retention": "• 7 eguneko atxikitzea",
+          "restore": "• Leheneratzea komando batekin",
+          "encrypted": "• Biltegirataize zifratua"
+        }
+      },
+      "advanced": {
+        "title": "📱 Ezaugarri Tekniko Aurreratuak",
+        "ssr": {
+          "title": "🚀 Server-Side Rendering (SSR)",
+          "description": "Zerbitzariaren aldeko errendatzea SEO eta errendimendu hoberako"
+        },
+        "imageOptimization": {
+          "title": "⚡ Irudien Optimizazioa",
+          "description": "Konpresio automatikoa eta formatu modernoak (WebP)"
+        },
+        "geolocation": {
+          "title": "📍 Geolokalizazioa",
+          "description": "Kooordinatu sistema hurbiltasunaren araberako bilaketak egiteko"
+        },
+        "realtime": {
+          "title": "🔄 Denbora Errealeko Eguneratzeak",
+          "description": "Denbora errealeko eguneratzeak React Query-rekin"
+        },
+        "messaging": {
+          "title": "📨 Mezularitza Sistema",
+          "description": "Kideen arteko mezu zuzen seguruak"
+        }
+      },
+      "api": {
+        "title": "🌐 API REST eta Dokumentazioa",
+        "description": "API-a osoki dokumentatuta dago Swagger/OpenAPI-rekin.",
+        "access": "Sarbidea API dokumentaziora:",
+        "url": "http://localhost:4000/api/docs",
+        "explore": "Esploratu endpoint, parametro eta erantzun guztiak modu interaktiboan"
+      }
+    },
+    "deployment": {
+      "title": "🚀 Ekoizpenera Deployment",
+      "subtitle": "Gida osoa Komunitate Bizia zure zerbitzarian Docker-ekin hedatzeko",
+      "prerequisites": {
+        "title": "📋 Aurrebaldintzak",
+        "docker": "Docker eta Docker Compose instalatuta duen zerbitzaria",
+        "domain": "Domeinua konfiguratuta (aukerakoa baina gomendatua)",
+        "ports": "80 eta 443 portuak erabilgarri (HTTPS-rako)",
+        "ram": "Gutxienez 2GB RAM erabilgarri"
+      },
+      "automatic": {
+        "title": "⚡ 1. Aukera: Deployment Automatikoa (Gomendatua)",
+        "description": "Erabili gure script automatizatua dena egiten duena:",
+        "cloneTitle": "# 1. Biltegia klonatu",
+        "cloneCmd1": "git clone https://github.com/tu-usuario/comunidad-viva.git",
+        "cloneCmd2": "cd comunidad-viva",
+        "executableTitle": "# 2. Script-a exekutagarri egin",
+        "executableCmd": "chmod +x deploy.sh",
+        "deployTitle": "# 3. Deployment exekutatu",
+        "deployCmd": "./deploy.sh production",
+        "scriptsDoesTitle": "Script-ak automatikoki:",
+        "check": "✓ Egiaztatzen du Docker eta .env fitxategiak prest daudela",
+        "backup": "✓ Datu basearen backup-a sortzen du (badago)",
+        "build": "✓ Docker irudi optimizatuak eraikitzen ditu",
+        "start": "✓ Zerbitzu guztiak abiarazten ditu (PostgreSQL, Backend, Frontend)",
+        "migrate": "✓ Datu basearen migrazioak aplikatzen ditu",
+        "verify": "✓ Egiaztatzen du zerbitzu guztiak martxan daudela",
+        "cleanup": "✓ Erabili gabeko baliabideak garbitzen ditu"
+      },
+      "manual": {
+        "title": "🔧 2. Aukera: Deployment Manuala",
+        "step1": {
+          "title": "1. Pausua: Ingurune Aldagaiak Konfiguratu",
+          "backendComment": "# Backend",
+          "backendCmd1": "cp packages/backend/.env.example packages/backend/.env",
+          "backendCmd2": "nano packages/backend/.env",
+          "frontendComment": "# Frontend",
+          "frontendCmd1": "cp packages/web/.env.production.example packages/web/.env.production",
+          "frontendCmd2": "nano packages/web/.env.production",
+          "important": "Garrantzitsua: Aldatu pasahitzak, JWT_SECRET eta URL-ak .env fitxategietan"
+        },
+        "step2": {
+          "title": "2. Pausua: Irudiak Eraiki",
+          "cmd": "docker compose -f docker-compose.yml -f docker-compose.prod.yml build"
+        },
+        "step3": {
+          "title": "3. Pausua: Zerbitzuak Abiarazi",
+          "cmd": "docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d"
+        },
+        "step4": {
+          "title": "4. Pausua: Migrazioak Aplikatu",
+          "cmd": "docker compose exec backend npx prisma migrate deploy"
+        },
+        "step5": {
+          "title": "5. Pausua: Egoera Egiaztatu",
+          "verifyComment": "# Egiaztatu zerbitzuak martxan daudela",
+          "verifyCmd": "docker compose ps",
+          "backendComment": "# Backend probatu",
+          "backendCmd": "curl http://localhost:4000/health",
+          "frontendComment": "# Frontend probatu",
+          "frontendCmd": "curl http://localhost:3000"
+        }
+      },
+      "domain": {
+        "title": "🌐 Domeinua NGINX + SSL-rekin Konfiguratu",
+        "description": "Domeinu pertsonalizatua HTTPS-rekin erabiltzeko:",
+        "step1": {
+          "title": "1. NGINX eta Certbot Instalatu",
+          "cmd1": "sudo apt-get update",
+          "cmd2": "sudo apt-get install nginx certbot python3-certbot-nginx"
+        },
+        "step2": {
+          "title": "2. NGINX Konfiguratu",
+          "description": "/etc/nginx/sites-available/comunidad-viva fitxategia sortu:",
+          "frontendComment": "# Frontend",
+          "backendComment": "# Backend API"
+        },
+        "step3": {
+          "title": "3. Aktibatu eta SSL Lortu",
+          "activateComment": "# Konfigurazioa aktibatu",
+          "activateCmd1": "sudo ln -s /etc/nginx/sites-available/comunidad-viva /etc/nginx/sites-enabled/",
+          "activateCmd2": "sudo nginx -t",
+          "activateCmd3": "sudo systemctl restart nginx",
+          "sslComment": "# SSL ziurtagiri doakoa eskuratu",
+          "sslCmd": "sudo certbot --nginx -d tu-dominio.com -d api.tu-dominio.com"
+        }
+      },
+      "update": {
+        "title": "🔄 Aplikazioa Eguneratu",
+        "description": "Bertsio berriak daudenean:",
+        "pullComment": "# Azken aldaketak jaso",
+        "pullCmd": "git pull origin main",
+        "rebuildComment": "# Rebuild eta restart",
+        "rebuildCmd1": "docker compose -f docker-compose.yml -f docker-compose.prod.yml build",
+        "rebuildCmd2": "docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d",
+        "migrateComment": "# Migrazio berriak badaude aplikatu",
+        "migrateCmd": "docker compose exec backend npx prisma migrate deploy"
+      },
+      "backup": {
+        "title": "🔐 Datu Basearen Backup",
+        "create": {
+          "title": "Backup Sortu",
+          "cmd": "docker compose exec postgres \\\n  pg_dump -U comunidad \\\n  comunidad_viva > \\\n  backup_$(date +%Y%m%d).sql"
+        },
+        "restore": {
+          "title": "Backup Leheneratu",
+          "cmd": "cat backup_20250101.sql | \\\n  docker compose exec -T \\\n  postgres psql -U comunidad \\\n  -d comunidad_viva"
+        }
+      },
+      "monitoring": {
+        "title": "📊 Monitorizazioa eta Logs",
+        "allLogs": {
+          "title": "Zerbitzu guztien logs ikusi",
+          "cmd": "docker compose logs -f"
+        },
+        "specificLogs": {
+          "title": "Zerbitzu zehatz baten logs ikusi",
+          "cmd": "docker compose logs -f backend"
+        },
+        "status": {
+          "title": "Zerbitzuen egoera ikusi",
+          "cmd": "docker compose ps"
+        },
+        "resources": {
+          "title": "Baliabideen erabilpena ikusi",
+          "cmd": "docker stats"
+        }
+      },
+      "troubleshooting": {
+        "title": "🐛 Arazo-konponketa Arrunta",
+        "portInUse": {
+          "title": "Portua erabilita dago",
+          "cmd1": "sudo lsof -i :4000  # Ikusi zerk erabiltzen duen portua",
+          "cmd2": "sudo kill -9 PID    # Prozesua hil behar bada"
+        },
+        "frontendConnection": {
+          "title": "Frontend-ak ez du backend-era konektatzen",
+          "description": "Egiaztatu NEXT_PUBLIC_API_URL .env.production-en backend-aren URL zuzenera apuntatzen duela"
+        },
+        "migrations": {
+          "title": "Migrazioen errorea",
+          "description": "Ziurtatu PostgreSQL martxan dagoela eta DATABASE_URL zuzena dela"
+        }
+      },
+      "docs": {
+        "title": "📄 Dokumentazio Osoa",
+        "description": "Xehetasun gehiagorako, kontsultatu proiektuaren erroko DEPLOYMENT.md fitxategia.",
+        "platforms": "Vercel, Railway, Render eta DigitalOcean App Platform-erako deployment aukerak ere barne hartzen ditu."
+      }
+    },
+    "downloads": {
+      "title": "📚 Deskargatzeko Dokumentu Erabilgarriak",
+      "presentation": {
+        "title": "🎯 Erabilteko Prest dagoen Aurkezpena",
+        "subtitle": "Deskargatu zuzenean PowerPoint-a edo ikusi aurkezpena nabigatzailean",
+        "powerpoint": {
+          "title": "PowerPoint Deskargatu",
+          "filename": "PRESENTATION.pptx - Editatzeko prest",
+          "size": "66 KB",
+          "cta": "Orain deskargatu"
+        },
+        "browser": {
+          "title": "Nabigatzailean Ikusi",
+          "filename": "PRESENTATION.html - Web bistaratze",
+          "size": "21 KB",
+          "cta": "Aurkezpena ireki"
+        },
+        "note": "💡 Oharra: PowerPoint fitxategia (.pptx) automatikoki pandoc-ekin sortu da eta Microsoft PowerPoint, Google Slides, LibreOffice Impress edo edozein software bateragarritan editatzeko prest dago."
+      },
+      "documents": {
+        "title": "📚 Deskargatzeko Dokumentu Erabilgarriak",
+        "cta": "Deskargatu"
+      }
+    },
+    "contribute": {
+      "title": "🤝 Nola Lagundu?",
+      "intro": "Komunitate Bizia kode irekiko proiektu bat da, zu bezalako pertsonen parte-hartzeari esker hazten dena. Ekarpen guztiak ongi etorriak dira!",
+      "areas": {
+        "development": {
+          "title": "💻 Garapena",
+          "description": "Lagundu kodea hobetzen, akatsak zuzentzen edo funtzionalitate berriak gehitzen.",
+          "frontend": "• Frontend (React/Next.js)",
+          "backend": "• Backend (NestJS/Node.js)",
+          "database": "• Database (PostgreSQL/Prisma)",
+          "devops": "• DevOps (Docker/CI-CD)"
+        },
+        "design": {
+          "title": "🎨 Diseinua",
+          "description": "Hobetu erabiltzaile esperientzia eta diseinu bisuala.",
+          "uiux": "• UI/UX Design",
+          "graphic": "• Diseinu grafikoa",
+          "icons": "• Ikonografia",
+          "accessibility": "• Irisgarritasuna (A11y)"
+        },
+        "documentation": {
+          "title": "📝 Dokumentazioa",
+          "description": "Idatzi gidak, tutorialak eta dokumentazio teknikoa.",
+          "userGuides": "• Erabiltzaile gidak",
+          "technical": "• Dokumentazio teknikoa",
+          "translations": "• Itzulpenak",
+          "videos": "• Bideo tutorialak"
+        },
+        "testing": {
+          "title": "🧪 Probak",
+          "description": "Probatu aplikazioa eta eman akatseen edo arazoen berri.",
+          "manual": "• Eskuzko probak",
+          "bugs": "• Akatseen txostenak",
+          "automated": "• Proba automatizatuak",
+          "qa": "• QA eta balioztatzea"
+        }
+      },
+      "codeGuide": {
+        "title": "🚀 Koderako Laguntza Gida",
+        "step1": {
+          "title": "1. Prestatu zure ingurunea",
+          "forkComment": "# Biltegiraren fork-a",
+          "cloneCmd": "git clone https://github.com/tu-usuario/comunidad-viva.git",
+          "cdCmd": "cd comunidad-viva",
+          "installComment": "# Dependentziak instalatu",
+          "installCmd": "make install",
+          "devComment": "# Garapen ingurunea abiarazi",
+          "devCmd": "make dev"
+        },
+        "step2": {
+          "title": "2. Sortu zure feature-rako adar bat",
+          "cmd": "git checkout -b feature/zure-feature-aren-izena"
+        },
+        "step3": {
+          "title": "3. Garatu zure funtzionaltasuna",
+          "follow": "• Jarraitu proiektuaren kode konbentzioak",
+          "clean": "• Idatzi kode garbi eta ondo dokumentatua",
+          "tests": "• Gehitu probak zure funtzionalitaterako",
+          "compile": "• Ziurtatu dena konpilatzen dela akatsik gabe"
+        },
+        "step4": {
+          "title": "4. Egin zure aldaketen commit-a",
+          "addCmd": "git add .",
+          "commitCmd": "git commit -m \"feat: aldaketaren deskribapen argia\"",
+          "typesComment": "# Commit motak: feat, fix, docs, style, refactor, test"
+        },
+        "step5": {
+          "title": "5. Push egin eta Pull Request sortu",
+          "pushCmd": "git push origin feature/zure-feature-aren-izena",
+          "description": "Ondoren joan GitHub-era eta sortu Pull Request zure aldaketen deskribapen argi batekin."
+        }
+      },
+      "bestPractices": {
+        "title": "📋 Praktika Onak",
+        "smallCommits": {
+          "title": "Commit txiki eta sarriag",
+          "description": "Errazagoa da aldaketa zehatzak berrikustea kode bloke handiak baino"
+        },
+        "descriptive": {
+          "title": "Commit mezu deskriptiboak",
+          "description": "Erabili formatua: mota(eremua): deskribapen argia"
+        },
+        "tests": {
+          "title": "Kode berri guztirako probak",
+          "description": "Kalitatea ziurtatzen du eta atzerapenak saihesten ditu"
+        },
+        "document": {
+          "title": "Dokumentatu funtzio konplexuak",
+          "description": "Beste garatzaileei zure kodea ulerizen laguntzen die"
+        },
+        "style": {
+          "title": "Errespetatu kode estiloa",
+          "description": "Erabili Prettier eta ESLint koherentzia mantentzeko"
+        }
+      },
+      "bugs": {
+        "title": "🐛 Akatsak Salatu",
+        "description": "Akats bat aurkitzen baduzu, mesedez eman horren berri GitHub-en issue bat sortuz honako hauekin:",
+        "clearDescription": "Arazoaren deskribapen argia",
+        "steps": "Errorea erreproduzitzeko urratsak",
+        "expected": "Esperotako portaera vs. oraingo portaera",
+        "screenshots": "Pantaila-argazkiak aplikatzen bada",
+        "environment": "Inguruneari buruzko informazioa (nabigatzailea, OS, etab.)"
+      },
+      "community": {
+        "title": "💬 Komunitatea eta Laguntza",
+        "discussions": {
+          "title": "GitHub Discussions",
+          "description": "Parte hartu feature berri eta hobenkuntzen inguruko eztabaidetan"
+        },
+        "issues": {
+          "title": "GitHub Issues",
+          "description": "Salatu akatsak, eskatu feature-ak edo galdetu zalantza teknikoak"
+        },
+        "pullRequests": {
+          "title": "Pull Requests",
+          "description": "Berrikusi besteen kodea eta ikasi komunitatearengan"
+        }
+      },
+      "contributors": {
+        "title": "🌟 Laguntzaileak",
+        "thanks": "Eskerrak Komunitate Bizia egunero plataforma hobea egiten lagundu duten pertsona guztiei.",
+        "yourName": "Zure izena hemen ager daiteke. Egin zure lehen ekarpena gaur!"
+      },
+      "license": {
+        "title": "📄 Lizentzia",
+        "description": "Komunitate Bizia MIT License lizentziapean dago.",
+        "details": "Honek esan nahi du kodea libreki erabili, aldatu eta banatu dezakezula, copyright-aren oharra eta lizentzia mantentzen dituzun bitartean."
+      }
+    }
+  },
+  "contact": {
+    "title": "Kontaktua - Komunitate Bizia",
+    "header": {
+      "title": "📧 Jarri Gurekin Harremanetan",
+      "subtitle": "Galderak, proposamenak edo kolaboratu nahi duzu? Hemen gaude laguntzeko."
+    },
+    "form": {
+      "title": "Bidali Mezu bat",
+      "success": "✅ Mezua ondo bidali da! Laster erantzungo dizugu.",
+      "fields": {
+        "name": "Izena",
+        "email": "Posta Elektronikoa",
+        "subject": "Gaia",
+        "message": "Mezua"
+      },
+      "placeholders": {
+        "name": "Zure izen osoa",
+        "email": "zure@emaila.eus",
+        "subject": "Hautatu gai bat",
+        "message": "Kontaiguzu nola lagundu dezakegun..."
+      },
+      "subjects": {
+        "general": "Kontsulta Orokorra",
+        "support": "Laguntza Teknikoa",
+        "bug": "Errorea Jakinarazi",
+        "feature": "Funtzionalitatea Proposatu",
+        "partnership": "Kolaborazioa edo Elkarlana",
+        "other": "Beste bat"
+      },
+      "submit": "Mezua Bidali"
+    },
+    "info": {
+      "email": {
+        "title": "Email",
+        "description": "Zure kontsulta 24-48 orduko epean erantzungo dugu."
+      },
+      "github": {
+        "title": "GitHub",
+        "description": "Jakinarazi akatsak, eskatu funtzionalitateak edo lagundu kodearekin."
+      },
+      "community": {
+        "title": "Komunitatea",
+        "description": "Bat egin gure komunitatearekin beste erabiltzaile eta kolaboratzaileekin konektatzeko."
+      },
+      "response": {
+        "title": "Erantzun Denbora",
+        "description": "Normalean 24-48 ordutan erantzuten dugu. Larrialdi teknikoetarako, erabili GitHub Issues."
+      }
+    }
+  },
+  "dashboard": {
+    "customizer": {
+      "title": "Arbela Pertsonalizatu",
+      "description": "Aukeratu zein widget erakutsi fitxa bakoitzean",
+      "tabs": {
+        "all": "Denak",
+        "discover": "Aurkitu",
+        "activity": "Nire Jarduera",
+        "community": "Komunitatea"
+      },
+      "widgets": {
+        "quick_actions": {
+          "name": "Ekintza Azkarrak",
+          "description": "Eskaintza, ekitaldi, etab. sortzeko lasterbideak"
+        },
+        "map_view": {
+          "name": "Mapa Ikuspegia",
+          "description": "Inguruko baliabideen mapa interaktiboa"
+        },
+        "community_stats": {
+          "name": "Estatistikak",
+          "description": "Komunitatearen metrikak"
+        },
+        "daily_seed": {
+          "name": "Eguneko Hazia",
+          "description": "Irabazi kredituak egunero"
+        },
+        "personal_feed": {
+          "name": "Nire Jarioa",
+          "description": "Zure jarduera pertsonala"
+        },
+        "upcoming_events": {
+          "name": "Hurrengo Ekitaldiak",
+          "description": "Zure komunitateko ekitaldiak"
+        }
+      },
+      "actions": {
+        "restore": "Lehenetsiak Berreskuratu",
+        "cancel": "Utzi",
+        "save": "Gorde Aldaketak"
+      },
+      "status": {
+        "widgetsActive": "widget aktibo",
+        "unsavedChanges": "Gorde gabeko aldaketak",
+        "discardConfirm": "Gorde gabeko aldaketak baztertu?"
+      }
+    },
+    "customize": "Pertsonalizatu"
+  },
+  "communityMembers": {
+    "title": "Kideak",
+    "backTo": "Itzuli hona",
+    "membersCount": "kide",
+    "loading": "Kargatzen...",
+    "notFound": "Ez da komunitaterik aurkitu",
+    "noMembers": "Oraindik ez dago kiderik komunitate honetan.",
+    "level": "Maila",
+    "credits": "kreditu"
   }
 }

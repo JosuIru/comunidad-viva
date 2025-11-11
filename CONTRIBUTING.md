@@ -1,6 +1,6 @@
 # 🤝 Guía de Contribución
 
-¡Gracias por tu interés en contribuir a Comunidad Viva! Este documento te guiará a través del proceso de contribución.
+¡Gracias por tu interés en contribuir a Truk! Este documento te guiará a través del proceso de contribución.
 
 ## 📋 Tabla de Contenidos
 
@@ -419,7 +419,7 @@ Busca issues etiquetados como:
 
 ## 🙏 Agradecimientos
 
-¡Gracias por contribuir a Comunidad Viva! Cada contribución, por pequeña que sea, hace que este proyecto sea mejor.
+¡Gracias por contribuir a Truk! Cada contribución, por pequeña que sea, hace que este proyecto sea mejor.
 
 ---
 

@@ -2,6 +2,8 @@ import { Controller, Get, Post, Body, Param, UseGuards, Request, Query } from '@
 import { CreditsService } from './credits.service';
 import { CreditDecayService } from './credit-decay.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { EmailVerifiedGuard } from '../auth/guards/email-verified.guard';
+import { RequireEmailVerification } from '../common/decorators/require-email-verification.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
@@ -81,7 +83,8 @@ export class CreditsController {
 
   @ApiOperation({ summary: 'Spend credits' })
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @RequireEmailVerification()
+  @UseGuards(JwtAuthGuard, EmailVerifiedGuard)
   @Post('spend')
   async spendCredits(@Request() req, @Body() spendCreditsDto: SpendCreditsDto) {
     return this.creditsService.spendCredits(

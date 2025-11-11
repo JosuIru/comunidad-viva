@@ -135,7 +135,7 @@ export default function CommunityPoolsPage() {
   }
 
   return (
-    <Layout title="Pools Comunitarios - Comunidad Viva">
+    <Layout title="Pools Comunitarios - Truk">
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="container mx-auto px-4 max-w-6xl">
           {/* Header */}
@@ -371,4 +371,4 @@ export default function CommunityPoolsPage() {
   );
 }
 
-export { getI18nProps as getStaticProps };
+export const getStaticProps = async (context: any) => getI18nProps(context);

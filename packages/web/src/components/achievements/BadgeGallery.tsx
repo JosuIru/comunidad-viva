@@ -235,7 +235,7 @@ export default function BadgeGallery() {
         {/* Badge Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           {filteredProgress.map((item) => (
-            <BadgeCard key={item.badgeType} badge={item} />
+            <BadgeCard key={item.badgeType} badge={item} badges={badges} />
           ))}
         </div>
 
@@ -249,7 +249,7 @@ export default function BadgeGallery() {
   );
 }
 
-function BadgeCard({ badge }: { badge: BadgeProgress }) {
+function BadgeCard({ badge, badges }: { badge: BadgeProgress; badges: Badge[] }) {
   const isUnlocked = badge.unlocked;
   const progressPercent = badge.maxProgress > 0
     ? Math.min((badge.progress / badge.maxProgress) * 100, 100)

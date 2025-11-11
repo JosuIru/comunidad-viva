@@ -1,8 +1,14 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Request, Query } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { EmailVerifiedGuard } from '../auth/guards/email-verified.guard';
+import { OwnershipGuard } from '../common/guards/ownership.guard';
+import { RequireEmailVerification } from '../common/decorators/require-email-verification.decorator';
+import { CheckOwnership } from '../common/decorators/check-ownership.decorator';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { CheckInEventDto } from './dto/checkin-event.dto';
+import { CreateEventDto } from './dto/create-event.dto';
+import { UpdateEventDto } from './dto/update-event.dto';
 
 @ApiTags('events')
 @Controller('events')
@@ -12,18 +18,39 @@ export class EventsController {
   @ApiOperation({ summary: 'Get all events' })
   @ApiQuery({ name: 'upcoming', required: false, type: Boolean })
   @ApiQuery({ name: 'category', required: false, type: String })
+  @ApiQuery({ name: 'communityId', required: false, type: String })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'offset', required: false, type: Number })
+  @ApiQuery({ name: 'nearLat', required: false, type: Number })
+  @ApiQuery({ name: 'nearLng', required: false, type: Number })
+  @ApiQuery({ name: 'maxDistance', required: false, type: Number })
   @Get()
   async findAll(
     @Query('upcoming') upcoming?: boolean,
     @Query('category') category?: string,
+    @Query('communityId') communityId?: string,
     @Query('limit') limitStr?: string,
     @Query('offset') offsetStr?: string,
+    @Query('nearLat') nearLatStr?: string,
+    @Query('nearLng') nearLngStr?: string,
+    @Query('maxDistance') maxDistanceStr?: string,
   ) {
     const limit = limitStr ? parseInt(limitStr, 10) : undefined;
     const offset = offsetStr ? parseInt(offsetStr, 10) : undefined;
-    return this.eventsService.findAll({ upcoming, category, limit, offset });
+    const nearLat = nearLatStr ? parseFloat(nearLatStr) : undefined;
+    const nearLng = nearLngStr ? parseFloat(nearLngStr) : undefined;
+    const maxDistance = maxDistanceStr ? parseFloat(maxDistanceStr) : undefined;
+
+    return this.eventsService.findAll({
+      upcoming,
+      category,
+      communityId,
+      limit,
+      offset,
+      nearLat,
+      nearLng,
+      maxDistance
+    });
   }
 
   @ApiOperation({ summary: 'Get user event registrations' })
@@ -51,23 +78,26 @@ export class EventsController {
 
   @ApiOperation({ summary: 'Create new event' })
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @RequireEmailVerification()
+  @UseGuards(JwtAuthGuard, EmailVerifiedGuard)
   @Post()
-  async create(@Request() req, @Body() data: any) {
+  async create(@Request() req, @Body() data: CreateEventDto) {
     return this.eventsService.create(req.user.userId, data);
   }
 
   @ApiOperation({ summary: 'Update event (organizer only)' })
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, OwnershipGuard)
+  @CheckOwnership('event')
   @Put(':id')
-  async update(@Param('id') id: string, @Request() req, @Body() data: any) {
+  async update(@Param('id') id: string, @Request() req, @Body() data: UpdateEventDto) {
     return this.eventsService.update(id, req.user.userId, data);
   }
 
   @ApiOperation({ summary: 'Delete event (organizer only)' })
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, OwnershipGuard)
+  @CheckOwnership('event')
   @Delete(':id')
   async remove(@Param('id') id: string, @Request() req) {
     return this.eventsService.remove(id, req.user.userId);

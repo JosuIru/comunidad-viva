@@ -1,15 +1,19 @@
-import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, BadRequestException, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCommunityDto } from './dto/create-community.dto';
 import { UpdateCommunityDto } from './dto/update-community.dto';
 import { CommunityVisibility } from '@prisma/client';
 import { AchievementsService } from '../achievements/achievements.service';
+import { CommunityPacksService } from '../community-packs/community-packs.service';
 
 @Injectable()
 export class CommunitiesService {
+  private readonly logger = new Logger(CommunitiesService.name);
+
   constructor(
     private prisma: PrismaService,
     private achievementsService: AchievementsService,
+    private communityPacksService: CommunityPacksService,
   ) {}
 
   async create(userId: string, createCommunityDto: CreateCommunityDto) {
@@ -18,9 +22,12 @@ export class CommunitiesService {
     const bootstrapEndDate = new Date();
     bootstrapEndDate.setDate(bootstrapEndDate.getDate() + 30); // 30 días de bootstrap
 
+    // Extract onboarding pack data before creating community
+    const { onboardingPack, ...communityData } = createCommunityDto;
+
     const community = await this.prisma.community.create({
       data: {
-        ...createCommunityDto,
+        ...communityData,
         governance: {
           create: {
             founders: [userId],
@@ -28,15 +35,40 @@ export class CommunitiesService {
             // Valores por defecto están en el schema
           },
         },
+        members: {
+          create: {
+            userId,
+            role: 'ADMIN',
+          },
+        },
       },
       include: {
         governance: true,
+        members: true,
       },
     });
 
+    // Create onboarding pack if provided
+    if (onboardingPack) {
+      try {
+        await this.communityPacksService.createPack(
+          community.id,
+          {
+            packType: onboardingPack.type,
+            customConfig: onboardingPack.setupData || {},
+          },
+          userId,
+        );
+        this.logger.log(`Created onboarding pack ${onboardingPack.type} for community ${community.id}`);
+      } catch (error) {
+        this.logger.error(`Failed to create onboarding pack: ${error.message}`, error.stack);
+        // Don't fail community creation if pack creation fails
+      }
+    }
+
     // Check achievements for community founder
     this.achievementsService.checkAchievements(userId).catch(err => {
-      console.error('Error checking achievements after community creation:', err);
+      // Achievement check failed silently
     });
 
     return community;
@@ -46,6 +78,9 @@ export class CommunitiesService {
     type?: string;
     visibility?: CommunityVisibility;
     search?: string;
+    nearLat?: number;
+    nearLng?: number;
+    maxDistance?: number;
   }) {
     const where: any = {
       // Only show non-private communities in public listing
@@ -70,7 +105,7 @@ export class CommunitiesService {
       ];
     }
 
-    return this.prisma.community.findMany({
+    let communities = await this.prisma.community.findMany({
       where,
       include: {
         _count: {
@@ -85,6 +120,17 @@ export class CommunitiesService {
         membersCount: 'desc',
       },
     });
+
+    // Apply proximity filter using Haversine formula
+    if (filters?.nearLat && filters?.nearLng && filters?.maxDistance && filters.maxDistance > 0) {
+      communities = communities.filter((community) => {
+        if (!community.lat || !community.lng) return false;
+        const distance = this.calculateDistance(filters.nearLat, filters.nearLng, community.lat, community.lng);
+        return distance <= filters.maxDistance;
+      });
+    }
+
+    return communities;
   }
 
   async findOne(id: string, userId?: string) {
@@ -410,7 +456,7 @@ export class CommunitiesService {
 
           // Check achievements for joining community
           this.achievementsService.checkAchievements(userId).catch(err => {
-            console.error('Error checking achievements after joining community:', err);
+            // Achievement check failed silently
           });
 
           return { message: 'Successfully joined community' };
@@ -471,7 +517,7 @@ export class CommunitiesService {
 
     // Check achievements for joining community
     this.achievementsService.checkAchievements(userId).catch(err => {
-      console.error('Error checking achievements after joining community:', err);
+      this.logger.error('Error checking achievements after joining community', err.stack, { userId, communityId });
     });
 
     return { message: 'Successfully joined community' };
@@ -896,5 +942,66 @@ export class CommunitiesService {
       .slice(0, limit);
 
     return activities;
+  }
+
+  /**
+   * Calculate distance between two coordinates using Haversine formula
+   */
+  private calculateDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
+    const R = 6371; // Earth's radius in km
+    const dLat = this.toRadians(lat2 - lat1);
+    const dLng = this.toRadians(lng2 - lng1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.toRadians(lat1)) *
+        Math.cos(this.toRadians(lat2)) *
+        Math.sin(dLng / 2) *
+        Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  private toRadians(degrees: number): number {
+    return degrees * (Math.PI / 180);
+  }
+
+  /**
+   * Get offers from a community
+   */
+  async getCommunityOffers(communityId: string, status?: string, limit: number = 50) {
+    const community = await this.prisma.community.findUnique({
+      where: { id: communityId },
+    });
+
+    if (!community) {
+      throw new NotFoundException('Community not found');
+    }
+
+    const offers = await this.prisma.offer.findMany({
+      where: {
+        communityId,
+        ...(status && { status }),
+      },
+      take: limit,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+        community: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
+      },
+    });
+
+    return offers;
   }
 }
