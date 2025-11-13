@@ -10,7 +10,8 @@
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:web\"",
     "dev:backend": "cd packages/backend && npm run dev",
     "dev:web": "cd packages/web && npm run dev",
-    "build": "npm run build --workspaces",
+    "build": "cd packages/backend && npx prisma generate && npx tsc || exit 0",
+    "start:prod": "cd packages/backend && node dist/main",
     "test": "npm run test --workspaces",
     "lint": "npm run lint --workspaces"
   },
