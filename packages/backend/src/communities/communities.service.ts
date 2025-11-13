@@ -35,17 +35,16 @@ export class CommunitiesService {
             // Valores por defecto están en el schema
           },
         },
-        members: {
-          create: {
-            userId,
-            role: 'ADMIN',
-          },
-        },
       },
       include: {
         governance: true,
-        members: true,
       },
+    });
+
+    // Assign the creator as the first member with community relationship
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { communityId: community.id },
     });
 
     // Create onboarding pack if provided
@@ -284,9 +283,12 @@ export class CommunitiesService {
         },
       });
 
+      // Extract onboardingPack if present
+      const { onboardingPack, ...communityUpdateData } = updateCommunityDto;
+
       const updatedCommunity = await this.prisma.community.update({
         where: { id },
-        data: updateCommunityDto,
+        data: communityUpdateData,
       });
 
       // Registrar cambio en el log de auditoría
@@ -338,9 +340,12 @@ export class CommunitiesService {
           },
         });
 
+        // Extract onboardingPack if present
+        const { onboardingPack, ...communityUpdateData } = updateCommunityDto;
+
         const updatedCommunity = await this.prisma.community.update({
           where: { id },
-          data: updateCommunityDto,
+          data: communityUpdateData,
         });
 
         // Registrar cambio en el log de auditoría
@@ -980,7 +985,7 @@ export class CommunitiesService {
     const offers = await this.prisma.offer.findMany({
       where: {
         communityId,
-        ...(status && { status }),
+        ...(status && { status: status as any }),
       },
       take: limit,
       orderBy: { createdAt: 'desc' },

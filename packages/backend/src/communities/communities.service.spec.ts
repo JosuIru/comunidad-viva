@@ -144,6 +144,7 @@ describe('CommunitiesService', () => {
       };
 
       prismaService.community.create.mockResolvedValue(createdCommunity);
+      prismaService.user.update.mockResolvedValue(mockUser);
 
       const result = await service.create(userId, createCommunityDto);
 
@@ -161,8 +162,11 @@ describe('CommunitiesService', () => {
           governance: true,
         },
       });
+      expect(prismaService.user.update).toHaveBeenCalledWith({
+        where: { id: userId },
+        data: { communityId: createdCommunity.id },
+      });
       expect(result).toEqual(createdCommunity);
-      expect(result.governance).toBeDefined();
     });
 
     it('should set bootstrap period to 30 days', async () => {

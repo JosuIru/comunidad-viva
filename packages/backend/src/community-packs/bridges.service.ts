@@ -33,7 +33,6 @@ export class BridgesService {
           onboardingPack: { isNot: null },
         },
         include: {
-          members: { where: { active: true } },
           onboardingPack: true,
         },
       });

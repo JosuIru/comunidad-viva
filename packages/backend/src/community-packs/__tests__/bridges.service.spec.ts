@@ -233,7 +233,7 @@ describe('BridgesService', () => {
       mockPrismaService.offer.count.mockResolvedValue(0);
       mockPrismaService.event.count.mockResolvedValue(0);
 
-      const result = await service.detectBridges('comm-a', 'comm-b');
+      const result = await service.detectBridgesBetween('comm-a', 'comm-b');
 
       expect(result.detected).toBeGreaterThan(0);
       expect(mockPrismaService.communityBridge.create).toHaveBeenCalledWith(
@@ -274,7 +274,7 @@ describe('BridgesService', () => {
       mockPrismaService.offer.count.mockResolvedValue(0);
       mockPrismaService.event.count.mockResolvedValue(0);
 
-      const result = await service.detectBridges('comm-a', 'comm-b');
+      const result = await service.detectBridgesBetween('comm-a', 'comm-b');
 
       expect(result.detected).toBeGreaterThan(0);
       expect(mockPrismaService.communityBridge.create).toHaveBeenCalledWith(
@@ -315,7 +315,7 @@ describe('BridgesService', () => {
       mockPrismaService.offer.count.mockResolvedValue(0);
       mockPrismaService.event.count.mockResolvedValue(0);
 
-      const result = await service.detectBridges('comm-a', 'comm-b');
+      const result = await service.detectBridgesBetween('comm-a', 'comm-b');
 
       expect(result.detected).toBeGreaterThan(0);
       expect(mockPrismaService.communityBridge.create).toHaveBeenCalledWith(
@@ -346,9 +346,9 @@ describe('BridgesService', () => {
 
       expect(stats.totalBridges).toBe(25);
       expect(stats.averageStrength).toBe(0.65);
-      expect(stats.byType.GEOGRAPHIC).toBe(2);
-      expect(stats.byType.THEMATIC).toBe(1);
-      expect(stats.byType.SPONTANEOUS).toBe(1);
+      expect(stats.bridgesByType.GEOGRAPHIC).toBe(2);
+      expect(stats.bridgesByType.THEMATIC).toBe(1);
+      expect(stats.bridgesByType.SPONTANEOUS).toBe(1);
     });
   });
 });
