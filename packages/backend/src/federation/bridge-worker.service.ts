@@ -292,7 +292,7 @@ export class BridgeWorkerService implements OnModuleInit {
   async retryFailedBridge(bridgeId: string) {
     const bridge = await this.prisma.bridgeTransaction.findUnique({
       where: { id: bridgeId },
-      include: { user: true },
+      include: { User: true },
     });
 
     if (!bridge) {

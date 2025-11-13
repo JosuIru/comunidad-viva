@@ -1088,7 +1088,7 @@ export class ViralFeaturesService {
     // Get verified merchants
     const merchants = await this.prisma.merchant.findMany({
       where: { verified: true },
-      include: { user: true },
+      include: { User: true },
       take: 10,
     });
 
