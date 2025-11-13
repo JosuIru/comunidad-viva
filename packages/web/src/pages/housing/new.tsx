@@ -18,6 +18,7 @@ const SOLUTION_TYPES = [
 export default function NewHousingSolutionPage() {
   const router = useRouter();
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [solutionType, setSolutionType] = useState<string>('SPACE_BANK');
 
   // Initialize form validation
   const {
@@ -41,6 +42,12 @@ export default function NewHousingSolutionPage() {
       images: [],
     },
   });
+
+  // Sync solutionType with formData
+  const handleSolutionTypeChange = (type: string) => {
+    setSolutionType(type);
+    handleChange('solutionType', type);
+  };
 
   const createMutation = useMutation({
     mutationFn: async (data: any) => {
@@ -114,7 +121,7 @@ export default function NewHousingSolutionPage() {
                       <button
                         key={type.value}
                         type="button"
-                        onClick={() => setSolutionType(type.value)}
+                        onClick={() => handleSolutionTypeChange(type.value)}
                         className={`p-4 border-2 rounded-lg text-left transition ${
                           solutionType === type.value
                             ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'

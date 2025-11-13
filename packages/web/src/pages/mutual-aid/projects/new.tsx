@@ -46,6 +46,7 @@ const SDG_GOALS = [
 export default function NewProjectPage() {
   const router = useRouter();
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [selectedSDGs, setSelectedSDGs] = useState<number[]>([]);
 
   // Initialize form validation
   const {
@@ -71,6 +72,19 @@ export default function NewProjectPage() {
       images: [],
     },
   });
+
+  // Toggle SDG selection
+  const toggleSDG = (sdgValue: number) => {
+    setSelectedSDGs((prev) => {
+      const newSDGs = prev.includes(sdgValue)
+        ? prev.filter((v) => v !== sdgValue)
+        : [...prev, sdgValue];
+
+      // Sync with formData
+      handleChange('sdgGoals', newSDGs);
+      return newSDGs;
+    });
+  };
 
   const createMutation = useMutation({
     mutationFn: async (data: any) => {

@@ -36,6 +36,12 @@ export default function NewEvent() {
     },
   });
 
+  // Wrapper for handleChange to work with input events
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    handleChange(name as keyof CreateEventFormData, value);
+  };
+
   const geocodeAddress = async () => {
     if (!formData.address) {
       toast.error(t('form.address.placeholder'));
@@ -427,10 +433,10 @@ export default function NewEvent() {
           <div className="flex gap-4">
             <button
               type="submit"
-              disabled={loading}
+              disabled={isSubmitting}
               className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? t('form.submitting') : t('form.submit')}
+              {isSubmitting ? t('form.submitting') : t('form.submit')}
             </button>
             <button
               type="button"
