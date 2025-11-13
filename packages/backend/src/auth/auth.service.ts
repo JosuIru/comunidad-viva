@@ -159,7 +159,7 @@ export class AuthService {
         },
       },
       include: {
-        user: true,
+        User: true,
       },
     });
 
@@ -167,7 +167,7 @@ export class AuthService {
     for (const storedToken of tokens) {
       const isMatch = await bcrypt.compare(token, storedToken.token);
       if (isMatch) {
-        const { password: _, ...userWithoutPassword } = storedToken.user;
+        const { password: _, ...userWithoutPassword } = storedToken.User;
         return { refreshTokenId: storedToken.id, user: userWithoutPassword };
       }
     }

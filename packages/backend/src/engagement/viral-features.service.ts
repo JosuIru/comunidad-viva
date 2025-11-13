@@ -225,7 +225,7 @@ export class ViralFeaturesService {
         userId: { not: userId }, // Excluir ofertas propias
       },
       include: {
-        user: true,
+        User: true,
       },
       take: limit,
       orderBy: { createdAt: 'desc' },
@@ -277,8 +277,8 @@ export class ViralFeaturesService {
         const responseRate = completedTransactionsCount > 0 ? 95 : 100;
 
         // Calcular reputación basada en generosityScore
-        const reputation = offer.user.generosityScore
-          ? Math.min(5, Math.max(1, offer.user.generosityScore / 20))
+        const reputation = offer.User.generosityScore
+          ? Math.min(5, Math.max(1, offer.User.generosityScore / 20))
           : 4.5;
 
         // Generar intereses ficticios basados en la categoría de la oferta
@@ -293,18 +293,18 @@ export class ViralFeaturesService {
         return {
           id: offer.id,
           userId: offer.userId,
-          userName: offer.user.name,
-          avatar: offer.user.avatar || undefined,
-          bio: offer.user.bio || `Miembro activo de la comunidad ofreciendo ${offer.title}`,
+          userName: offer.User.name,
+          avatar: offer.User.avatar || undefined,
+          bio: offer.User.bio || `Miembro activo de la comunidad ofreciendo ${offer.title}`,
           interests: interests.filter(Boolean),
           helpOffered: [offer.title],
           helpNeeded: [], // Puede extenderse consultando otras ofertas del tipo "REQUEST"
           mutualConnections: 0, // TODO: Implementar lógica de conexiones mutuas
-          level: offer.user.level || 1,
-          credits: offer.user.credits || 0,
+          level: offer.User.level || 1,
+          credits: offer.User.credits || 0,
           reputation: reputation,
           location: 'No especificada', // El modelo User no tiene campo location
-          joinedDate: offer.user.createdAt.toISOString(),
+          joinedDate: offer.User.createdAt.toISOString(),
           activeOffersCount,
           completedTransactionsCount,
           badges: userBadges.map(ub => badgeEmojiMap[ub.badgeType] || '🏅').filter(Boolean),
