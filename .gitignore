@@ -86,3 +86,4 @@ packages/backend/prisma/*.db-journal
 
 # Release packages (generated for deployment)
 release/
+.env.railway
