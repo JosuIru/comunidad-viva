@@ -19,33 +19,42 @@ Truk es una aplicación web moderna que facilita el intercambio de bienes y serv
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Instalación
 
-### Opción 1: Railway (Recomendado - 5 minutos)
+### Opción 1: Docker - 1 Comando (Recomendado) ⭐
+
+**Para instalar en tu servidor:**
+
+```bash
+git clone https://github.com/tu-usuario/truk.git
+cd truk
+./install.sh
+```
+
+¡Eso es todo! El script instala Docker, configura todo y arranca los servicios automáticamente.
+
+**📚 Documentación completa:** [INSTALL.md](./INSTALL.md)
+
+---
+
+### Opción 2: Railway (Cloud - 5 minutos)
 
 ```bash
 # Instalar Railway CLI
 npm install -g @railway/cli
 
-# Login
+# Login y deploy
 railway login
-
-# Inicializar proyecto
 cd truk
 railway init
-
-# Deploy backend
-cd packages/backend
-railway up
-
-# Deploy frontend  
-cd ../web
 railway up
 ```
 
 **Ver guías detalladas**: [`docs/deployment/`](docs/deployment/)
 
-### Opción 2: Desarrollo Local
+---
+
+### Opción 3: Desarrollo Local
 
 ```bash
 # Clonar
