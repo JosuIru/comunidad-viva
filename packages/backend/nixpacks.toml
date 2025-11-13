@@ -7,7 +7,7 @@ cmds = ["npm install"]
 [phases.build]
 cmds = [
   "npx prisma generate",
-  "npx tsc || true"
+  "bash ../../build.sh"
 ]
 
 [start]
