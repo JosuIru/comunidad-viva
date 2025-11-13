@@ -1,6 +1,5 @@
 [build]
 builder = "NIXPACKS"
-nixpacksConfigPath = "packages/backend/nixpacks.toml"
 
 [deploy]
 startCommand = "cd packages/backend && bash start.sh"

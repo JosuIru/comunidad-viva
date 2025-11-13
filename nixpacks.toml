@@ -8,6 +8,7 @@ cmds = [
 
 [phases.build]
 cmds = [
+  "cd packages/backend && npx prisma generate && cd ../..",
   "./build.sh"
 ]
 
