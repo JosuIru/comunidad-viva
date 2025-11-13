@@ -112,7 +112,7 @@ export default function EditEvent() {
         toast.error(t('errors.getCoordinates'));
       }
     } catch (error) {
-      logger.error('Error geocoding address', { error);
+      logger.error('Error geocoding address', { error });
       toast.error(t('errors.getCoordinates'));
     }
   };
@@ -160,7 +160,7 @@ export default function EditEvent() {
         });
         uploadedUrls.push(response.data.url);
       } catch (error) {
-        logger.error('Error uploading image', { error, error);
+        logger.error('Error uploading image', { error });
         toast.error(t('errors.uploadImage', { name: image.name }));
       }
     }
@@ -216,7 +216,7 @@ export default function EditEvent() {
       toast.success('Evento actualizado exitosamente');
       router.push(`/events/${id}`);
     } catch (error: unknown) {
-      logger.error('Error updating event', { error: error);
+      logger.error('Error updating event', { error });
       const errorMessage = error instanceof Error && 'response' in error
         ? (error as { response?: { data?: { message?: string } } }).response?.data?.message
         : 'Error al actualizar el evento';

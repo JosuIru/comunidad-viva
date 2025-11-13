@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useQuery, useMutation, useQueryClient } from '@tantml:invoke>
-<parameter name="toast">import toast from 'react-hot-toast';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';

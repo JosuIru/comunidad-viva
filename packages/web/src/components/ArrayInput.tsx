@@ -87,7 +87,7 @@ export default function ArrayInput({
       </div>
 
       <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-        Escribe un elemento y presiona Enter o haz clic en "Añadir"
+        Escribe un elemento y presiona Enter o haz clic en &quot;Añadir&quot;
       </p>
     </div>
   );
