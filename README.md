@@ -37,20 +37,19 @@ cd truk
 
 ---
 
-### Opción 2: Railway (Cloud - 5 minutos)
+### Opción 2: Railway (Cloud - 5 minutos) ☁️
+
+**Perfecto para empezar sin servidor propio. $5 gratis/mes.**
 
 ```bash
-# Instalar Railway CLI
-npm install -g @railway/cli
-
-# Login y deploy
-railway login
+git clone https://github.com/tu-usuario/truk.git
 cd truk
-railway init
-railway up
+./railway-setup.sh
 ```
 
-**Ver guías detalladas**: [`docs/deployment/`](docs/deployment/)
+El script genera secretos seguros y te guía paso a paso.
+
+**📚 Guía completa:** [RAILWAY_DEPLOY.md](./RAILWAY_DEPLOY.md)
 
 ---
 
