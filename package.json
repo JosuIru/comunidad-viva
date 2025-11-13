@@ -10,7 +10,7 @@
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:web\"",
     "dev:backend": "cd packages/backend && npm run dev",
     "dev:web": "cd packages/web && npm run dev",
-    "build": "./build.sh",
+    "build": "bash build.sh",
     "start:prod": "cd packages/backend && node dist/main",
     "test": "npm run test --workspaces",
     "lint": "npm run lint --workspaces"
