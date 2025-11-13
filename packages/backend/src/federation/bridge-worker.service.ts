@@ -65,7 +65,7 @@ export class BridgeWorkerService implements OnModuleInit {
         orderBy: { createdAt: 'asc' },
         take: 10, // Process 10 at a time
         include: {
-          user: true,
+          User: true,
         },
       });
 
