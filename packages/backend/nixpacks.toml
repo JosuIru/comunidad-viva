@@ -7,7 +7,7 @@ cmds = ["npm install"]
 [phases.build]
 cmds = [
   "npx prisma generate",
-  "npx tsc || echo 'TS errors ignored'"
+  "npx tsc || true"
 ]
 
 [start]
