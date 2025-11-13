@@ -6,8 +6,11 @@ cmds = ["npm install"]
 
 [phases.build]
 cmds = [
+  "echo 'Generating Prisma client...'",
   "npx prisma generate",
-  "npx tsc || echo 'TypeScript errors expected - files generated'"
+  "echo 'Building TypeScript...'",
+  "npx tsc || echo 'TypeScript errors ignored - files generated'",
+  "echo 'Build complete - NOT running migrations (will run on start)'"
 ]
 
 [start]
