@@ -12,4 +12,4 @@ cmds = [
 ]
 
 [start]
-cmd = "cd packages/backend && echo '=== STARTING ===' && npx prisma generate && echo '=== PRISMA CLIENT GENERATED ===' && npx prisma migrate deploy && echo '=== MIGRATIONS DEPLOYED ===' && npm run start:prod"
+cmd = "cd packages/backend && bash start.sh"
