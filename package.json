@@ -11,7 +11,7 @@
     "dev:backend": "cd packages/backend && npm run dev",
     "dev:web": "cd packages/web && npm run dev",
     "build": "./build.sh",
-    "start:prod": "cd packages/backend && node dist/main",
+    "start:prod": "cd packages/backend && npx ts-node -r tsconfig-paths/register src/main.ts",
     "test": "npm run test --workspaces",
     "lint": "npm run lint --workspaces"
   },
