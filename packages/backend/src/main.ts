@@ -37,8 +37,9 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter());
 
   // CORS - Enable first before other middleware
-  const allowedOrigins = process.env.FRONTEND_URL
-    ? process.env.FRONTEND_URL.split(',')
+  const frontendUrl = process.env.FRONTEND_URL || process.env.CORS_ORIGIN;
+  const allowedOrigins = frontendUrl
+    ? frontendUrl.split(',')
     : ['http://localhost:3000', 'http://localhost:3001'];
 
   const corsOptions = {
