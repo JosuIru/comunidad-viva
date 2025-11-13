@@ -6,12 +6,9 @@ cmds = ["npm install"]
 
 [phases.build]
 cmds = [
-  "echo 'Generating Prisma client...'",
   "npx prisma generate",
-  "echo 'Building TypeScript...'",
-  "npx tsc || echo 'TypeScript errors ignored - files generated'",
-  "echo 'Build complete - NOT running migrations (will run on start)'"
+  "npx tsc || echo 'TS errors ignored'"
 ]
 
 [start]
-cmd = "echo '=== STARTING ===' && npx prisma migrate deploy && echo '=== MIGRATIONS DEPLOYED ===' && npm run start:prod"
+cmd = "npx prisma migrate deploy && npm run start:prod"

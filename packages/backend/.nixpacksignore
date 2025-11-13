@@ -1,0 +1,2 @@
+# Tell Nixpacks to ignore Prisma detection
+prisma/schema.prisma
