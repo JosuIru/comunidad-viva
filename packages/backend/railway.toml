@@ -8,4 +8,4 @@ healthcheckPath = "/health"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
-# Railway deployment vie 14 nov 2025 10:39:27 CET
+# Railway deployment vie 14 nov 2025 11:15:00 CET
