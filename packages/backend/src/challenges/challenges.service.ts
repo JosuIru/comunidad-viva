@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { PrismaService } from '../prisma/prisma.service';
 import { SeedType, CreditReason } from '@prisma/client';
 import { ViralFeaturesService } from '../engagement/viral-features.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class ChallengesService {
@@ -17,7 +18,7 @@ export class ChallengesService {
     let challenge = await this.prisma.dailySeed.findUnique({
       where: { date: today },
       include: {
-        completions: {
+        UserDailySeedCompletion: {
           select: {
             userId: true,
           },
@@ -32,7 +33,7 @@ export class ChallengesService {
       challenge = await this.prisma.dailySeed.findUnique({
         where: { date: today },
         include: {
-          completions: {
+          UserDailySeedCompletion: {
             select: {
               userId: true,
             },
@@ -51,7 +52,7 @@ export class ChallengesService {
     let challenge = await this.prisma.dailySeed.findUnique({
       where: { date: today },
       include: {
-        completions: {
+        UserDailySeedCompletion: {
           where: {
             userId,
           },
@@ -65,7 +66,7 @@ export class ChallengesService {
       challenge = await this.prisma.dailySeed.findUnique({
         where: { date: today },
         include: {
-          completions: {
+          UserDailySeedCompletion: {
             where: {
               userId,
             },
@@ -76,7 +77,7 @@ export class ChallengesService {
 
     return {
       ...challenge,
-      completed: challenge.completions.length > 0,
+      completed: challenge.UserDailySeedCompletion.length > 0,
     };
   }
 
@@ -116,6 +117,7 @@ export class ChallengesService {
     const [completion] = await this.prisma.$transaction([
       this.prisma.userDailySeedCompletion.create({
         data: {
+          id: uuidv4(),
           userId,
           dailySeedId: challenge.id,
           creditsAwarded: challenge.creditsReward,
@@ -142,6 +144,7 @@ export class ChallengesService {
       }),
       this.prisma.creditTransaction.create({
         data: {
+          id: uuidv4(),
           userId,
           amount: challenge.creditsReward,
           balance: user.credits + challenge.creditsReward,
@@ -169,6 +172,7 @@ export class ChallengesService {
 
     return this.prisma.dailySeed.create({
       data: {
+        id: uuidv4(),
         date,
         type: randomChallenge.type,
         challenge: randomChallenge.challenge,

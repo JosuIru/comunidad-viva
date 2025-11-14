@@ -6,6 +6,7 @@ import { AnnounceAbundanceDto } from './dto/announce-abundance.dto';
 import { ExpressNeedDto } from './dto/express-need.dto';
 import { CreateBridgeEventDto } from './dto/create-bridge-event.dto';
 import { UpdateCommunityLayerConfigDto } from './dto/update-community-layer-config.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class HybridLayerService {
@@ -42,6 +43,7 @@ export class HybridLayerService {
     // Registrar migración
     await this.prisma.layerMigration.create({
       data: {
+        id: uuidv4(),
         userId,
         fromLayer,
         toLayer,
@@ -282,6 +284,7 @@ export class HybridLayerService {
 
     const announcement = await this.prisma.abundanceAnnouncement.create({
       data: {
+        id: uuidv4(),
         communityId: user.communityId,
         providerId: isAnonymous ? null : userId,
         what: dto.what,
@@ -317,6 +320,7 @@ export class HybridLayerService {
 
     const need = await this.prisma.needExpression.create({
       data: {
+        id: uuidv4(),
         communityId: user.communityId,
         requesterId: isAnonymous ? null : userId,
         what: dto.what,
@@ -348,6 +352,7 @@ export class HybridLayerService {
   }) {
     return this.prisma.anonymousCelebration.create({
       data: {
+        id: uuidv4(),
         event: data.event,
         description: data.description,
         emoji: data.emoji || '🎉',
@@ -464,7 +469,9 @@ export class HybridLayerService {
     await this.prisma.communityLayerConfig.upsert({
       where: { communityId },
       create: {
+        id: uuidv4(),
         communityId,
+        updatedAt: new Date(),
         ...counts,
       },
       update: counts,
@@ -702,6 +709,7 @@ export class HybridLayerService {
   async createBridgeEvent(dto: CreateBridgeEventDto) {
     return this.prisma.bridgeEvent.create({
       data: {
+        id: uuidv4(),
         type: dto.type,
         title: dto.title,
         description: dto.description,
@@ -727,12 +735,14 @@ export class HybridLayerService {
       // Crear configuración por defecto
       config = await this.prisma.communityLayerConfig.create({
         data: {
+          id: uuidv4(),
           communityId,
           defaultLayer: 'TRADITIONAL',
           allowMixedMode: true,
           autoGiftDays: true,
           autoDebtAmnesty: true,
           giftThreshold: 60,
+          updatedAt: new Date(),
         },
       });
     }

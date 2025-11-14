@@ -1,6 +1,7 @@
 import { Injectable, Logger, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { BridgeChain } from './bridge.service';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Bridge Security Service
@@ -347,8 +348,9 @@ export class BridgeSecurityService {
     details: any,
   ): Promise<void> {
     try {
-      await this.prisma.securityEvent.create({
+      await this.prisma.security_events.create({
         data: {
+          id: uuidv4(),
           type: eventType,
           severity: this.getSeverity(eventType),
           details,
@@ -443,6 +445,7 @@ export class BridgeSecurityService {
   ): Promise<void> {
     await this.prisma.blacklist.create({
       data: {
+        id: uuidv4(),
         type,
         value: type === 'ADDRESS' ? value.toLowerCase() : value,
         reason,
@@ -501,7 +504,7 @@ export class BridgeSecurityService {
    * Get recent security events
    */
   async getSecurityEvents(limit: number = 100) {
-    const events = await this.prisma.securityEvent.findMany({
+    const events = await this.prisma.security_events.findMany({
       take: limit,
       orderBy: { timestamp: 'desc' },
     });
@@ -526,14 +529,14 @@ export class BridgeSecurityService {
       eventsBySeverity,
       eventsByType,
     ] = await Promise.all([
-      this.prisma.securityEvent.count(),
-      this.prisma.securityEvent.count({
+      this.prisma.security_events.count(),
+      this.prisma.security_events.count({
         where: { timestamp: { gte: oneDayAgo } },
       }),
-      this.prisma.securityEvent.count({
+      this.prisma.security_events.count({
         where: { timestamp: { gte: oneHourAgo } },
       }),
-      this.prisma.securityEvent.count({
+      this.prisma.security_events.count({
         where: { severity: 'CRITICAL' },
       }),
       this.prisma.blacklist.count({
@@ -542,12 +545,12 @@ export class BridgeSecurityService {
       this.prisma.blacklist.count({
         where: { type: 'ADDRESS', active: true },
       }),
-      this.prisma.securityEvent.groupBy({
+      this.prisma.security_events.groupBy({
         by: ['severity'],
         _count: true,
         where: { timestamp: { gte: oneDayAgo } },
       }),
-      this.prisma.securityEvent.groupBy({
+      this.prisma.security_events.groupBy({
         by: ['type'],
         _count: true,
         where: { timestamp: { gte: oneDayAgo } },

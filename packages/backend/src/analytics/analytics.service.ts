@@ -27,7 +27,7 @@ export class AnalyticsService {
       },
       include: {
         PriceBreak: true,
-        Participant: true,
+        GroupBuyParticipant: true,
       },
     });
 
@@ -35,22 +35,22 @@ export class AnalyticsService {
     let totalParticipants = 0;
 
     for (const groupBuy of groupBuys) {
-      const totalQuantity = groupBuy.participants.reduce(
+      const totalQuantity = groupBuy.GroupBuyParticipant.reduce(
         (sum, p) => sum + p.quantity,
         0,
       );
 
       // Calculate savings based on price breaks
-      const lowestTier = groupBuy.priceBreaks.reduce((min, tier) =>
+      const lowestTier = groupBuy.PriceBreak.reduce((min, tier) =>
         tier.pricePerUnit < min.pricePerUnit ? tier : min
       );
-      const highestTier = groupBuy.priceBreaks.reduce((max, tier) =>
+      const highestTier = groupBuy.PriceBreak.reduce((max, tier) =>
         tier.pricePerUnit > max.pricePerUnit ? tier : max
       );
 
       const savingsPerUnit = highestTier.pricePerUnit - lowestTier.pricePerUnit;
       totalSavings += savingsPerUnit * totalQuantity;
-      totalParticipants += groupBuy.participants.length;
+      totalParticipants += groupBuy.GroupBuyParticipant.length;
     }
 
     // Get total hours exchanged in time bank
@@ -166,7 +166,7 @@ export class AnalyticsService {
         ...(Object.keys(dateFilter).length > 0 && { joinedAt: dateFilter }),
       },
       include: {
-        groupBuy: {
+        GroupBuy: {
           include: {
             PriceBreak: true,
           },
@@ -176,7 +176,7 @@ export class AnalyticsService {
 
     let userSavings = 0;
     for (const participation of groupBuyParticipations) {
-      const priceBreaks = participation.groupBuy.priceBreaks;
+      const priceBreaks = participation.GroupBuy.PriceBreak;
       const lowestPrice = Math.min(...priceBreaks.map(pb => pb.pricePerUnit));
       const highestPrice = Math.max(...priceBreaks.map(pb => pb.pricePerUnit));
       const savingsPerUnit = highestPrice - lowestPrice;

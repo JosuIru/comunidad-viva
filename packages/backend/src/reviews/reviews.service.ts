@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { ReviewType } from '@prisma/client';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class ReviewsService {
@@ -35,15 +36,17 @@ export class ReviewsService {
 
     return this.prisma.review.create({
       data: {
+        id: uuidv4(),
         reviewerId,
         reviewType: reviewTypeEnum,
         reviewedEntityId,
         rating,
         comment,
         transactionId,
+        updatedAt: new Date(),
       },
       include: {
-        reviewer: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -68,7 +71,7 @@ export class ReviewsService {
     return this.prisma.review.findMany({
       where,
       include: {
-        reviewer: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -86,7 +89,7 @@ export class ReviewsService {
     const review = await this.prisma.review.findUnique({
       where: { id },
       include: {
-        reviewer: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -124,7 +127,7 @@ export class ReviewsService {
       where: { id },
       data: updateData,
       include: {
-        reviewer: {
+        User: {
           select: {
             id: true,
             name: true,
