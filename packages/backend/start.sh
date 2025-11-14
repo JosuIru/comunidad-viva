@@ -15,5 +15,5 @@ npx prisma migrate deploy
 
 echo ""
 echo "Step 3: Starting Server..."
-echo "Using 'nest start' to compile and run TypeScript on-the-fly"
-npm run start
+echo "Running pre-compiled JavaScript from dist/"
+node dist/main.js
