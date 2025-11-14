@@ -10,7 +10,10 @@ echo "Step 1: Generating Prisma Client..."
 npx prisma generate
 
 echo ""
-echo "Step 2: Running Database Migrations..."
+echo "Step 2: Synchronizing Database Schema..."
+# Use db push to sync all missing tables (faster than migrations for catching up)
+npx prisma db push --accept-data-loss --skip-generate
+echo "Step 2b: Running pending migrations..."
 npx prisma migrate deploy
 
 echo ""
