@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { SemillaService } from './semilla.service';
 import { DIDService } from './did.service';
 import { BridgeSecurityService } from './bridge-security.service';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Bridge Service
@@ -154,6 +155,7 @@ export class BridgeService {
         // Create internal transaction record
         const semillaTx = await tx.semillaTransaction.create({
           data: {
+            id: uuidv4(),
             fromDID: userDID,
             fromId: userId,
             toDID: `did:gailu:${this.didService.getNodeId()}:system:bridge`,
@@ -174,7 +176,7 @@ export class BridgeService {
         // Create bridge transaction record
         const bridge = await tx.bridgeTransaction.create({
           data: {
-            userId,
+            id: uuidv4(),
             userDID,
             amount,
             fee: chainConfig.fee,
@@ -183,6 +185,9 @@ export class BridgeService {
             externalAddress,
             status: 'LOCKED',
             internalTxId: semillaTx.id,
+            User: {
+              connect: { id: userId },
+            },
           },
         });
 
@@ -264,6 +269,7 @@ export class BridgeService {
         // Create internal transaction record
         const semillaTx = await tx.semillaTransaction.create({
           data: {
+            id: uuidv4(),
             fromDID: `did:gailu:${this.didService.getNodeId()}:system:bridge`,
             fromId: null,
             toDID: userDID,
@@ -284,7 +290,7 @@ export class BridgeService {
         // Create bridge transaction record
         const bridge = await tx.bridgeTransaction.create({
           data: {
-            userId,
+            id: uuidv4(),
             userDID,
             amount,
             fee: chainConfig.fee,
@@ -295,6 +301,9 @@ export class BridgeService {
             status: 'UNLOCKED',
             internalTxId: semillaTx.id,
             completedAt: new Date(),
+            User: {
+              connect: { id: userId },
+            },
           },
         });
 

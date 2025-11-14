@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { SendMessageDto } from './dto/send-message.dto';
 import { EventsGateway } from '../notifications/events/events.gateway';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class MessagesService {
@@ -84,14 +85,14 @@ export class MessagesService {
       },
       orderBy: { createdAt: 'asc' },
       include: {
-        sender: {
+        User_Message_senderIdToUser: {
           select: {
             id: true,
             name: true,
             avatar: true,
           },
         },
-        receiver: {
+        User_Message_receiverIdToUser: {
           select: {
             id: true,
             name: true,
@@ -128,20 +129,21 @@ export class MessagesService {
 
     const message = await this.prisma.message.create({
       data: {
+        id: uuidv4(),
         senderId,
         receiverId,
         content: sendMessageDto.content,
         metadata: sendMessageDto.attachments ? { attachments: sendMessageDto.attachments } : null,
       },
       include: {
-        sender: {
+        User_Message_senderIdToUser: {
           select: {
             id: true,
             name: true,
             avatar: true,
           },
         },
-        receiver: {
+        User_Message_receiverIdToUser: {
           select: {
             id: true,
             name: true,

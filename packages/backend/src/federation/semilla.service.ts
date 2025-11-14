@@ -2,6 +2,7 @@ import { Injectable, Logger, BadRequestException, NotFoundException } from '@nes
 import { PrismaService } from '../prisma/prisma.service';
 import { DIDService } from './did.service';
 import { SemillaTransactionType, SemillaTransactionStatus } from '@prisma/client';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * SEMILLA Token Service
@@ -104,6 +105,7 @@ export class SemillaService {
         // Create transaction record
         const txRecord = await tx.semillaTransaction.create({
           data: {
+            id: uuidv4(),
             fromDID,
             fromId,
             toDID,
@@ -117,10 +119,10 @@ export class SemillaService {
             completedAt: new Date(),
           },
           include: {
-            from: {
+            User_SemillaTransaction_fromIdToUser: {
               select: { id: true, name: true, avatar: true },
             },
-            to: {
+            User_SemillaTransaction_toIdToUser: {
               select: { id: true, name: true, avatar: true },
             },
           },
@@ -181,6 +183,7 @@ export class SemillaService {
         // Create reward transaction
         const transaction = await tx.semillaTransaction.create({
           data: {
+            id: uuidv4(),
             fromDID: systemDID,
             fromId: null,
             toDID: userDID,
@@ -250,10 +253,10 @@ export class SemillaService {
       orderBy: { createdAt: 'desc' },
       take: limit,
       include: {
-        from: {
+        User_SemillaTransaction_fromIdToUser: {
           select: { id: true, name: true, avatar: true },
         },
-        to: {
+        User_SemillaTransaction_toIdToUser: {
           select: { id: true, name: true, avatar: true },
         },
       },
@@ -284,6 +287,7 @@ export class SemillaService {
 
       const transaction = await tx.semillaTransaction.create({
         data: {
+          id: uuidv4(),
           fromDID: systemDID,
           toDID: userDID,
           toId: parsed.userId,
