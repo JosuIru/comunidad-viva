@@ -192,11 +192,11 @@ describe('UsersService', () => {
         id: 'user-123',
         email: 'user@test.com',
         name: 'Test User',
-        skills: [
+        Skill: [
           { id: 'skill-1', name: 'JavaScript' },
           { id: 'skill-2', name: 'TypeScript' },
         ],
-        badges: [
+        UserBadge: [
           { id: 'badge-1', name: 'Helper' },
         ],
       };
@@ -209,12 +209,12 @@ describe('UsersService', () => {
         where: { id: 'user-123' },
         include: {
           Skill: true,
-          Badge: true,
+          UserBadge: true,
         },
       });
       expect(result).toEqual(mockUser);
-      expect(result.skills).toHaveLength(2);
-      expect(result.badges).toHaveLength(1);
+      expect(result.Skill).toHaveLength(2);
+      expect(result.UserBadge).toHaveLength(1);
     });
   });
 

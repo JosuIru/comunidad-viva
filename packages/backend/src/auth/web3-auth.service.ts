@@ -4,6 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { ethers } from 'ethers';
 import * as nacl from 'tweetnacl';
 import bs58 from 'bs58';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class Web3AuthService {
@@ -98,6 +99,7 @@ export class Web3AuthService {
 
       user = await this.prisma.user.create({
         data: {
+          id: randomUUID(),
           name: username,
           email: email,
           password: '', // Empty password for wallet-only auth
@@ -105,6 +107,7 @@ export class Web3AuthService {
           walletType: walletType,
           role: 'CITIZEN',
           isEmailVerified: false, // Wallet auth doesn't verify email
+          updatedAt: new Date(),
         },
       });
 

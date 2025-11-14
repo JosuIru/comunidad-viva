@@ -89,7 +89,7 @@ export class HealthController {
         this.prisma.proposal.findMany({
           include: {
             _count: {
-              select: { votes: true }
+              select: { ProposalVote: true }
             }
           }
         }),
@@ -167,7 +167,7 @@ export class HealthController {
           title: p.title,
           type: p.type,
           status: p.status,
-          votesCount: p._count.votes,
+          votesCount: p._count.ProposalVote,
         })),
         tips: [
           'Inicia sesión con cualquier email de prueba',

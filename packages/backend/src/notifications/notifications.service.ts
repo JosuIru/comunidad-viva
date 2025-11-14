@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationType } from '@prisma/client';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class NotificationsService {
@@ -15,6 +16,7 @@ export class NotificationsService {
   }) {
     return this.prisma.notification.create({
       data: {
+        id: randomUUID(),
         userId,
         ...data,
       },

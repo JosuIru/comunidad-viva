@@ -217,8 +217,8 @@ export class Web3RPCService {
         take: 100,
         orderBy: { createdAt: 'desc' },
         include: {
-          from: true,
-          to: true,
+          User_SemillaTransaction_fromIdToUser: true,
+          User_SemillaTransaction_toIdToUser: true,
         },
       });
 
@@ -236,8 +236,8 @@ export class Web3RPCService {
         blockHash: '0x' + transaction.id.replace(/-/g, '').slice(0, 64),
         blockNumber: '0x1',
         transactionIndex: '0x0',
-        from: transaction.from?.walletAddress || '0x0',
-        to: transaction.to?.walletAddress || '0x0',
+        from: transaction.User_SemillaTransaction_fromIdToUser?.walletAddress || '0x0',
+        to: transaction.User_SemillaTransaction_toIdToUser?.walletAddress || '0x0',
         value: '0x' + Math.floor(transaction.amount * 100).toString(16),
         gas: '0x5208', // 21000 in hex
         gasPrice: '0x0', // No gas in SEMILLA network

@@ -162,7 +162,7 @@ export class HealthService {
       ] = await Promise.all([
         this.prisma.user.count(),
         this.prisma.community.count(),
-        this.prisma.Offer.count(),
+        this.prisma.offer.count(),
         this.prisma.event.count(),
         this.prisma.creditTransaction.count(),
       ]);

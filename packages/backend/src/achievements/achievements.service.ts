@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { BadgeType } from '@prisma/client';
 import { AppWebSocketGateway } from '../websocket/websocket.gateway';
+import { randomUUID } from 'crypto';
 
 /**
  * Achievements Service
@@ -1042,6 +1043,7 @@ export class AchievementsService {
     // Crear badge
     await this.prisma.userBadge.create({
       data: {
+        id: randomUUID(),
         userId,
         badgeType,
         isNew: true,
@@ -1079,6 +1081,7 @@ export class AchievementsService {
 
         await this.prisma.creditTransaction.create({
           data: {
+            id: randomUUID(),
             userId,
             amount: credits,
             balance: (user?.credits || 0) + credits,

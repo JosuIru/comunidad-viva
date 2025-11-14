@@ -108,8 +108,10 @@ export class AuthService {
 
     const user = await this.prisma.user.create({
       data: {
+        id: randomUUID(),
         ...data,
         password: hashedPassword,
+        updatedAt: new Date(),
       },
     });
 
@@ -135,6 +137,7 @@ export class AuthService {
 
     await this.prisma.refreshToken.create({
       data: {
+        id: randomUUID(),
         token: hashedToken,
         userId,
         expiresAt,

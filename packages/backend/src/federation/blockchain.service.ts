@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { ethers } from 'ethers';
 import { PrismaService } from '../prisma/prisma.service';
 import SemillaTokenABI from './abis/SemillaToken.abi.json';
+import { randomUUID } from 'crypto';
 
 export enum BlockchainNetwork {
   AMOY = 'amoy',
@@ -273,8 +274,9 @@ export class BlockchainService implements OnModuleInit {
 
     try {
       // Log security event
-      await this.prisma.securityEvent.create({
+      await this.prisma.security_events.create({
         data: {
+          id: randomUUID(),
           type: 'CONTRACT_PAUSED',
           severity: 'CRITICAL',
           details: {
@@ -308,8 +310,9 @@ export class BlockchainService implements OnModuleInit {
     );
 
     try {
-      await this.prisma.securityEvent.create({
+      await this.prisma.security_events.create({
         data: {
+          id: randomUUID(),
           type: 'CONTRACT_UNPAUSED',
           severity: 'HIGH',
           details: {

@@ -415,22 +415,24 @@ describe('OffersService', () => {
           userId,
           title: 'Offer 1',
           status: OfferStatus.ACTIVE,
-          user: { id: userId, name: 'User' },
-          interestedUsers: [
+          User: { id: userId, name: 'User', avatar: null },
+          OfferInterest: [
             {
               id: 'interest-1',
-              user: {
+              User: {
                 id: 'interested-user-1',
                 name: 'Interested User 1',
                 email: 'user1@test.com',
+                avatar: null,
               },
             },
             {
               id: 'interest-2',
-              user: {
+              User: {
                 id: 'interested-user-2',
                 name: 'Interested User 2',
                 email: 'user2@test.com',
+                avatar: null,
               },
             },
           ],
@@ -441,7 +443,7 @@ describe('OffersService', () => {
 
       const result = await service.findUserOffers(userId);
 
-      expect(result[0].interestedUsers).toHaveLength(2);
+      expect(result[0].OfferInterest).toHaveLength(2);
     });
   });
 });

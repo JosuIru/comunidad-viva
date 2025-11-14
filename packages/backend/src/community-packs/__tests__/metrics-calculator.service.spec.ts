@@ -287,7 +287,8 @@ describe('MetricsCalculatorService', () => {
 
       mockPrismaService.communityPack.findMany.mockResolvedValue(mockPacks);
 
-      const result = await service.aggregateGlobalMetrics();
+      // TODO: Implement aggregateGlobalMetrics method in MetricsCalculatorService
+      const result = await (service as any).aggregateGlobalMetrics();
 
       expect(result.totalCommunities).toBe(2);
       expect(result.totalMembers).toBe(3); // 2 + 1

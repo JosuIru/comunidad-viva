@@ -11,7 +11,7 @@ export class UsersService {
       where: { id },
       include: {
         Skill: true,
-        Badge: true,
+        UserBadge: true,
       },
     });
   }
@@ -65,11 +65,11 @@ export class UsersService {
         neighborhood: true,
         interests: true,
         Skill: true,
-        Badge: true,
+        UserBadge: true,
         generosityScore: true,
         flowPower: true,
         communityId: true,
-        community: {
+        Community: {
           select: {
             id: true,
             name: true,

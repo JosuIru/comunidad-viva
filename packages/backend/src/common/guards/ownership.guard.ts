@@ -58,7 +58,7 @@ export class OwnershipGuard implements CanActivate {
     try {
       switch (resourceType) {
         case 'offer':
-          const offer = await this.prisma.Offer.findUnique({
+          const offer = await this.prisma.offer.findUnique({
             where: { id: resourceId },
             select: { userId: true }
           });

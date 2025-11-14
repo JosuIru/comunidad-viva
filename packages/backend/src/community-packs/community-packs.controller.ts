@@ -152,19 +152,19 @@ export class CommunityPacksController {
     // Check if user is community admin
     const community = await this.communityPacksService['prisma'].community.findUnique({
       where: { id: communityId },
-      include: { governance: true },
+      include: { CommunityGovernance: true },
     });
 
     if (!community) {
       throw new Error('Community not found');
     }
 
-    const user = await this.communityPacksService['prisma'].User.findUnique({
+    const user = await this.communityPacksService['prisma'].user.findUnique({
       where: { id: req.user.userId },
       select: { communityId: true, generosityScore: true },
     });
 
-    const isFounder = community.governance?.founders.includes(req.user.userId) || false;
+    const isFounder = community.CommunityGovernance?.founders.includes(req.user.userId) || false;
     const isMember = user?.communityId === communityId;
     const hasModerateRights = user && user.generosityScore >= 5;
 

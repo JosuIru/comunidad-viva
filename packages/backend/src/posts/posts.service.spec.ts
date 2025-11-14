@@ -207,13 +207,13 @@ describe('PostsService', () => {
       const mockPost = {
         id: postId,
         content: 'Test post',
-        author: { id: 'user-id', name: 'User', avatar: null },
-        reactions: [],
-        comments: [
+        User: { id: 'user-id', name: 'User', avatar: null },
+        Reaction: [],
+        Comment: [
           {
             id: 'comment-1',
             content: 'Comment 1',
-            author: { id: 'commenter-1', name: 'Commenter 1' },
+            User: { id: 'commenter-1', name: 'Commenter 1', avatar: null },
           },
         ],
       };
@@ -223,7 +223,7 @@ describe('PostsService', () => {
       const result = await service.findOne(postId);
 
       expect(result).toBeDefined();
-      expect(result.comments).toHaveLength(1);
+      expect(result.Comment).toHaveLength(1);
       expect(result.userReaction).toBeNull();
     });
 

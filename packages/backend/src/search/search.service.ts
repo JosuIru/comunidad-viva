@@ -63,10 +63,10 @@ export class SearchService {
       if (maxPrice !== undefined) offerWhere.priceEur.lte = maxPrice;
     }
 
-    let offers = await this.prisma.Offer.findMany({
+    let offers = await this.prisma.offer.findMany({
       where: offerWhere,
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -103,7 +103,7 @@ export class SearchService {
     let events = await this.prisma.event.findMany({
       where: eventWhere,
       include: {
-        organizer: {
+        User: {
           select: {
             id: true,
             name: true,

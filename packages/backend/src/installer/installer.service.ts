@@ -5,6 +5,7 @@ import { promisify } from 'util';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as bcrypt from 'bcrypt';
+import { randomUUID } from 'crypto';
 
 const execAsync = promisify(exec);
 
@@ -180,11 +181,13 @@ export class InstallerService {
       // Crear usuario admin
       const user = await this.prisma.user.create({
         data: {
+          id: randomUUID(),
           name: admin.name,
           email: admin.email,
           password: hashedPassword,
           role: 'ADMIN',
           isEmailVerified: true,
+          updatedAt: new Date(),
         },
       });
 
