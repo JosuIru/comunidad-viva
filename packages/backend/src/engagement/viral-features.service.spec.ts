@@ -389,7 +389,7 @@ describe('ViralFeaturesService', () => {
           direction,
         });
 
-        mockPrismaService.Offer.findUnique.mockResolvedValue({
+        mockPrismaService.offer.findUnique.mockResolvedValue({
           id: offerId,
           userId: 'other-user-id',
         });
@@ -414,7 +414,7 @@ describe('ViralFeaturesService', () => {
           direction: 'RIGHT',
         });
 
-        mockPrismaService.Offer.findUnique.mockResolvedValue({
+        mockPrismaService.offer.findUnique.mockResolvedValue({
           id: offerId,
           userId: otherUserId,
         });

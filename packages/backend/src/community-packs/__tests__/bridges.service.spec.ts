@@ -230,7 +230,7 @@ describe('BridgesService', () => {
       mockPrismaService.communityBridge.findFirst.mockResolvedValue(null);
       mockPrismaService.communityBridge.create.mockResolvedValue({});
       mockPrismaService.user.count.mockResolvedValue(0);
-      mockPrismaService.Offer.count.mockResolvedValue(0);
+      mockPrismaService.offer.count.mockResolvedValue(0);
       mockPrismaService.event.count.mockResolvedValue(0);
 
       const result = await service.detectBridgesBetween('comm-a', 'comm-b');
@@ -271,7 +271,7 @@ describe('BridgesService', () => {
       mockPrismaService.communityBridge.findFirst.mockResolvedValue(null);
       mockPrismaService.communityBridge.create.mockResolvedValue({});
       mockPrismaService.user.count.mockResolvedValue(0);
-      mockPrismaService.Offer.count.mockResolvedValue(0);
+      mockPrismaService.offer.count.mockResolvedValue(0);
       mockPrismaService.event.count.mockResolvedValue(0);
 
       const result = await service.detectBridgesBetween('comm-a', 'comm-b');
@@ -312,7 +312,7 @@ describe('BridgesService', () => {
       mockPrismaService.communityBridge.findFirst.mockResolvedValue(null);
       mockPrismaService.communityBridge.create.mockResolvedValue({});
       mockPrismaService.user.count.mockResolvedValue(1); // 1 miembro compartido
-      mockPrismaService.Offer.count.mockResolvedValue(0);
+      mockPrismaService.offer.count.mockResolvedValue(0);
       mockPrismaService.event.count.mockResolvedValue(0);
 
       const result = await service.detectBridgesBetween('comm-a', 'comm-b');

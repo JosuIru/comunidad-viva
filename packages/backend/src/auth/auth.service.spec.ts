@@ -232,7 +232,7 @@ describe('AuthService', () => {
       expect(result).toHaveProperty('access_token');
       expect(result).toHaveProperty('refresh_token');
       expect(result).toHaveProperty('user');
-      expect(result.User.password).toBeUndefined();
+      expect(result.user.password).toBeUndefined();
     });
 
     it('should return login response after registration', async () => {
@@ -255,8 +255,8 @@ describe('AuthService', () => {
       const result = await service.register(registerDto);
 
       expect(result.access_token).toBe(mockToken);
-      expect(result.User.email).toBe(registerDto.email);
-      expect(result.User.name).toBe(registerDto.name);
+      expect(result.user.email).toBe(registerDto.email);
+      expect(result.user.name).toBe(registerDto.name);
     });
 
     it('should handle registration without optional phone', async () => {
@@ -284,7 +284,7 @@ describe('AuthService', () => {
       const result = await service.register(registerDtoWithoutPhone);
 
       expect(result).toHaveProperty('access_token');
-      expect(result.User.phone).toBeNull();
+      expect(result.user.phone).toBeNull();
     });
   });
 
