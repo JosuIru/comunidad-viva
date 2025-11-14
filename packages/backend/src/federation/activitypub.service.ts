@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { DIDService } from './did.service';
 import { ActivityType, ActivityVisibility } from '@prisma/client';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * ActivityPub Service
@@ -60,12 +61,14 @@ export class ActivityPubService {
         // Create node record for this instance
         node = await this.prisma.federatedNode.create({
           data: {
+            id: uuidv4(),
             nodeId,
             name: 'Comunidad Viva',
             type: 'GENESIS',
             url: `https://${nodeId}.gailu.org`,
             publicKey: 'TODO: Generate public key',
             description: 'Plataforma de economía colaborativa local',
+            updatedAt: new Date(),
           },
         });
       }
@@ -73,6 +76,7 @@ export class ActivityPubService {
       // Create activity record
       const activity = await this.prisma.federatedActivity.create({
         data: {
+          id: uuidv4(),
           activityId,
           type,
           publisherDID,
@@ -104,7 +108,7 @@ export class ActivityPubService {
     const post = await this.prisma.post.findUnique({
       where: { id: postId },
       include: {
-        author: {
+        User: {
           select: { name: true, avatar: true, gailuDID: true },
         },
       },
@@ -121,8 +125,8 @@ export class ActivityPubService {
       published: post.createdAt,
       attributedTo: publisherDID,
       author: {
-        name: post.author.name,
-        avatar: post.author.avatar,
+        name: post.User.name,
+        avatar: post.User.avatar,
       },
       images: post.images || [],
     };
@@ -134,10 +138,10 @@ export class ActivityPubService {
    * Publish an offer to the federation
    */
   async publishOffer(offerId: string, publisherDID: string, visibility: ActivityVisibility = 'FEDERATED') {
-    const offer = await this.prisma.Offer.findUnique({
+    const offer = await this.prisma.offer.findUnique({
       where: { id: offerId },
       include: {
-        user: {
+        User: {
           select: { name: true, avatar: true, gailuDID: true },
         },
       },
@@ -198,6 +202,7 @@ export class ActivityPubService {
       // Store activity
       const stored = await this.prisma.federatedActivity.create({
         data: {
+          id: uuidv4(),
           activityId: id,
           type: type as ActivityType,
           publisherDID: actor,
@@ -235,10 +240,10 @@ export class ActivityPubService {
       take: limit,
       skip: offset,
       include: {
-        node: {
+        FederatedNode: {
           select: { nodeId: true, name: true, type: true },
         },
-        publisher: {
+        User: {
           select: { id: true, name: true, avatar: true },
         },
       },
@@ -264,7 +269,7 @@ export class ActivityPubService {
       orderBy: { publishedAt: 'desc' },
       take: limit,
       include: {
-        node: {
+        FederatedNode: {
           select: { nodeId: true, name: true, type: true },
         },
       },
@@ -282,7 +287,7 @@ export class ActivityPubService {
       orderBy: { publishedAt: 'desc' },
       take: limit,
       include: {
-        node: {
+        FederatedNode: {
           select: { nodeId: true, name: true, type: true },
         },
       },
@@ -363,12 +368,14 @@ export class ActivityPubService {
     try {
       const node = await this.prisma.federatedNode.create({
         data: {
+          id: uuidv4(),
           nodeId,
           name,
           type: type as any,
           url,
           publicKey,
           description,
+          updatedAt: new Date(),
         },
       });
 

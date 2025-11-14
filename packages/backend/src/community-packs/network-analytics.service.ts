@@ -59,8 +59,8 @@ export class NetworkAnalyticsService {
     const sourceCommunity = await this.prisma.community.findUnique({
       where: { id: communityId },
       include: {
-        onboardingPack: true,
-        users: { where: { active: true } },
+        CommunityPack: true,
+        User: true,
       },
     });
 
@@ -86,11 +86,11 @@ export class NetworkAnalyticsService {
     const allCommunities = await this.prisma.community.findMany({
       where: {
         id: { not: communityId },
-        onboardingPack: { isNot: null },
+        CommunityPack: { isNot: null },
       },
       include: {
-        onboardingPack: true,
-        users: { where: { active: true }, select: { id: true } },
+        CommunityPack: true,
+        User: { select: { id: true } },
       },
     });
 
@@ -110,8 +110,8 @@ export class NetworkAnalyticsService {
             id: targetCommunity.id,
             name: targetCommunity.name,
             slug: targetCommunity.slug,
-            packType: targetCommunity.onboardingPack?.packType,
-            memberCount: targetCommunity.users.length,
+            packType: targetCommunity.CommunityPack?.packType,
+            memberCount: targetCommunity.User.length,
             createdAt: targetCommunity.createdAt,
           },
           score: analysis.score,
@@ -157,26 +157,26 @@ export class NetworkAnalyticsService {
 
     // 2. Same pack type (25% weight)
     if (
-      sourceCommunity.onboardingPack?.packType === targetCommunity.onboardingPack?.packType
+      sourceCommunity.CommunityPack?.packType === targetCommunity.CommunityPack?.packType
     ) {
       score += 0.25;
       estimatedStrength += 0.3;
       reasons.push(
-        `Mismo tipo: ${this.getPackTypeName(sourceCommunity.onboardingPack.packType)}`,
+        `Mismo tipo: ${this.getPackTypeName(sourceCommunity.CommunityPack.packType)}`,
       );
       bridgeTypes.push('THEMATIC');
     }
 
     // 3. Similar size communities (15% weight)
     const sizeRatio =
-      Math.min(sourceCommunity.users.length, targetCommunity.users.length) /
-      Math.max(sourceCommunity.users.length, targetCommunity.users.length);
+      Math.min(sourceCommunity.User.length, targetCommunity.User.length) /
+      Math.max(sourceCommunity.User.length, targetCommunity.User.length);
 
     if (sizeRatio > 0.5) {
       score += sizeRatio * 0.15;
       estimatedStrength += sizeRatio * 0.2;
       reasons.push(
-        `Tamaño similar: ${sourceCommunity.users.length} ↔ ${targetCommunity.users.length} miembros`,
+        `Tamaño similar: ${sourceCommunity.User.length} ↔ ${targetCommunity.User.length} miembros`,
       );
     }
 
@@ -252,8 +252,8 @@ export class NetworkAnalyticsService {
    * Check if pack types are complementary
    */
   private areComplementaryPackTypes(communityA: any, communityB: any): boolean {
-    const typeA = communityA.onboardingPack?.packType;
-    const typeB = communityB.onboardingPack?.packType;
+    const typeA = communityA.CommunityPack?.packType;
+    const typeB = communityB.CommunityPack?.packType;
 
     if (!typeA || !typeB) return false;
 
@@ -378,7 +378,7 @@ export class NetworkAnalyticsService {
     });
 
     const totalCommunities = await this.prisma.community.count({
-      where: { onboardingPack: { isNot: null } },
+      where: { CommunityPack: { isNot: null } },
     });
 
     if (totalCommunities <= 1) return 0;
@@ -392,10 +392,10 @@ export class NetworkAnalyticsService {
    */
   async detectClusters(): Promise<NetworkCluster[]> {
     const communities = await this.prisma.community.findMany({
-      where: { onboardingPack: { isNot: null } },
+      where: { CommunityPack: { isNot: null } },
       include: {
-        onboardingPack: true,
-        users: { where: { active: true }, select: { id: true } },
+        CommunityPack: true,
+        User: { select: { id: true } },
       },
     });
 
@@ -447,14 +447,14 @@ export class NetworkAnalyticsService {
         );
 
         const totalMembers = clusterCommunitiesData.reduce(
-          (sum, c) => sum + c.users.length,
+          (sum, c) => sum + c.User.length,
           0,
         );
 
         // Find dominant pack type
         const packTypeCounts = new Map<string, number>();
         for (const c of clusterCommunitiesData) {
-          const packType = c.onboardingPack?.packType || 'UNKNOWN';
+          const packType = c.CommunityPack?.packType || 'UNKNOWN';
           packTypeCounts.set(packType, (packTypeCounts.get(packType) || 0) + 1);
         }
 
@@ -493,7 +493,7 @@ export class NetworkAnalyticsService {
    */
   async getNetworkLeaderboard(limit: number = 10) {
     const communities = await this.prisma.community.findMany({
-      where: { onboardingPack: { isNot: null } },
+      where: { CommunityPack: { isNot: null } },
       select: { id: true, name: true, slug: true },
     });
 

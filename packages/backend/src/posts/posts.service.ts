@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { PostType, Visibility, ReactionType } from '@prisma/client';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class PostsService {
@@ -11,12 +12,14 @@ export class PostsService {
   async create(userId: string, createPostDto: CreatePostDto) {
     return this.prisma.post.create({
       data: {
+        id: uuidv4(),
         ...createPostDto,
         authorId: userId,
         visibility: createPostDto.visibility || Visibility.PUBLIC,
+        updatedAt: new Date(),
       },
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -45,14 +48,14 @@ export class PostsService {
         ...(filters?.visibility && { visibility: filters.visibility }),
       },
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
             avatar: true,
           },
         },
-        reactions: currentUserId
+        Reaction: currentUserId
           ? {
               where: {
                 userId: currentUserId,
@@ -72,10 +75,10 @@ export class PostsService {
 
     // Transform posts to include userReaction
     return posts.map((post) => {
-      const { reactions, ...postData } = post;
+      const { Reaction, ...postData } = post;
       return {
         ...postData,
-        userReaction: reactions && reactions.length > 0 ? reactions[0].type : null,
+        userReaction: Reaction && Reaction.length > 0 ? Reaction[0].type : null,
       };
     });
   }
@@ -84,14 +87,14 @@ export class PostsService {
     const post = await this.prisma.post.findUnique({
       where: { id },
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
             avatar: true,
           },
         },
-        reactions: currentUserId
+        Reaction: currentUserId
           ? {
               where: {
                 userId: currentUserId,
@@ -101,13 +104,13 @@ export class PostsService {
               },
             }
           : false,
-        comments: {
+        Comment: {
           take: 5,
           orderBy: {
             createdAt: 'desc',
           },
           include: {
-            author: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -123,10 +126,10 @@ export class PostsService {
       throw new NotFoundException('Post not found');
     }
 
-    const { reactions, ...postData } = post;
+    const { Reaction, ...postData } = post;
     return {
       ...postData,
-      userReaction: reactions && reactions.length > 0 ? reactions[0].type : null,
+      userReaction: Reaction && Reaction.length > 0 ? Reaction[0].type : null,
     };
   }
 
@@ -152,7 +155,7 @@ export class PostsService {
         editedAt: new Date(),
       },
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -224,6 +227,7 @@ export class PostsService {
       // Create reaction and increment count
       await this.prisma.reaction.create({
         data: {
+          id: uuidv4(),
           postId,
           userId,
           type: reactionType,
@@ -265,7 +269,7 @@ export class PostsService {
         },
       },
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,

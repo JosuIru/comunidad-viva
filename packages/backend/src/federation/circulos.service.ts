@@ -2,6 +2,7 @@ import { Injectable, Logger, BadRequestException, NotFoundException, ForbiddenEx
 import { PrismaService } from '../prisma/prisma.service';
 import { DIDService } from './did.service';
 import { CirculoType, CirculoStatus, ParticipacionRole, ParticipacionStatus } from '@prisma/client';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Círculos de Conciencia Service
@@ -58,6 +59,7 @@ export class CirculosService {
     try {
       const circulo = await this.prisma.circuloConciencia.create({
         data: {
+          id: uuidv4(),
           name: data.name,
           description: data.description,
           level: data.level,
@@ -71,6 +73,7 @@ export class CirculosService {
           location: data.location,
           language: data.language || 'es',
           practices: data.practices || [],
+          updatedAt: new Date(),
         },
       });
 
@@ -78,6 +81,7 @@ export class CirculosService {
       if (facilitatorIds.length > 0) {
         await this.prisma.circuloParticipacion.create({
           data: {
+            id: uuidv4(),
             userId: facilitatorIds[0],
             circuloId: circulo.id,
             role: 'FACILITATOR',
@@ -102,7 +106,7 @@ export class CirculosService {
     const circulo = await this.prisma.circuloConciencia.findUnique({
       where: { id: circuloId },
       include: {
-        participations: true,
+        CirculoParticipacion: true,
       },
     });
 
@@ -115,7 +119,7 @@ export class CirculosService {
     }
 
     // Check if círculo is full
-    if (circulo.maxParticipants && circulo.participations.length >= circulo.maxParticipants) {
+    if (circulo.maxParticipants && circulo.CirculoParticipacion.length >= circulo.maxParticipants) {
       throw new BadRequestException('This círculo is full');
     }
 
@@ -144,6 +148,7 @@ export class CirculosService {
 
     const participation = await this.prisma.circuloParticipacion.create({
       data: {
+        id: uuidv4(),
         userId,
         circuloId,
         role: 'MEMBER',
@@ -273,10 +278,10 @@ export class CirculosService {
     const circulos = await this.prisma.circuloConciencia.findMany({
       where,
       include: {
-        participations: {
+        CirculoParticipacion: {
           where: { status: 'ACTIVE' },
           include: {
-            user: {
+            User: {
               select: { id: true, name: true, avatar: true, gailuDID: true },
             },
           },
@@ -295,9 +300,9 @@ export class CirculosService {
     const circulo = await this.prisma.circuloConciencia.findUnique({
       where: { id: circuloId },
       include: {
-        participations: {
+        CirculoParticipacion: {
           include: {
-            user: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -333,9 +338,9 @@ export class CirculosService {
         status: { in: ['ACTIVE', 'INVITED'] },
       },
       include: {
-        circulo: {
+        CirculoConciencia: {
           include: {
-            participations: {
+            CirculoParticipacion: {
               where: { status: 'ACTIVE' },
             },
           },
@@ -344,7 +349,7 @@ export class CirculosService {
     });
 
     return participations.map((p) => ({
-      ...p.circulo,
+      ...p.CirculoConciencia,
       myRole: p.role,
       myAttendanceRate: p.attendanceRate,
       myContributionLevel: p.contributionLevel,

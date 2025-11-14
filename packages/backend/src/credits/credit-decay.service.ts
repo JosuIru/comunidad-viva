@@ -3,6 +3,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreditReason } from '@prisma/client';
 import { LoggerService } from '../common/logger.service';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Credit Decay Service - Obsolescencia Programada
@@ -74,7 +75,7 @@ export class CreditDecayService {
         },
       },
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             credits: true,
@@ -98,7 +99,7 @@ export class CreditDecayService {
           // TRANSACCIÓN ATÓMICA: Prevenir race conditions en expiración de créditos
           await this.prisma.$transaction(async (transactionClient) => {
             // 1. Actualizar balance del usuario atómicamente con decrement
-            const updatedUser = await transactionClient.User.update({
+            const updatedUser = await transactionClient.user.update({
               where: { id: transaction.userId },
               data: {
                 credits: {
@@ -111,6 +112,7 @@ export class CreditDecayService {
             // 2. Crear transacción de expiración con el balance actualizado
             await transactionClient.creditTransaction.create({
               data: {
+                id: uuidv4(),
                 userId: transaction.userId,
                 amount: -amountToDeduct,
                 balance: updatedUser.credits,
@@ -128,6 +130,7 @@ export class CreditDecayService {
             // 3. Crear notificación
             await transactionClient.notification.create({
               data: {
+                id: uuidv4(),
                 userId: transaction.userId,
                 type: 'CREDITS_EXPIRING',
                 title: 'Créditos expirados',
@@ -203,7 +206,7 @@ export class CreditDecayService {
           // TRANSACCIÓN ATÓMICA: Prevenir race conditions en decay mensual
           await this.prisma.$transaction(async (transactionClient) => {
             // 1. Actualizar balance del usuario atómicamente con decrement
-            const updatedUser = await transactionClient.User.update({
+            const updatedUser = await transactionClient.user.update({
               where: { id: user.id },
               data: {
                 credits: {
@@ -216,6 +219,7 @@ export class CreditDecayService {
             // 2. Crear transacción de decay con el balance actualizado
             await transactionClient.creditTransaction.create({
               data: {
+                id: uuidv4(),
                 userId: user.id,
                 amount: -decayAmount,
                 balance: updatedUser.credits,
@@ -232,6 +236,7 @@ export class CreditDecayService {
             // 3. Crear notificación
             await transactionClient.notification.create({
               data: {
+                id: uuidv4(),
                 userId: user.id,
                 type: 'CREDITS_EXPIRING',
                 title: 'Decay mensual de créditos',
@@ -279,7 +284,7 @@ export class CreditDecayService {
           },
         },
         include: {
-          user: {
+          User: {
             select: {
               id: true,
               name: true,
@@ -308,6 +313,7 @@ export class CreditDecayService {
           if (!existingNotification) {
             await this.prisma.notification.create({
               data: {
+                id: uuidv4(),
                 userId: transaction.userId,
                 type: 'CREDITS_EXPIRING',
                 title: `⚠️ Créditos próximos a expirar`,
