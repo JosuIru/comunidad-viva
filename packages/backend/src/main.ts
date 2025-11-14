@@ -1,4 +1,4 @@
-// Backend main entry point - handles NestJS application bootstrap and configuration (v1.0.1)
+// Backend main entry point - handles NestJS application bootstrap and configuration (v1.0.2 - Railway fix)
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';

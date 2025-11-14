@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-watchPatterns = ["**/*.ts", "**/*.js", "prisma/**/*"]
+watchPatterns = ["**/*.ts", "**/*.js", "**/*.sh", "prisma/**/*"]
 
 [deploy]
 startCommand = "bash start.sh"
