@@ -1,3 +1,4 @@
 Dockerfile
 Dockerfile.*
 .dockerignore
+# Force Railway rebuild vie 14 nov 2025 11:07:06 CET
