@@ -255,7 +255,7 @@ describe('ChallengesService', () => {
 
       mockPrismaService.dailySeed.findUnique.mockResolvedValue(mockChallenge);
       mockPrismaService.userDailySeedCompletion.findUnique.mockResolvedValue(null);
-      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
       mockPrismaService.$transaction.mockResolvedValue([mockCompletion]);
       mockViralFeaturesService.checkLevelUp.mockResolvedValue(null);
 
@@ -339,7 +339,7 @@ describe('ChallengesService', () => {
 
       mockPrismaService.dailySeed.findUnique.mockResolvedValue(mockChallenge);
       mockPrismaService.userDailySeedCompletion.findUnique.mockResolvedValue(null);
-      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
       mockPrismaService.$transaction.mockResolvedValue([{}]);
       mockViralFeaturesService.checkLevelUp.mockResolvedValue(null);
 
@@ -373,7 +373,7 @@ describe('ChallengesService', () => {
 
       mockPrismaService.dailySeed.findUnique.mockResolvedValue(mockChallenge);
       mockPrismaService.userDailySeedCompletion.findUnique.mockResolvedValue(null);
-      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
       mockPrismaService.$transaction.mockResolvedValue([{}]);
       mockViralFeaturesService.checkLevelUp.mockResolvedValue(null);
 
@@ -405,7 +405,7 @@ describe('ChallengesService', () => {
 
       mockPrismaService.dailySeed.findUnique.mockResolvedValue(mockChallenge);
       mockPrismaService.userDailySeedCompletion.findUnique.mockResolvedValue(null);
-      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
       mockPrismaService.$transaction.mockResolvedValue([{}]);
       mockViralFeaturesService.checkLevelUp.mockResolvedValue(null);
 
@@ -441,7 +441,7 @@ describe('ChallengesService', () => {
 
       mockPrismaService.dailySeed.findUnique.mockResolvedValue(mockChallenge);
       mockPrismaService.userDailySeedCompletion.findUnique.mockResolvedValue(null);
-      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
       mockPrismaService.$transaction.mockResolvedValue([{}]);
       mockViralFeaturesService.checkLevelUp.mockResolvedValue(mockLevelUp);
 

@@ -82,8 +82,8 @@ export class FlowEconomicsService {
   ) {
     // Get current balances and user info
     const [fromUser, toUser] = await Promise.all([
-      this.prisma.User.findUnique({ where: { id: fromUserId }, select: { credits: true, name: true, email: true } }),
-      this.prisma.User.findUnique({ where: { id: toUserId }, select: { credits: true, name: true, email: true } }),
+      this.prisma.user.findUnique({ where: { id: fromUserId }, select: { credits: true, name: true, email: true } }),
+      this.prisma.user.findUnique({ where: { id: toUserId }, select: { credits: true, name: true, email: true } }),
     ]);
 
     if (!fromUser || !toUser) {
@@ -252,7 +252,7 @@ export class FlowEconomicsService {
    * Target: Keep Gini < 0.4 (considered equitable)
    */
   async calculateGiniIndex(): Promise<number> {
-    const users = await this.prisma.User.findMany({
+    const users = await this.prisma.user.findMany({
       select: { credits: true },
       orderBy: { credits: 'asc' },
     });
@@ -281,7 +281,7 @@ export class FlowEconomicsService {
    */
   async getEconomicMetrics() {
     const [users, pools, flowTransactions] = await Promise.all([
-      this.prisma.User.findMany({
+      this.prisma.user.findMany({
         select: { credits: true, generosityScore: true },
         orderBy: { credits: 'desc' },
       }),

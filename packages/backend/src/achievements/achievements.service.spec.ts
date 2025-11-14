@@ -90,7 +90,7 @@ describe('AchievementsService', () => {
       const userId = 'test-user-id';
 
       mockPrismaService.userBadge.findMany.mockResolvedValue([]);
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         peopleHelped: 10,
         credits: 50,
@@ -101,7 +101,7 @@ describe('AchievementsService', () => {
         badgeType: BadgeType.HELPER_10,
         isNew: true,
       });
-      mockPrismaService.User.update.mockResolvedValue({
+      mockPrismaService.user.update.mockResolvedValue({
         id: userId,
         credits: 100,
         experience: 100,
@@ -130,7 +130,7 @@ describe('AchievementsService', () => {
       mockPrismaService.userBadge.findMany.mockResolvedValue([
         { badgeType: BadgeType.HELPER_10 },
       ]);
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         peopleHelped: 10,
       });
@@ -145,7 +145,7 @@ describe('AchievementsService', () => {
       const userId = 'test-user-id';
 
       mockPrismaService.userBadge.findMany.mockResolvedValue([]);
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         hoursShared: 10.5,
         credits: 0,
@@ -155,7 +155,7 @@ describe('AchievementsService', () => {
         userId,
         badgeType: BadgeType.TIME_GIVER_10,
       });
-      mockPrismaService.User.update.mockResolvedValue({});
+      mockPrismaService.user.update.mockResolvedValue({});
       mockPrismaService.creditTransaction.create.mockResolvedValue({});
 
       const newBadges = await service.checkAchievements(userId);
@@ -173,11 +173,11 @@ describe('AchievementsService', () => {
         userId,
         badgeType: BadgeType.ORGANIZER_FIRST,
       });
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         credits: 0,
       });
-      mockPrismaService.User.update.mockResolvedValue({});
+      mockPrismaService.user.update.mockResolvedValue({});
       mockPrismaService.creditTransaction.create.mockResolvedValue({});
 
       const newBadges = await service.checkAchievements(userId);
@@ -192,7 +192,7 @@ describe('AchievementsService', () => {
       const userId = 'test-user-id';
 
       mockPrismaService.userBadge.findMany.mockResolvedValue([]);
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         co2Avoided: 10,
         credits: 0,
@@ -202,7 +202,7 @@ describe('AchievementsService', () => {
         userId,
         badgeType: BadgeType.ECO_STARTER,
       });
-      mockPrismaService.User.update.mockResolvedValue({});
+      mockPrismaService.user.update.mockResolvedValue({});
       mockPrismaService.creditTransaction.create.mockResolvedValue({});
 
       const newBadges = await service.checkAchievements(userId);
@@ -220,11 +220,11 @@ describe('AchievementsService', () => {
         userId,
         badgeType: BadgeType.LEARNER_FIRST,
       });
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         credits: 0,
       });
-      mockPrismaService.User.update.mockResolvedValue({});
+      mockPrismaService.user.update.mockResolvedValue({});
       mockPrismaService.creditTransaction.create.mockResolvedValue({});
 
       const newBadges = await service.checkAchievements(userId);
@@ -242,11 +242,11 @@ describe('AchievementsService', () => {
         userId,
         badgeType: BadgeType.VOTER_FIRST,
       });
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         credits: 0,
       });
-      mockPrismaService.User.update.mockResolvedValue({});
+      mockPrismaService.user.update.mockResolvedValue({});
       mockPrismaService.creditTransaction.create.mockResolvedValue({});
 
       const newBadges = await service.checkAchievements(userId);
@@ -265,11 +265,11 @@ describe('AchievementsService', () => {
         userId,
         badgeType,
       });
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         credits: 50,
       });
-      mockPrismaService.User.update.mockResolvedValue({
+      mockPrismaService.user.update.mockResolvedValue({
         id: userId,
         credits: 100,
         experience: 100,
@@ -293,7 +293,7 @@ describe('AchievementsService', () => {
         },
       });
 
-      expect(mockPrismaService.User.update).toHaveBeenCalledWith({
+      expect(mockPrismaService.user.update).toHaveBeenCalledWith({
         where: { id: userId },
         data: {
           credits: { increment: 50 },
@@ -314,11 +314,11 @@ describe('AchievementsService', () => {
         userId,
         badgeType,
       });
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         credits: 0,
       });
-      mockPrismaService.User.update.mockResolvedValue({});
+      mockPrismaService.user.update.mockResolvedValue({});
       mockPrismaService.creditTransaction.create.mockResolvedValue({});
 
       await service.awardBadge(userId, badgeType);
@@ -369,7 +369,7 @@ describe('AchievementsService', () => {
       const userId = 'test-user-id';
 
       mockPrismaService.userBadge.findFirst.mockResolvedValue(null);
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         peopleHelped: 5,
         hoursShared: 25,
@@ -410,7 +410,7 @@ describe('AchievementsService', () => {
         }
         return Promise.resolve(null);
       });
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         peopleHelped: 15,
       });
@@ -547,14 +547,14 @@ describe('AchievementsService', () => {
       const userCreatedAt = new Date('2025-01-01');
 
       mockPrismaService.userBadge.findMany.mockResolvedValue([]);
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         createdAt: userCreatedAt,
       });
-      mockPrismaService.User.count.mockResolvedValue(50); // User is 50th
+      mockPrismaService.user.count.mockResolvedValue(50); // User is 50th
 
       mockPrismaService.userBadge.create.mockResolvedValue({});
-      mockPrismaService.User.update.mockResolvedValue({});
+      mockPrismaService.user.update.mockResolvedValue({});
       mockPrismaService.creditTransaction.create.mockResolvedValue({});
 
       const newBadges = await service.checkAchievements(userId);
@@ -568,11 +568,11 @@ describe('AchievementsService', () => {
       mockPrismaService.userBadge.findMany.mockResolvedValue([]);
       mockPrismaService.post.count.mockResolvedValue(50);
       mockPrismaService.userBadge.create.mockResolvedValue({});
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         credits: 0,
       });
-      mockPrismaService.User.update.mockResolvedValue({});
+      mockPrismaService.user.update.mockResolvedValue({});
       mockPrismaService.creditTransaction.create.mockResolvedValue({});
 
       const newBadges = await service.checkAchievements(userId);
@@ -586,11 +586,11 @@ describe('AchievementsService', () => {
       mockPrismaService.userBadge.findMany.mockResolvedValue([]);
       mockPrismaService.moderationVote.count.mockResolvedValue(100);
       mockPrismaService.userBadge.create.mockResolvedValue({});
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         credits: 0,
       });
-      mockPrismaService.User.update.mockResolvedValue({});
+      mockPrismaService.user.update.mockResolvedValue({});
       mockPrismaService.creditTransaction.create.mockResolvedValue({});
 
       const newBadges = await service.checkAchievements(userId);
@@ -604,7 +604,7 @@ describe('AchievementsService', () => {
       const userId = 'test-user-id';
 
       mockPrismaService.userBadge.findMany.mockResolvedValue([]);
-      mockPrismaService.User.findUnique.mockRejectedValue(new Error('Database error'));
+      mockPrismaService.user.findUnique.mockRejectedValue(new Error('Database error'));
 
       // Should not throw, just log error and continue
       const newBadges = await service.checkAchievements(userId);

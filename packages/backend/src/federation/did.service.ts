@@ -31,7 +31,7 @@ export class DIDService {
 
     try {
       // Update user with their DID
-      await this.prisma.User.update({
+      await this.prisma.user.update({
         where: { id: userId },
         data: {
           gailuDID: did,
@@ -63,7 +63,7 @@ export class DIDService {
 
       // If it's a local user (this node), fetch from database
       if (parsed.nodeId === this.nodeId) {
-        const user = await this.prisma.User.findUnique({
+        const user = await this.prisma.user.findUnique({
           where: { id: parsed.userId },
           select: {
             id: true,
@@ -142,7 +142,7 @@ export class DIDService {
    */
   async getAllDIDs() {
     try {
-      const users = await this.prisma.User.findMany({
+      const users = await this.prisma.user.findMany({
         where: {
           gailuDID: { not: null },
         },
@@ -169,7 +169,7 @@ export class DIDService {
    */
   async generateMissingDIDs(): Promise<number> {
     try {
-      const usersWithoutDID = await this.prisma.User.findMany({
+      const usersWithoutDID = await this.prisma.user.findMany({
         where: {
           gailuDID: null,
         },

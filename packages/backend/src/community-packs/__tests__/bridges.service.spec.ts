@@ -136,12 +136,12 @@ describe('BridgesService', () => {
 
   describe('getSharedMembersCount', () => {
     it('should count users who belong to both communities', async () => {
-      mockPrismaService.User.count.mockResolvedValue(3);
+      mockPrismaService.user.count.mockResolvedValue(3);
 
       const count = await service['getSharedMembersCount']('comm-a', 'comm-b');
 
       expect(count).toBe(3);
-      expect(mockPrismaService.User.count).toHaveBeenCalled();
+      expect(mockPrismaService.user.count).toHaveBeenCalled();
     });
   });
 
@@ -229,7 +229,7 @@ describe('BridgesService', () => {
 
       mockPrismaService.communityBridge.findFirst.mockResolvedValue(null);
       mockPrismaService.communityBridge.create.mockResolvedValue({});
-      mockPrismaService.User.count.mockResolvedValue(0);
+      mockPrismaService.user.count.mockResolvedValue(0);
       mockPrismaService.Offer.count.mockResolvedValue(0);
       mockPrismaService.event.count.mockResolvedValue(0);
 
@@ -270,7 +270,7 @@ describe('BridgesService', () => {
 
       mockPrismaService.communityBridge.findFirst.mockResolvedValue(null);
       mockPrismaService.communityBridge.create.mockResolvedValue({});
-      mockPrismaService.User.count.mockResolvedValue(0);
+      mockPrismaService.user.count.mockResolvedValue(0);
       mockPrismaService.Offer.count.mockResolvedValue(0);
       mockPrismaService.event.count.mockResolvedValue(0);
 
@@ -311,7 +311,7 @@ describe('BridgesService', () => {
 
       mockPrismaService.communityBridge.findFirst.mockResolvedValue(null);
       mockPrismaService.communityBridge.create.mockResolvedValue({});
-      mockPrismaService.User.count.mockResolvedValue(1); // 1 miembro compartido
+      mockPrismaService.user.count.mockResolvedValue(1); // 1 miembro compartido
       mockPrismaService.Offer.count.mockResolvedValue(0);
       mockPrismaService.event.count.mockResolvedValue(0);
 

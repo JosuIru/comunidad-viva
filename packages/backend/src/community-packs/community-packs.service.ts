@@ -47,7 +47,7 @@ export class CommunityPacksService {
     }
 
     // Check if user is founder or has high reputation
-    const user = await this.prisma.User.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { communityId: true, generosityScore: true },
     });
@@ -160,7 +160,7 @@ export class CommunityPacksService {
       throw new NotFoundException('Community not found');
     }
 
-    const user = await this.prisma.User.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { communityId: true, generosityScore: true },
     });
@@ -202,7 +202,7 @@ export class CommunityPacksService {
       throw new NotFoundException('Community not found');
     }
 
-    const user = await this.prisma.User.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { communityId: true, generosityScore: true },
     });
@@ -296,7 +296,7 @@ export class CommunityPacksService {
       throw new NotFoundException('Community pack not found');
     }
 
-    const user = await this.prisma.User.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { communityId: true, generosityScore: true },
     });

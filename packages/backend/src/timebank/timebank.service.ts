@@ -26,7 +26,7 @@ export class TimeBankService {
     const { providerId, offerId, description, hours, scheduledFor } = createRequestDto;
 
     // Validate provider exists
-    const provider = await this.prisma.User.findUnique({
+    const provider = await this.prisma.user.findUnique({
       where: { id: providerId },
     });
     if (!provider) {
@@ -83,10 +83,10 @@ export class TimeBankService {
     });
 
     // Send email notification to provider
-    if (transaction.Provider.email) {
+    if (transaction.provider.email) {
       await this.emailService.sendTimeBankRequest(
-        transaction.Provider.email,
-        transaction.Requester.name,
+        transaction.provider.email,
+        transaction.requester.name,
         description,
         hours,
         new Date(scheduledFor),

@@ -88,7 +88,7 @@ export class AnalyticsService {
     const totalCO2Avoided = co2FromGroupBuys + co2FromTimeBank + co2FromEvents;
 
     // Get active users count
-    const activeUsers = await this.prisma.User.count();
+    const activeUsers = await this.prisma.user.count();
 
     // Get total credits circulating
     const creditStats = await this.prisma.creditTransaction.aggregate({

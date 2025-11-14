@@ -7,7 +7,7 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async findOne(id: string) {
-    return this.prisma.User.findUnique({
+    return this.prisma.user.findUnique({
       where: { id },
       include: {
         Skill: true,
@@ -17,14 +17,14 @@ export class UsersService {
   }
 
   async findByEmail(email: string) {
-    return this.prisma.User.findUnique({ where: { email } });
+    return this.prisma.user.findUnique({ where: { email } });
   }
 
   async update(id: string, requestingUserId: string, data: any) {
     // Check if user is updating their own profile
     if (id !== requestingUserId) {
       // Check if requesting user is an admin
-      const requestingUser = await this.prisma.User.findUnique({
+      const requestingUser = await this.prisma.user.findUnique({
         where: { id: requestingUserId },
         select: { role: true },
       });
@@ -34,14 +34,14 @@ export class UsersService {
       }
     }
 
-    return this.prisma.User.update({
+    return this.prisma.user.update({
       where: { id },
       data,
     });
   }
 
   async getProfile(id: string) {
-    return this.prisma.User.findUnique({
+    return this.prisma.user.findUnique({
       where: { id },
       select: {
         id: true,
@@ -84,7 +84,7 @@ export class UsersService {
   }
 
   async searchByEmail(email: string) {
-    return this.prisma.User.findFirst({
+    return this.prisma.user.findFirst({
       where: {
         email: {
           equals: email,

@@ -164,7 +164,7 @@ export class HousingService {
     const space = await this.findSpaceById(spaceId);
 
     // Check reputation requirement
-    const user = await this.prisma.User.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { generosityScore: true, credits: true },
     });
@@ -250,7 +250,7 @@ export class HousingService {
 
     // Deduct credits if needed
     if (paidCredits && booking.status === BookingStatus.CONFIRMED) {
-      await this.prisma.User.update({
+      await this.prisma.user.update({
         where: { id: userId },
         data: {
           credits: {
@@ -260,7 +260,7 @@ export class HousingService {
       });
 
       // Credit to owner
-      await this.prisma.User.update({
+      await this.prisma.user.update({
         where: { id: space.ownerId },
         data: {
           credits: {
@@ -298,7 +298,7 @@ export class HousingService {
 
     // Process payment if needed
     if (updated.paidCredits) {
-      await this.prisma.User.update({
+      await this.prisma.user.update({
         where: { id: updated.bookerId },
         data: {
           credits: {
@@ -307,7 +307,7 @@ export class HousingService {
         },
       });
 
-      await this.prisma.User.update({
+      await this.prisma.user.update({
         where: { id: ownerId },
         data: {
           credits: {
@@ -589,7 +589,7 @@ export class HousingService {
     const housing = await this.findHousingById(housingId);
 
     // Check reputation
-    const user = await this.prisma.User.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { generosityScore: true, credits: true },
     });
@@ -717,7 +717,7 @@ export class HousingService {
 
     // Process payment
     if (updated.paidCredits) {
-      await this.prisma.User.update({
+      await this.prisma.user.update({
         where: { id: updated.guestId },
         data: {
           credits: {
@@ -726,7 +726,7 @@ export class HousingService {
         },
       });
 
-      await this.prisma.User.update({
+      await this.prisma.user.update({
         where: { id: hostId },
         data: {
           credits: {
@@ -1110,7 +1110,7 @@ export class HousingService {
   // ============================================
 
   async requestGuarantee(userId: string, data: any) {
-    const user = await this.prisma.User.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { generosityScore: true },
     });

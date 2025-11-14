@@ -17,7 +17,7 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string, ip?: string, userAgent?: string): Promise<any> {
-    const user = await this.prisma.User.findUnique({ where: { email } });
+    const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) {
       // Log failed login attempt
       await this.auditLogger.logFailedLogin(email, 'User not found', ip, userAgent);
@@ -106,7 +106,7 @@ export class AuthService {
   }, ip?: string, userAgent?: string) {
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    const user = await this.prisma.User.create({
+    const user = await this.prisma.user.create({
       data: {
         ...data,
         password: hashedPassword,

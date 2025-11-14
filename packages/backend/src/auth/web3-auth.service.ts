@@ -80,7 +80,7 @@ export class Web3AuthService {
     this.nonces.delete(normalizedAddress);
 
     // Check if user exists with this wallet
-    let user = await this.prisma.User.findFirst({
+    let user = await this.prisma.user.findFirst({
       where: {
         walletAddress: normalizedAddress,
       },
@@ -96,7 +96,7 @@ export class Web3AuthService {
       const username = userInfo?.name || `user_${normalizedAddress.substring(0, 8)}`;
       const email = userInfo?.email || `${normalizedAddress}@wallet.comunidadviva.local`;
 
-      user = await this.prisma.User.create({
+      user = await this.prisma.user.create({
         data: {
           name: username,
           email: email,
@@ -147,7 +147,7 @@ export class Web3AuthService {
     const normalizedAddress = walletAddress.toLowerCase();
 
     // Check if wallet is already linked to another user
-    const existingWallet = await this.prisma.User.findFirst({
+    const existingWallet = await this.prisma.user.findFirst({
       where: {
         walletAddress: normalizedAddress,
         id: { not: userId },
@@ -180,7 +180,7 @@ export class Web3AuthService {
     this.nonces.delete(normalizedAddress);
 
     // Update user with wallet info
-    const updatedUser = await this.prisma.User.update({
+    const updatedUser = await this.prisma.user.update({
       where: { id: userId },
       data: {
         walletAddress: normalizedAddress,
@@ -242,7 +242,7 @@ export class Web3AuthService {
   async getUserByWallet(walletAddress: string): Promise<any> {
     const normalizedAddress = walletAddress.toLowerCase();
 
-    const user = await this.prisma.User.findFirst({
+    const user = await this.prisma.user.findFirst({
       where: {
         walletAddress: normalizedAddress,
       },

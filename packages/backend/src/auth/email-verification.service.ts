@@ -51,7 +51,7 @@ export class EmailVerificationService {
     }
 
     // Update user's email verification status
-    await this.prisma.User.update({
+    await this.prisma.user.update({
       where: { id: tokenData.userId },
       data: { 
         emailVerified: true,
@@ -72,7 +72,7 @@ export class EmailVerificationService {
    * Resend verification email
    */
   async resendVerificationEmail(email: string): Promise<{ success: boolean; message: string }> {
-    const user = await this.prisma.User.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { email },
     });
 
@@ -100,7 +100,7 @@ export class EmailVerificationService {
    * Check if user's email is verified
    */
   async isEmailVerified(userId: string): Promise<boolean> {
-    const user = await this.prisma.User.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { emailVerified: true },
     });

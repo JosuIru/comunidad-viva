@@ -186,11 +186,11 @@ describe('ViralFeaturesService', () => {
         });
 
         mockPrismaService.onboardingProgress.update.mockResolvedValue({});
-        mockPrismaService.User.update.mockResolvedValue({});
+        mockPrismaService.user.update.mockResolvedValue({});
 
         await service.trackOnboardingStep(userId, step);
 
-        expect(mockPrismaService.User.update).toHaveBeenCalledWith({
+        expect(mockPrismaService.user.update).toHaveBeenCalledWith({
           where: { id: userId },
           data: { credits: { increment: 50 } },
         });
@@ -445,7 +445,7 @@ describe('ViralFeaturesService', () => {
         const userId = 'user-id';
 
         mockPrismaService.referralCode.findFirst.mockResolvedValue(null);
-        mockPrismaService.User.findUnique.mockResolvedValue({
+        mockPrismaService.user.findUnique.mockResolvedValue({
           id: userId,
           name: 'TestUser',
         });
@@ -502,12 +502,12 @@ describe('ViralFeaturesService', () => {
           codeId: 'code-id',
           referredUserId: newUserId,
         });
-        mockPrismaService.User.update.mockResolvedValue({});
+        mockPrismaService.user.update.mockResolvedValue({});
         mockPrismaService.referralCode.update.mockResolvedValue({});
 
         await service.useReferralCode(newUserId, code);
 
-        expect(mockPrismaService.User.update).toHaveBeenCalledTimes(2);
+        expect(mockPrismaService.user.update).toHaveBeenCalledTimes(2);
         expect(mockPrismaService.referralCode.update).toHaveBeenCalled();
       });
 
@@ -561,14 +561,14 @@ describe('ViralFeaturesService', () => {
       it('should level up user and award credits', async () => {
         const userId = 'user-id';
 
-        mockPrismaService.User.findUnique.mockResolvedValue({
+        mockPrismaService.user.findUnique.mockResolvedValue({
           id: userId,
           experience: 400, // level 2
           level: 1,
           credits: 50,
         });
 
-        mockPrismaService.User.update.mockResolvedValue({});
+        mockPrismaService.user.update.mockResolvedValue({});
         mockPrismaService.userFeatureUnlock.create.mockResolvedValue({});
         mockPrismaService.creditTransaction.create.mockResolvedValue({});
         mockPrismaService.notification.create.mockResolvedValue({});
@@ -578,13 +578,13 @@ describe('ViralFeaturesService', () => {
         expect(result).toBeDefined();
         expect(result.level).toBe(2);
         expect(result.credits).toBe(20); // 2 * 10
-        expect(mockPrismaService.User.update).toHaveBeenCalled();
+        expect(mockPrismaService.user.update).toHaveBeenCalled();
       });
 
       it('should return null if no level up', async () => {
         const userId = 'user-id';
 
-        mockPrismaService.User.findUnique.mockResolvedValue({
+        mockPrismaService.user.findUnique.mockResolvedValue({
           id: userId,
           experience: 50,
           level: 1,
@@ -600,7 +600,7 @@ describe('ViralFeaturesService', () => {
       it('should calculate level progress correctly', async () => {
         const userId = 'user-id';
 
-        mockPrismaService.User.findUnique.mockResolvedValue({
+        mockPrismaService.user.findUnique.mockResolvedValue({
           id: userId,
           level: 2,
           experience: 500,
@@ -624,17 +624,17 @@ describe('ViralFeaturesService', () => {
         const amount = 50;
         const reason = 'Test reward';
 
-        mockPrismaService.User.findUnique.mockResolvedValue({
+        mockPrismaService.user.findUnique.mockResolvedValue({
           id: userId,
           credits: 100,
         });
 
-        mockPrismaService.User.update.mockResolvedValue({});
+        mockPrismaService.user.update.mockResolvedValue({});
         mockPrismaService.creditTransaction.create.mockResolvedValue({});
 
         await service.grantCredits(userId, amount, reason);
 
-        expect(mockPrismaService.User.update).toHaveBeenCalledWith({
+        expect(mockPrismaService.user.update).toHaveBeenCalledWith({
           where: { id: userId },
           data: { credits: 150 },
         });
@@ -645,7 +645,7 @@ describe('ViralFeaturesService', () => {
       it('should throw error if user not found', async () => {
         const userId = 'non-existent';
 
-        mockPrismaService.User.findUnique.mockResolvedValue(null);
+        mockPrismaService.user.findUnique.mockResolvedValue(null);
 
         await expect(service.grantCredits(userId, 50)).rejects.toThrow('User not found');
       });
@@ -663,11 +663,11 @@ describe('ViralFeaturesService', () => {
           badgeType,
         });
         mockPrismaService.notification.create.mockResolvedValue({});
-        mockPrismaService.User.findUnique.mockResolvedValue({
+        mockPrismaService.user.findUnique.mockResolvedValue({
           id: userId,
           credits: 100,
         });
-        mockPrismaService.User.update.mockResolvedValue({});
+        mockPrismaService.user.update.mockResolvedValue({});
         mockPrismaService.creditTransaction.create.mockResolvedValue({});
 
         const result = await service.awardBadge(userId, badgeType);
@@ -723,7 +723,7 @@ describe('ViralFeaturesService', () => {
           { id: 'user-3' },
         ];
 
-        mockPrismaService.User.findMany.mockResolvedValue(mockUsers);
+        mockPrismaService.user.findMany.mockResolvedValue(mockUsers);
         mockPrismaService.notification.createMany.mockResolvedValue({ count: 3 });
 
         const result = await service.sendMassNotification({
@@ -791,8 +791,8 @@ describe('ViralFeaturesService', () => {
           reward,
         });
 
-        mockPrismaService.User.update.mockResolvedValue({});
-        mockPrismaService.User.findUnique.mockResolvedValue({
+        mockPrismaService.user.update.mockResolvedValue({});
+        mockPrismaService.user.findUnique.mockResolvedValue({
           id: userId,
           experience: 100,
           level: 1,
@@ -801,7 +801,7 @@ describe('ViralFeaturesService', () => {
         const result = await service.rewardMicroAction(userId, action, reward);
 
         expect(result.microAction).toBeDefined();
-        expect(mockPrismaService.User.update).toHaveBeenCalledWith({
+        expect(mockPrismaService.user.update).toHaveBeenCalledWith({
           where: { id: userId },
           data: {
             credits: { increment: reward },

@@ -160,7 +160,7 @@ export class CreditDecayService {
     const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
 
     // Buscar usuarios con créditos suficientes
-    const users = await this.prisma.User.findMany({
+    const users = await this.prisma.user.findMany({
       where: {
         credits: {
           gte: 100, // Solo usuarios con más de 100 créditos
@@ -379,7 +379,7 @@ export class CreditDecayService {
         },
       }),
       // Créditos en riesgo (>100 créditos sin usar)
-      this.prisma.User.count({
+      this.prisma.user.count({
         where: {
           credits: {
             gte: 100,

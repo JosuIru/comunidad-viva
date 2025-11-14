@@ -89,7 +89,7 @@ describe('BridgeService', () => {
       mockDIDService.isLocalDID.mockReturnValue(true);
 
       // Mock user with sufficient balance
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: 'user-id',
         semillaBalance: 200,
       });
@@ -137,7 +137,7 @@ describe('BridgeService', () => {
       });
       mockDIDService.isLocalDID.mockReturnValue(true);
 
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: 'user-id',
         semillaBalance: 100,
       });
@@ -241,7 +241,7 @@ describe('BridgeService', () => {
       mockDIDService.parseDID.mockReturnValue({ userId: 'user-id' });
       mockDIDService.isLocalDID.mockReturnValue(true);
 
-      mockPrismaService.User.findUnique.mockResolvedValue(null);
+      mockPrismaService.user.findUnique.mockResolvedValue(null);
 
       await expect(
         service.lockAndBridge(userDID, amount, targetChain, externalAddress),
@@ -257,7 +257,7 @@ describe('BridgeService', () => {
       mockDIDService.parseDID.mockReturnValue({ userId: 'user-id' });
       mockDIDService.isLocalDID.mockReturnValue(true);
 
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: 'user-id',
         semillaBalance: 50, // Not enough for 100 + 0.5 fee
       });

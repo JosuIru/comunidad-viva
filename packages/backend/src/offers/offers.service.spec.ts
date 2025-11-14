@@ -248,7 +248,7 @@ describe('OffersService', () => {
 
       mockPrismaService.offerInterest.findUnique.mockResolvedValue(null);
       mockPrismaService.Offer.findUnique.mockResolvedValue(mockOffer);
-      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
       mockPrismaService.$transaction.mockResolvedValue([{}, {}]);
       mockEmailService.sendOfferInterest.mockResolvedValue(undefined);
 
@@ -306,7 +306,7 @@ describe('OffersService', () => {
 
       mockPrismaService.offerInterest.findUnique.mockResolvedValue(null);
       mockPrismaService.Offer.findUnique.mockResolvedValue(mockOffer);
-      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
       mockPrismaService.$transaction.mockResolvedValue([{}, {}]);
 
       await service.toggleInterest(offerId, userId);

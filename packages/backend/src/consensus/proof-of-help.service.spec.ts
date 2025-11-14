@@ -147,7 +147,7 @@ describe('ProofOfHelpService', () => {
       });
 
       // Mock user work (sufficient for HELP)
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: 'user-id',
         timeBankGiven: [{ hours: 5 }],
         badges: [{ type: 'HELPER_10' }],
@@ -190,7 +190,7 @@ describe('ProofOfHelpService', () => {
       mockPrismaService.trustBlock.findFirst.mockResolvedValue(null);
 
       // Mock insufficient user work (PROPOSAL requires 20)
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: 'user-id',
         timeBankGiven: [{ hours: 1 }], // Only 1 hour
         badges: [],
@@ -208,7 +208,7 @@ describe('ProofOfHelpService', () => {
       const validatorId = 'validator-id';
 
       // Mock validator with sufficient level
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: validatorId,
         peopleHelped: 50,
         hoursShared: 100,
@@ -250,7 +250,7 @@ describe('ProofOfHelpService', () => {
     });
 
     it('should throw NotFoundException if block not found', async () => {
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: 'validator-id',
         peopleHelped: 50,
       });
@@ -267,7 +267,7 @@ describe('ProofOfHelpService', () => {
       const validatorId = 'validator-id';
 
       // Mock validator with low level
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: validatorId,
         peopleHelped: 5, // Only level 0 (needs 10+ for level 1)
         badges: [],
@@ -290,7 +290,7 @@ describe('ProofOfHelpService', () => {
       const blockId = 'block-id';
       const validatorId = 'validator-id';
 
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: validatorId,
         peopleHelped: 50,
       });
@@ -334,7 +334,7 @@ describe('ProofOfHelpService', () => {
       mockPrismaService.moderationDAO.create.mockResolvedValue(mockDAO);
 
       // Mock jury selection
-      mockPrismaService.User.findMany.mockResolvedValue([
+      mockPrismaService.user.findMany.mockResolvedValue([
         { id: 'juror-1', peopleHelped: 30 },
         { id: 'juror-2', peopleHelped: 25 },
         { id: 'juror-3', peopleHelped: 20 },
@@ -374,7 +374,7 @@ describe('ProofOfHelpService', () => {
       mockPrismaService.moderationDAO.findUnique.mockResolvedValue(mockDAO);
 
       // Mock voter reputation
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: voterId,
         peopleHelped: 20,
         hoursShared: 50,
@@ -509,7 +509,7 @@ describe('ProofOfHelpService', () => {
       };
 
       // Mock author with sufficient reputation
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: 'author-id',
         peopleHelped: 25,
         hoursShared: 50,
@@ -551,7 +551,7 @@ describe('ProofOfHelpService', () => {
 
       mockPrismaService.proposal.create.mockResolvedValue(mockProposal);
       mockPrismaService.notification.create.mockResolvedValue({});
-      mockPrismaService.User.findMany.mockResolvedValue([]);
+      mockPrismaService.user.findMany.mockResolvedValue([]);
 
       const result = await service.createProposal(proposalData);
 
@@ -572,7 +572,7 @@ describe('ProofOfHelpService', () => {
       };
 
       // Mock author with low reputation
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: 'author-id',
         peopleHelped: 5, // Less than 20
         badges: [],
@@ -606,7 +606,7 @@ describe('ProofOfHelpService', () => {
 
       mockPrismaService.proposal.findUnique.mockResolvedValue(mockProposal);
 
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: voterId,
         voteCredits: 20, // Has enough for 9 credits
       });
@@ -620,14 +620,14 @@ describe('ProofOfHelpService', () => {
       };
 
       mockPrismaService.proposalVote.upsert.mockResolvedValue(mockVote);
-      mockPrismaService.User.update.mockResolvedValue({});
-      mockPrismaService.User.count.mockResolvedValue(100);
+      mockPrismaService.user.update.mockResolvedValue({});
+      mockPrismaService.user.count.mockResolvedValue(100);
 
       const result = await service.voteProposal(proposalId, voterId, points);
 
       expect(result).toEqual(mockVote);
       expect(mockPrismaService.proposalVote.upsert).toHaveBeenCalled();
-      expect(mockPrismaService.User.update).toHaveBeenCalledWith({
+      expect(mockPrismaService.user.update).toHaveBeenCalledWith({
         where: { id: voterId },
         data: { voteCredits: { decrement: 9 } },
       });
@@ -645,7 +645,7 @@ describe('ProofOfHelpService', () => {
         votes: [],
       });
 
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: voterId,
         voteCredits: 50, // Not enough for 100
       });
@@ -979,7 +979,7 @@ describe('ProofOfHelpService', () => {
     it('should calculate user reputation correctly', async () => {
       const userId = 'user-id';
 
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: userId,
         timeBankGiven: [{ status: 'COMPLETED' }, { status: 'COMPLETED' }],
         timeBankReceived: [{ status: 'COMPLETED' }],
@@ -1009,7 +1009,7 @@ describe('ProofOfHelpService', () => {
     });
 
     it('should return 0 if user not found', async () => {
-      mockPrismaService.User.findUnique.mockResolvedValue(null);
+      mockPrismaService.user.findUnique.mockResolvedValue(null);
       mockPrismaService.blockValidation.count.mockResolvedValue(0);
 
       const reputation = await service.calculateReputation('invalid-id');
@@ -1023,7 +1023,7 @@ describe('ProofOfHelpService', () => {
       const userId = 'user-id';
 
       // Mock user reputation and level
-      mockPrismaService.User.findUnique
+      mockPrismaService.user.findUnique
         .mockResolvedValueOnce({
           id: userId,
           peopleHelped: 50,
@@ -1097,7 +1097,7 @@ describe('ProofOfHelpService', () => {
         .mockResolvedValueOnce(8) // active
         .mockResolvedValueOnce(30); // resolved
 
-      mockPrismaService.User.findMany.mockResolvedValue([
+      mockPrismaService.user.findMany.mockResolvedValue([
         {
           id: 'user-1',
           name: 'Top Validator',
@@ -1128,7 +1128,7 @@ describe('ProofOfHelpService', () => {
       mockPrismaService.blockValidation.count.mockResolvedValue(15);
       mockPrismaService.proposalVote.count.mockResolvedValue(25);
 
-      mockPrismaService.User.count
+      mockPrismaService.user.count
         .mockResolvedValueOnce(200) // total
         .mockResolvedValueOnce(50); // active validators
 
@@ -1152,7 +1152,7 @@ describe('ProofOfHelpService', () => {
     it('should return list of available delegates', async () => {
       const userId = 'user-id';
 
-      mockPrismaService.User.findMany.mockResolvedValue([
+      mockPrismaService.user.findMany.mockResolvedValue([
         {
           id: 'delegate-1',
           name: 'Delegate 1',
@@ -1197,7 +1197,7 @@ describe('ProofOfHelpService', () => {
 
   describe('createDelegation', () => {
     it('should create a delegation', async () => {
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: 'delegate-id',
         name: 'Delegate',
         proofOfHelpScore: 50,
@@ -1215,7 +1215,7 @@ describe('ProofOfHelpService', () => {
     });
 
     it('should throw error if delegate not found', async () => {
-      mockPrismaService.User.findUnique.mockResolvedValue(null);
+      mockPrismaService.user.findUnique.mockResolvedValue(null);
 
       await expect(
         service.createDelegation('user-id', 'invalid-id', 10),
@@ -1223,7 +1223,7 @@ describe('ProofOfHelpService', () => {
     });
 
     it('should throw error if delegate has insufficient reputation', async () => {
-      mockPrismaService.User.findUnique.mockResolvedValue({
+      mockPrismaService.user.findUnique.mockResolvedValue({
         id: 'delegate-id',
         name: 'Delegate',
         proofOfHelpScore: 10, // Less than 20

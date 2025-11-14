@@ -75,7 +75,7 @@ export class CreditsService {
     description?: string,
   ) {
     // Validaciones previas fuera de la transacción (no modifican datos)
-    const user = await this.prisma.User.findUnique({ where: { id: userId } });
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       throw new NotFoundException('User not found');
     }
@@ -250,7 +250,7 @@ export class CreditsService {
 
   // Get balance and stats
   async getBalance(userId: string) {
-    const user = await this.prisma.User.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { credits: true },
     });
@@ -325,7 +325,7 @@ export class CreditsService {
 
   // Admin: Get leaderboard
   async getLeaderboard(limit = 10) {
-    const users = await this.prisma.User.findMany({
+    const users = await this.prisma.user.findMany({
       orderBy: { credits: 'desc' },
       take: limit,
       select: {

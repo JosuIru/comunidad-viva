@@ -69,7 +69,7 @@ export class SemillaService {
 
       // Check sender's balance (if local user)
       if (fromId) {
-        const sender = await this.prisma.User.findUnique({
+        const sender = await this.prisma.user.findUnique({
           where: { id: fromId },
           select: { semillaBalance: true },
         });
@@ -219,7 +219,7 @@ export class SemillaService {
       throw new BadRequestException('Can only query local user balances');
     }
 
-    const user = await this.prisma.User.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: parsed.userId },
       select: { semillaBalance: true },
     });
@@ -308,7 +308,7 @@ export class SemillaService {
    * Get total SEMILLA in circulation on this node
    */
   async getTotalSupply(): Promise<number> {
-    const result = await this.prisma.User.aggregate({
+    const result = await this.prisma.user.aggregate({
       _sum: {
         semillaBalance: true,
       },

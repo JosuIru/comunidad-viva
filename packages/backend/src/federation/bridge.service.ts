@@ -126,7 +126,7 @@ export class BridgeService {
       const userId = parsed.userId;
 
       // Check user balance
-      const user = await this.prisma.User.findUnique({
+      const user = await this.prisma.user.findUnique({
         where: { id: userId },
         select: { semillaBalance: true },
       });

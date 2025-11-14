@@ -212,7 +212,7 @@ export class MutualAidService {
     }
 
     // Check user has enough resources
-    const user = await this.prisma.User.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { credits: true, hoursShared: true },
     });
@@ -603,7 +603,7 @@ export class MutualAidService {
     }
 
     // Check user has enough resources
-    const user = await this.prisma.User.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { credits: true },
     });

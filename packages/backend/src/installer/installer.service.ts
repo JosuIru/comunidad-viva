@@ -30,7 +30,7 @@ export class InstallerService {
 
     try {
       // Verificar que el admin existe
-      const adminCount = await this.prisma.User.count({
+      const adminCount = await this.prisma.user.count({
         where: { role: 'ADMIN' },
       });
 
@@ -178,7 +178,7 @@ export class InstallerService {
       const hashedPassword = await bcrypt.hash(admin.password, 10);
 
       // Crear usuario admin
-      const user = await this.prisma.User.create({
+      const user = await this.prisma.user.create({
         data: {
           name: admin.name,
           email: admin.email,

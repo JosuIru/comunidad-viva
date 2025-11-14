@@ -560,7 +560,7 @@ export class SocialService {
 
   async getMentions(userId: string, limit = 50) {
     // First get the user to get their name/username
-    const user = await this.prisma.User.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { name: true, email: true },
     });

@@ -7,8 +7,7 @@
     "strictFunctionTypes": false,
     "strictPropertyInitialization": false,
     "noImplicitAny": false,
-    "noImplicitThis": false,
-    "suppressImplicitAnyIndexErrors": true
+    "noImplicitThis": false
   },
   "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
 }

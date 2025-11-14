@@ -627,7 +627,7 @@ describe('MutualAidService', () => {
       };
 
       mockPrismaService.need.findUnique.mockResolvedValue(mockNeed);
-      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
       mockPrismaService.$transaction.mockImplementation((callback) =>
         callback(mockPrismaService),
       );
@@ -635,7 +635,7 @@ describe('MutualAidService', () => {
         mockContribution,
       );
       mockPrismaService.need.update.mockResolvedValue(mockNeed);
-      mockPrismaService.User.update.mockResolvedValue(mockUser);
+      mockPrismaService.user.update.mockResolvedValue(mockUser);
 
       const result = await service.contributeToNeed(
         userId,

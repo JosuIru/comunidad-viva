@@ -127,7 +127,7 @@ export class ProofOfHelpService {
     this.logger.log(`Validating block: blockId=${blockId}, validator=${validatorId}, decision=${decision}`);
 
     // Verificar que el validador tiene autoridad
-    const validator = await this.prisma.User.findUnique({
+    const validator = await this.prisma.user.findUnique({
       where: { id: validatorId },
       include: { Badge: true },
     });
@@ -529,7 +529,7 @@ export class ProofOfHelpService {
       throw new BadRequestException('Votación cerrada');
     }
 
-    const voter = await this.prisma.User.findUnique({
+    const voter = await this.prisma.user.findUnique({
       where: { id: voterId },
     });
 
@@ -568,7 +568,7 @@ export class ProofOfHelpService {
     });
 
     // Actualizar créditos del votante
-    await this.prisma.User.update({
+    await this.prisma.user.update({
       where: { id: voterId },
       data: {
         voteCredits: { decrement: cost },
@@ -761,7 +761,7 @@ export class ProofOfHelpService {
    * Sistema de reputación distribuida
    */
   async calculateReputation(userId: string): Promise<number> {
-    const user = await this.prisma.User.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
       include: {
         timeBankGiven: { where: { status: 'COMPLETED' } },
@@ -825,7 +825,7 @@ export class ProofOfHelpService {
    */
   async getPendingBlocks(userId: string) {
     const reputation = await this.calculateReputation(userId);
-    const user = await this.prisma.User.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { peopleHelped: true },
     });
@@ -1130,7 +1130,7 @@ export class ProofOfHelpService {
     ]);
 
     // Usuarios más activos (por validaciones)
-    const topValidators = await this.prisma.User.findMany({
+    const topValidators = await this.prisma.user.findMany({
       select: {
         id: true,
         name: true,
@@ -1183,8 +1183,8 @@ export class ProofOfHelpService {
     ]);
 
     // Tasa de participación
-    const totalUsers = await this.prisma.User.count();
-    const activeValidators = await this.prisma.User.count({
+    const totalUsers = await this.prisma.user.count();
+    const activeValidators = await this.prisma.user.count({
       where: {
         blockValidations: {
           some: {
@@ -1283,7 +1283,7 @@ export class ProofOfHelpService {
     // Si es una ayuda aprobada, actualizar stats
     if (block.type === 'HELP' && status === 'APPROVED') {
       const content = block.content as any;
-      await this.prisma.User.update({
+      await this.prisma.user.update({
         where: { id: block.actorId },
         data: {
           peopleHelped: { increment: 1 },
@@ -1313,7 +1313,7 @@ export class ProofOfHelpService {
       });
 
       // Bonus en créditos de voto
-      await this.prisma.User.update({
+      await this.prisma.user.update({
         where: { id: validator.validatorId },
         data: {
           voteCredits: { increment: 1 },
@@ -1326,7 +1326,7 @@ export class ProofOfHelpService {
    * Penalizar actor por bloque rechazado
    */
   private async penalizeActor(actorId: string) {
-    await this.prisma.User.update({
+    await this.prisma.user.update({
       where: { id: actorId },
       data: {
         credits: { decrement: 5 },
@@ -1421,7 +1421,7 @@ export class ProofOfHelpService {
     const totalSupport = proposal.votes.reduce((sum, v) => sum + v.points, 0);
 
     // Threshold dinámico basado en participación
-    const activeUsers = await this.prisma.User.count({
+    const activeUsers = await this.prisma.user.count({
       where: {
         lastActiveAt: {
           gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
@@ -1524,7 +1524,7 @@ export class ProofOfHelpService {
             });
 
             // Primero eliminar a todos los usuarios de la comunidad
-            await this.prisma.User.updateMany({
+            await this.prisma.user.updateMany({
               where: { communityId: content.communityId },
               data: { communityId: null },
             });
@@ -1553,7 +1553,7 @@ export class ProofOfHelpService {
         case 'FUND_ALLOCATION':
           // Asignar fondos/créditos
           if (content.recipientId && content.amount) {
-            await this.prisma.User.update({
+            await this.prisma.user.update({
               where: { id: content.recipientId },
               data: {
                 credits: { increment: content.amount },
@@ -1751,14 +1751,14 @@ export class ProofOfHelpService {
    * Algoritmo de selección de validadores
    */
   private async selectValidators(actorId: string, type: string): Promise<string[]> {
-    const actor = await this.prisma.User.findUnique({
+    const actor = await this.prisma.user.findUnique({
       where: { id: actorId },
       select: { lat: true, lng: true, neighborhood: true },
     });
 
     if (!actor || !actor.lat || !actor.lng) {
       // Si no tiene ubicación, seleccionar validadores aleatorios con buena reputación
-      const validators = await this.prisma.User.findMany({
+      const validators = await this.prisma.user.findMany({
         where: {
           id: { not: actorId },
           lastActiveAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
@@ -1771,7 +1771,7 @@ export class ProofOfHelpService {
     }
 
     // Selección basada en proximidad, reputación y aleatoriedad
-    const nearbyValidators = await this.prisma.User.findMany({
+    const nearbyValidators = await this.prisma.user.findMany({
       where: {
         id: { not: actorId },
         lastActiveAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
@@ -1790,7 +1790,7 @@ export class ProofOfHelpService {
    */
   private async selectJury(contentId: string): Promise<any[]> {
     // Mezcla de usuarios con alta reputación y usuarios aleatorios
-    const highRep = await this.prisma.User.findMany({
+    const highRep = await this.prisma.user.findMany({
       where: {
         peopleHelped: { gte: 20 },
         lastActiveAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
@@ -1799,7 +1799,7 @@ export class ProofOfHelpService {
       take: 3,
     });
 
-    const random = await this.prisma.User.findMany({
+    const random = await this.prisma.user.findMany({
       where: {
         peopleHelped: { gte: 5 },
         lastActiveAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
@@ -1840,7 +1840,7 @@ export class ProofOfHelpService {
   }
 
   private async calculateUserWork(userId: string): Promise<number> {
-    const user = await this.prisma.User.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
       include: {
         timeBankGiven: { where: { status: 'COMPLETED' } },
@@ -1904,7 +1904,7 @@ export class ProofOfHelpService {
 
   async getAvailableDelegates(userId: string) {
     // Get users with high proof of help score who can be delegates
-    const potentialDelegates = await this.prisma.User.findMany({
+    const potentialDelegates = await this.prisma.user.findMany({
       where: {
         id: { not: userId },
         proofOfHelpScore: { gte: 20 }, // Minimum score to be a delegate
@@ -1987,7 +1987,7 @@ export class ProofOfHelpService {
     category?: string,
   ) {
     // Validate delegate exists and has sufficient proof of help score
-    const delegate = await this.prisma.User.findUnique({
+    const delegate = await this.prisma.user.findUnique({
       where: { id: delegateId },
       select: { id: true, name: true, proofOfHelpScore: true },
     });

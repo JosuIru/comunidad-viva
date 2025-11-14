@@ -11,7 +11,7 @@ interface CommunityNode {
   createdAt: Date;
 }
 
-interface NetworkCluster {
+export interface NetworkCluster {
   id: string;
   name: string;
   communities: string[];
@@ -20,7 +20,7 @@ interface NetworkCluster {
   cohesionScore: number;
 }
 
-interface ConnectionRecommendation {
+export interface ConnectionRecommendation {
   targetCommunity: CommunityNode;
   score: number;
   reasons: string[];
@@ -28,7 +28,7 @@ interface ConnectionRecommendation {
   estimatedStrength: number;
 }
 
-interface CommunityImpact {
+export interface CommunityImpact {
   communityId: string;
   communityName: string;
   bridgeCount: number;

@@ -1060,7 +1060,7 @@ export class AchievementsService {
       const { credits, xp } = definition.rewards;
 
       if (credits || xp) {
-        await this.prisma.User.update({
+        await this.prisma.user.update({
           where: { id: userId },
           data: {
             ...(credits && { credits: { increment: credits } }),
@@ -1072,7 +1072,7 @@ export class AchievementsService {
       // Si tiene créditos, crear transacción
       if (credits) {
         // Obtener balance actual
-        const user = await this.prisma.User.findUnique({
+        const user = await this.prisma.user.findUnique({
           where: { id: userId },
           select: { credits: true },
         });
