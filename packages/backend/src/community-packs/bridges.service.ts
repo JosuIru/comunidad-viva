@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { BridgeType, CommunityBridgeStatus } from '@prisma/client';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Service to detect and track bridges (connections) between communities
@@ -30,10 +31,10 @@ export class BridgesService {
     try {
       const communities = await this.prisma.community.findMany({
         where: {
-          onboardingPack: { isNot: null },
+          CommunityPack: { isNot: null },
         },
         include: {
-          onboardingPack: true,
+          CommunityPack: true,
         },
       });
 
@@ -74,17 +75,17 @@ export class BridgesService {
       this.prisma.community.findUnique({
         where: { id: communityAId },
         include: {
-          users: true,
-          onboardingPack: true,
-          events: true,
+          User: true,
+          CommunityPack: true,
+          Event: true,
         },
       }),
       this.prisma.community.findUnique({
         where: { id: communityBId },
         include: {
-          users: true,
-          onboardingPack: true,
-          events: true,
+          User: true,
+          CommunityPack: true,
+          Event: true,
         },
       }),
     ]);
@@ -105,7 +106,7 @@ export class BridgesService {
 
     // Detect Thematic Bridge (same pack type)
     if (
-      communityA.onboardingPack?.packType === communityB.onboardingPack?.packType
+      communityA.CommunityPack?.packType === communityB.CommunityPack?.packType
     ) {
       const result = await this.createOrUpdateBridge(
         communityAId,
@@ -121,7 +122,7 @@ export class BridgesService {
     const sharedMembers = await this.getSharedMembersCount(communityAId, communityBId);
     if (sharedMembers > 0) {
       const strength = Math.min(
-        sharedMembers / Math.min(communityA.users.length, communityB.users.length),
+        sharedMembers / Math.min(communityA.User.length, communityB.User.length),
         1,
       );
       const result = await this.createOrUpdateBridge(
@@ -262,6 +263,7 @@ export class BridgesService {
       // Create new bridge
       await this.prisma.communityBridge.create({
         data: {
+          id: uuidv4(),
           sourceCommunityId,
           targetCommunityId,
           bridgeType,
@@ -269,6 +271,7 @@ export class BridgesService {
           sharedMembers,
           status: 'ACTIVE',
           lastInteractionAt: new Date(),
+          updatedAt: new Date(),
         },
       });
 
@@ -292,34 +295,48 @@ export class BridgesService {
         OR: [{ sourceCommunityId: communityId }, { targetCommunityId: communityId }],
         status: 'ACTIVE',
       },
-      include: {
-        sourceCommunity: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-            location: true,
-            onboardingPack: {
-              select: { packType: true },
-            },
-          },
-        },
-        targetCommunity: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-            location: true,
-            onboardingPack: {
-              select: { packType: true },
-            },
-          },
-        },
-      },
       orderBy: { strength: 'desc' },
     });
 
-    return bridges;
+    // Manually fetch community details
+    const enrichedBridges = await Promise.all(
+      bridges.map(async (bridge) => {
+        const [sourceCommunity, targetCommunity] = await Promise.all([
+          this.prisma.community.findUnique({
+            where: { id: bridge.sourceCommunityId },
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              location: true,
+              CommunityPack: {
+                select: { packType: true },
+              },
+            },
+          }),
+          this.prisma.community.findUnique({
+            where: { id: bridge.targetCommunityId },
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              location: true,
+              CommunityPack: {
+                select: { packType: true },
+              },
+            },
+          }),
+        ]);
+
+        return {
+          ...bridge,
+          sourceCommunity,
+          targetCommunity,
+        };
+      }),
+    );
+
+    return enrichedBridges;
   }
 
   /**
@@ -337,12 +354,30 @@ export class BridgesService {
         where: { status: 'ACTIVE' },
         orderBy: { strength: 'desc' },
         take: 10,
-        include: {
-          sourceCommunity: { select: { name: true, slug: true } },
-          targetCommunity: { select: { name: true, slug: true } },
-        },
       }),
     ]);
+
+    // Manually fetch community details for strongest bridges
+    const enrichedStrongestBridges = await Promise.all(
+      strongestBridges.map(async (bridge) => {
+        const [sourceCommunity, targetCommunity] = await Promise.all([
+          this.prisma.community.findUnique({
+            where: { id: bridge.sourceCommunityId },
+            select: { name: true, slug: true },
+          }),
+          this.prisma.community.findUnique({
+            where: { id: bridge.targetCommunityId },
+            select: { name: true, slug: true },
+          }),
+        ]);
+
+        return {
+          ...bridge,
+          sourceCommunity,
+          targetCommunity,
+        };
+      }),
+    );
 
     return {
       totalBridges,
@@ -353,11 +388,11 @@ export class BridgesService {
         },
         {} as Record<string, number>,
       ),
-      strongestBridges,
+      strongestBridges: enrichedStrongestBridges,
       averageStrength:
-        strongestBridges.length > 0
-          ? strongestBridges.reduce((sum, b) => sum + b.strength, 0) /
-            strongestBridges.length
+        enrichedStrongestBridges.length > 0
+          ? enrichedStrongestBridges.reduce((sum, b) => sum + b.strength, 0) /
+            enrichedStrongestBridges.length
           : 0,
     };
   }
@@ -373,12 +408,12 @@ export class BridgesService {
   ) {
     const mentor = await this.prisma.community.findUnique({
       where: { id: mentorCommunityId },
-      include: { onboardingPack: true },
+      include: { CommunityPack: true },
     });
 
     const mentee = await this.prisma.community.findUnique({
       where: { id: menteeCommunityId },
-      include: { onboardingPack: true },
+      include: { CommunityPack: true },
     });
 
     if (!mentor || !mentee) {
@@ -392,6 +427,7 @@ export class BridgesService {
 
     const bridge = await this.prisma.communityBridge.create({
       data: {
+        id: uuidv4(),
         sourceCommunityId: mentorCommunityId,
         targetCommunityId: menteeCommunityId,
         bridgeType: 'MENTORSHIP',
@@ -399,18 +435,31 @@ export class BridgesService {
         initiatedBy,
         notes,
         status: 'PENDING',
-      },
-      include: {
-        sourceCommunity: { select: { name: true } },
-        targetCommunity: { select: { name: true } },
+        updatedAt: new Date(),
       },
     });
 
+    // Fetch community names for logging
+    const [sourceCommunity, targetCommunity] = await Promise.all([
+      this.prisma.community.findUnique({
+        where: { id: mentorCommunityId },
+        select: { name: true },
+      }),
+      this.prisma.community.findUnique({
+        where: { id: menteeCommunityId },
+        select: { name: true },
+      }),
+    ]);
+
     this.logger.log(
-      `Mentorship proposed: ${bridge.sourceCommunity.name} → ${bridge.targetCommunity.name}`,
+      `Mentorship proposed: ${sourceCommunity?.name} → ${targetCommunity?.name}`,
     );
 
-    return bridge;
+    return {
+      ...bridge,
+      sourceCommunity,
+      targetCommunity,
+    };
   }
 
   /**

@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { OrganizedCommunityType } from '@prisma/client';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Service to automatically calculate and update community pack metrics
@@ -23,11 +24,11 @@ export class MetricsCalculatorService {
     try {
       const packs = await this.prisma.communityPack.findMany({
         include: {
-          community: {
+          Community: {
             include: {
-              users: true,
-              offers: true,
-              events: true,
+              User: true,
+              Offer: true,
+              Event: true,
             },
           },
         },
@@ -75,10 +76,10 @@ export class MetricsCalculatorService {
     const pack = await this.prisma.communityPack.findUnique({
       where: { id: packId },
       include: {
-        community: {
+        Community: {
           include: {
-            users: true,
-            offers: { where: { status: 'ACTIVE' } },
+            User: true,
+            Offer: { where: { status: 'ACTIVE' } },
             // In real implementation, you'd have Orders/Transactions
           },
         },
@@ -88,10 +89,10 @@ export class MetricsCalculatorService {
     if (!pack) return;
 
     // Active members
-    await this.updateMetric(packId, 'active_members', pack.community.users.length);
+    await this.updateMetric(packId, 'active_members', pack.Community.User.length);
 
     // Local producers (count offers from different users)
-    const uniqueProducers = new Set(pack.community.offers.map((o) => o.userId));
+    const uniqueProducers = new Set(pack.Community.Offer.map((o) => o.userId));
     await this.updateMetric(packId, 'local_producers', uniqueProducers.size);
 
     // TODO: These would come from actual transactions/orders
@@ -109,10 +110,10 @@ export class MetricsCalculatorService {
     const pack = await this.prisma.communityPack.findUnique({
       where: { id: packId },
       include: {
-        community: {
+        Community: {
           include: {
-            users: true,
-            events: true, // Events could represent space bookings
+            User: true,
+            Event: true, // Events could represent space bookings
           },
         },
       },
@@ -132,7 +133,7 @@ export class MetricsCalculatorService {
     await this.updateMetric(packId, 'space_bookings', spaceBookings);
 
     // Participation rate (% of members who have been active in last 30 days)
-    const totalMembers = pack.community.users.length;
+    const totalMembers = pack.Community.User.length;
     if (totalMembers > 0) {
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -141,7 +142,7 @@ export class MetricsCalculatorService {
       const activeMemberIds = new Set<string>();
 
       // Members who created offers
-      const offersCreators = await this.prisma.Offer.findMany({
+      const offersCreators = await this.prisma.offer.findMany({
         where: {
           communityId: pack.communityId,
           createdAt: { gte: thirtyDaysAgo },
@@ -152,10 +153,10 @@ export class MetricsCalculatorService {
       offersCreators.forEach((o) => activeMemberIds.add(o.userId));
 
       // Members who joined events
-      const eventParticipants = await this.prisma.liveEventParticipant.findMany({
+      const eventParticipants = await this.prisma.eventAttendee.findMany({
         where: {
-          event: { communityId: pack.communityId },
-          createdAt: { gte: thirtyDaysAgo },
+          Event: { communityId: pack.communityId },
+          registeredAt: { gte: thirtyDaysAgo },
         },
         select: { userId: true },
         distinct: ['userId'],
@@ -176,11 +177,11 @@ export class MetricsCalculatorService {
     const pack = await this.prisma.communityPack.findUnique({
       where: { id: packId },
       include: {
-        community: {
+        Community: {
           include: {
-            users: true,
-            events: true,
-            offers: true,
+            User: true,
+            Event: true,
+            Offer: true,
           },
         },
       },
@@ -195,10 +196,10 @@ export class MetricsCalculatorService {
     await this.updateMetric(packId, 'events_hosted', eventsHosted);
 
     // Active members (socios)
-    await this.updateMetric(packId, 'active_members', pack.community.users.length);
+    await this.updateMetric(packId, 'active_members', pack.Community.User.length);
 
     // Local suppliers (unique offer creators)
-    const uniqueSuppliers = new Set(pack.community.offers.map((o) => o.userId));
+    const uniqueSuppliers = new Set(pack.Community.Offer.map((o) => o.userId));
     await this.updateMetric(packId, 'local_suppliers', uniqueSuppliers.size);
 
     // TODO: local_currency would come from credit transactions
@@ -241,11 +242,13 @@ export class MetricsCalculatorService {
         // Create metric if doesn't exist
         await this.prisma.communityMetric.create({
           data: {
+            id: uuidv4(),
             packId,
             metricKey,
             metricName: metricKey, // Use metricKey as default name
             currentValue: newValue,
             unit: '',
+            updatedAt: new Date(),
           },
         });
         this.logger.debug(`Created metric ${metricKey}: ${newValue}`);
@@ -284,21 +287,21 @@ export class MetricsCalculatorService {
 
     const packs = await this.prisma.communityPack.findMany({
       include: {
-        community: {
+        Community: {
           include: {
-            users: true,
-            events: true,
+            User: true,
+            Event: true,
           },
         },
-        metrics: true,
+        CommunityMetric: true,
       },
     });
 
     summary.totalCommunities = packs.length;
 
     for (const pack of packs) {
-      summary.totalMembers += pack.community.users.length;
-      summary.totalEvents += pack.community.events.length;
+      summary.totalMembers += pack.Community.User.length;
+      summary.totalEvents += pack.Community.Event.length;
 
       if (!summary.byType[pack.packType]) {
         summary.byType[pack.packType] = {
@@ -309,10 +312,10 @@ export class MetricsCalculatorService {
       }
 
       summary.byType[pack.packType].count++;
-      summary.byType[pack.packType].totalMembers += pack.community.users.length;
+      summary.byType[pack.packType].totalMembers += pack.Community.User.length;
 
       // Aggregate metrics
-      for (const metric of pack.metrics) {
+      for (const metric of pack.CommunityMetric) {
         if (!summary.byType[pack.packType].metrics[metric.metricKey]) {
           summary.byType[pack.packType].metrics[metric.metricKey] = 0;
         }

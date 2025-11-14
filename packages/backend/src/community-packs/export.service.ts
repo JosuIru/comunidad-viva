@@ -12,8 +12,8 @@ export class ExportService {
     const pack = await this.prisma.communityPack.findUnique({
       where: { communityId },
       include: {
-        metrics: true,
-        community: {
+        CommunityMetric: true,
+        Community: {
           select: {
             name: true,
             slug: true,
@@ -30,7 +30,7 @@ export class ExportService {
     let csv = 'Métrica,Valor Actual,Valor Objetivo,Unidad,Período,Última Actualización\n';
 
     // Add rows
-    for (const metric of pack.metrics) {
+    for (const metric of pack.CommunityMetric) {
       const row = [
         this.escapeCsvField(metric.metricName),
         metric.currentValue.toString(),
@@ -46,13 +46,14 @@ export class ExportService {
     csv += '\n\nHistórico\n';
     csv += 'Métrica,Fecha,Valor\n';
 
-    for (const metric of pack.metrics) {
+    for (const metric of pack.CommunityMetric) {
       const history = Array.isArray(metric.history) ? metric.history : [];
       for (const point of history) {
+        const historyPoint = point as { date: string | Date; value: number };
         const row = [
           this.escapeCsvField(metric.metricName),
-          new Date(point.date).toLocaleString('es-ES'),
-          point.value.toString(),
+          new Date(historyPoint.date).toLocaleString('es-ES'),
+          historyPoint.value.toString(),
         ];
         csv += row.join(',') + '\n';
       }
@@ -68,8 +69,8 @@ export class ExportService {
     const pack = await this.prisma.communityPack.findUnique({
       where: { communityId },
       include: {
-        metrics: true,
-        community: {
+        CommunityMetric: true,
+        Community: {
           select: {
             name: true,
             slug: true,
@@ -84,12 +85,12 @@ export class ExportService {
 
     return {
       community: {
-        name: pack.community.name,
-        slug: pack.community.slug,
+        name: pack.Community.name,
+        slug: pack.Community.slug,
       },
       packType: pack.packType,
       exportDate: new Date().toISOString(),
-      metrics: pack.metrics.map((metric) => ({
+      metrics: pack.CommunityMetric.map((metric) => ({
         key: metric.metricKey,
         name: metric.metricName,
         currentValue: metric.currentValue,
@@ -109,14 +110,14 @@ export class ExportService {
     const pack = await this.prisma.communityPack.findUnique({
       where: { communityId },
       include: {
-        metrics: true,
-        community: {
+        CommunityMetric: true,
+        Community: {
           select: {
             name: true,
             slug: true,
           },
         },
-        setupSteps: true,
+        CommunitySetupStep: true,
       },
     });
 
@@ -124,12 +125,12 @@ export class ExportService {
       throw new Error('Pack not found');
     }
 
-    const completedSteps = pack.setupSteps.filter((s) => s.completed).length;
-    const totalSteps = pack.setupSteps.length;
+    const completedSteps = pack.CommunitySetupStep.filter((s) => s.completed).length;
+    const totalSteps = pack.CommunitySetupStep.length;
 
     let report = `
 ╔════════════════════════════════════════════════════════════════╗
-║          REPORTE DE MÉTRICAS - ${pack.community.name.toUpperCase().padEnd(27)}║
+║          REPORTE DE MÉTRICAS - ${pack.Community.name.toUpperCase().padEnd(27)}║
 ╚════════════════════════════════════════════════════════════════╝
 
 Fecha de generación: ${new Date().toLocaleString('es-ES')}
@@ -142,7 +143,7 @@ Progreso de configuración: ${pack.setupProgress}% (${completedSteps}/${totalSte
 
 `;
 
-    for (const metric of pack.metrics) {
+    for (const metric of pack.CommunityMetric) {
       const targetStr = metric.targetValue
         ? ` / ${metric.targetValue} ${metric.unit || ''} (objetivo)`
         : '';

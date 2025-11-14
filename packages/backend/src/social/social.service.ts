@@ -6,6 +6,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { CreateReactionDto } from './dto/create-reaction.dto';
 import { AchievementsService } from '../achievements/achievements.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class SocialService {
@@ -47,6 +48,7 @@ export class SocialService {
 
     const post = await this.prisma.post.create({
       data: {
+        id: uuidv4(),
         content: createPostDto.content,
         type: createPostDto.type || PostType.STORY,
         images: createPostDto.media || [],
@@ -57,9 +59,10 @@ export class SocialService {
         tags: allTags,
         mentions: autoMentions,
         authorId,
+        updatedAt: new Date(),
       },
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -98,16 +101,16 @@ export class SocialService {
         skip: 1,
       }),
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
             avatar: true,
           },
         },
-        reactions: {
+        Reaction: {
           include: {
-            user: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -115,9 +118,9 @@ export class SocialService {
             },
           },
         },
-        comments: {
+        Comment: {
           include: {
-            author: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -133,7 +136,7 @@ export class SocialService {
         _count: {
           select: {
             Reaction: true,
-            comments: true,
+            Comment: true,
           },
         },
       },
@@ -145,7 +148,7 @@ export class SocialService {
 
     // Add userReaction to each post
     const postsWithUserReaction = posts.map(post => {
-      const userReaction = post.reactions.find(r => r.userId === userId);
+      const userReaction = post.Reaction.find(r => r.userId === userId);
       return {
         ...post,
         userReaction: userReaction?.type,
@@ -162,16 +165,16 @@ export class SocialService {
     const post = await this.prisma.post.findUnique({
       where: { id },
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
             avatar: true,
           },
         },
-        reactions: {
+        Reaction: {
           include: {
-            user: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -179,9 +182,9 @@ export class SocialService {
             },
           },
         },
-        comments: {
+        Comment: {
           include: {
-            author: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -196,7 +199,7 @@ export class SocialService {
         _count: {
           select: {
             Reaction: true,
-            comments: true,
+            Comment: true,
           },
         },
       },
@@ -229,7 +232,7 @@ export class SocialService {
       where: { id },
       data: updatePostDto,
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -267,12 +270,13 @@ export class SocialService {
 
     const comment = await this.prisma.comment.create({
       data: {
+        id: uuidv4(),
         postId,
         authorId,
         content: createCommentDto.content,
       },
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -347,7 +351,7 @@ export class SocialService {
         where: { id: existingReaction.id },
         data: { type: createReactionDto.type },
         include: {
-          user: {
+          User: {
             select: {
               id: true,
               name: true,
@@ -360,12 +364,13 @@ export class SocialService {
     // Create new reaction
     const reaction = await this.prisma.reaction.create({
       data: {
+        id: uuidv4(),
         postId,
         userId,
         type: createReactionDto.type,
       },
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -448,7 +453,7 @@ export class SocialService {
     return this.prisma.post.findMany({
       where: { authorId: userId },
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -458,7 +463,7 @@ export class SocialService {
         _count: {
           select: {
             Reaction: true,
-            comments: true,
+            Comment: true,
           },
         },
       },
@@ -480,16 +485,16 @@ export class SocialService {
         visibility: Visibility.PUBLIC,
       },
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
             avatar: true,
           },
         },
-        reactions: {
+        Reaction: {
           include: {
-            user: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -500,7 +505,7 @@ export class SocialService {
         _count: {
           select: {
             Reaction: true,
-            comments: true,
+            Comment: true,
           },
         },
       },
@@ -513,7 +518,7 @@ export class SocialService {
     // Add userReaction if userId provided
     if (userId) {
       return posts.map(post => {
-        const userReaction = post.reactions.find(r => r.userId === userId);
+        const userReaction = post.Reaction.find(r => r.userId === userId);
         return {
           ...post,
           userReaction: userReaction?.type,
@@ -580,16 +585,16 @@ export class SocialService {
         visibility: Visibility.PUBLIC,
       },
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
             avatar: true,
           },
         },
-        reactions: {
+        Reaction: {
           include: {
-            user: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -600,7 +605,7 @@ export class SocialService {
         _count: {
           select: {
             Reaction: true,
-            comments: true,
+            Comment: true,
           },
         },
       },
@@ -612,7 +617,7 @@ export class SocialService {
 
     // Add userReaction
     const postsWithUserReaction = posts.map(post => {
-      const userReaction = post.reactions.find(r => r.userId === userId);
+      const userReaction = post.Reaction.find(r => r.userId === userId);
       return {
         ...post,
         userReaction: userReaction?.type,
