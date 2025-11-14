@@ -58,9 +58,10 @@ export class HousingService {
         requiresApproval: data.requiresApproval || false,
         rules: data.rules || [],
         status: SpaceStatus.ACTIVE,
-      },
+        updatedAt: new Date(),
+      } as any,
       include: {
-        owner: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -97,7 +98,7 @@ export class HousingService {
     let spaces = await this.prisma.spaceBank.findMany({
       where,
       include: {
-        owner: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -106,7 +107,7 @@ export class HousingService {
         },
         _count: {
           select: {
-            bookings: true,
+            SpaceBooking: true,
           },
         },
       },
@@ -131,7 +132,7 @@ export class HousingService {
     const space = await this.prisma.spaceBank.findUnique({
       where: { id: spaceId },
       include: {
-        owner: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -139,7 +140,7 @@ export class HousingService {
             level: true,
           },
         },
-        bookings: {
+        SpaceBooking: {
           where: {
             status: {
               in: [BookingStatus.CONFIRMED, BookingStatus.CHECKED_IN],
@@ -226,11 +227,12 @@ export class HousingService {
         status: space.requiresApproval
           ? BookingStatus.PENDING
           : BookingStatus.CONFIRMED,
-      },
+        updatedAt: new Date(),
+      } as any,
       include: {
-        space: {
+        SpaceBank: {
           include: {
-            owner: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -238,7 +240,7 @@ export class HousingService {
             },
           },
         },
-        booker: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -276,14 +278,14 @@ export class HousingService {
   async approveSpaceBooking(ownerId: string, bookingId: string) {
     const booking = await this.prisma.spaceBooking.findUnique({
       where: { id: bookingId },
-      include: { space: true },
+      include: { SpaceBank: true },
     });
 
     if (!booking) {
       throw new NotFoundException('Booking not found');
     }
 
-    if (booking.space.ownerId !== ownerId) {
+    if (booking.SpaceBank.ownerId !== ownerId) {
       throw new ForbiddenException('Not the space owner');
     }
 
@@ -291,8 +293,8 @@ export class HousingService {
       where: { id: bookingId },
       data: { status: BookingStatus.APPROVED },
       include: {
-        booker: true,
-        space: true,
+        User: true,
+        SpaceBank: true,
       },
     });
 
@@ -323,7 +325,7 @@ export class HousingService {
   async completeSpaceBooking(userId: string, bookingId: string, review?: any) {
     const booking = await this.prisma.spaceBooking.findUnique({
       where: { id: bookingId },
-      include: { space: true },
+      include: { SpaceBank: true },
     });
 
     if (!booking) {
@@ -382,9 +384,10 @@ export class HousingService {
         communityInsured: data.communityInsured !== false,
         emergencyContact: data.emergencyContact,
         status: HousingStatus.ACTIVE,
-      },
+        updatedAt: new Date(),
+      } as any,
       include: {
-        host: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -439,7 +442,7 @@ export class HousingService {
         ...(data.status && { status: data.status }),
       },
       include: {
-        host: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -520,7 +523,7 @@ export class HousingService {
     let housing = await this.prisma.temporaryHousing.findMany({
       where,
       include: {
-        host: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -530,7 +533,7 @@ export class HousingService {
         },
         _count: {
           select: {
-            bookings: true,
+            HousingBooking: true,
           },
         },
       },
@@ -555,7 +558,7 @@ export class HousingService {
     const housing = await this.prisma.temporaryHousing.findUnique({
       where: { id: housingId },
       include: {
-        host: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -564,7 +567,7 @@ export class HousingService {
             generosityScore: true,
           },
         },
-        bookings: {
+        HousingBooking: {
           where: {
             status: {
               in: [BookingStatus.CONFIRMED, BookingStatus.CHECKED_IN],
@@ -660,11 +663,12 @@ export class HousingService {
         status: housing.requiresApproval
           ? BookingStatus.PENDING
           : BookingStatus.CONFIRMED,
-      },
+        updatedAt: new Date(),
+      } as any,
       include: {
-        housing: {
+        TemporaryHousing: {
           include: {
-            host: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -672,7 +676,7 @@ export class HousingService {
             },
           },
         },
-        guest: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -692,14 +696,14 @@ export class HousingService {
   ) {
     const booking = await this.prisma.housingBooking.findUnique({
       where: { id: bookingId },
-      include: { housing: true },
+      include: { TemporaryHousing: true },
     });
 
     if (!booking) {
       throw new NotFoundException('Booking not found');
     }
 
-    if (booking.housing.hostId !== hostId) {
+    if (booking.TemporaryHousing.hostId !== hostId) {
       throw new ForbiddenException('Not the host');
     }
 
@@ -710,8 +714,8 @@ export class HousingService {
         hostResponse: response,
       },
       include: {
-        guest: true,
-        housing: true,
+        User: true,
+        TemporaryHousing: true,
       },
     });
 
@@ -769,7 +773,7 @@ export class HousingService {
   ) {
     const booking = await this.prisma.housingBooking.findUnique({
       where: { id: bookingId },
-      include: { housing: true },
+      include: { TemporaryHousing: true },
     });
 
     if (!booking) {
@@ -777,7 +781,7 @@ export class HousingService {
     }
 
     // Both host and guest can complete
-    const isHost = booking.housing.hostId === userId;
+    const isHost = booking.TemporaryHousing.hostId === userId;
     const isGuest = booking.guestId === userId;
 
     if (!isHost && !isGuest) {
@@ -831,7 +835,8 @@ export class HousingService {
         phase: CoopPhase.FORMING,
         targetMoveIn: data.targetMoveIn ? new Date(data.targetMoveIn) : null,
         status: CoopStatus.OPEN,
-      },
+        updatedAt: new Date(),
+      } as any,
     });
 
     // Add creator as founder
@@ -842,7 +847,8 @@ export class HousingService {
         role: CoopMemberRole.FOUNDER,
         status: MemberStatus.ACTIVE,
         joinedAt: new Date(),
-      },
+        updatedAt: new Date(),
+      } as any,
     });
 
     // Update member count
@@ -875,10 +881,10 @@ export class HousingService {
     const coops = await this.prisma.housingCoop.findMany({
       where,
       include: {
-        members: {
+        HousingCoopMember: {
           where: { status: MemberStatus.ACTIVE },
           include: {
-            member: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -889,8 +895,8 @@ export class HousingService {
         },
         _count: {
           select: {
-            members: true,
-            proposals: true,
+            HousingCoopMember: true,
+            HousingCoopProposal: true,
           },
         },
       },
@@ -906,9 +912,9 @@ export class HousingService {
     const coop = await this.prisma.housingCoop.findUnique({
       where: { id: coopId },
       include: {
-        members: {
+        HousingCoopMember: {
           include: {
-            member: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -918,7 +924,7 @@ export class HousingService {
             },
           },
         },
-        proposals: {
+        HousingCoopProposal: {
           orderBy: { createdAt: 'desc' },
           take: 10,
         },
@@ -964,9 +970,10 @@ export class HousingService {
         skills: application.skills || [],
         commitmentLevel: application.commitmentLevel,
         availability: application.availability,
-      },
+        updatedAt: new Date(),
+      } as any,
       include: {
-        member: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -989,7 +996,8 @@ export class HousingService {
           requiredVotes: Math.ceil(
             coop.currentMembers * coop.decisionThreshold,
           ),
-        },
+          updatedAt: new Date(),
+        } as any,
       });
     }
 
@@ -1003,7 +1011,7 @@ export class HousingService {
   ) {
     const proposal = await this.prisma.housingCoopProposal.findUnique({
       where: { id: proposalId },
-      include: { coop: true },
+      include: { HousingCoop: true },
     });
 
     if (!proposal) {
@@ -1039,7 +1047,8 @@ export class HousingService {
         points: vote.points,
         decision: vote.decision,
         reason: vote.reason,
-      },
+        createdAt: new Date(),
+      } as any,
     });
 
     // Update proposal vote count
@@ -1134,7 +1143,8 @@ export class HousingService {
         maxCoverage: data.monthlyRent * (data.coverageMonths || 3),
         reputation: user.generosityScore,
         status: GuaranteeStatus.PENDING,
-      },
+        updatedAt: new Date(),
+      } as any,
     });
 
     return guarantee;
@@ -1164,7 +1174,8 @@ export class HousingService {
         monthsCommitted: commitment.months,
         amountCommitted: commitment.amount,
         status: SupportStatus.ACTIVE,
-      },
+        updatedAt: new Date(),
+      } as any,
     });
 
     // Check if guarantee is fully supported
@@ -1194,9 +1205,9 @@ export class HousingService {
     const spaceBookings = await this.prisma.spaceBooking.findMany({
       where: { bookerId: userId },
       include: {
-        space: {
+        SpaceBank: {
           include: {
-            owner: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -1212,9 +1223,9 @@ export class HousingService {
     const housingBookings = await this.prisma.housingBooking.findMany({
       where: { guestId: userId },
       include: {
-        housing: {
+        TemporaryHousing: {
           include: {
-            host: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -1239,7 +1250,7 @@ export class HousingService {
       include: {
         _count: {
           select: {
-            bookings: true,
+            SpaceBooking: true,
           },
         },
       },
@@ -1250,7 +1261,7 @@ export class HousingService {
       include: {
         _count: {
           select: {
-            bookings: true,
+            HousingBooking: true,
           },
         },
       },

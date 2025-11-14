@@ -7,6 +7,7 @@ import { CreateRequestDto } from './dto/create-request.dto';
 import { CompleteTransactionDto } from './dto/complete-transaction.dto';
 import { LoggerService } from '../common/logger.service';
 import { AchievementsService } from '../achievements/achievements.service';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class TimeBankService {
@@ -57,6 +58,7 @@ export class TimeBankService {
 
     const transaction = await this.prisma.timeBankTransaction.create({
       data: {
+        id: randomUUID(),
         requesterId,
         providerId,
         offerId,
@@ -65,15 +67,16 @@ export class TimeBankService {
         credits,
         scheduledFor: new Date(scheduledFor),
         status: TransactionStatus.PENDING,
+        updatedAt: new Date(),
       },
       include: {
-        requester: {
+        User_TimeBankTransaction_requesterIdToUser: {
           select: { id: true, name: true, avatar: true, email: true },
         },
-        provider: {
+        User_TimeBankTransaction_providerIdToUser: {
           select: { id: true, name: true, avatar: true, email: true },
         },
-        timeBankOffer: {
+        TimeBankOffer: {
           include: {
             Offer: true,
             Skill: true,
@@ -83,10 +86,10 @@ export class TimeBankService {
     });
 
     // Send email notification to provider
-    if (transaction.provider.email) {
+    if (transaction.User_TimeBankTransaction_providerIdToUser.email) {
       await this.emailService.sendTimeBankRequest(
-        transaction.provider.email,
-        transaction.requester.name,
+        transaction.User_TimeBankTransaction_providerIdToUser.email,
+        transaction.User_TimeBankTransaction_requesterIdToUser.name,
         description,
         hours,
         new Date(scheduledFor),
@@ -122,16 +125,16 @@ export class TimeBankService {
       where: { id: transactionId },
       data: { status: newStatus },
       include: {
-        requester: { select: { id: true, name: true, avatar: true, email: true } },
-        provider: { select: { id: true, name: true, avatar: true, email: true } },
+        User_TimeBankTransaction_requesterIdToUser: { select: { id: true, name: true, avatar: true, email: true } },
+        User_TimeBankTransaction_providerIdToUser: { select: { id: true, name: true, avatar: true, email: true } },
       },
     });
 
     // Send email notification to requester
-    if (updated.Requester.email) {
+    if (updated.User_TimeBankTransaction_requesterIdToUser.email) {
       await this.emailService.sendTimeBankConfirmation(
-        updated.Requester.email,
-        updated.Provider.name,
+        updated.User_TimeBankTransaction_requesterIdToUser.email,
+        updated.User_TimeBankTransaction_providerIdToUser.name,
         updated.description,
         accept,
       );
@@ -152,8 +155,8 @@ export class TimeBankService {
     const transaction = await this.prisma.timeBankTransaction.findUnique({
       where: { id: transactionId },
       include: {
-        requester: { select: { id: true, name: true, avatar: true } },
-        provider: { select: { id: true, name: true, avatar: true } },
+        User_TimeBankTransaction_requesterIdToUser: { select: { id: true, name: true, avatar: true } },
+        User_TimeBankTransaction_providerIdToUser: { select: { id: true, name: true, avatar: true } },
       },
     });
 
@@ -211,8 +214,8 @@ export class TimeBankService {
       where: { id: transactionId },
       data: updateData,
       include: {
-        requester: { select: { id: true, name: true, avatar: true, email: true } },
-        provider: { select: { id: true, name: true, avatar: true, email: true } },
+        User_TimeBankTransaction_requesterIdToUser: { select: { id: true, name: true, avatar: true, email: true } },
+        User_TimeBankTransaction_providerIdToUser: { select: { id: true, name: true, avatar: true, email: true } },
       },
     });
 
@@ -249,16 +252,16 @@ export class TimeBankService {
       }
 
       // Send completion notification to both parties
-      if (updated.Requester.email) {
+      if (updated.User_TimeBankTransaction_requesterIdToUser.email) {
         await this.emailService.sendTimeBankCompletion(
-          updated.Requester.email,
+          updated.User_TimeBankTransaction_requesterIdToUser.email,
           transaction.description,
           transaction.credits,
         );
       }
-      if (updated.Provider.email) {
+      if (updated.User_TimeBankTransaction_providerIdToUser.email) {
         await this.emailService.sendTimeBankCompletion(
-          updated.Provider.email,
+          updated.User_TimeBankTransaction_providerIdToUser.email,
           transaction.description,
           transaction.credits,
         );
@@ -292,8 +295,8 @@ export class TimeBankService {
       where: { id: transactionId },
       data: { status: TransactionStatus.CANCELLED },
       include: {
-        requester: { select: { id: true, name: true, avatar: true } },
-        provider: { select: { id: true, name: true, avatar: true } },
+        User_TimeBankTransaction_requesterIdToUser: { select: { id: true, name: true, avatar: true } },
+        User_TimeBankTransaction_providerIdToUser: { select: { id: true, name: true, avatar: true } },
       },
     });
 
@@ -332,13 +335,13 @@ export class TimeBankService {
       this.prisma.timeBankTransaction.findMany({
         where,
         include: {
-          requester: {
+          User_TimeBankTransaction_requesterIdToUser: {
             select: { id: true, name: true, avatar: true },
           },
-          provider: {
+          User_TimeBankTransaction_providerIdToUser: {
             select: { id: true, name: true, avatar: true },
           },
-          timeBankOffer: {
+          TimeBankOffer: {
             include: {
               Skill: true,
             },
@@ -361,13 +364,13 @@ export class TimeBankService {
     const transaction = await this.prisma.timeBankTransaction.findUnique({
       where: { id: transactionId },
       include: {
-        requester: {
+        User_TimeBankTransaction_requesterIdToUser: {
           select: { id: true, name: true, avatar: true },
         },
-        provider: {
+        User_TimeBankTransaction_providerIdToUser: {
           select: { id: true, name: true, avatar: true },
         },
-        timeBankOffer: {
+        TimeBankOffer: {
           include: {
             Offer: true,
             Skill: true,
@@ -417,9 +420,9 @@ export class TimeBankService {
       this.prisma.timeBankOffer.findMany({
         where,
         include: {
-          offer: {
+          Offer: {
             include: {
-              user: {
+              User: {
                 select: { id: true, name: true, avatar: true },
               },
             },
@@ -505,14 +508,14 @@ export class TimeBankService {
   async getUserTimeBankOffers(userId: string) {
     const offers = await this.prisma.timeBankOffer.findMany({
       where: {
-        offer: {
+        Offer: {
           userId,
         },
       },
       include: {
-        offer: {
+        Offer: {
           include: {
-            user: {
+            User: {
               select: { id: true, name: true, avatar: true },
             },
           },
@@ -520,7 +523,7 @@ export class TimeBankService {
         Skill: true,
       },
       orderBy: {
-        offer: {
+        Offer: {
           createdAt: 'desc',
         },
       },

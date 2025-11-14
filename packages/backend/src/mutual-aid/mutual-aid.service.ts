@@ -31,29 +31,29 @@ export class MutualAidService {
     const need = await this.prisma.need.create({
       data: {
         creatorId: userId,
-        communityId: data.communityId,
+        communityId: data.communityId || undefined,
         scope: data.scope,
         category: data.category,
         type: data.type,
         title: data.title,
         description: data.description,
         images: data.images || [],
-        location: data.location,
-        latitude: data.latitude,
-        longitude: data.longitude,
-        country: data.country,
+        location: data.location || undefined,
+        latitude: data.latitude || undefined,
+        longitude: data.longitude || undefined,
+        country: data.country || undefined,
         resourceTypes: data.resourceTypes || [],
-        targetEur: data.targetEur,
-        targetCredits: data.targetCredits,
-        targetHours: data.targetHours,
+        targetEur: data.targetEur || undefined,
+        targetCredits: data.targetCredits || undefined,
+        targetHours: data.targetHours || undefined,
         neededSkills: data.neededSkills || [],
-        neededMaterials: data.neededMaterials,
+        neededMaterials: data.neededMaterials || undefined,
         urgencyLevel: data.urgencyLevel || 1,
-        deadline: data.deadline ? new Date(data.deadline) : null,
+        deadline: data.deadline ? new Date(data.deadline) : undefined,
         verificationDocs: data.verificationDocs || [],
-      },
+      } as any,
       include: {
-        creator: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -61,7 +61,7 @@ export class MutualAidService {
             generosityScore: true,
           },
         },
-        community: {
+        Community: {
           select: {
             id: true,
             name: true,
@@ -102,7 +102,7 @@ export class MutualAidService {
     let needs = await this.prisma.need.findMany({
       where,
       include: {
-        creator: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -110,14 +110,14 @@ export class MutualAidService {
             generosityScore: true,
           },
         },
-        community: {
+        Community: {
           select: {
             id: true,
             name: true,
             slug: true,
           },
         },
-        contributions: {
+        Contribution: {
           select: {
             id: true,
             contributionType: true,
@@ -152,7 +152,7 @@ export class MutualAidService {
     const need = await this.prisma.need.findUnique({
       where: { id: needId },
       include: {
-        creator: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -161,7 +161,7 @@ export class MutualAidService {
             generosityScore: true,
           },
         },
-        community: {
+        Community: {
           select: {
             id: true,
             name: true,
@@ -169,16 +169,16 @@ export class MutualAidService {
             location: true,
           },
         },
-        contributions: {
+        Contribution: {
           include: {
-            user: {
+            User: {
               select: {
                 id: true,
                 name: true,
                 avatar: true,
               },
             },
-            community: {
+            Community: {
               select: {
                 id: true,
                 name: true,
@@ -228,28 +228,28 @@ export class MutualAidService {
           userId,
           needId,
           contributionType: data.contributionType,
-          amountEur: data.amountEur,
-          amountCredits: data.amountCredits,
-          amountHours: data.amountHours,
+          amountEur: data.amountEur || undefined,
+          amountCredits: data.amountCredits || undefined,
+          amountHours: data.amountHours || undefined,
           skillsOffered: data.skillsOffered || [],
-          materialsOffered: data.materialsOffered,
+          materialsOffered: data.materialsOffered || undefined,
           equipmentOffered: data.equipmentOffered || [],
-          message: data.message,
+          message: data.message || undefined,
           isAnonymous: data.isAnonymous || false,
           isRecurring: data.isRecurring || false,
-          recurringMonths: data.recurringMonths,
+          recurringMonths: data.recurringMonths || undefined,
           status: ContributionStatus.PENDING,
           proofDocuments: data.proofDocuments || [],
-        },
+        } as any,
         include: {
-          user: {
+          User: {
             select: {
               id: true,
               name: true,
               avatar: true,
             },
           },
-          need: true,
+          Need: true,
         },
       });
 
@@ -386,45 +386,45 @@ export class MutualAidService {
     const project = await this.prisma.communityProject.create({
       data: {
         creatorId: userId,
-        communityId: data.communityId,
+        communityId: data.communityId || undefined,
         type: data.type,
         title: data.title,
         description: data.description,
         vision: data.vision,
         images: data.images || [],
-        videoUrl: data.videoUrl,
+        videoUrl: data.videoUrl || undefined,
         location: data.location,
-        latitude: data.latitude,
-        longitude: data.longitude,
+        latitude: data.latitude || undefined,
+        longitude: data.longitude || undefined,
         country: data.country,
-        region: data.region,
-        beneficiaries: data.beneficiaries,
+        region: data.region || undefined,
+        beneficiaries: data.beneficiaries || undefined,
         impactGoals: data.impactGoals || [],
-        targetEur: data.targetEur,
-        targetCredits: data.targetCredits,
-        targetHours: data.targetHours,
+        targetEur: data.targetEur || undefined,
+        targetCredits: data.targetCredits || undefined,
+        targetHours: data.targetHours || undefined,
         targetSkills: data.targetSkills || [],
-        materialNeeds: data.materialNeeds,
+        materialNeeds: data.materialNeeds || undefined,
         participatingCommunities: data.participatingCommunities || [],
-        volunteersNeeded: data.volunteersNeeded,
-        startDate: data.startDate ? new Date(data.startDate) : null,
-        endDate: data.endDate ? new Date(data.endDate) : null,
-        estimatedMonths: data.estimatedMonths,
-        organizationName: data.organizationName,
-        contactEmail: data.contactEmail,
-        websiteUrl: data.websiteUrl,
+        volunteersNeeded: data.volunteersNeeded || undefined,
+        startDate: data.startDate ? new Date(data.startDate) : undefined,
+        endDate: data.endDate ? new Date(data.endDate) : undefined,
+        estimatedMonths: data.estimatedMonths || undefined,
+        organizationName: data.organizationName || undefined,
+        contactEmail: data.contactEmail || undefined,
+        websiteUrl: data.websiteUrl || undefined,
         tags: data.tags || [],
         sdgGoals: data.sdgGoals || [],
-      },
+      } as any,
       include: {
-        creator: {
+        User: {
           select: {
             id: true,
             name: true,
             avatar: true,
           },
         },
-        community: {
+        Community: {
           select: {
             id: true,
             name: true,
@@ -464,21 +464,21 @@ export class MutualAidService {
     let projects = await this.prisma.communityProject.findMany({
       where,
       include: {
-        creator: {
+        User: {
           select: {
             id: true,
             name: true,
             avatar: true,
           },
         },
-        community: {
+        Community: {
           select: {
             id: true,
             name: true,
             slug: true,
           },
         },
-        contributions: {
+        Contribution: {
           select: {
             id: true,
             contributionType: true,
@@ -490,8 +490,8 @@ export class MutualAidService {
         },
         _count: {
           select: {
-            contributions: true,
-            updates: true,
+            Contribution: true,
+            ProjectUpdate: true,
           },
         },
       },
@@ -515,7 +515,7 @@ export class MutualAidService {
     const project = await this.prisma.communityProject.findUnique({
       where: { id: projectId },
       include: {
-        creator: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -523,7 +523,7 @@ export class MutualAidService {
             bio: true,
           },
         },
-        community: {
+        Community: {
           select: {
             id: true,
             name: true,
@@ -531,19 +531,19 @@ export class MutualAidService {
             location: true,
           },
         },
-        phases: {
+        ProjectPhase: {
           orderBy: { order: 'asc' },
         },
-        contributions: {
+        Contribution: {
           include: {
-            user: {
+            User: {
               select: {
                 id: true,
                 name: true,
                 avatar: true,
               },
             },
-            community: {
+            Community: {
               select: {
                 id: true,
                 name: true,
@@ -553,9 +553,9 @@ export class MutualAidService {
           },
           orderBy: { createdAt: 'desc' },
         },
-        updates: {
+        ProjectUpdate: {
           include: {
-            author: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -566,9 +566,9 @@ export class MutualAidService {
           orderBy: { createdAt: 'desc' },
           take: 10,
         },
-        impactReports: {
+        ImpactReport: {
           include: {
-            author: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -618,21 +618,21 @@ export class MutualAidService {
         data: {
           userId,
           projectId,
-          phaseId: data.phaseId,
+          phaseId: data.phaseId || undefined,
           contributionType: data.contributionType,
-          amountEur: data.amountEur,
-          amountCredits: data.amountCredits,
-          amountHours: data.amountHours,
+          amountEur: data.amountEur || undefined,
+          amountCredits: data.amountCredits || undefined,
+          amountHours: data.amountHours || undefined,
           skillsOffered: data.skillsOffered || [],
-          materialsOffered: data.materialsOffered,
+          materialsOffered: data.materialsOffered || undefined,
           equipmentOffered: data.equipmentOffered || [],
-          message: data.message,
+          message: data.message || undefined,
           isAnonymous: data.isAnonymous || false,
           status: ContributionStatus.PENDING,
           proofDocuments: data.proofDocuments || [],
-        },
+        } as any,
         include: {
-          user: {
+          User: {
             select: {
               id: true,
               name: true,
@@ -791,12 +791,12 @@ export class MutualAidService {
         name: data.name,
         description: data.description,
         order: data.order,
-        targetEur: data.targetEur,
-        targetCredits: data.targetCredits,
-        targetHours: data.targetHours,
-        startDate: data.startDate ? new Date(data.startDate) : null,
-        endDate: data.endDate ? new Date(data.endDate) : null,
-      },
+        targetEur: data.targetEur || undefined,
+        targetCredits: data.targetCredits || undefined,
+        targetHours: data.targetHours || undefined,
+        startDate: data.startDate ? new Date(data.startDate) : undefined,
+        endDate: data.endDate ? new Date(data.endDate) : undefined,
+      } as any,
     });
   }
 
@@ -820,16 +820,16 @@ export class MutualAidService {
         title: data.title,
         content: data.content,
         images: data.images || [],
-        videoUrl: data.videoUrl,
-        progressUpdate: data.progressUpdate,
-        fundsUsed: data.fundsUsed,
-        beneficiariesReached: data.beneficiariesReached,
+        videoUrl: data.videoUrl || undefined,
+        progressUpdate: data.progressUpdate || undefined,
+        fundsUsed: data.fundsUsed || undefined,
+        beneficiariesReached: data.beneficiariesReached || undefined,
         milestones: data.milestones || [],
-        challenges: data.challenges,
-        nextSteps: data.nextSteps,
-      },
+        challenges: data.challenges || undefined,
+        nextSteps: data.nextSteps || undefined,
+      } as any,
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -873,21 +873,21 @@ export class MutualAidService {
         summary: data.summary,
         impactLevel: data.impactLevel,
         beneficiariesReached: data.beneficiariesReached,
-        jobsCreated: data.jobsCreated,
-        co2Avoided: data.co2Avoided,
-        waterLitersProvided: data.waterLitersProvided,
-        peopleEducated: data.peopleEducated,
-        customMetrics: data.customMetrics,
+        jobsCreated: data.jobsCreated || undefined,
+        co2Avoided: data.co2Avoided || undefined,
+        waterLitersProvided: data.waterLitersProvided || undefined,
+        peopleEducated: data.peopleEducated || undefined,
+        customMetrics: data.customMetrics || undefined,
         photos: data.photos || [],
         videos: data.videos || [],
         testimonials: data.testimonials || [],
         documents: data.documents || [],
-        sustainabilityPlan: data.sustainabilityPlan,
+        sustainabilityPlan: data.sustainabilityPlan || undefined,
         futureGoals: data.futureGoals || [],
-        publishedAt: data.publish ? new Date() : null,
-      },
+        publishedAt: data.publish ? new Date() : undefined,
+      } as any,
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -906,8 +906,8 @@ export class MutualAidService {
     const contribution = await this.prisma.contribution.findUnique({
       where: { id: contributionId },
       include: {
-        need: true,
-        project: true,
+        Need: true,
+        CommunityProject: true,
       },
     });
 
@@ -917,8 +917,8 @@ export class MutualAidService {
 
     // Only need/project creator can validate
     const canValidate =
-      (contribution.need && contribution.need.creatorId === userId) ||
-      (contribution.project && contribution.project.creatorId === userId);
+      (contribution.Need && contribution.Need.creatorId === userId) ||
+      (contribution.CommunityProject && contribution.CommunityProject.creatorId === userId);
 
     if (!canValidate) {
       throw new ForbiddenException('No tienes permiso para validar esta contribución');
@@ -938,8 +938,8 @@ export class MutualAidService {
     const contribution = await this.prisma.contribution.findUnique({
       where: { id: contributionId },
       include: {
-        need: true,
-        project: true,
+        Need: true,
+        CommunityProject: true,
       },
     });
 
@@ -1011,7 +1011,7 @@ export class MutualAidService {
     const contributions = await this.prisma.contribution.findMany({
       where: { userId },
       include: {
-        need: {
+        Need: {
           select: {
             id: true,
             title: true,
@@ -1019,7 +1019,7 @@ export class MutualAidService {
             status: true,
           },
         },
-        project: {
+        CommunityProject: {
           select: {
             id: true,
             title: true,
@@ -1038,7 +1038,7 @@ export class MutualAidService {
     return this.prisma.need.findMany({
       where: { creatorId: userId },
       include: {
-        contributions: {
+        Contribution: {
           select: {
             id: true,
             contributionType: true,
@@ -1057,7 +1057,7 @@ export class MutualAidService {
     return this.prisma.communityProject.findMany({
       where: { creatorId: userId },
       include: {
-        contributions: {
+        Contribution: {
           select: {
             id: true,
             contributionType: true,
@@ -1069,8 +1069,8 @@ export class MutualAidService {
         },
         _count: {
           select: {
-            updates: true,
-            impactReports: true,
+            ProjectUpdate: true,
+            ImpactReport: true,
           },
         },
       },

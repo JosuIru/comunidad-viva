@@ -88,11 +88,12 @@ export class ProofOfHelpService {
     // Crear el bloque
     const block = await this.prisma.trustBlock.create({
       data: {
+        id: `block-${blockData.height}-${Date.now()}`,
         height: blockData.height,
         hash,
         previousHash: blockData.previousHash,
         type: data.type,
-        actorId: data.actorId,
+        User: { connect: { id: data.actorId } },
         content: data.content,
         nonce,
         difficulty,
@@ -129,7 +130,7 @@ export class ProofOfHelpService {
     // Verificar que el validador tiene autoridad
     const validator = await this.prisma.user.findUnique({
       where: { id: validatorId },
-      include: { Badge: true },
+      include: { UserBadge: true },
     });
 
     if (!validator) {
@@ -139,7 +140,7 @@ export class ProofOfHelpService {
     const validatorLevel = this.getValidatorLevel(validator);
     const block = await this.prisma.trustBlock.findUnique({
       where: { id: blockId },
-      include: { validations: true },
+      include: { BlockValidation: true },
     });
 
     if (!block) {
@@ -160,7 +161,7 @@ export class ProofOfHelpService {
     }
 
     // Verificar que no haya validado ya
-    const existingValidation = block.validations.find(v => v.validatorId === validatorId);
+    const existingValidation = block.BlockValidation.find(v => v.validatorId === validatorId);
     if (existingValidation) {
       throw new BadRequestException('Ya has validado este bloque');
     }
@@ -168,8 +169,9 @@ export class ProofOfHelpService {
     // Registrar validación
     const validation = await this.prisma.blockValidation.create({
       data: {
-        blockId,
-        validatorId,
+        id: `${blockId}-${validatorId}-${Date.now()}`,
+        TrustBlock: { connect: { id: blockId } },
+        User: { connect: { id: validatorId } },
         decision,
         reason,
         stake: this.calculateValidatorStake(validator),
@@ -204,10 +206,11 @@ export class ProofOfHelpService {
     // Crear un mini-DAO para esta decisión
     const dao = await this.prisma.moderationDAO.create({
       data: {
+        id: `dao-${contentId}-${Date.now()}`,
         contentId,
         contentType,
         reportReason,
-        reporterId,
+        User: reporterId ? { connect: { id: reporterId } } : undefined,
         status: 'VOTING',
         quorum: 5,
         deadline: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24h
@@ -221,7 +224,8 @@ export class ProofOfHelpService {
     for (const juror of jury) {
       await this.prisma.notification.create({
         data: {
-          userId: juror.id,
+          id: `notif-${juror.id}-${Date.now()}`,
+          User: { connect: { id: juror.id } },
           type: 'HELP_REQUEST',
           title: 'Solicitud de moderación',
           body: 'Tu opinión es necesaria para moderar contenido reportado por la comunidad',
@@ -246,7 +250,7 @@ export class ProofOfHelpService {
   ) {
     const dao = await this.prisma.moderationDAO.findUnique({
       where: { id: daoId },
-      include: { votes: true },
+      include: { ModerationVote: true },
     });
 
     if (!dao || dao.status !== 'VOTING') {
@@ -258,7 +262,7 @@ export class ProofOfHelpService {
     }
 
     // Verificar que no haya votado ya
-    const existingVote = dao.votes.find(v => v.voterId === voterId);
+    const existingVote = dao.ModerationVote.find(v => v.voterId === voterId);
     if (existingVote) {
       throw new BadRequestException('Ya has votado en esta moderación');
     }
@@ -268,8 +272,9 @@ export class ProofOfHelpService {
     // Registrar voto ponderado por reputación
     const vote = await this.prisma.moderationVote.create({
       data: {
-        daoId,
-        voterId,
+        id: `vote-${daoId}-${voterId}-${Date.now()}`,
+        ModerationDAO: { connect: { id: daoId } },
+        User: { connect: { id: voterId } },
         decision,
         reason,
         weight: Math.min(voterReputation / 10, 10), // Max peso 10
@@ -279,7 +284,7 @@ export class ProofOfHelpService {
     this.logger.log(`Moderation vote: daoId=${daoId}, voter=${voterId}, decision=${decision}, weight=${vote.weight}`);
 
     // Verificar si alcanzamos quorum
-    if (dao.votes.length + 1 >= dao.quorum) {
+    if (dao.ModerationVote.length + 1 >= dao.quorum) {
       await this.executeModerationDecision(daoId);
     }
 
@@ -322,9 +327,9 @@ export class ProofOfHelpService {
         },
       },
       include: {
-        votes: {
+        ModerationVote: {
           include: {
-            voter: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -333,7 +338,7 @@ export class ProofOfHelpService {
             },
           },
         },
-        reporter: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -348,7 +353,7 @@ export class ProofOfHelpService {
 
     // Filtrar solo las que el usuario no ha votado todavía
     const pending = moderations.filter(dao => {
-      const hasVoted = dao.votes.some(vote => vote.voterId === userId);
+      const hasVoted = dao.ModerationVote.some(vote => vote.voterId === userId);
       return !hasVoted;
     });
 
@@ -364,23 +369,33 @@ export class ProofOfHelpService {
                 where: { id: dao.contentId },
                 select: {
                   content: true,
-                  author: {
-                    select: { id: true, name: true, avatar: true },
-                  },
+                  authorId: true,
                 },
               });
+              if (contentInfo) {
+                const author = await this.prisma.user.findUnique({
+                  where: { id: contentInfo.authorId },
+                  select: { id: true, name: true, avatar: true },
+                });
+                contentInfo = { ...contentInfo, author };
+              }
               break;
             case 'OFFER':
-              contentInfo = await this.prisma.Offer.findUnique({
+              contentInfo = await this.prisma.offer.findUnique({
                 where: { id: dao.contentId },
                 select: {
                   title: true,
                   description: true,
-                  user: {
-                    select: { id: true, name: true, avatar: true },
-                  },
+                  userId: true,
                 },
               });
+              if (contentInfo) {
+                const user = await this.prisma.user.findUnique({
+                  where: { id: contentInfo.userId },
+                  select: { id: true, name: true, avatar: true },
+                });
+                contentInfo = { ...contentInfo, user };
+              }
               break;
             case 'COMMUNITY':
               contentInfo = await this.prisma.community.findUnique({
@@ -398,11 +413,16 @@ export class ProofOfHelpService {
                 select: {
                   title: true,
                   description: true,
-                  organizer: {
-                    select: { id: true, name: true, avatar: true },
-                  },
+                  organizerId: true,
                 },
               });
+              if (contentInfo) {
+                const organizer = await this.prisma.user.findUnique({
+                  where: { id: contentInfo.organizerId },
+                  select: { id: true, name: true, avatar: true },
+                });
+                contentInfo = { ...contentInfo, organizer };
+              }
               break;
             case 'TIMEBANK':
               contentInfo = await this.prisma.timeBankTransaction.findUnique({
@@ -410,11 +430,16 @@ export class ProofOfHelpService {
                 select: {
                   description: true,
                   hours: true,
-                  requester: {
-                    select: { id: true, name: true, avatar: true },
-                  },
+                  requesterId: true,
                 },
               });
+              if (contentInfo) {
+                const requester = await this.prisma.user.findUnique({
+                  where: { id: contentInfo.requesterId },
+                  select: { id: true, name: true, avatar: true },
+                });
+                contentInfo = { ...contentInfo, requester };
+              }
               break;
           }
         } catch (error) {
@@ -423,10 +448,10 @@ export class ProofOfHelpService {
 
         // Calcular estadísticas de votación
         const voteStats = {
-          keep: dao.votes.filter(v => v.decision === 'KEEP').length,
-          remove: dao.votes.filter(v => v.decision === 'REMOVE').length,
-          warn: dao.votes.filter(v => v.decision === 'WARN').length,
-          total: dao.votes.length,
+          keep: dao.ModerationVote.filter(v => v.decision === 'KEEP').length,
+          remove: dao.ModerationVote.filter(v => v.decision === 'REMOVE').length,
+          warn: dao.ModerationVote.filter(v => v.decision === 'WARN').length,
+          total: dao.ModerationVote.length,
           quorum: dao.quorum,
           hoursRemaining: Math.ceil(
             (dao.deadline.getTime() - Date.now()) / (1000 * 60 * 60)
@@ -485,6 +510,7 @@ export class ProofOfHelpService {
     // Crear DAO para votación
     const proposal = await this.prisma.proposal.create({
       data: {
+        id: `proposal-${Date.now()}`,
         blockId: block.id,
         authorId: data.authorId,
         type: data.type,
@@ -495,6 +521,7 @@ export class ProofOfHelpService {
         status: 'DISCUSSION',
         discussionDeadline: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 días discusión
         votingDeadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 días total
+        updatedAt: new Date(),
       },
     });
 
@@ -514,7 +541,7 @@ export class ProofOfHelpService {
 
     const proposal = await this.prisma.proposal.findUnique({
       where: { id: proposalId },
-      include: { votes: true },
+      include: { ProposalVote: true },
     });
 
     if (!proposal) {
@@ -556,10 +583,12 @@ export class ProofOfHelpService {
         proposalId_voterId: { proposalId, voterId },
       },
       create: {
+        id: `vote-${proposalId}-${voterId}`,
         proposalId,
         voterId,
         points,
         cost,
+        updatedAt: new Date(),
       },
       update: {
         points,
@@ -609,7 +638,7 @@ export class ProofOfHelpService {
         { votingDeadline: 'asc' },
       ],
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -617,9 +646,9 @@ export class ProofOfHelpService {
             generosityScore: true,
           },
         },
-        votes: {
+        ProposalVote: {
           include: {
-            voter: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -630,8 +659,8 @@ export class ProofOfHelpService {
         },
         _count: {
           select: {
-            votes: true,
-            comments: true,
+            ProposalVote: true,
+            ProposalComment: true,
           },
         },
       },
@@ -639,11 +668,13 @@ export class ProofOfHelpService {
 
     // Calcular totales de votos para cada propuesta
     const proposalsWithStats = proposals.map(proposal => {
-      const totalPoints = proposal.votes.reduce((sum, vote) => sum + vote.points, 0);
-      const totalVoters = proposal.votes.length;
+      const totalPoints = proposal.ProposalVote.reduce((sum, vote) => sum + vote.points, 0);
+      const totalVoters = proposal.ProposalVote.length;
 
       return {
         ...proposal,
+        author: proposal.User,
+        votes: proposal.ProposalVote,
         stats: {
           totalPoints,
           totalVoters,
@@ -664,7 +695,7 @@ export class ProofOfHelpService {
     const proposal = await this.prisma.proposal.findUnique({
       where: { id: proposalId },
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -673,10 +704,10 @@ export class ProofOfHelpService {
             generosityScore: true,
           },
         },
-        block: true,
-        votes: {
+        TrustBlock: true,
+        ProposalVote: {
           include: {
-            voter: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -689,21 +720,21 @@ export class ProofOfHelpService {
             createdAt: 'desc',
           },
         },
-        comments: {
+        ProposalComment: {
           where: {
             parentId: null, // Solo comentarios de nivel superior
           },
           include: {
-            author: {
+            User: {
               select: {
                 id: true,
                 name: true,
                 avatar: true,
               },
             },
-            replies: {
+            other_ProposalComment: {
               include: {
-                author: {
+                User: {
                   select: {
                     id: true,
                     name: true,
@@ -725,19 +756,30 @@ export class ProofOfHelpService {
     }
 
     // Calcular estadísticas
-    const totalPoints = proposal.votes.reduce((sum, vote) => sum + vote.points, 0);
-    const totalCost = proposal.votes.reduce((sum, vote) => sum + vote.cost, 0);
-    const uniqueVoters = proposal.votes.length;
+    const totalPoints = proposal.ProposalVote.reduce((sum, vote) => sum + vote.points, 0);
+    const totalCost = proposal.ProposalVote.reduce((sum, vote) => sum + vote.cost, 0);
+    const uniqueVoters = proposal.ProposalVote.length;
 
     // Distribución de votos por rango
     const voteDistribution = {
-      low: proposal.votes.filter(v => v.points <= 3).length,
-      medium: proposal.votes.filter(v => v.points > 3 && v.points <= 7).length,
-      high: proposal.votes.filter(v => v.points > 7).length,
+      low: proposal.ProposalVote.filter(v => v.points <= 3).length,
+      medium: proposal.ProposalVote.filter(v => v.points > 3 && v.points <= 7).length,
+      high: proposal.ProposalVote.filter(v => v.points > 7).length,
     };
 
     return {
       ...proposal,
+      author: proposal.User,
+      block: proposal.TrustBlock,
+      votes: proposal.ProposalVote,
+      comments: proposal.ProposalComment.map(comment => ({
+        ...comment,
+        author: comment.User,
+        replies: comment.other_ProposalComment.map(reply => ({
+          ...reply,
+          author: reply.User,
+        })),
+      })),
       stats: {
         totalPoints,
         totalCost,
@@ -764,14 +806,14 @@ export class ProofOfHelpService {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       include: {
-        timeBankGiven: { where: { status: 'COMPLETED' } },
-        timeBankReceived: { where: { status: 'COMPLETED' } },
-        Badge: true,
+        TimeBankTransaction_TimeBankTransaction_providerIdToUser: { where: { status: 'COMPLETED' } },
+        TimeBankTransaction_TimeBankTransaction_requesterIdToUser: { where: { status: 'COMPLETED' } },
+        UserBadge: true,
         _count: {
           select: {
-            posts: true,
-            offers: true,
-            connections: true,
+            Post: true,
+            Offer: true,
+            Connection_Connection_userIdToUser: true,
           },
         },
       },
@@ -783,16 +825,16 @@ export class ProofOfHelpService {
     let reputation = 0;
 
     // Ayudas dadas (peso alto)
-    reputation += user.timeBankGiven.length * 5;
+    reputation += user.TimeBankTransaction_TimeBankTransaction_providerIdToUser.length * 5;
 
     // Ayudas recibidas (peso medio - incentiva pedir ayuda)
-    reputation += user.timeBankReceived.length * 2;
+    reputation += user.TimeBankTransaction_TimeBankTransaction_requesterIdToUser.length * 2;
 
     // Badges (peso variable)
-    reputation += user.badges.length * 10;
+    reputation += user.UserBadge.length * 10;
 
     // Conexiones (peso bajo)
-    reputation += user._count.connections;
+    reputation += user._count.Connection_Connection_userIdToUser;
 
     // Antigüedad (bonus)
     const accountAge = Date.now() - user.createdAt.getTime();
@@ -812,7 +854,7 @@ export class ProofOfHelpService {
       where: {
         validatorId: userId,
         decision: 'APPROVE',
-        block: { status: 'APPROVED' },
+        TrustBlock: { status: 'APPROVED' },
       },
     });
     reputation += validations * 3;
@@ -838,7 +880,7 @@ export class ProofOfHelpService {
         actorId: { not: userId }, // No puede validar sus propios bloques
       },
       include: {
-        actor: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -846,9 +888,9 @@ export class ProofOfHelpService {
             peopleHelped: true,
           },
         },
-        validations: {
+        BlockValidation: {
           include: {
-            validator: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -859,7 +901,7 @@ export class ProofOfHelpService {
         },
         _count: {
           select: {
-            validations: true,
+            BlockValidation: true,
           },
         },
       },
@@ -872,16 +914,16 @@ export class ProofOfHelpService {
     // Filtrar bloques que el usuario puede validar según su nivel
     const validatableBlocks = pendingBlocks.filter(block => {
       const requiredLevel = this.getRequiredValidatorLevel(block.type);
-      const hasAlreadyValidated = block.validations.some(v => v.validatorId === userId);
+      const hasAlreadyValidated = block.BlockValidation.some(v => v.validatorId === userId);
       return userLevel >= requiredLevel && !hasAlreadyValidated;
     });
 
     // Agregar información de progreso de validación
     const blocksWithProgress = validatableBlocks.map(block => {
       const requiredValidations = this.getRequiredValidations(block.type);
-      const currentValidations = block._count.validations;
-      const approvals = block.validations.filter(v => v.decision === 'APPROVE').length;
-      const rejections = block.validations.filter(v => v.decision === 'REJECT').length;
+      const currentValidations = block._count.BlockValidation;
+      const approvals = block.BlockValidation.filter(v => v.decision === 'APPROVE').length;
+      const rejections = block.BlockValidation.filter(v => v.decision === 'REJECT').length;
 
       return {
         ...block,
@@ -944,20 +986,23 @@ export class ProofOfHelpService {
 
     const comment = await this.prisma.proposalComment.create({
       data: {
+        id: `comment-${Date.now()}`,
         proposalId: data.proposalId,
         authorId: data.authorId,
         content: data.content,
         parentId: data.parentId,
+        updatedAt: new Date(),
       },
-      include: {
-        author: {
-          select: {
-            id: true,
-            name: true,
-            avatar: true,
-            generosityScore: true,
-          },
-        },
+    });
+
+    // Fetch author info for notifications
+    const author = await this.prisma.user.findUnique({
+      where: { id: data.authorId },
+      select: {
+        id: true,
+        name: true,
+        avatar: true,
+        generosityScore: true,
       },
     });
 
@@ -965,10 +1010,11 @@ export class ProofOfHelpService {
     if (proposal.authorId !== data.authorId) {
       await this.prisma.notification.create({
         data: {
-          userId: proposal.authorId,
+          id: `notif-${proposal.authorId}-${Date.now()}`,
+          User: { connect: { id: proposal.authorId } },
           type: 'POST_MENTION',
           title: 'Nuevo comentario en tu propuesta',
-          body: `${comment.author.name} comentó en "${proposal.title}"`,
+          body: `${author?.name || 'Alguien'} comentó en "${proposal.title}"`,
           data: { proposalId: data.proposalId, commentId: comment.id },
           link: `/consensus/proposals/${data.proposalId}`,
         },
@@ -985,10 +1031,11 @@ export class ProofOfHelpService {
       if (parentComment && parentComment.authorId !== data.authorId) {
         await this.prisma.notification.create({
           data: {
-            userId: parentComment.authorId,
+            id: `notif-${parentComment.authorId}-${Date.now()}-reply`,
+            User: { connect: { id: parentComment.authorId } },
             type: 'POST_MENTION',
             title: 'Nueva respuesta a tu comentario',
-            body: `${comment.author.name} respondió a tu comentario`,
+            body: `${author?.name || 'Alguien'} respondió a tu comentario`,
             data: { proposalId: data.proposalId, commentId: comment.id },
             link: `/consensus/proposals/${data.proposalId}`,
           },
@@ -996,7 +1043,10 @@ export class ProofOfHelpService {
       }
     }
 
-    return comment;
+    return {
+      ...comment,
+      author,
+    };
   }
 
   /**
@@ -1049,7 +1099,7 @@ export class ProofOfHelpService {
         parentId: null, // Solo comentarios de nivel superior
       },
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -1057,9 +1107,9 @@ export class ProofOfHelpService {
             generosityScore: true,
           },
         },
-        replies: {
+        other_ProposalComment: {
           include: {
-            author: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -1078,7 +1128,14 @@ export class ProofOfHelpService {
       },
     });
 
-    return comments;
+    return comments.map(comment => ({
+      ...comment,
+      author: comment.User,
+      replies: comment.other_ProposalComment.map(reply => ({
+        ...reply,
+        author: reply.User,
+      })),
+    }));
   }
 
   /**
@@ -1138,9 +1195,9 @@ export class ProofOfHelpService {
         generosityScore: true,
         _count: {
           select: {
-            blockValidations: true,
-            proposalVotes: true,
-            moderationVotes: true,
+            BlockValidation: true,
+            ProposalVote: true,
+            ModerationVote: true,
           },
         },
       },
@@ -1155,7 +1212,7 @@ export class ProofOfHelpService {
       take: 5,
       orderBy: { createdAt: 'desc' },
       include: {
-        author: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -1164,8 +1221,8 @@ export class ProofOfHelpService {
         },
         _count: {
           select: {
-            votes: true,
-            comments: true,
+            ProposalVote: true,
+            ProposalComment: true,
           },
         },
       },
@@ -1186,7 +1243,7 @@ export class ProofOfHelpService {
     const totalUsers = await this.prisma.user.count();
     const activeValidators = await this.prisma.user.count({
       where: {
-        blockValidations: {
+        BlockValidation: {
           some: {
             createdAt: { gte: last30Days },
           },
@@ -1215,7 +1272,7 @@ export class ProofOfHelpService {
       })),
       topValidators: topValidators.map(v => ({
         ...v,
-        totalParticipations: v._count.blockValidations + v._count.proposalVotes + v._count.moderationVotes,
+        totalParticipations: v._count.BlockValidation + v._count.ProposalVote + v._count.ModerationVote,
       })),
       recentActivity: {
         proposals: proposalsLast7Days,
@@ -1241,21 +1298,21 @@ export class ProofOfHelpService {
   private async checkConsensus(blockId: string) {
     const block = await this.prisma.trustBlock.findUnique({
       where: { id: blockId },
-      include: { validations: true },
+      include: { BlockValidation: true },
     });
 
     if (!block || block.status !== 'PENDING') return;
 
     const requiredValidations = this.getRequiredValidations(block.type);
-    const approvals = block.validations.filter(v => v.decision === 'APPROVE');
-    const rejections = block.validations.filter(v => v.decision === 'REJECT');
+    const approvals = block.BlockValidation.filter(v => v.decision === 'APPROVE');
+    const rejections = block.BlockValidation.filter(v => v.decision === 'REJECT');
 
     // Consenso por mayoría ponderada por stake
     const approvalStake = approvals.reduce((sum, v) => sum + v.stake, 0);
     const rejectionStake = rejections.reduce((sum, v) => sum + v.stake, 0);
     const totalStake = approvalStake + rejectionStake;
 
-    if (block.validations.length >= requiredValidations) {
+    if (block.BlockValidation.length >= requiredValidations) {
       if (approvalStake > totalStake * 0.66) {
         // Consenso alcanzado - aprobar
         await this.finalizeBlock(blockId, 'APPROVED');
@@ -1303,7 +1360,8 @@ export class ProofOfHelpService {
     for (const validator of correctValidators) {
       await this.prisma.creditTransaction.create({
         data: {
-          userId: validator.validatorId,
+          id: `tx-${validator.validatorId}-${Date.now()}`,
+          User: { connect: { id: validator.validatorId } },
           amount: 2,
           balance: 0,
           reason: 'COMMUNITY_HELP',
@@ -1341,7 +1399,7 @@ export class ProofOfHelpService {
   private async executeModerationDecision(daoId: string) {
     const dao = await this.prisma.moderationDAO.findUnique({
       where: { id: daoId },
-      include: { votes: true },
+      include: { ModerationVote: true },
     });
 
     if (!dao) return;
@@ -1353,7 +1411,7 @@ export class ProofOfHelpService {
       WARN: 0,
     };
 
-    dao.votes.forEach(vote => {
+    dao.ModerationVote.forEach(vote => {
       voteCount[vote.decision] += vote.weight;
     });
 
@@ -1389,11 +1447,12 @@ export class ProofOfHelpService {
     }
 
     // Recompensar al jurado
-    for (const vote of dao.votes) {
+    for (const vote of dao.ModerationVote) {
       if (vote.decision === decision) {
         await this.prisma.creditTransaction.create({
           data: {
-            userId: vote.voterId,
+            id: `tx-${vote.voterId}-${Date.now()}`,
+            User: { connect: { id: vote.voterId } },
             amount: 1,
             balance: 0,
             reason: 'COMMUNITY_HELP',
@@ -1412,13 +1471,13 @@ export class ProofOfHelpService {
   private async checkProposalThreshold(proposalId: string) {
     const proposal = await this.prisma.proposal.findUnique({
       where: { id: proposalId },
-      include: { votes: true },
+      include: { ProposalVote: true },
     });
 
     if (!proposal) return;
 
     // Calcular apoyo total (suma de puntos)
-    const totalSupport = proposal.votes.reduce((sum, v) => sum + v.points, 0);
+    const totalSupport = proposal.ProposalVote.reduce((sum, v) => sum + v.points, 0);
 
     // Threshold dinámico basado en participación
     const activeUsers = await this.prisma.user.count({
@@ -1454,8 +1513,8 @@ export class ProofOfHelpService {
     const proposal = await this.prisma.proposal.findUnique({
       where: { id: proposalId },
       include: {
-        block: true,
-        author: true,
+        TrustBlock: true,
+        User: true,
       },
     });
 
@@ -1466,7 +1525,7 @@ export class ProofOfHelpService {
     this.logger.log(`Executing proposal: ${proposalId}, type=${proposal.type}`);
 
     try {
-      const content = proposal.block.content as any;
+      const content = proposal.TrustBlock.content as any;
 
       switch (proposal.type) {
         case 'COMMUNITY_UPDATE':
@@ -1611,7 +1670,8 @@ export class ProofOfHelpService {
       // Notificar al autor
       await this.prisma.notification.create({
         data: {
-          userId: proposal.authorId,
+          id: `notif-${proposal.authorId}-${Date.now()}`,
+          User: { connect: { id: proposal.authorId } },
           type: 'COMMUNITY_MILESTONE',
           title: 'Propuesta implementada',
           body: `Tu propuesta "${proposal.title}" ha sido aprobada e implementada exitosamente`,
@@ -1625,7 +1685,8 @@ export class ProofOfHelpService {
       // Notificar error al autor
       await this.prisma.notification.create({
         data: {
-          userId: proposal.authorId,
+          id: `notif-${proposal.authorId}-${Date.now()}-error`,
+          User: { connect: { id: proposal.authorId } },
           type: 'COMMUNITY_MILESTONE',
           title: 'Error en implementación',
           body: `Hubo un error al implementar tu propuesta "${proposal.title}"`,
@@ -1644,7 +1705,7 @@ export class ProofOfHelpService {
         await this.prisma.post.delete({ where: { id: contentId } });
         break;
       case 'OFFER':
-        await this.prisma.Offer.update({
+        await this.prisma.offer.update({
           where: { id: contentId },
           data: { status: 'CANCELLED' },
         });
@@ -1690,7 +1751,7 @@ export class ProofOfHelpService {
         authorId = post?.authorId || null;
         break;
       case 'OFFER':
-        const offer = await this.prisma.Offer.findUnique({
+        const offer = await this.prisma.offer.findUnique({
           where: { id: contentId },
         });
         authorId = offer?.userId || null;
@@ -1698,10 +1759,10 @@ export class ProofOfHelpService {
       case 'COMMUNITY':
         const community = await this.prisma.community.findUnique({
           where: { id: contentId },
-          include: { governance: true },
+          include: { CommunityGovernance: true },
         });
         // Notify first founder
-        authorId = community?.governance?.founders[0] || null;
+        authorId = community?.CommunityGovernance?.founders[0] || null;
         break;
       case 'EVENT':
         const event = await this.prisma.event.findUnique({
@@ -1720,7 +1781,8 @@ export class ProofOfHelpService {
     if (authorId) {
       await this.prisma.notification.create({
         data: {
-          userId: authorId,
+          id: `notif-${authorId}-${Date.now()}`,
+          User: { connect: { id: authorId } },
           type: 'COMMUNITY_MILESTONE',
           title: 'Aviso de la comunidad',
           body: 'Tu contenido ha recibido una advertencia por decisión comunitaria',
@@ -1737,7 +1799,8 @@ export class ProofOfHelpService {
     for (const witnessId of witnesses) {
       await this.prisma.notification.create({
         data: {
-          userId: witnessId,
+          id: `notif-${witnessId}-${blockId}-${Date.now()}`,
+          User: { connect: { id: witnessId } },
           type: 'HELP_REQUEST',
           title: 'Validación requerida',
           body: 'Se necesita tu validación para confirmar una transacción de ayuda',
@@ -1843,15 +1906,15 @@ export class ProofOfHelpService {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       include: {
-        timeBankGiven: { where: { status: 'COMPLETED' } },
-        Badge: true,
+        TimeBankTransaction_TimeBankTransaction_providerIdToUser: { where: { status: 'COMPLETED' } },
+        UserBadge: true,
       },
     });
 
     if (!user) return 0;
 
-    const hoursHelped = user.timeBankGiven.reduce((sum, t) => sum + t.hours, 0);
-    const badgeBonus = user.badges?.length || 0;
+    const hoursHelped = user.TimeBankTransaction_TimeBankTransaction_providerIdToUser.reduce((sum, t) => sum + t.hours, 0);
+    const badgeBonus = user.UserBadge?.length || 0;
 
     return hoursHelped + badgeBonus;
   }
@@ -1916,7 +1979,7 @@ export class ProofOfHelpService {
         proofOfHelpScore: true,
         level: true,
         peopleHelped: true,
-        badges: {
+        UserBadge: {
           select: {
             badgeType: true,
           },
@@ -1930,7 +1993,7 @@ export class ProofOfHelpService {
 
     const delegates = potentialDelegates.map(user => {
       // Extract expertise categories from badge types
-      const badgeCategories = user.badges?.map(b => {
+      const badgeCategories = user.UserBadge?.map(b => {
         const type = b.badgeType.toString();
         if (type.startsWith('HELPER')) return 'Ayuda Mutua';
         if (type.startsWith('TIME_GIVER')) return 'Tiempo Compartido';

@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreditReason, FlowType, PoolType, RequestStatus } from '@prisma/client';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Flow Economics Service
@@ -125,6 +126,7 @@ export class FlowEconomicsService {
       // 3. Create regular credit transactions (for compatibility)
       await tx.creditTransaction.create({
         data: {
+          id: uuidv4(),
           userId: fromUserId,
           amount: -baseAmount,
           balance: updatedFrom.credits,
@@ -136,6 +138,7 @@ export class FlowEconomicsService {
 
       await tx.creditTransaction.create({
         data: {
+          id: uuidv4(),
           userId: toUserId,
           amount: totalValue,
           balance: updatedTo.credits,
@@ -148,6 +151,7 @@ export class FlowEconomicsService {
       // 4. Create flow transaction record
       const flowTx = await tx.flowTransaction.create({
         data: {
+          id: uuidv4(),
           fromUserId,
           toUserId,
           baseAmount,
@@ -167,6 +171,7 @@ export class FlowEconomicsService {
       if (bonusValue > 0) {
         await tx.creditTransaction.create({
           data: {
+            id: uuidv4(),
             userId: toUserId,
             amount: bonusValue,
             balance: updatedTo.credits,
@@ -346,9 +351,12 @@ export class FlowEconomicsService {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
+    const economicMetricsId = `metrics-${today.toISOString().split('T')[0]}`;
+
     return this.prisma.economicMetrics.upsert({
       where: { date: today },
       create: {
+        id: economicMetricsId,
         date: today,
         giniIndex: metrics.giniIndex,
         medianBalance: metrics.medianBalance,
@@ -440,6 +448,7 @@ export class FlowEconomicsService {
       // Create credit transaction
       await tx.creditTransaction.create({
         data: {
+          id: uuidv4(),
           userId: recipientId,
           amount,
           balance: updatedUser.credits,
@@ -471,16 +480,19 @@ export class FlowEconomicsService {
     }
 
     // Create request
+    const now = new Date();
     const request = await this.prisma.poolRequest.create({
       data: {
+        id: uuidv4(),
         userId,
         poolId: pool.id,
         amount,
         reason,
         status: RequestStatus.PENDING,
+        updatedAt: now,
       },
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -488,7 +500,7 @@ export class FlowEconomicsService {
             avatar: true,
           },
         },
-        pool: true,
+        CommunityPool: true,
       },
     });
 
@@ -506,7 +518,7 @@ export class FlowEconomicsService {
     return this.prisma.poolRequest.findMany({
       where,
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -514,10 +526,10 @@ export class FlowEconomicsService {
             avatar: true,
           },
         },
-        pool: true,
-        votes: {
+        CommunityPool: true,
+        PoolRequestVote: {
           include: {
-            voter: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -540,10 +552,10 @@ export class FlowEconomicsService {
     return this.prisma.poolRequest.findMany({
       where: { userId },
       include: {
-        pool: true,
-        votes: {
+        CommunityPool: true,
+        PoolRequestVote: {
           include: {
-            voter: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -566,7 +578,7 @@ export class FlowEconomicsService {
     return this.prisma.poolRequest.findUnique({
       where: { id: requestId },
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -575,10 +587,10 @@ export class FlowEconomicsService {
             generosityScore: true,
           },
         },
-        pool: true,
-        votes: {
+        CommunityPool: true,
+        PoolRequestVote: {
           include: {
-            voter: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -624,6 +636,7 @@ export class FlowEconomicsService {
     // Create new vote
     const newVote = await this.prisma.poolRequestVote.create({
       data: {
+        id: uuidv4(),
         requestId,
         voterId,
         vote,
@@ -644,7 +657,7 @@ export class FlowEconomicsService {
     const request = await this.prisma.poolRequest.findUnique({
       where: { id: requestId },
       include: {
-        votes: true,
+        PoolRequestVote: true,
       },
     });
 
@@ -652,8 +665,8 @@ export class FlowEconomicsService {
       return;
     }
 
-    const approveVotes = request.votes.filter((v) => v.vote === true).length;
-    const rejectVotes = request.votes.filter((v) => v.vote === false).length;
+    const approveVotes = request.PoolRequestVote.filter((v) => v.vote === true).length;
+    const rejectVotes = request.PoolRequestVote.filter((v) => v.vote === false).length;
 
     // Auto-approve if 3+ approve votes and no reject votes
     if (approveVotes >= 3 && rejectVotes === 0) {
@@ -741,7 +754,7 @@ export class FlowEconomicsService {
     const request = await this.prisma.poolRequest.findUnique({
       where: { id: requestId },
       include: {
-        pool: true,
+        CommunityPool: true,
       },
     });
 
@@ -755,7 +768,7 @@ export class FlowEconomicsService {
 
     // Use existing distributeFromPool method
     const result = await this.distributeFromPool(
-      request.pool.type,
+      request.CommunityPool.type,
       request.userId,
       request.amount,
       request.reason,

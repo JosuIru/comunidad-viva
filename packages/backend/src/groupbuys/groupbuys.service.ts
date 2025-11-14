@@ -4,6 +4,7 @@ import { EmailService } from '../notifications/email.service';
 import { CreateGroupBuyDto } from './dto/create-groupbuy.dto';
 import { JoinGroupBuyDto } from './dto/join-groupbuy.dto';
 import { UpdateParticipationDto } from './dto/update-participation.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class GroupBuysService {
@@ -56,6 +57,7 @@ export class GroupBuysService {
     // Create group buy with price breaks
     const groupBuy = await this.prisma.groupBuy.create({
       data: {
+        id: uuidv4(),
         offerId,
         minParticipants,
         maxParticipants,
@@ -64,8 +66,9 @@ export class GroupBuysService {
         pickupLat,
         pickupLng,
         pickupAddress,
-        priceBreaks: {
+        PriceBreak: {
           create: priceBreaks.map(pb => ({
+            id: uuidv4(),
             minQuantity: pb.minQuantity,
             pricePerUnit: pb.pricePerUnit,
             savings: pb.savings,
@@ -73,19 +76,19 @@ export class GroupBuysService {
         },
       },
       include: {
-        offer: {
+        Offer: {
           include: {
-            user: {
+            User: {
               select: { id: true, name: true, avatar: true },
             },
           },
         },
-        priceBreaks: {
+        PriceBreak: {
           orderBy: { minQuantity: 'asc' },
         },
-        participants: {
+        GroupBuyParticipant: {
           include: {
-            user: {
+            User: {
               select: { id: true, name: true, avatar: true },
             },
           },
@@ -148,19 +151,19 @@ export class GroupBuysService {
       const findOptions: any = {
         where,
         include: {
-          offer: {
+          Offer: {
             include: {
-              user: {
+              User: {
                 select: { id: true, name: true, avatar: true },
               },
             },
           },
-          priceBreaks: {
+          PriceBreak: {
             orderBy: { minQuantity: 'asc' },
           },
-          participants: {
+          GroupBuyParticipant: {
             include: {
-              user: {
+              User: {
                 select: { id: true, name: true, avatar: true },
               },
             },
@@ -180,9 +183,9 @@ export class GroupBuysService {
 
     // Calculate current pricing tier for each group buy
     const enrichedGroupBuys = groupBuys.map(gb => {
-      const totalQuantity = gb.participants?.reduce((sum: number, p: any) => sum + p.quantity, 0) || 0;
-      const currentTier = this.getCurrentPriceTier(gb.priceBreaks, totalQuantity);
-      const nextTier = this.getNextPriceTier(gb.priceBreaks, totalQuantity);
+      const totalQuantity = gb.GroupBuyParticipant?.reduce((sum: number, p: any) => sum + p.quantity, 0) || 0;
+      const currentTier = this.getCurrentPriceTier(gb.PriceBreak, totalQuantity);
+      const nextTier = this.getNextPriceTier(gb.PriceBreak, totalQuantity);
       const progress = (gb.currentParticipants / gb.minParticipants) * 100;
 
       return {
@@ -207,19 +210,19 @@ export class GroupBuysService {
     const groupBuy = await this.prisma.groupBuy.findUnique({
       where: { id: groupBuyId },
       include: {
-        offer: {
+        Offer: {
           include: {
-            user: {
+            User: {
               select: { id: true, name: true, avatar: true },
             },
           },
         },
-        priceBreaks: {
+        PriceBreak: {
           orderBy: { minQuantity: 'asc' },
         },
-        participants: {
+        GroupBuyParticipant: {
           include: {
-            user: {
+            User: {
               select: { id: true, name: true, avatar: true },
             },
           },
@@ -232,9 +235,9 @@ export class GroupBuysService {
       throw new NotFoundException('Group buy not found');
     }
 
-    const totalQuantity = groupBuy.participants.reduce((sum, p) => sum + p.quantity, 0);
-    const currentTier = this.getCurrentPriceTier(groupBuy.priceBreaks, totalQuantity);
-    const nextTier = this.getNextPriceTier(groupBuy.priceBreaks, totalQuantity);
+    const totalQuantity = groupBuy.GroupBuyParticipant.reduce((sum, p) => sum + p.quantity, 0);
+    const currentTier = this.getCurrentPriceTier(groupBuy.PriceBreak, totalQuantity);
+    const nextTier = this.getNextPriceTier(groupBuy.PriceBreak, totalQuantity);
     const progress = (groupBuy.currentParticipants / groupBuy.minParticipants) * 100;
 
     return {
@@ -256,10 +259,10 @@ export class GroupBuysService {
     const groupBuy = await this.prisma.groupBuy.findUnique({
       where: { id: groupBuyId },
       include: {
-        participants: true,
-        offer: {
+        GroupBuyParticipant: true,
+        Offer: {
           include: {
-            user: {
+            User: {
               select: { id: true, name: true, email: true },
             },
           },
@@ -282,7 +285,7 @@ export class GroupBuysService {
     }
 
     // Check if user already joined
-    const existingParticipation = groupBuy.participants.find(p => p.userId === userId);
+    const existingParticipation = groupBuy.GroupBuyParticipant.find(p => p.userId === userId);
     if (existingParticipation) {
       throw new BadRequestException('You have already joined this group buy');
     }
@@ -290,13 +293,14 @@ export class GroupBuysService {
     // Add participant
     const participant = await this.prisma.groupBuyParticipant.create({
       data: {
+        id: uuidv4(),
         groupBuyId,
         userId,
         quantity,
         committed: false,
       },
       include: {
-        user: {
+        User: {
           select: { id: true, name: true, avatar: true, email: true },
         },
       },
@@ -310,12 +314,18 @@ export class GroupBuysService {
       },
     });
 
+    // Get user info for email
+    const participantUser = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { name: true },
+    });
+
     // Send email to organizer about new participation
-    if (groupBuy.offer.user.email) {
+    if (groupBuy.Offer.User.email && participantUser) {
       await this.emailService.sendGroupBuyParticipation(
-        groupBuy.offer.user.email,
-        participant.user.name,
-        groupBuy.offer.title,
+        groupBuy.Offer.User.email,
+        participantUser.name,
+        groupBuy.Offer.title,
         groupBuy.currentParticipants + 1,
         groupBuy.minParticipants,
       );
@@ -325,9 +335,9 @@ export class GroupBuysService {
     const updated = await this.prisma.groupBuy.findUnique({
       where: { id: groupBuyId },
       include: {
-        participants: {
+        GroupBuyParticipant: {
           include: {
-            user: {
+            User: {
               select: { id: true, name: true, email: true },
             },
           },
@@ -337,15 +347,15 @@ export class GroupBuysService {
 
     if (updated && updated.currentParticipants === updated.minParticipants) {
       // Notify all participants that minimum goal has been reached
-      const participantEmails = updated.participants
-        .map(p => p.user.email)
+      const participantEmails = updated.GroupBuyParticipant
+        .map(p => p.User.email)
         .filter((email): email is string => !!email);
 
       for (const email of participantEmails) {
         await this.emailService.sendGroupBuyParticipation(
           email,
           'La meta mínima',
-          groupBuy.offer.title,
+          groupBuy.Offer.title,
           updated.currentParticipants,
           updated.minParticipants,
         );
@@ -387,7 +397,7 @@ export class GroupBuysService {
       },
       data: updateParticipationDto,
       include: {
-        user: {
+        User: {
           select: { id: true, name: true, avatar: true },
         },
       },
@@ -445,15 +455,15 @@ export class GroupBuysService {
     const groupBuy = await this.prisma.groupBuy.findUnique({
       where: { id: groupBuyId },
       include: {
-        offer: true,
-        participants: {
+        Offer: true,
+        GroupBuyParticipant: {
           include: {
-            user: {
+            User: {
               select: { id: true, name: true, email: true },
             },
           },
         },
-        priceBreaks: {
+        PriceBreak: {
           orderBy: { minQuantity: 'desc' },
         },
       },
@@ -463,7 +473,7 @@ export class GroupBuysService {
       throw new NotFoundException('Group buy not found');
     }
 
-    if (groupBuy.offer.userId !== userId) {
+    if (groupBuy.Offer.userId !== userId) {
       throw new ForbiddenException('Only the organizer can close the group buy');
     }
 
@@ -473,7 +483,7 @@ export class GroupBuysService {
     }
 
     // Check if all participants have committed
-    const uncommitted = groupBuy.participants.filter(p => !p.committed);
+    const uncommitted = groupBuy.GroupBuyParticipant.filter(p => !p.committed);
     if (uncommitted.length > 0) {
       throw new BadRequestException(`${uncommitted.length} participants haven't committed yet`);
     }
@@ -485,34 +495,36 @@ export class GroupBuysService {
     });
 
     // Calculate total quantity and final price
-    const totalQuantity = groupBuy.participants.reduce((sum, p) => sum + p.quantity, 0);
+    const totalQuantity = groupBuy.GroupBuyParticipant.reduce((sum, p) => sum + p.quantity, 0);
 
     // Find applicable price break
-    const applicablePriceBreak = groupBuy.priceBreaks.find(
+    const applicablePriceBreak = groupBuy.PriceBreak.find(
       pb => totalQuantity >= pb.minQuantity
     );
 
     const finalPrice = applicablePriceBreak
       ? applicablePriceBreak.pricePerUnit * totalQuantity
-      : (groupBuy.offer.priceEur || 0) * totalQuantity;
+      : (groupBuy.Offer.priceEur || 0) * totalQuantity;
 
-    const originalPrice = (groupBuy.offer.priceEur || 0) * totalQuantity;
+    const originalPrice = (groupBuy.Offer.priceEur || 0) * totalQuantity;
     const savings = originalPrice - finalPrice;
 
     // Create orders for each participant
-    const orderPromises = groupBuy.participants.map(async (participant) => {
+    const orderPromises = groupBuy.GroupBuyParticipant.map(async (participant) => {
       const participantTotal = applicablePriceBreak
         ? applicablePriceBreak.pricePerUnit * participant.quantity
-        : (groupBuy.offer.priceEur || 0) * participant.quantity;
+        : (groupBuy.Offer.priceEur || 0) * participant.quantity;
 
       return this.prisma.groupBuyOrder.create({
         data: {
+          id: uuidv4(),
           groupBuyId: groupBuy.id,
           userId: participant.userId,
           quantity: participant.quantity,
-          pricePerUnit: applicablePriceBreak?.pricePerUnit || groupBuy.offer.priceEur || 0,
+          pricePerUnit: applicablePriceBreak?.pricePerUnit || groupBuy.Offer.priceEur || 0,
           totalAmount: participantTotal,
           status: 'PENDING',
+          updatedAt: new Date(),
         },
       });
     });
@@ -520,20 +532,20 @@ export class GroupBuysService {
     await Promise.all(orderPromises);
 
     // Send notifications to all participants
-    const participantEmails = groupBuy.participants
-      .map(p => p.user.email)
+    const participantEmails = groupBuy.GroupBuyParticipant
+      .map(p => p.User.email)
       .filter((email): email is string => !!email);
 
     for (const email of participantEmails) {
       await this.emailService.sendGroupBuyClosed(
         email,
-        groupBuy.offer.title,
+        groupBuy.Offer.title,
         finalPrice,
         savings,
       );
     }
 
-    return { success: true, message: 'Group buy closed successfully', ordersCreated: groupBuy.participants.length };
+    return { success: true, message: 'Group buy closed successfully', ordersCreated: groupBuy.GroupBuyParticipant.length };
   }
 
   /**
@@ -543,19 +555,19 @@ export class GroupBuysService {
     const participations = await this.prisma.groupBuyParticipant.findMany({
       where: { userId },
       include: {
-        groupBuy: {
+        GroupBuy: {
           include: {
-            offer: {
+            Offer: {
               include: {
-                user: {
+                User: {
                   select: { id: true, name: true, avatar: true },
                 },
               },
             },
-            priceBreaks: {
+            PriceBreak: {
               orderBy: { minQuantity: 'asc' },
             },
-            participants: true,
+            GroupBuyParticipant: true,
           },
         },
       },
@@ -563,8 +575,8 @@ export class GroupBuysService {
     });
 
     return participations.map(p => {
-      const totalQuantity = p.groupBuy.participants.reduce((sum, part) => sum + part.quantity, 0);
-      const currentTier = this.getCurrentPriceTier(p.groupBuy.priceBreaks, totalQuantity);
+      const totalQuantity = p.GroupBuy.GroupBuyParticipant.reduce((sum, part) => sum + part.quantity, 0);
+      const currentTier = this.getCurrentPriceTier(p.GroupBuy.PriceBreak, totalQuantity);
       const userTotal = p.quantity * (currentTier?.pricePerUnit || 0);
 
       return {

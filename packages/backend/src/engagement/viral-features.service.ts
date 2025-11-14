@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class ViralFeaturesService {
@@ -19,13 +20,16 @@ export class ViralFeaturesService {
     const progress = await this.prisma.onboardingProgress.upsert({
       where: { userId },
       create: {
+        id: uuidv4(),
         userId,
         currentStep: step,
         completedSteps: JSON.stringify([step]),
         completed: false,
+        updatedAt: new Date(),
       },
       update: {
         currentStep: step,
+        updatedAt: new Date(),
       },
     });
 
@@ -95,6 +99,7 @@ export class ViralFeaturesService {
     // Create redemption
     const redemption = await this.prisma.flashDealRedemption.create({
       data: {
+        id: uuidv4(),
         dealId,
         userId,
       },
@@ -112,6 +117,7 @@ export class ViralFeaturesService {
 
     const story = await this.prisma.story.create({
       data: {
+        id: uuidv4(),
         userId,
         type: type as any,
         content,
@@ -119,7 +125,7 @@ export class ViralFeaturesService {
         expiresAt,
       },
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -139,7 +145,7 @@ export class ViralFeaturesService {
         expiresAt: { gt: new Date() },
       },
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -147,14 +153,14 @@ export class ViralFeaturesService {
             generosityScore: true,
           },
         },
-        reactions: {
+        StoryReaction: {
           select: {
             id: true,
             reaction: true,
             userId: true,
           },
         },
-        viewers: currentUserId ? { where: { userId: currentUserId } } : undefined,
+        StoryView: currentUserId ? { where: { userId: currentUserId } } : undefined,
       },
       orderBy: { createdAt: 'desc' },
       take: 50,
@@ -176,7 +182,7 @@ export class ViralFeaturesService {
     }
 
     const view = await this.prisma.storyView.create({
-      data: { storyId, userId },
+      data: { id: uuidv4(), storyId, userId },
     });
 
     // Increment view count
@@ -194,6 +200,7 @@ export class ViralFeaturesService {
         storyId_userId: { storyId, userId },
       },
       create: {
+        id: uuidv4(),
         storyId,
         userId,
         reaction: emoji,
@@ -218,7 +225,7 @@ export class ViralFeaturesService {
       })
       .then((swipes) => swipes.map((s) => s.offerId));
 
-    const offers = await this.prisma.Offer.findMany({
+    const offers = await this.prisma.offer.findMany({
       where: {
         id: { notIn: swipedOfferIds },
         status: 'ACTIVE',
@@ -235,7 +242,7 @@ export class ViralFeaturesService {
     const cards = await Promise.all(
       offers.map(async (offer) => {
         // Contar ofertas activas del usuario
-        const activeOffersCount = await this.prisma.Offer.count({
+        const activeOffersCount = await this.prisma.offer.count({
           where: {
             userId: offer.userId,
             status: 'ACTIVE',
@@ -321,6 +328,7 @@ export class ViralFeaturesService {
   async swipeOffer(userId: string, offerId: string, direction: 'LEFT' | 'RIGHT' | 'SUPER') {
     const swipe = await this.prisma.swipe.create({
       data: {
+        id: uuidv4(),
         userId,
         offerId,
         direction,
@@ -329,7 +337,7 @@ export class ViralFeaturesService {
 
     // If RIGHT or SUPER, check for match
     if (direction === 'RIGHT' || direction === 'SUPER') {
-      const offer = await this.prisma.Offer.findUnique({
+      const offer = await this.prisma.offer.findUnique({
         where: { id: offerId },
         select: { userId: true },
       });
@@ -340,7 +348,7 @@ export class ViralFeaturesService {
           where: {
             userId: offer.userId,
             direction: { in: ['RIGHT', 'SUPER'] },
-            offer: {
+            Offer: {
               userId: userId,
             },
           },
@@ -350,6 +358,7 @@ export class ViralFeaturesService {
           // Create match!
           const match = await this.prisma.match.create({
             data: {
+              id: uuidv4(),
               user1Id: userId,
               user2Id: offer.userId,
               offerId,
@@ -373,7 +382,7 @@ export class ViralFeaturesService {
         OR: [{ user1Id: userId }, { user2Id: userId }],
       },
       include: {
-        user1: {
+        User_Match_user1IdToUser: {
           select: {
             id: true,
             name: true,
@@ -381,7 +390,7 @@ export class ViralFeaturesService {
             generosityScore: true,
           },
         },
-        user2: {
+        User_Match_user2IdToUser: {
           select: {
             id: true,
             name: true,
@@ -404,9 +413,9 @@ export class ViralFeaturesService {
         endsAt: { gte: new Date() },
       },
       include: {
-        participations: {
+        ChallengeParticipant: {
           include: {
-            user: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -428,6 +437,7 @@ export class ViralFeaturesService {
         challengeId_userId: { challengeId, userId },
       },
       create: {
+        id: uuidv4(),
         challengeId,
         userId,
         progress: score,
@@ -447,9 +457,9 @@ export class ViralFeaturesService {
     const existing = await this.prisma.referralCode.findFirst({
       where: { userId },
       include: {
-        referrals: {
+        Referral: {
           include: {
-            referredUser: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -471,6 +481,7 @@ export class ViralFeaturesService {
 
     return this.prisma.referralCode.create({
       data: {
+        id: uuidv4(),
         userId,
         code,
         rewardForReferrer: 100,
@@ -478,9 +489,9 @@ export class ViralFeaturesService {
         bonusOnFirstTransaction: 25,
       },
       include: {
-        referrals: {
+        Referral: {
           include: {
-            referredUser: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -498,9 +509,9 @@ export class ViralFeaturesService {
     let code = await this.prisma.referralCode.findFirst({
       where: { userId },
       include: {
-        referrals: {
+        Referral: {
           include: {
-            referredUser: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -539,6 +550,7 @@ export class ViralFeaturesService {
 
     const referral = await this.prisma.referral.create({
       data: {
+        id: uuidv4(),
         codeId: referralCode.id,
         referredUserId: newUserId,
       },
@@ -567,9 +579,9 @@ export class ViralFeaturesService {
     const referralCode = await this.prisma.referralCode.findFirst({
       where: { userId },
       include: {
-        referrals: {
+        Referral: {
           include: {
-            referredUser: true,
+            User: true,
           },
         },
       },
@@ -585,9 +597,9 @@ export class ViralFeaturesService {
       };
     }
 
-    const totalReferrals = referralCode.referrals.length;
-    const activeReferrals = referralCode.referrals.filter(
-      (r) => r.referredUser && r.referredUser.level > 1,
+    const totalReferrals = referralCode.Referral.length;
+    const activeReferrals = referralCode.Referral.filter(
+      (r) => r.User && r.User.level > 1,
     ).length;
     const totalRewards = referralCode.usedCount * referralCode.rewardForReferrer;
 
@@ -619,9 +631,9 @@ export class ViralFeaturesService {
     const referralCode = await this.prisma.referralCode.findFirst({
       where: { userId },
       include: {
-        referrals: {
+        Referral: {
           include: {
-            referredUser: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -642,15 +654,15 @@ export class ViralFeaturesService {
       return { referrals: [] };
     }
 
-    const referrals = referralCode.referrals.map((ref) => ({
+    const referrals = referralCode.Referral.map((ref) => ({
       id: ref.id,
       referredUserId: ref.referredUserId,
-      referredUserName: ref.referredUser?.name || 'Usuario',
-      status: ref.referredUser && ref.referredUser.level > 1 ? 'ACTIVE' : 'PENDING',
+      referredUserName: ref.User?.name || 'Usuario',
+      status: ref.User && ref.User.level > 1 ? 'ACTIVE' : 'PENDING',
       rewardEarned: referralCode.rewardForReferrer,
       createdAt: ref.createdAt.toISOString(),
-      activatedAt: ref.referredUser && ref.referredUser.level > 1
-        ? ref.referredUser.createdAt.toISOString()
+      activatedAt: ref.User && ref.User.level > 1
+        ? ref.User.createdAt.toISOString()
         : undefined,
     }));
 
@@ -668,7 +680,7 @@ export class ViralFeaturesService {
         direction: { in: ['RIGHT', 'SUPER'] },
       },
       include: {
-        offer: {
+        Offer: {
           select: { category: true },
         },
       },
@@ -679,14 +691,14 @@ export class ViralFeaturesService {
       .filter((c) => c);
 
     // Find similar offers
-    const suggestedOffers = await this.prisma.Offer.findMany({
+    const suggestedOffers = await this.prisma.offer.findMany({
       where: {
         category: { in: likedCategories },
         status: 'ACTIVE',
         userId: { not: userId },
       },
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             name: true,
@@ -714,9 +726,9 @@ export class ViralFeaturesService {
         endsAt: { gte: new Date() },
       },
       include: {
-        participations: {
+        LiveEventParticipant: {
           include: {
-            user: {
+            User: {
               select: {
                 id: true,
                 name: true,
@@ -740,6 +752,7 @@ export class ViralFeaturesService {
 
     const participation = await this.prisma.liveEventParticipant.create({
       data: {
+        id: uuidv4(),
         eventId,
         userId,
       },
@@ -754,6 +767,7 @@ export class ViralFeaturesService {
   async rewardMicroAction(userId: string, action: string, reward: number) {
     const microAction = await this.prisma.microAction.create({
       data: {
+        id: uuidv4(),
         userId,
         action,
         reward,
@@ -798,6 +812,7 @@ export class ViralFeaturesService {
     // Log transaction
     await this.prisma.creditTransaction.create({
       data: {
+        id: uuidv4(),
         userId,
         amount,
         balance: newBalance,
@@ -815,6 +830,7 @@ export class ViralFeaturesService {
   async unlockFeature(userId: string, feature: string) {
     const unlock = await this.prisma.userFeatureUnlock.create({
       data: {
+        id: uuidv4(),
         userId,
         feature,
         unlockedAt: new Date(),
@@ -845,6 +861,7 @@ export class ViralFeaturesService {
 
     const badge = await this.prisma.userBadge.create({
       data: {
+        id: uuidv4(),
         userId,
         badgeType: badgeType as any,
       },
@@ -979,6 +996,7 @@ export class ViralFeaturesService {
   }) {
     return this.prisma.notification.create({
       data: {
+        id: uuidv4(),
         userId,
         type: data.type as any,
         title: data.title,
@@ -1011,6 +1029,7 @@ export class ViralFeaturesService {
 
     // Create notifications in batch
     const notifications = activeUsers.map(user => ({
+      id: uuidv4(),
       userId: user.id,
       type: (notification.type || 'ANNOUNCEMENT') as any,
       title: notification.title,
@@ -1054,6 +1073,7 @@ export class ViralFeaturesService {
     `;
 
     const notifications = nearbyUsers.map(user => ({
+      id: uuidv4(),
       userId: user.id,
       type: 'NEARBY_DEAL' as any,
       title: data.title,
@@ -1109,6 +1129,7 @@ export class ViralFeaturesService {
 
       const deal = await this.prisma.flashDeal.create({
         data: {
+          id: uuidv4(),
           merchantId: merchant.id,
           title: `${discount}% descuento en ${merchant.businessName}`,
           product: merchant.category || 'Producto general',
@@ -1152,6 +1173,7 @@ export class ViralFeaturesService {
 
     const happyHour = await this.prisma.liveEvent.create({
       data: {
+        id: uuidv4(),
         type: 'HAPPY_HOUR',
         title: '🎉 Happy Hour: Créditos x2',
         description: 'Durante las próximas 2 horas, todos los intercambios dan el doble de créditos',
@@ -1225,6 +1247,7 @@ export class ViralFeaturesService {
 
     const weeklyChallenge = await this.prisma.weeklyChallenge.create({
       data: {
+        id: uuidv4(),
         type: challenge.type,
         title: challenge.title,
         description: challenge.description,

@@ -24,20 +24,25 @@ export class CommunitiesService {
 
     // Extract onboarding pack data before creating community
     const { onboardingPack, ...communityData } = createCommunityDto;
+    const communityId = `comm_${Date.now()}_${userId}`;
 
     const community = await this.prisma.community.create({
       data: {
+        id: communityId,
         ...communityData,
-        governance: {
+        updatedAt: new Date(),
+        CommunityGovernance: {
           create: {
+            id: `gov_${Date.now()}_${userId}`,
             founders: [userId],
             bootstrapEndDate,
+            updatedAt: new Date(),
             // Valores por defecto están en el schema
           },
         },
       },
       include: {
-        governance: true,
+        CommunityGovernance: true,
       },
     });
 
@@ -109,9 +114,9 @@ export class CommunitiesService {
       include: {
         _count: {
           select: {
-            users: true,
-            offers: true,
-            events: true,
+            User: true,
+            Offer: true,
+            Event: true,
           },
         },
       },
@@ -136,14 +141,14 @@ export class CommunitiesService {
     const community = await this.prisma.community.findUnique({
       where: { id },
       include: {
-        governance: true,
+        CommunityGovernance: true,
         _count: {
           select: {
-            users: true,
-            offers: true,
-            events: true,
-            connectionsOut: true,
-            connectionsIn: true,
+            User: true,
+            Offer: true,
+            Event: true,
+            CommunityConnection_CommunityConnection_sourceCommunityIdToCommunity: true,
+            CommunityConnection_CommunityConnection_targetCommunityIdToCommunity: true,
           },
         },
       },
@@ -170,13 +175,13 @@ export class CommunitiesService {
       });
 
       isMember = user?.communityId === id;
-      isFounder = community.governance?.founders.includes(userId) || false;
+      isFounder = community.CommunityGovernance?.founders.includes(userId) || false;
 
       // Permisos basados en reputación, no en roles
       if (isMember && user) {
-        canPropose = user.generosityScore >= (community.governance?.minProposalReputation || 10);
-        canVote = user.generosityScore >= (community.governance?.minVoteReputation || 1);
-        canModerate = user.generosityScore >= (community.governance?.minModerateReputation || 5);
+        canPropose = user.generosityScore >= (community.CommunityGovernance?.minProposalReputation || 10);
+        canVote = user.generosityScore >= (community.CommunityGovernance?.minVoteReputation || 1);
+        canModerate = user.generosityScore >= (community.CommunityGovernance?.minModerateReputation || 5);
       }
     }
 
@@ -236,7 +241,7 @@ export class CommunitiesService {
     }
 
     // At this point, TypeScript knows we have the full community object
-    const community = communityResult as Awaited<ReturnType<typeof this.findOne>> & { isFounder: boolean; governance: any };
+    const community = communityResult as Awaited<ReturnType<typeof this.findOne>> & { isFounder: boolean; CommunityGovernance: any };
 
     if (!community.isMember) {
       throw new ForbiddenException('Solo miembros pueden proponer cambios');
@@ -257,7 +262,7 @@ export class CommunitiesService {
     }
 
     const now = new Date();
-    const isBootstrap = community.governance?.bootstrapEndDate && now < community.governance.bootstrapEndDate;
+    const isBootstrap = community.CommunityGovernance?.bootstrapEndDate && now < community.CommunityGovernance.bootstrapEndDate;
 
     // Durante bootstrap (primeros 30 días), fundadores pueden hacer cambios directos
     if (isBootstrap && community.isFounder) {
@@ -384,7 +389,7 @@ export class CommunitiesService {
       where: { id },
       select: {
         membersCount: true,
-        governance: { select: { founders: true } },
+        CommunityGovernance: { select: { founders: true } },
       },
     });
 
@@ -392,7 +397,7 @@ export class CommunitiesService {
       throw new NotFoundException('Community not found');
     }
 
-    const isFounder = community.governance?.founders.includes(userId);
+    const isFounder = community.CommunityGovernance?.founders.includes(userId);
 
     // Si la comunidad tiene ≤ 1 miembro y el usuario es fundador, puede eliminar directamente
     if (community.membersCount <= 1 && isFounder) {
@@ -471,6 +476,7 @@ export class CommunitiesService {
       // Create membership request
       await this.prisma.membershipRequest.create({
         data: {
+          id: `req_${Date.now()}_${userId}_${communityId}`,
           communityId,
           userId,
           message,
@@ -490,6 +496,7 @@ export class CommunitiesService {
         moderators.map(moderator =>
           this.prisma.notification.create({
             data: {
+              id: `notif_${Date.now()}_${moderator.id}_membership`,
               userId: moderator.id,
               type: 'HELP_REQUEST',
               title: 'Nueva solicitud de membresía',
@@ -677,6 +684,7 @@ export class CommunitiesService {
 
     await this.prisma.notification.create({
       data: {
+        id: `notif_${Date.now()}_${request.userId}_approved`,
         userId: request.userId,
         type: 'COMMUNITY_MILESTONE',
         title: 'Solicitud de membresía aprobada',
@@ -741,6 +749,7 @@ export class CommunitiesService {
 
     await this.prisma.notification.create({
       data: {
+        id: `notif_${Date.now()}_${request.userId}_rejected`,
         userId: request.userId,
         type: 'COMMUNITY_MILESTONE',
         title: 'Solicitud de membresía rechazada',
@@ -827,12 +836,12 @@ export class CommunitiesService {
     // Obtener actividad reciente de diferentes fuentes
     const [offers, events, proposals, posts] = await Promise.all([
       // Ofertas recientes
-      this.prisma.Offer.findMany({
+      this.prisma.offer.findMany({
         where: { communityId },
         take: Math.ceil(limit / 4),
         orderBy: { createdAt: 'desc' },
         include: {
-          user: {
+          User: {
             select: {
               id: true,
               name: true,
@@ -847,7 +856,7 @@ export class CommunitiesService {
         take: Math.ceil(limit / 4),
         orderBy: { createdAt: 'desc' },
         include: {
-          organizer: {
+          User: {
             select: {
               id: true,
               name: true,
@@ -859,7 +868,7 @@ export class CommunitiesService {
       // Propuestas recientes
       this.prisma.proposal.findMany({
         where: {
-          block: {
+          TrustBlock: {
             content: {
               path: ['communityId'],
               equals: communityId,
@@ -869,7 +878,7 @@ export class CommunitiesService {
         take: Math.ceil(limit / 4),
         orderBy: { createdAt: 'desc' },
         include: {
-          author: {
+          User: {
             select: {
               id: true,
               name: true,
@@ -880,11 +889,11 @@ export class CommunitiesService {
       }),
       // Posts recientes de la comunidad
       this.prisma.post.findMany({
-        where: { author: { communityId } },
+        where: { User: { communityId } },
         take: Math.ceil(limit / 4),
         orderBy: { createdAt: 'desc' },
         include: {
-          author: {
+          User: {
             select: {
               id: true,
               name: true,
@@ -893,7 +902,7 @@ export class CommunitiesService {
           },
           _count: {
             select: {
-              comments: true,
+              Comment: true,
               Reaction: true,
             },
           },
@@ -909,7 +918,7 @@ export class CommunitiesService {
         title: offer.title,
         description: offer.description,
         createdAt: offer.createdAt,
-        user: offer.user,
+        user: offer.User,
         data: offer,
       })),
       ...events.map(event => ({
@@ -918,7 +927,7 @@ export class CommunitiesService {
         title: event.title,
         description: event.description,
         createdAt: event.createdAt,
-        user: event.organizer,
+        user: event.User,
         data: event,
       })),
       ...proposals.map(proposal => ({
@@ -927,7 +936,7 @@ export class CommunitiesService {
         title: proposal.title,
         description: proposal.description,
         createdAt: proposal.createdAt,
-        user: proposal.author,
+        user: proposal.User,
         data: proposal,
       })),
       ...posts.map(post => ({
@@ -936,11 +945,11 @@ export class CommunitiesService {
         title: null,
         description: post.content,
         createdAt: post.createdAt,
-        user: post.author,
+        user: post.User,
         data: {
           ...post,
-          commentsCount: post._count.comments,
-          reactionsCount: post._count.reactions,
+          commentsCount: post._count.Comment,
+          reactionsCount: post._count.Reaction,
         },
       })),
     ].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
@@ -982,7 +991,7 @@ export class CommunitiesService {
       throw new NotFoundException('Community not found');
     }
 
-    const offers = await this.prisma.Offer.findMany({
+    const offers = await this.prisma.offer.findMany({
       where: {
         communityId,
         ...(status && { status: status as any }),
@@ -990,14 +999,14 @@ export class CommunitiesService {
       take: limit,
       orderBy: { createdAt: 'desc' },
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             name: true,
             avatar: true,
           },
         },
-        community: {
+        Community: {
           select: {
             id: true,
             name: true,

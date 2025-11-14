@@ -6,6 +6,7 @@ import { CreditReason } from '@prisma/client';
 import { randomBytes } from 'crypto';
 import { LoggerService } from '../common/logger.service';
 import { AchievementsService } from '../achievements/achievements.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class EventsService {
@@ -37,7 +38,7 @@ export class EventsService {
         qrCode: this.generateQRToken(data.title || 'event'),
       },
       include: {
-        organizer: {
+        User: {
           select: { id: true, name: true, avatar: true },
         },
       },
@@ -104,23 +105,23 @@ export class EventsService {
         qrCode: true,
         createdAt: true,
         updatedAt: true,
-        organizer: {
+        User: {
           select: { id: true, name: true, avatar: true },
         },
-        attendees: {
+        EventAttendee: {
           select: {
             id: true,
             userId: true,
             registeredAt: true,
             checkedInAt: true,
-            user: {
+            User: {
               select: { id: true, name: true, avatar: true },
             },
           },
         },
         _count: {
           select: {
-            attendees: true,
+            EventAttendee: true,
           },
         },
       },
@@ -172,12 +173,12 @@ export class EventsService {
     const event = await this.prisma.event.findUnique({
       where: { id },
       include: {
-        organizer: {
+        User: {
           select: { id: true, name: true, avatar: true },
         },
-        attendees: {
+        EventAttendee: {
           include: {
-            user: {
+            User: {
               select: { id: true, name: true, avatar: true },
             },
           },
@@ -185,7 +186,7 @@ export class EventsService {
         },
         _count: {
           select: {
-            attendees: true,
+            EventAttendee: true,
           },
         },
       },
@@ -204,7 +205,7 @@ export class EventsService {
   async register(eventId: string, userId: string) {
     const event = await this.prisma.event.findUnique({
       where: { id: eventId },
-      include: { _count: { select: { attendees: true } } },
+      include: { _count: { select: { EventAttendee: true } } },
     });
 
     if (!event) {
@@ -212,7 +213,7 @@ export class EventsService {
     }
 
     // Check if event is full
-    if (event.capacity && event._count.attendees >= event.capacity) {
+    if (event.capacity && event._count.EventAttendee >= event.capacity) {
       throw new BadRequestException('Event is full');
     }
 
@@ -234,18 +235,19 @@ export class EventsService {
 
     const attendee = await this.prisma.eventAttendee.create({
       data: {
+        id: uuidv4(),
         eventId,
         userId,
       },
       include: {
-        user: {
+        User: {
           select: { id: true, name: true, avatar: true, email: true },
         },
       },
     });
 
     // Send email notification
-    if (attendee.User.email) {
+    if (attendee.User && attendee.User.email) {
       await this.emailService.sendEventRegistrationConfirmation(
         attendee.User.email,
         event.title,
@@ -354,10 +356,10 @@ export class EventsService {
         checkedInAt: new Date(),
       },
       include: {
-        user: {
+        User: {
           select: { id: true, name: true, avatar: true },
         },
-        event: {
+        Event: {
           select: { id: true, title: true, type: true },
         },
       },
@@ -412,7 +414,7 @@ export class EventsService {
     const attendees = await this.prisma.eventAttendee.findMany({
       where: { eventId },
       include: {
-        user: {
+        User: {
           select: { id: true, name: true, avatar: true, email: true },
         },
       },
@@ -439,7 +441,7 @@ export class EventsService {
     };
 
     if (upcoming) {
-      where.event = {
+      where.Event = {
         startsAt: { gte: new Date() },
       };
     }
@@ -447,18 +449,18 @@ export class EventsService {
     const registrations = await this.prisma.eventAttendee.findMany({
       where,
       include: {
-        event: {
+        Event: {
           include: {
-            organizer: {
+            User: {
               select: { id: true, name: true, avatar: true },
             },
             _count: {
-              select: { attendees: true },
+              select: { EventAttendee: true },
             },
           },
         },
       },
-      orderBy: { event: { startsAt: 'asc' } },
+      orderBy: { Event: { startsAt: 'asc' } },
     });
 
     return registrations;
@@ -484,7 +486,7 @@ export class EventsService {
       where: { id: eventId },
       data,
       include: {
-        organizer: {
+        User: {
           select: { id: true, name: true, avatar: true },
         },
       },
@@ -500,7 +502,7 @@ export class EventsService {
     const event = await this.prisma.event.findUnique({
       where: { id: eventId },
       include: {
-        _count: { select: { attendees: true } },
+        _count: { select: { EventAttendee: true } },
       },
     });
 
@@ -512,7 +514,7 @@ export class EventsService {
       throw new ForbiddenException('Only the organizer can delete this event');
     }
 
-    if (event._count.attendees > 0) {
+    if (event._count.EventAttendee > 0) {
       throw new BadRequestException('Cannot delete event with registered attendees');
     }
 
@@ -532,17 +534,17 @@ export class EventsService {
         organizerId: userId,
       },
       include: {
-        organizer: {
+        User: {
           select: { id: true, name: true, avatar: true },
         },
         _count: {
           select: {
-            attendees: true,
+            EventAttendee: true,
           },
         },
-        attendees: {
+        EventAttendee: {
           include: {
-            user: {
+            User: {
               select: { id: true, name: true, avatar: true },
             },
           },

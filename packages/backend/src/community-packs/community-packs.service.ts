@@ -5,6 +5,7 @@ import { UpdateCommunityPackDto } from './dto/update-community-pack.dto';
 import { CompleteStepDto } from './dto/complete-step.dto';
 import { UpdateMetricDto } from './dto/update-metric.dto';
 import { OrganizedCommunityType } from '@prisma/client';
+import { v4 as uuidv4 } from 'uuid';
 
 // Pack configurations - mirrors frontend config
 const PACK_CONFIGS = {
@@ -39,7 +40,7 @@ export class CommunityPacksService {
     // Check if community exists and user has permission
     const community = await this.prisma.community.findUnique({
       where: { id: communityId },
-      include: { governance: true },
+      include: { CommunityGovernance: true },
     });
 
     if (!community) {
@@ -52,7 +53,7 @@ export class CommunityPacksService {
       select: { communityId: true, generosityScore: true },
     });
 
-    const isFounder = community.governance?.founders.includes(userId) || false;
+    const isFounder = community.CommunityGovernance?.founders.includes(userId) || false;
     const isMember = user?.communityId === communityId;
     const hasModerateRights = user && user.generosityScore >= 5;
 
@@ -78,26 +79,33 @@ export class CommunityPacksService {
     // Create pack with defaults
     const pack = await this.prisma.communityPack.create({
       data: {
+        id: uuidv4(),
         communityId,
         packType: dto.packType,
         enabledFeatures: dto.enabledFeatures || packConfig.defaultFeatures,
         trackingMetrics: dto.trackingMetrics || packConfig.defaultMetrics,
         customConfig: dto.customConfig || {},
         goals: dto.goals || {},
+        updatedAt: new Date(),
       },
       include: {
-        setupSteps: true,
-        metrics: true,
+        CommunitySetupStep: true,
+        CommunityMetric: true,
       },
     });
 
     // Initialize setup steps
-    for (const stepKey of packConfig.setupSteps) {
+    for (let i = 0; i < packConfig.setupSteps.length; i++) {
+      const stepKey = packConfig.setupSteps[i];
       await this.prisma.communitySetupStep.create({
         data: {
+          id: uuidv4(),
           packId: pack.id,
           stepKey,
+          stepOrder: i,
+          title: stepKey,
           completed: false,
+          updatedAt: new Date(),
         },
       });
     }
@@ -106,9 +114,12 @@ export class CommunityPacksService {
     for (const metricKey of packConfig.defaultMetrics) {
       await this.prisma.communityMetric.create({
         data: {
+          id: uuidv4(),
           packId: pack.id,
           metricKey,
-          value: 0,
+          metricName: metricKey,
+          currentValue: 0,
+          updatedAt: new Date(),
         },
       });
     }
@@ -123,13 +134,13 @@ export class CommunityPacksService {
     const pack = await this.prisma.communityPack.findUnique({
       where: { communityId },
       include: {
-        setupSteps: {
+        CommunitySetupStep: {
           orderBy: { createdAt: 'asc' },
         },
-        metrics: {
-          orderBy: { lastUpdated: 'desc' },
+        CommunityMetric: {
+          orderBy: { updatedAt: 'desc' },
         },
-        community: {
+        Community: {
           select: {
             id: true,
             name: true,
@@ -153,7 +164,7 @@ export class CommunityPacksService {
     // Check permissions
     const community = await this.prisma.community.findUnique({
       where: { id: communityId },
-      include: { governance: true },
+      include: { CommunityGovernance: true },
     });
 
     if (!community) {
@@ -165,7 +176,7 @@ export class CommunityPacksService {
       select: { communityId: true, generosityScore: true },
     });
 
-    const isFounder = community.governance?.founders.includes(userId) || false;
+    const isFounder = community.CommunityGovernance?.founders.includes(userId) || false;
     const isMember = user?.communityId === communityId;
     const hasModerateRights = user && user.generosityScore >= 5;
 
@@ -180,8 +191,8 @@ export class CommunityPacksService {
         updatedAt: new Date(),
       },
       include: {
-        setupSteps: true,
-        metrics: true,
+        CommunitySetupStep: true,
+        CommunityMetric: true,
       },
     });
 
@@ -195,7 +206,7 @@ export class CommunityPacksService {
     // Check permissions
     const community = await this.prisma.community.findUnique({
       where: { id: communityId },
-      include: { governance: true },
+      include: { CommunityGovernance: true },
     });
 
     if (!community) {
@@ -207,7 +218,7 @@ export class CommunityPacksService {
       select: { communityId: true, generosityScore: true },
     });
 
-    const isFounder = community.governance?.founders.includes(userId) || false;
+    const isFounder = community.CommunityGovernance?.founders.includes(userId) || false;
     const isMember = user?.communityId === communityId;
     const hasModerateRights = user && user.generosityScore >= 5;
 
@@ -217,7 +228,7 @@ export class CommunityPacksService {
 
     const pack = await this.prisma.communityPack.findUnique({
       where: { communityId },
-      include: { setupSteps: true },
+      include: { CommunitySetupStep: true },
     });
 
     if (!pack) {
@@ -225,7 +236,7 @@ export class CommunityPacksService {
     }
 
     // Find and update the step
-    const step = pack.setupSteps.find((s) => s.stepKey === dto.stepKey);
+    const step = pack.CommunitySetupStep.find((s) => s.stepKey === dto.stepKey);
     if (!step) {
       throw new NotFoundException('Setup step not found');
     }
@@ -235,7 +246,8 @@ export class CommunityPacksService {
       data: {
         completed: true,
         completedAt: new Date(),
-        stepData: dto.stepData || {},
+        data: dto.stepData || {},
+        updatedAt: new Date(),
       },
     });
 
@@ -289,7 +301,7 @@ export class CommunityPacksService {
   async updateMetric(communityId: string, metricKey: string, dto: UpdateMetricDto, userId: string) {
     const pack = await this.prisma.communityPack.findUnique({
       where: { communityId },
-      include: { metrics: true, community: { include: { governance: true } } },
+      include: { CommunityMetric: true, Community: { include: { CommunityGovernance: true } } },
     });
 
     if (!pack) {
@@ -301,7 +313,7 @@ export class CommunityPacksService {
       select: { communityId: true, generosityScore: true },
     });
 
-    const isFounder = pack.community.governance?.founders.includes(userId) || false;
+    const isFounder = pack.Community.CommunityGovernance?.founders.includes(userId) || false;
     const isMember = user?.communityId === communityId;
     const hasModerateRights = user && user.generosityScore >= 5;
 
@@ -309,7 +321,7 @@ export class CommunityPacksService {
       throw new ForbiddenException('Only community founders or high-reputation members can update metrics');
     }
 
-    const metric = pack.metrics.find((m) => m.metricKey === metricKey);
+    const metric = pack.CommunityMetric.find((m) => m.metricKey === metricKey);
     if (!metric) {
       throw new NotFoundException('Metric not found');
     }
@@ -327,6 +339,7 @@ export class CommunityPacksService {
       data: {
         currentValue: dto.value,
         history: history,
+        updatedAt: new Date(),
       },
     });
 
@@ -340,7 +353,7 @@ export class CommunityPacksService {
     const pack = await this.prisma.communityPack.findUnique({
       where: { communityId },
       include: {
-        metrics: {
+        CommunityMetric: {
           orderBy: { updatedAt: 'desc' },
         },
       },
@@ -350,7 +363,7 @@ export class CommunityPacksService {
       throw new NotFoundException('Community pack not found');
     }
 
-    return pack.metrics;
+    return pack.CommunityMetric;
   }
 
   /**
