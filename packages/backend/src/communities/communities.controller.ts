@@ -25,7 +25,7 @@ export class CommunitiesController {
   @UseGuards(JwtAuthGuard)
   @Post()
   create(@Request() req, @Body() createCommunityDto: CreateCommunityDto) {
-    return this.communitiesService.create(req.User.userId, createCommunityDto);
+    return this.communitiesService.create(req.user.userId, createCommunityDto);
   }
 
   @Get()
@@ -70,37 +70,37 @@ export class CommunitiesController {
     @Request() req,
     @Body() updateCommunityDto: UpdateCommunityDto,
   ) {
-    return this.communitiesService.update(id, req.User.userId, updateCommunityDto);
+    return this.communitiesService.update(id, req.user.userId, updateCommunityDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   delete(@Param('id') id: string, @Request() req) {
-    return this.communitiesService.delete(id, req.User.userId);
+    return this.communitiesService.delete(id, req.user.userId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post(':id/join')
   joinCommunity(@Param('id') id: string, @Request() req, @Body() body?: { message?: string }) {
-    return this.communitiesService.joinCommunity(id, req.User.userId, body?.message);
+    return this.communitiesService.joinCommunity(id, req.user.userId, body?.message);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post(':id/leave')
   leaveCommunity(@Param('id') id: string, @Request() req) {
-    return this.communitiesService.leaveCommunity(id, req.User.userId);
+    return this.communitiesService.leaveCommunity(id, req.user.userId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':id/members')
   getMembers(@Param('id') id: string, @Request() req) {
-    return this.communitiesService.getMembers(id, req.User.userId);
+    return this.communitiesService.getMembers(id, req.user.userId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':id/membership-requests')
   getMembershipRequests(@Param('id') id: string, @Request() req) {
-    return this.communitiesService.getMembershipRequests(id, req.User.userId);
+    return this.communitiesService.getMembershipRequests(id, req.user.userId);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -114,7 +114,7 @@ export class CommunitiesController {
     return this.communitiesService.approveMembershipRequest(
       id,
       requestId,
-      req.User.userId,
+      req.user.userId,
       body?.reviewNote,
     );
   }
@@ -130,7 +130,7 @@ export class CommunitiesController {
     return this.communitiesService.rejectMembershipRequest(
       id,
       requestId,
-      req.User.userId,
+      req.user.userId,
       body?.reviewNote,
     );
   }

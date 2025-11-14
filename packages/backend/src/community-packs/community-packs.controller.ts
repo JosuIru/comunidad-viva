@@ -67,7 +67,7 @@ export class CommunityPacksController {
     @Body() dto: CreateCommunityPackDto,
     @Request() req,
   ) {
-    return this.communityPacksService.createPack(communityId, dto, req.User.userId);
+    return this.communityPacksService.createPack(communityId, dto, req.user.userId);
   }
 
   @Get('communities/:communityId')
@@ -92,7 +92,7 @@ export class CommunityPacksController {
     @Body() dto: UpdateCommunityPackDto,
     @Request() req,
   ) {
-    return this.communityPacksService.updatePack(communityId, dto, req.User.userId);
+    return this.communityPacksService.updatePack(communityId, dto, req.user.userId);
   }
 
   @Post('communities/:communityId/steps/complete')
@@ -109,7 +109,7 @@ export class CommunityPacksController {
     @Body() dto: CompleteStepDto,
     @Request() req,
   ) {
-    return this.communityPacksService.completeStep(communityId, dto, req.User.userId);
+    return this.communityPacksService.completeStep(communityId, dto, req.user.userId);
   }
 
   @Get('communities/:communityId/metrics')
@@ -136,7 +136,7 @@ export class CommunityPacksController {
     @Body() dto: UpdateMetricDto,
     @Request() req,
   ) {
-    return this.communityPacksService.updateMetric(communityId, metricKey, dto, req.User.userId);
+    return this.communityPacksService.updateMetric(communityId, metricKey, dto, req.user.userId);
   }
 
   @Post('communities/:communityId/metrics/recalculate')
@@ -160,11 +160,11 @@ export class CommunityPacksController {
     }
 
     const user = await this.communityPacksService['prisma'].User.findUnique({
-      where: { id: req.User.userId },
+      where: { id: req.user.userId },
       select: { communityId: true, generosityScore: true },
     });
 
-    const isFounder = community.governance?.founders.includes(req.User.userId) || false;
+    const isFounder = community.governance?.founders.includes(req.user.userId) || false;
     const isMember = user?.communityId === communityId;
     const hasModerateRights = user && user.generosityScore >= 5;
 
@@ -213,7 +213,7 @@ export class CommunityPacksController {
     return this.bridgesService.proposeMentorship(
       dto.mentorCommunityId,
       dto.menteeCommunityId,
-      req.User.userId,
+      req.user.userId,
       dto.notes,
     );
   }

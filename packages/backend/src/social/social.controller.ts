@@ -40,7 +40,7 @@ export class SocialController {
     @Query('type') type?: PostType
   ) {
     const limit = limitStr ? parseInt(limitStr, 10) : undefined;
-    return this.socialService.getFeed(req.User.userId, { limit, cursor, type });
+    return this.socialService.getFeed(req.user.userId, { limit, cursor, type });
   }
 
   @ApiOperation({ summary: 'Create post' })
@@ -48,7 +48,7 @@ export class SocialController {
   @UseGuards(JwtAuthGuard)
   @Post('posts')
   async createPost(@Request() req, @Body() createPostDto: CreatePostDto) {
-    return this.socialService.createPost(req.User.userId, createPostDto);
+    return this.socialService.createPost(req.user.userId, createPostDto);
   }
 
   @ApiOperation({ summary: 'Get single post' })
@@ -69,7 +69,7 @@ export class SocialController {
     @Request() req,
     @Body() updatePostDto: UpdatePostDto
   ) {
-    return this.socialService.updatePost(id, req.User.userId, updatePostDto);
+    return this.socialService.updatePost(id, req.user.userId, updatePostDto);
   }
 
   @ApiOperation({ summary: 'Delete post' })
@@ -79,7 +79,7 @@ export class SocialController {
   @Delete('posts/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async deletePost(@Param('id') id: string, @Request() req) {
-    return this.socialService.deletePost(id, req.User.userId);
+    return this.socialService.deletePost(id, req.user.userId);
   }
 
   @ApiOperation({ summary: 'Get user posts' })
@@ -103,7 +103,7 @@ export class SocialController {
     @Request() req,
     @Body() createCommentDto: CreateCommentDto,
   ) {
-    return this.socialService.addComment(postId, req.User.userId, createCommentDto);
+    return this.socialService.addComment(postId, req.user.userId, createCommentDto);
   }
 
   @ApiOperation({ summary: 'Delete comment' })
@@ -113,7 +113,7 @@ export class SocialController {
   @Delete('comments/:commentId')
   @HttpCode(HttpStatus.OK)
   async deleteComment(@Param('commentId') commentId: string, @Request() req) {
-    return this.socialService.deleteComment(commentId, req.User.userId);
+    return this.socialService.deleteComment(commentId, req.user.userId);
   }
 
   @ApiOperation({ summary: 'Add or update reaction to post' })
@@ -126,7 +126,7 @@ export class SocialController {
     @Request() req,
     @Body() createReactionDto: CreateReactionDto,
   ) {
-    return this.socialService.addReaction(postId, req.User.userId, createReactionDto);
+    return this.socialService.addReaction(postId, req.user.userId, createReactionDto);
   }
 
   @ApiOperation({ summary: 'Remove reaction from post' })
@@ -136,7 +136,7 @@ export class SocialController {
   @Delete('posts/:id/reactions')
   @HttpCode(HttpStatus.OK)
   async removeReaction(@Param('id') postId: string, @Request() req) {
-    return this.socialService.removeReaction(postId, req.User.userId);
+    return this.socialService.removeReaction(postId, req.user.userId);
   }
 
   @ApiOperation({ summary: 'Search posts by hashtag' })
@@ -164,6 +164,6 @@ export class SocialController {
   @UseGuards(JwtAuthGuard)
   @Get('mentions')
   async getMentions(@Request() req, @Query('limit') limit?: number) {
-    return this.socialService.getMentions(req.User.userId, limit);
+    return this.socialService.getMentions(req.user.userId, limit);
   }
 }

@@ -67,7 +67,7 @@ export class PostsController {
   @ApiResponse({ status: 201, description: 'Post created successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async create(@Request() req, @Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(req.User.userId, createPostDto);
+    return this.postsService.create(req.user.userId, createPostDto);
   }
 
   @Put(':id')
@@ -82,7 +82,7 @@ export class PostsController {
     @Request() req,
     @Body() updatePostDto: UpdatePostDto,
   ) {
-    return this.postsService.update(id, req.User.userId, updatePostDto);
+    return this.postsService.update(id, req.user.userId, updatePostDto);
   }
 
   @Delete(':id')
@@ -93,7 +93,7 @@ export class PostsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'Post not found' })
   async delete(@Param('id') id: string, @Request() req) {
-    return this.postsService.delete(id, req.User.userId);
+    return this.postsService.delete(id, req.user.userId);
   }
 
   @Post(':id/react')
@@ -108,7 +108,7 @@ export class PostsController {
     @Request() req,
     @Body() createReactionDto: CreateReactionDto,
   ) {
-    return this.postsService.toggleReaction(id, req.User.userId, createReactionDto.type);
+    return this.postsService.toggleReaction(id, req.user.userId, createReactionDto.type);
   }
 
   @Post(':id/share')

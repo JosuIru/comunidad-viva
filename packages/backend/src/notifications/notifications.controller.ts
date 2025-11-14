@@ -13,18 +13,18 @@ export class NotificationsController {
   @ApiOperation({ summary: 'Get user notifications' })
   @Get()
   async getNotifications(@Request() req, @Query('limit') limit?: number) {
-    return this.notificationsService.getUserNotifications(req.User.userId, limit);
+    return this.notificationsService.getUserNotifications(req.user.userId, limit);
   }
 
   @ApiOperation({ summary: 'Mark notification as read' })
   @Put(':id/read')
   async markAsRead(@Param('id') id: string, @Request() req) {
-    return this.notificationsService.markAsRead(id, req.User.userId);
+    return this.notificationsService.markAsRead(id, req.user.userId);
   }
 
   @ApiOperation({ summary: 'Mark all notifications as read' })
   @Put('read-all')
   async markAllAsRead(@Request() req) {
-    return this.notificationsService.markAllAsRead(req.User.userId);
+    return this.notificationsService.markAllAsRead(req.user.userId);
   }
 }

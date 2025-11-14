@@ -15,7 +15,7 @@ export class MessagesController {
   @ApiResponse({ status: 200, description: 'Returns all conversations for the current user' })
   @Get('conversations')
   async getConversations(@Request() req) {
-    return this.messagesService.getConversations(req.User.userId);
+    return this.messagesService.getConversations(req.user.userId);
   }
 
   @ApiOperation({ summary: 'Get messages with a specific user' })
@@ -23,7 +23,7 @@ export class MessagesController {
   @ApiResponse({ status: 404, description: 'User not found' })
   @Get(':userId')
   async getMessages(@Request() req, @Param('userId') userId: string) {
-    return this.messagesService.getMessages(req.User.userId, userId);
+    return this.messagesService.getMessages(req.user.userId, userId);
   }
 
   @ApiOperation({ summary: 'Send a message to a user' })
@@ -35,7 +35,7 @@ export class MessagesController {
     @Param('userId') userId: string,
     @Body() sendMessageDto: SendMessageDto,
   ) {
-    return this.messagesService.sendMessage(req.User.userId, userId, sendMessageDto);
+    return this.messagesService.sendMessage(req.user.userId, userId, sendMessageDto);
   }
 
   @ApiOperation({ summary: 'Mark message as read' })
@@ -43,6 +43,6 @@ export class MessagesController {
   @ApiResponse({ status: 404, description: 'Message not found' })
   @Patch(':messageId/read')
   async markAsRead(@Request() req, @Param('messageId') messageId: string) {
-    return this.messagesService.markAsRead(messageId, req.User.userId);
+    return this.messagesService.markAsRead(messageId, req.user.userId);
   }
 }

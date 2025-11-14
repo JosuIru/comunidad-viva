@@ -69,7 +69,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('2fa/setup')
   async setupTwoFactor(@Request() req) {
-    return this.twoFactorService.generateTwoFactorSecret(req.User.userId);
+    return this.twoFactorService.generateTwoFactorSecret(req.user.userId);
   }
 
   @ApiOperation({ summary: 'Enable 2FA - Verify and activate' })
@@ -82,7 +82,7 @@ export class AuthController {
     @Body() body: { secret: string; token: string; backupCodes: string[] },
   ) {
     await this.twoFactorService.enableTwoFactor(
-      req.User.userId,
+      req.user.userId,
       body.secret,
       body.token,
       body.backupCodes,
@@ -96,7 +96,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('2fa/disable')
   async disableTwoFactor(@Request() req, @Body() body: { token: string }) {
-    await this.twoFactorService.disableTwoFactor(req.User.userId, body.token);
+    await this.twoFactorService.disableTwoFactor(req.user.userId, body.token);
     return { message: '2FA disabled successfully' };
   }
 
@@ -107,7 +107,7 @@ export class AuthController {
   @Post('2fa/regenerate-backup-codes')
   async regenerateBackupCodes(@Request() req, @Body() body: { token: string }) {
     const codes = await this.twoFactorService.regenerateBackupCodes(
-      req.User.userId,
+      req.user.userId,
       body.token,
     );
     return { backupCodes: codes };
@@ -118,7 +118,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('2fa/status')
   async getTwoFactorStatus(@Request() req) {
-    const enabled = await this.twoFactorService.isTwoFactorEnabled(req.User.userId);
+    const enabled = await this.twoFactorService.isTwoFactorEnabled(req.user.userId);
     return { twoFactorEnabled: enabled };
   }
 
@@ -157,7 +157,7 @@ export class AuthController {
   @Post('web3/link-wallet')
   async linkWallet(@Request() req, @Body() dto: LinkWalletDto) {
     return this.web3AuthService.linkWallet(
-      req.User.userId,
+      req.user.userId,
       dto.walletAddress,
       dto.signature,
       dto.walletType,
@@ -201,7 +201,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('email-verification-status')
   async checkEmailVerification(@Request() req) {
-    const isVerified = await this.emailVerificationService.isEmailVerified(req.User.userId);
+    const isVerified = await this.emailVerificationService.isEmailVerified(req.user.userId);
     return {
       emailVerified: isVerified,
       message: isVerified ? 'Email verificado' : 'Email pendiente de verificación'

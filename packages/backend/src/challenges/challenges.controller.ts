@@ -21,7 +21,7 @@ export class ChallengesController {
   @UseGuards(JwtAuthGuard)
   @Get('today/me')
   async getTodayChallengeForUser(@Request() req) {
-    return this.challengesService.getTodayChallengeForUser(req.User.userId);
+    return this.challengesService.getTodayChallengeForUser(req.user.userId);
   }
 
   @ApiOperation({ summary: 'Complete today\'s challenge' })
@@ -32,6 +32,6 @@ export class ChallengesController {
   @UseGuards(JwtAuthGuard)
   @Post('today/complete')
   async completeChallenge(@Request() req) {
-    return this.challengesService.completeChallenge(req.User.userId);
+    return this.challengesService.completeChallenge(req.user.userId);
   }
 }

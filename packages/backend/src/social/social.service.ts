@@ -145,7 +145,7 @@ export class SocialService {
 
     // Add userReaction to each post
     const postsWithUserReaction = posts.map(post => {
-      const userReaction = post.Reaction.find(r => r.userId === userId);
+      const userReaction = post.reactions.find(r => r.userId === userId);
       return {
         ...post,
         userReaction: userReaction?.type,
@@ -513,7 +513,7 @@ export class SocialService {
     // Add userReaction if userId provided
     if (userId) {
       return posts.map(post => {
-        const userReaction = post.Reaction.find(r => r.userId === userId);
+        const userReaction = post.reactions.find(r => r.userId === userId);
         return {
           ...post,
           userReaction: userReaction?.type,
@@ -612,7 +612,7 @@ export class SocialService {
 
     // Add userReaction
     const postsWithUserReaction = posts.map(post => {
-      const userReaction = post.Reaction.find(r => r.userId === userId);
+      const userReaction = post.reactions.find(r => r.userId === userId);
       return {
         ...post,
         userReaction: userReaction?.type,

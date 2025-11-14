@@ -69,7 +69,7 @@ export class FlowEconomicsController {
     }
 
     const result = await this.flowEconomicsService.executePeerTransaction(
-      req.User.userId,
+      req.user.userId,
       toUserId,
       amount,
       CreditReason.COMMUNITY_HELP,
@@ -108,7 +108,7 @@ export class FlowEconomicsController {
     }
 
     const request = await this.flowEconomicsService.createPoolRequest(
-      req.User.userId,
+      req.user.userId,
       poolType,
       amount,
       reason,
@@ -136,7 +136,7 @@ export class FlowEconomicsController {
   @UseGuards(JwtAuthGuard)
   @Get('my-requests')
   async getMyRequests(@Request() req) {
-    return this.flowEconomicsService.getMyPoolRequests(req.User.userId);
+    return this.flowEconomicsService.getMyPoolRequests(req.user.userId);
   }
 
   @ApiOperation({ summary: 'Get pool request by ID' })
@@ -162,7 +162,7 @@ export class FlowEconomicsController {
 
     const result = await this.flowEconomicsService.voteOnPoolRequest(
       requestId,
-      req.User.userId,
+      req.user.userId,
       vote,
       comment,
     );
@@ -183,7 +183,7 @@ export class FlowEconomicsController {
   async approveRequest(@Request() req, @Param('id') requestId: string) {
     const result = await this.flowEconomicsService.approvePoolRequest(
       requestId,
-      req.User.userId,
+      req.user.userId,
     );
 
     return {
@@ -202,7 +202,7 @@ export class FlowEconomicsController {
   async rejectRequest(@Request() req, @Param('id') requestId: string) {
     const result = await this.flowEconomicsService.rejectPoolRequest(
       requestId,
-      req.User.userId,
+      req.user.userId,
     );
 
     return {

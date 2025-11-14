@@ -30,7 +30,7 @@ export class MutualAidController {
   @UseGuards(JwtAuthGuard)
   @Post('needs')
   createNeed(@Request() req, @Body() body: CreateNeedDto) {
-    return this.mutualAidService.createNeed(req.User.userId, body);
+    return this.mutualAidService.createNeed(req.user.userId, body);
   }
 
   @Get('needs')
@@ -74,28 +74,28 @@ export class MutualAidController {
   @UseGuards(JwtAuthGuard)
   @Post('needs/:id/contribute')
   contributeToNeed(@Request() req, @Param('id') id: string, @Body() body) {
-    return this.mutualAidService.contributeToNeed(req.User.userId, id, body);
+    return this.mutualAidService.contributeToNeed(req.user.userId, id, body);
   }
 
   @UseGuards(JwtAuthGuard, OwnershipGuard)
   @CheckOwnership('mutualAidNeed')
   @Put('needs/:id')
   updateNeed(@Request() req, @Param('id') id: string, @Body() body: UpdateNeedDto) {
-    return this.mutualAidService.updateNeed(req.User.userId, id, body);
+    return this.mutualAidService.updateNeed(req.user.userId, id, body);
   }
 
   @UseGuards(JwtAuthGuard, OwnershipGuard)
   @CheckOwnership('mutualAidNeed')
   @Delete('needs/:id')
   deleteNeed(@Request() req, @Param('id') id: string) {
-    return this.mutualAidService.deleteNeed(req.User.userId, id);
+    return this.mutualAidService.deleteNeed(req.user.userId, id);
   }
 
   @UseGuards(JwtAuthGuard, OwnershipGuard)
   @CheckOwnership('mutualAidNeed')
   @Post('needs/:id/close')
   closeNeed(@Request() req, @Param('id') id: string) {
-    return this.mutualAidService.closeNeed(req.User.userId, id);
+    return this.mutualAidService.closeNeed(req.user.userId, id);
   }
 
   // ============================================
@@ -105,7 +105,7 @@ export class MutualAidController {
   @UseGuards(JwtAuthGuard)
   @Post('projects')
   createProject(@Request() req, @Body() body: CreateProjectDto) {
-    return this.mutualAidService.createProject(req.User.userId, body);
+    return this.mutualAidService.createProject(req.user.userId, body);
   }
 
   @Get('projects')
@@ -152,7 +152,7 @@ export class MutualAidController {
     @Body() body,
   ) {
     return this.mutualAidService.contributeToProject(
-      req.User.userId,
+      req.user.userId,
       id,
       body,
     );
@@ -162,35 +162,35 @@ export class MutualAidController {
   @CheckOwnership('mutualAidProject')
   @Put('projects/:id')
   updateProject(@Request() req, @Param('id') id: string, @Body() body: UpdateProjectDto) {
-    return this.mutualAidService.updateProject(req.User.userId, id, body);
+    return this.mutualAidService.updateProject(req.user.userId, id, body);
   }
 
   @UseGuards(JwtAuthGuard, OwnershipGuard)
   @CheckOwnership('mutualAidProject')
   @Delete('projects/:id')
   deleteProject(@Request() req, @Param('id') id: string) {
-    return this.mutualAidService.deleteProject(req.User.userId, id);
+    return this.mutualAidService.deleteProject(req.user.userId, id);
   }
 
   @UseGuards(JwtAuthGuard, OwnershipGuard)
   @CheckOwnership('mutualAidProject')
   @Post('projects/:id/phases')
   addProjectPhase(@Request() req, @Param('id') id: string, @Body() body) {
-    return this.mutualAidService.addProjectPhase(req.User.userId, id, body);
+    return this.mutualAidService.addProjectPhase(req.user.userId, id, body);
   }
 
   @UseGuards(JwtAuthGuard, OwnershipGuard)
   @CheckOwnership('mutualAidProject')
   @Post('projects/:id/updates')
   addProjectUpdate(@Request() req, @Param('id') id: string, @Body() body) {
-    return this.mutualAidService.addProjectUpdate(req.User.userId, id, body);
+    return this.mutualAidService.addProjectUpdate(req.user.userId, id, body);
   }
 
   @UseGuards(JwtAuthGuard, OwnershipGuard)
   @CheckOwnership('mutualAidProject')
   @Post('projects/:id/impact-reports')
   createImpactReport(@Request() req, @Param('id') id: string, @Body() body) {
-    return this.mutualAidService.createImpactReport(req.User.userId, id, body);
+    return this.mutualAidService.createImpactReport(req.user.userId, id, body);
   }
 
   // ============================================
@@ -200,13 +200,13 @@ export class MutualAidController {
   @UseGuards(JwtAuthGuard)
   @Post('contributions/:id/validate')
   validateContribution(@Request() req, @Param('id') id: string) {
-    return this.mutualAidService.validateContribution(req.User.userId, id);
+    return this.mutualAidService.validateContribution(req.user.userId, id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('contributions/:id/cancel')
   cancelContribution(@Request() req, @Param('id') id: string) {
-    return this.mutualAidService.cancelContribution(req.User.userId, id);
+    return this.mutualAidService.cancelContribution(req.user.userId, id);
   }
 
   // ============================================
@@ -216,18 +216,18 @@ export class MutualAidController {
   @UseGuards(JwtAuthGuard)
   @Get('my/contributions')
   getMyContributions(@Request() req) {
-    return this.mutualAidService.getMyContributions(req.User.userId);
+    return this.mutualAidService.getMyContributions(req.user.userId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('my/needs')
   getMyNeeds(@Request() req) {
-    return this.mutualAidService.getMyNeeds(req.User.userId);
+    return this.mutualAidService.getMyNeeds(req.user.userId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('my/projects')
   getMyProjects(@Request() req) {
-    return this.mutualAidService.getMyProjects(req.User.userId);
+    return this.mutualAidService.getMyProjects(req.user.userId);
   }
 }

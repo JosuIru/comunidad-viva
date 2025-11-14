@@ -40,7 +40,7 @@ export class ConsensusController {
   ) {
     return this.pohService.createTrustBlock({
       type: body.type,
-      actorId: req.User.userId,
+      actorId: req.user.userId,
       content: body.content,
       witnesses: body.witnesses,
     });
@@ -59,7 +59,7 @@ export class ConsensusController {
   ) {
     return this.pohService.validateBlock(
       blockId,
-      req.User.userId,
+      req.user.userId,
       body.decision,
       body.reason,
     );
@@ -69,7 +69,7 @@ export class ConsensusController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get pending blocks for validation' })
   async getPendingBlocks(@Request() req) {
-    return this.pohService.getPendingBlocks(req.User.userId);
+    return this.pohService.getPendingBlocks(req.user.userId);
   }
 
   // ============================================
@@ -96,7 +96,7 @@ export class ConsensusController {
     },
   ) {
     return this.pohService.createProposal({
-      authorId: req.User.userId,
+      authorId: req.user.userId,
       ...body,
     });
   }
@@ -112,7 +112,7 @@ export class ConsensusController {
   ) {
     return this.pohService.voteProposal(
       proposalId,
-      req.User.userId,
+      req.user.userId,
       body.points,
     );
   }
@@ -147,7 +147,7 @@ export class ConsensusController {
   ) {
     return this.pohService.createProposalComment({
       proposalId,
-      authorId: req.User.userId,
+      authorId: req.user.userId,
       content: body.content,
       parentId: body.parentId,
     });
@@ -167,7 +167,7 @@ export class ConsensusController {
   @ApiResponse({ status: 403, description: 'Not authorized to delete this proposal' })
   @ApiResponse({ status: 404, description: 'Proposal not found' })
   async deleteProposal(@Param('id') id: string, @Request() req) {
-    return this.pohService.deleteProposal(id, req.User.userId);
+    return this.pohService.deleteProposal(id, req.user.userId);
   }
 
   // ============================================
@@ -189,7 +189,7 @@ export class ConsensusController {
       body.contentId,
       body.contentType,
       body.reason,
-      req.User.userId,
+      req.user.userId,
     );
   }
 
@@ -206,7 +206,7 @@ export class ConsensusController {
   ) {
     return this.pohService.voteModeration(
       daoId,
-      req.User.userId,
+      req.user.userId,
       body.decision,
       body.reason,
     );
@@ -216,7 +216,7 @@ export class ConsensusController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get pending moderation requests where user is jury' })
   async getPendingModerations(@Request() req) {
-    return this.pohService.getPendingModerations(req.User.userId);
+    return this.pohService.getPendingModerations(req.user.userId);
   }
 
   // ============================================
@@ -237,21 +237,21 @@ export class ConsensusController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get available delegates' })
   async getAvailableDelegates(@Request() req) {
-    return this.pohService.getAvailableDelegates(req.User.userId);
+    return this.pohService.getAvailableDelegates(req.user.userId);
   }
 
   @Get('delegation/my-delegations')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get my delegations' })
   async getMyDelegations(@Request() req) {
-    return this.pohService.getMyDelegations(req.User.userId);
+    return this.pohService.getMyDelegations(req.user.userId);
   }
 
   @Get('delegation/stats')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get delegation statistics' })
   async getDelegationStats(@Request() req) {
-    return this.pohService.getDelegationStats(req.User.userId);
+    return this.pohService.getDelegationStats(req.user.userId);
   }
 
   @Post('delegation/delegate')
@@ -262,7 +262,7 @@ export class ConsensusController {
     @Body() body: { delegateId: string; category?: string; votingPower: number },
   ) {
     return this.pohService.createDelegation(
-      req.User.userId,
+      req.user.userId,
       body.delegateId,
       body.votingPower,
       body.category,
@@ -276,7 +276,7 @@ export class ConsensusController {
     @Request() req,
     @Param('delegationId') delegationId: string,
   ) {
-    return this.pohService.revokeDelegation(req.User.userId, delegationId);
+    return this.pohService.revokeDelegation(req.user.userId, delegationId);
   }
 
   // ============================================
@@ -287,9 +287,9 @@ export class ConsensusController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get user reputation score' })
   async getReputation(@Request() req) {
-    const reputation = await this.pohService.calculateReputation(req.User.userId);
+    const reputation = await this.pohService.calculateReputation(req.user.userId);
     return {
-      userId: req.User.userId,
+      userId: req.user.userId,
       reputation,
       level: this.getLevel(reputation),
       privileges: this.getPrivileges(reputation),

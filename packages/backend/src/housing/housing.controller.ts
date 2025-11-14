@@ -36,7 +36,7 @@ export class HousingController {
   @UseGuards(JwtAuthGuard)
   @Post('solutions/:id/join')
   joinSolution(@Request() req, @Param('id') id: string, @Body() body: any) {
-    return this.housingService.joinSolution(req.User.userId, id, body);
+    return this.housingService.joinSolution(req.user.userId, id, body);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -47,13 +47,13 @@ export class HousingController {
     // Route to specific creation method based on solution type
     switch (solutionType) {
       case 'SPACE_BANK':
-        return this.housingService.createSpace(req.User.userId, data);
+        return this.housingService.createSpace(req.user.userId, data);
       case 'TEMPORARY_HOUSING':
-        return this.housingService.createHousing(req.User.userId, data);
+        return this.housingService.createHousing(req.user.userId, data);
       case 'HOUSING_COOP':
-        return this.housingService.createCoop(req.User.userId, data);
+        return this.housingService.createCoop(req.user.userId, data);
       case 'COMMUNITY_GUARANTEE':
-        return this.housingService.requestGuarantee(req.User.userId, data);
+        return this.housingService.requestGuarantee(req.user.userId, data);
       default:
         throw new Error(`Unknown solution type: ${solutionType}`);
     }
@@ -83,7 +83,7 @@ export class HousingController {
   @UseGuards(JwtAuthGuard, EmailVerifiedGuard)
   @Post('spaces')
   createSpace(@Request() req, @Body() body: CreateSpaceDto) {
-    return this.housingService.createSpace(req.User.userId, body);
+    return this.housingService.createSpace(req.user.userId, body);
   }
 
   @Get('spaces')
@@ -115,14 +115,14 @@ export class HousingController {
   @UseGuards(JwtAuthGuard)
   @Post('spaces/:id/book')
   bookSpace(@Request() req, @Param('id') id: string, @Body() body) {
-    return this.housingService.bookSpace(req.User.userId, id, body);
+    return this.housingService.bookSpace(req.user.userId, id, body);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('spaces/bookings/:bookingId/approve')
   approveSpaceBooking(@Request() req, @Param('bookingId') bookingId: string) {
     return this.housingService.approveSpaceBooking(
-      req.User.userId,
+      req.user.userId,
       bookingId,
     );
   }
@@ -135,7 +135,7 @@ export class HousingController {
     @Body() body,
   ) {
     return this.housingService.completeSpaceBooking(
-      req.User.userId,
+      req.user.userId,
       bookingId,
       body,
     );
@@ -148,7 +148,7 @@ export class HousingController {
   @UseGuards(JwtAuthGuard, EmailVerifiedGuard)
   @Post('temporary')
   createHousing(@Request() req, @Body() body: CreateHousingDto) {
-    return this.housingService.createHousing(req.User.userId, body);
+    return this.housingService.createHousing(req.user.userId, body);
   }
 
   @Get('temporary')
@@ -187,20 +187,20 @@ export class HousingController {
   @CheckOwnership('housingListing')
   @Put('temporary/:id')
   updateHousing(@Request() req, @Param('id') id: string, @Body() body: UpdateHousingDto) {
-    return this.housingService.updateHousing(id, req.User.userId, body);
+    return this.housingService.updateHousing(id, req.user.userId, body);
   }
 
   @UseGuards(JwtAuthGuard, OwnershipGuard)
   @CheckOwnership('housingListing')
   @Delete('temporary/:id')
   deleteHousing(@Request() req, @Param('id') id: string) {
-    return this.housingService.deleteHousing(id, req.User.userId);
+    return this.housingService.deleteHousing(id, req.user.userId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('temporary/:id/book')
   bookHousing(@Request() req, @Param('id') id: string, @Body() body) {
-    return this.housingService.bookHousing(req.User.userId, id, body);
+    return this.housingService.bookHousing(req.user.userId, id, body);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -211,7 +211,7 @@ export class HousingController {
     @Body() body,
   ) {
     return this.housingService.approveHousingBooking(
-      req.User.userId,
+      req.user.userId,
       bookingId,
       body.response,
     );
@@ -220,7 +220,7 @@ export class HousingController {
   @UseGuards(JwtAuthGuard)
   @Post('temporary/bookings/:bookingId/checkin')
   checkInHousing(@Request() req, @Param('bookingId') bookingId: string) {
-    return this.housingService.checkInHousing(req.User.userId, bookingId);
+    return this.housingService.checkInHousing(req.user.userId, bookingId);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -231,7 +231,7 @@ export class HousingController {
     @Body() body,
   ) {
     return this.housingService.completeHousingStay(
-      req.User.userId,
+      req.user.userId,
       bookingId,
       body,
     );
@@ -244,7 +244,7 @@ export class HousingController {
   @UseGuards(JwtAuthGuard, EmailVerifiedGuard)
   @Post('coops')
   createCoop(@Request() req, @Body() body) {
-    return this.housingService.createCoop(req.User.userId, body);
+    return this.housingService.createCoop(req.user.userId, body);
   }
 
   @Get('coops')
@@ -264,7 +264,7 @@ export class HousingController {
   @UseGuards(JwtAuthGuard)
   @Post('coops/:id/join')
   joinCoop(@Request() req, @Param('id') id: string, @Body() body) {
-    return this.housingService.joinCoop(req.User.userId, id, body);
+    return this.housingService.joinCoop(req.user.userId, id, body);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -274,7 +274,7 @@ export class HousingController {
     @Param('proposalId') proposalId: string,
     @Body() body,
   ) {
-    return this.housingService.voteCoopProposal(req.User.userId, proposalId, {
+    return this.housingService.voteCoopProposal(req.user.userId, proposalId, {
       points: body.points,
       decision: body.decision,
       reason: body.reason,
@@ -288,7 +288,7 @@ export class HousingController {
   @UseGuards(JwtAuthGuard)
   @Post('guarantee/request')
   requestGuarantee(@Request() req, @Body() body) {
-    return this.housingService.requestGuarantee(req.User.userId, body);
+    return this.housingService.requestGuarantee(req.user.userId, body);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -298,7 +298,7 @@ export class HousingController {
     @Param('guaranteeId') guaranteeId: string,
     @Body() body,
   ) {
-    return this.housingService.supportGuarantee(req.User.userId, guaranteeId, {
+    return this.housingService.supportGuarantee(req.user.userId, guaranteeId, {
       months: body.months,
       amount: body.amount,
     });
@@ -311,12 +311,12 @@ export class HousingController {
   @UseGuards(JwtAuthGuard)
   @Get('my-bookings')
   getMyBookings(@Request() req) {
-    return this.housingService.getMyBookings(req.User.userId);
+    return this.housingService.getMyBookings(req.user.userId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('my-offerings')
   getMyOfferings(@Request() req) {
-    return this.housingService.getMyOfferings(req.User.userId);
+    return this.housingService.getMyOfferings(req.user.userId);
   }
 }

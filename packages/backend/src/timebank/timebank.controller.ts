@@ -34,7 +34,7 @@ export class TimeBankController {
   @UseGuards(JwtAuthGuard)
   @Get('user/my-offers')
   async getUserTimeBankOffers(@Request() req) {
-    return this.timeBankService.getUserTimeBankOffers(req.User.userId);
+    return this.timeBankService.getUserTimeBankOffers(req.user.userId);
   }
 
   @ApiOperation({ summary: 'Get user time bank statistics' })
@@ -42,7 +42,7 @@ export class TimeBankController {
   @UseGuards(JwtAuthGuard)
   @Get('stats')
   async getUserStats(@Request() req) {
-    return this.timeBankService.getUserStats(req.User.userId);
+    return this.timeBankService.getUserStats(req.user.userId);
   }
 
   @ApiOperation({ summary: 'Create a time bank request' })
@@ -50,7 +50,7 @@ export class TimeBankController {
   @UseGuards(JwtAuthGuard)
   @Post('requests')
   async createRequest(@Request() req, @Body() createRequestDto: CreateRequestDto) {
-    return this.timeBankService.createRequest(req.User.userId, createRequestDto);
+    return this.timeBankService.createRequest(req.user.userId, createRequestDto);
   }
 
   @ApiOperation({ summary: 'Get user time bank transactions' })
@@ -70,7 +70,7 @@ export class TimeBankController {
   ) {
     const limit = limitStr ? parseInt(limitStr, 10) : undefined;
     const offset = offsetStr ? parseInt(offsetStr, 10) : undefined;
-    return this.timeBankService.getTransactions(req.User.userId, { status, role, limit, offset });
+    return this.timeBankService.getTransactions(req.user.userId, { status, role, limit, offset });
   }
 
   @ApiOperation({ summary: 'Get single transaction by ID' })
@@ -78,7 +78,7 @@ export class TimeBankController {
   @UseGuards(JwtAuthGuard)
   @Get('transactions/:id')
   async getTransaction(@Param('id') id: string, @Request() req) {
-    return this.timeBankService.getTransaction(id, req.User.userId);
+    return this.timeBankService.getTransaction(id, req.user.userId);
   }
 
   @ApiOperation({ summary: 'Confirm or reject a transaction (provider only)' })
@@ -91,7 +91,7 @@ export class TimeBankController {
     @Body() confirmDto: ConfirmTransactionDto,
   ) {
     const accept = confirmDto.accept !== undefined ? confirmDto.accept : true;
-    return this.timeBankService.confirmTransaction(id, req.User.userId, accept);
+    return this.timeBankService.confirmTransaction(id, req.user.userId, accept);
   }
 
   @ApiOperation({ summary: 'Complete transaction with rating (bilateral validation)' })
@@ -103,7 +103,7 @@ export class TimeBankController {
     @Request() req,
     @Body() completeDto: CompleteTransactionDto,
   ) {
-    return this.timeBankService.completeTransaction(id, req.User.userId, completeDto);
+    return this.timeBankService.completeTransaction(id, req.user.userId, completeDto);
   }
 
   @ApiOperation({ summary: 'Cancel a transaction' })
@@ -111,6 +111,6 @@ export class TimeBankController {
   @UseGuards(JwtAuthGuard)
   @Put('transactions/:id/cancel')
   async cancelTransaction(@Param('id') id: string, @Request() req) {
-    return this.timeBankService.cancelTransaction(id, req.User.userId);
+    return this.timeBankService.cancelTransaction(id, req.user.userId);
   }
 }

@@ -221,9 +221,9 @@ export class OffersService {
       ]);
 
       // Send email notification to offer owner
-      if (offer && user && offer.User.email && offer.userId !== userId) {
+      if (offer && user && offer.user.email && offer.userId !== userId) {
         await this.emailService.sendOfferInterest(
-          offer.User.email,
+          offer.user.email,
           user.name,
           user.email,
           offer.title,

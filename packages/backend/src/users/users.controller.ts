@@ -27,7 +27,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Put(':id')
   async updateProfile(@Param('id') id: string, @Request() req, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, req.User.userId, updateUserDto);
+    return this.usersService.update(id, req.user.userId, updateUserDto);
   }
 
   @ApiOperation({ summary: 'Search user by email' })
