@@ -99,7 +99,7 @@ export class FlowEconomicsService {
     // Execute transaction with Prisma transaction
     const result = await this.prisma.$transaction(async (tx) => {
       // 1. Deduct from sender (base amount only)
-      const updatedFrom = await tx.User.update({
+      const updatedFrom = await tx.user.update({
         where: { id: fromUserId },
         data: {
           credits: {
@@ -113,7 +113,7 @@ export class FlowEconomicsService {
       });
 
       // 2. Add to receiver (total value with multiplier)
-      const updatedTo = await tx.User.update({
+      const updatedTo = await tx.user.update({
         where: { id: toUserId },
         data: {
           credits: {
@@ -428,7 +428,7 @@ export class FlowEconomicsService {
       });
 
       // Give to recipient
-      const updatedUser = await tx.User.update({
+      const updatedUser = await tx.user.update({
         where: { id: recipientId },
         data: {
           credits: {

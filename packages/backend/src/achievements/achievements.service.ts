@@ -59,11 +59,11 @@ export class AchievementsService {
         maxProgress: 10,
         rewards: { credits: 50, xp: 100 },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.peopleHelped || 0) >= 10;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return user?.peopleHelped || 0;
         },
       },
@@ -77,11 +77,11 @@ export class AchievementsService {
         maxProgress: 50,
         rewards: { credits: 200, xp: 500 },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.peopleHelped || 0) >= 50;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return user?.peopleHelped || 0;
         },
       },
@@ -95,11 +95,11 @@ export class AchievementsService {
         maxProgress: 100,
         rewards: { credits: 500, xp: 1000 },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.peopleHelped || 0) >= 100;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return user?.peopleHelped || 0;
         },
       },
@@ -113,11 +113,11 @@ export class AchievementsService {
         maxProgress: 500,
         rewards: { credits: 2000, xp: 5000, title: 'Ángel' },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.peopleHelped || 0) >= 500;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return user?.peopleHelped || 0;
         },
       },
@@ -131,11 +131,11 @@ export class AchievementsService {
         maxProgress: 1000,
         rewards: { credits: 5000, xp: 10000, title: 'Santo' },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.peopleHelped || 0) >= 1000;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return user?.peopleHelped || 0;
         },
       },
@@ -151,11 +151,11 @@ export class AchievementsService {
         maxProgress: 10,
         rewards: { credits: 50, xp: 100 },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.hoursShared || 0) >= 10;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return Math.floor(user?.hoursShared || 0);
         },
       },
@@ -169,11 +169,11 @@ export class AchievementsService {
         maxProgress: 50,
         rewards: { credits: 200, xp: 500 },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.hoursShared || 0) >= 50;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return Math.floor(user?.hoursShared || 0);
         },
       },
@@ -187,11 +187,11 @@ export class AchievementsService {
         maxProgress: 100,
         rewards: { credits: 500, xp: 1000 },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.hoursShared || 0) >= 100;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return Math.floor(user?.hoursShared || 0);
         },
       },
@@ -205,11 +205,11 @@ export class AchievementsService {
         maxProgress: 500,
         rewards: { credits: 2000, xp: 5000, title: 'Crononauta' },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.hoursShared || 0) >= 500;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return Math.floor(user?.hoursShared || 0);
         },
       },
@@ -223,11 +223,11 @@ export class AchievementsService {
         maxProgress: 1000,
         rewards: { credits: 5000, xp: 10000, title: 'Señor del Tiempo' },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.hoursShared || 0) >= 1000;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return Math.floor(user?.hoursShared || 0);
         },
       },
@@ -323,11 +323,11 @@ export class AchievementsService {
         maxProgress: 10,
         rewards: { credits: 50, xp: 100 },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.co2Avoided || 0) >= 10;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return Math.floor(user?.co2Avoided || 0);
         },
       },
@@ -341,11 +341,11 @@ export class AchievementsService {
         maxProgress: 100,
         rewards: { credits: 300, xp: 600 },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.co2Avoided || 0) >= 100;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return Math.floor(user?.co2Avoided || 0);
         },
       },
@@ -359,11 +359,11 @@ export class AchievementsService {
         maxProgress: 500,
         rewards: { credits: 1000, xp: 2000 },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.co2Avoided || 0) >= 500;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return Math.floor(user?.co2Avoided || 0);
         },
       },
@@ -377,11 +377,11 @@ export class AchievementsService {
         maxProgress: 1000,
         rewards: { credits: 5000, xp: 10000, title: 'Guardián del Planeta' },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.co2Avoided || 0) >= 1000;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return Math.floor(user?.co2Avoided || 0);
         },
       },
@@ -397,11 +397,11 @@ export class AchievementsService {
         maxProgress: 10,
         rewards: { credits: 100, xp: 200 },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.connectionsCount || 0) >= 10;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return user?.connectionsCount || 0;
         },
       },
@@ -415,11 +415,11 @@ export class AchievementsService {
         maxProgress: 50,
         rewards: { credits: 400, xp: 800 },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.connectionsCount || 0) >= 50;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return user?.connectionsCount || 0;
         },
       },
@@ -433,11 +433,11 @@ export class AchievementsService {
         maxProgress: 100,
         rewards: { credits: 1000, xp: 2000, title: 'Tejedor Social' },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.connectionsCount || 0) >= 100;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return user?.connectionsCount || 0;
         },
       },
@@ -610,11 +610,11 @@ export class AchievementsService {
         maxProgress: 100,
         rewards: { credits: 100, xp: 200 },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.totalSaved || 0) >= 100;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return Math.floor(user?.totalSaved || 0);
         },
       },
@@ -628,11 +628,11 @@ export class AchievementsService {
         maxProgress: 500,
         rewards: { credits: 400, xp: 800 },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.totalSaved || 0) >= 500;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return Math.floor(user?.totalSaved || 0);
         },
       },
@@ -646,11 +646,11 @@ export class AchievementsService {
         maxProgress: 1000,
         rewards: { credits: 1000, xp: 2000 },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.totalSaved || 0) >= 1000;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return Math.floor(user?.totalSaved || 0);
         },
       },
@@ -664,11 +664,11 @@ export class AchievementsService {
         maxProgress: 5000,
         rewards: { credits: 5000, xp: 10000, title: 'Genio de las Finanzas' },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return (user?.totalSaved || 0) >= 5000;
         },
         getProgress: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           return Math.floor(user?.totalSaved || 0);
         },
       },
@@ -683,10 +683,10 @@ export class AchievementsService {
         category: 'COMUNIDAD',
         rewards: { credits: 500, xp: 1000 },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           if (!user) return false;
 
-          const position = await prisma.User.count({
+          const position = await prisma.user.count({
             where: {
               createdAt: {
                 lte: user.createdAt,
@@ -706,7 +706,7 @@ export class AchievementsService {
         category: 'COMUNIDAD',
         rewards: { credits: 1000, xp: 2000 },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           if (!user) return false;
 
           const oneYearAgo = new Date();
@@ -724,7 +724,7 @@ export class AchievementsService {
         category: 'COMUNIDAD',
         rewards: { credits: 3000, xp: 6000, title: 'Leyenda' },
         checkCondition: async (userId, prisma) => {
-          const user = await prisma.User.findUnique({ where: { id: userId } });
+          const user = await prisma.user.findUnique({ where: { id: userId } });
           if (!user) return false;
 
           const threeYearsAgo = new Date();

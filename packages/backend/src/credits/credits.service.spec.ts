@@ -67,7 +67,7 @@ describe('CreditsService', () => {
     it('should grant credits successfully', async () => {
       const updatedUser = { credits: 110 };
 
-      prismaService.User.findUnique.mockResolvedValue(mockUser);
+      prismaService.user.findUnique.mockResolvedValue(mockUser);
       prismaService.creditTransaction.findMany.mockResolvedValue([]);
       prismaService.creditTransaction.findFirst.mockResolvedValue(null);
       prismaService.$transaction.mockImplementation((callback) => {
@@ -96,7 +96,7 @@ describe('CreditsService', () => {
     });
 
     it('should throw NotFoundException when user not found', async () => {
-      prismaService.User.findUnique.mockResolvedValue(null);
+      prismaService.user.findUnique.mockResolvedValue(null);
 
       await expect(
         service.grantCredits('non-existent', 10, CreditReason.EVENT_ATTENDANCE)
@@ -109,7 +109,7 @@ describe('CreditsService', () => {
         { amount: 5 },
       ];
 
-      prismaService.User.findUnique.mockResolvedValue(mockUser);
+      prismaService.user.findUnique.mockResolvedValue(mockUser);
       prismaService.creditTransaction.findMany.mockResolvedValue(existingTransactions);
 
       // EVENT_ATTENDANCE has dailyLimit: 15, trying to add 5 more when already has 15
@@ -119,7 +119,7 @@ describe('CreditsService', () => {
     });
 
     it('should throw BadRequestException for duplicate transaction', async () => {
-      prismaService.User.findUnique.mockResolvedValue(mockUser);
+      prismaService.user.findUnique.mockResolvedValue(mockUser);
       prismaService.creditTransaction.findMany.mockResolvedValue([]);
       prismaService.creditTransaction.findFirst.mockResolvedValue(mockTransaction);
 
@@ -132,7 +132,7 @@ describe('CreditsService', () => {
       const lowCreditUser = { ...mockUser, credits: 40 };
       const updatedUser = { credits: 50 }; // Crosses to level 2 (Brote)
 
-      prismaService.User.findUnique.mockResolvedValue(lowCreditUser);
+      prismaService.user.findUnique.mockResolvedValue(lowCreditUser);
       prismaService.creditTransaction.findMany.mockResolvedValue([]);
       prismaService.creditTransaction.findFirst.mockResolvedValue(null);
       prismaService.$transaction.mockImplementation((callback) => {
@@ -158,7 +158,7 @@ describe('CreditsService', () => {
     });
 
     it('should allow admin grants without daily limit', async () => {
-      prismaService.User.findUnique.mockResolvedValue(mockUser);
+      prismaService.user.findUnique.mockResolvedValue(mockUser);
       prismaService.creditTransaction.findMany.mockResolvedValue([]);
       prismaService.creditTransaction.findFirst.mockResolvedValue(null);
       prismaService.$transaction.mockImplementation((callback) => {
@@ -315,7 +315,7 @@ describe('CreditsService', () => {
 
   describe('getBalance', () => {
     it('should return balance and level info', async () => {
-      prismaService.User.findUnique.mockResolvedValue({ credits: 75 });
+      prismaService.user.findUnique.mockResolvedValue({ credits: 75 });
 
       const result = await service.getBalance('user-123');
 
@@ -327,7 +327,7 @@ describe('CreditsService', () => {
     });
 
     it('should return 100% progress for max level', async () => {
-      prismaService.User.findUnique.mockResolvedValue({ credits: 2000 });
+      prismaService.user.findUnique.mockResolvedValue({ credits: 2000 });
 
       const result = await service.getBalance('user-123');
 
@@ -337,7 +337,7 @@ describe('CreditsService', () => {
     });
 
     it('should throw NotFoundException when user not found', async () => {
-      prismaService.User.findUnique.mockResolvedValue(null);
+      prismaService.user.findUnique.mockResolvedValue(null);
 
       await expect(service.getBalance('non-existent')).rejects.toThrow(
         NotFoundException
@@ -418,7 +418,7 @@ describe('CreditsService', () => {
         { id: '3', name: 'User 3', avatar: null, credits: 150 },
       ];
 
-      prismaService.User.findMany.mockResolvedValue(topUsers);
+      prismaService.user.findMany.mockResolvedValue(topUsers);
 
       const result = await service.getLeaderboard(3);
 
@@ -429,11 +429,11 @@ describe('CreditsService', () => {
     });
 
     it('should respect limit parameter', async () => {
-      prismaService.User.findMany.mockResolvedValue([]);
+      prismaService.user.findMany.mockResolvedValue([]);
 
       await service.getLeaderboard(5);
 
-      expect(prismaService.User.findMany).toHaveBeenCalledWith(
+      expect(prismaService.user.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           take: 5,
         })
@@ -441,11 +441,11 @@ describe('CreditsService', () => {
     });
 
     it('should use default limit of 10', async () => {
-      prismaService.User.findMany.mockResolvedValue([]);
+      prismaService.user.findMany.mockResolvedValue([]);
 
       await service.getLeaderboard();
 
-      expect(prismaService.User.findMany).toHaveBeenCalledWith(
+      expect(prismaService.user.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           take: 10,
         })
@@ -453,11 +453,11 @@ describe('CreditsService', () => {
     });
 
     it('should order by credits descending', async () => {
-      prismaService.User.findMany.mockResolvedValue([]);
+      prismaService.user.findMany.mockResolvedValue([]);
 
       await service.getLeaderboard();
 
-      expect(prismaService.User.findMany).toHaveBeenCalledWith(
+      expect(prismaService.user.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           orderBy: { credits: 'desc' },
         })
@@ -479,7 +479,7 @@ describe('CreditsService', () => {
         };
       });
 
-      prismaService.User.findUnique.mockResolvedValue(mockUser);
+      prismaService.user.findUnique.mockResolvedValue(mockUser);
       prismaService.creditTransaction.findMany.mockResolvedValue([]);
       prismaService.creditTransaction.findFirst.mockResolvedValue(null);
       prismaService.$transaction.mockImplementation((callback) => {
@@ -557,7 +557,7 @@ describe('CreditsService', () => {
     it('should use increment operation in grantCredits', async () => {
       const mockUpdate = jest.fn().mockResolvedValue({ credits: 110 });
 
-      prismaService.User.findUnique.mockResolvedValue(mockUser);
+      prismaService.user.findUnique.mockResolvedValue(mockUser);
       prismaService.creditTransaction.findMany.mockResolvedValue([]);
       prismaService.creditTransaction.findFirst.mockResolvedValue(null);
       prismaService.$transaction.mockImplementation((callback) => {

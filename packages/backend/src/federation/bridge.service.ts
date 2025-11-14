@@ -146,7 +146,7 @@ export class BridgeService {
       // Create bridge transaction record
       const bridgeTx = await this.prisma.$transaction(async (tx) => {
         // Lock SEMILLA (deduct from user balance)
-        await tx.User.update({
+        await tx.user.update({
           where: { id: userId },
           data: { semillaBalance: { decrement: totalAmount } },
         });
@@ -256,7 +256,7 @@ export class BridgeService {
         // Unlock SEMILLA (add to user balance, minus fee)
         const netAmount = amount - chainConfig.fee;
 
-        await tx.User.update({
+        await tx.user.update({
           where: { id: userId },
           data: { semillaBalance: { increment: netAmount } },
         });

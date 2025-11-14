@@ -87,7 +87,7 @@ export class SemillaService {
       const transaction = await this.prisma.$transaction(async (tx) => {
         // Deduct from sender (if local)
         if (fromId) {
-          await tx.User.update({
+          await tx.user.update({
             where: { id: fromId },
             data: { semillaBalance: { decrement: amount } },
           });
@@ -95,7 +95,7 @@ export class SemillaService {
 
         // Add to receiver (if local)
         if (toId) {
-          await tx.User.update({
+          await tx.user.update({
             where: { id: toId },
             data: { semillaBalance: { increment: netAmount } },
           });
@@ -170,7 +170,7 @@ export class SemillaService {
 
       // Update user balance and PoH score
       const result = await this.prisma.$transaction(async (tx) => {
-        const user = await tx.User.update({
+        const user = await tx.user.update({
           where: { id: userId },
           data: {
             semillaBalance: { increment: amount },
@@ -277,7 +277,7 @@ export class SemillaService {
     const systemDID = `did:gailu:${this.didService.getNodeId()}:system:initial-grant`;
 
     const result = await this.prisma.$transaction(async (tx) => {
-      const user = await tx.User.update({
+      const user = await tx.user.update({
         where: { id: parsed.userId },
         data: { semillaBalance: { increment: amount } },
       });

@@ -266,7 +266,7 @@ export class MutualAidService {
 
       // Deduct credits from user if applicable
       if (data.amountCredits) {
-        await tx.User.update({
+        await tx.user.update({
           where: { id: userId },
           data: {
             credits: { decrement: data.amountCredits },
@@ -665,7 +665,7 @@ export class MutualAidService {
 
       // Deduct credits from user if applicable
       if (data.amountCredits) {
-        await tx.User.update({
+        await tx.user.update({
           where: { id: userId },
           data: {
             credits: { decrement: data.amountCredits },
@@ -958,7 +958,7 @@ export class MutualAidService {
     // Refund resources
     await this.prisma.$transaction(async (tx) => {
       if (contribution.amountCredits) {
-        await tx.User.update({
+        await tx.user.update({
           where: { id: userId },
           data: {
             credits: { increment: contribution.amountCredits },
