@@ -94,7 +94,7 @@ export class HealthController {
           }
         }),
         this.prisma.community.count(),
-        this.prisma.user.count({ where: { communityId: { not: null } } }),
+        this.prisma.User.count({ where: { communityId: { not: null } } }),
       ]);
 
       return {

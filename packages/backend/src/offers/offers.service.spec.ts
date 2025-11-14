@@ -76,12 +76,12 @@ describe('OffersService', () => {
         createdAt: new Date(),
       };
 
-      mockPrismaService.offer.create.mockResolvedValue(mockOffer);
+      mockPrismaService.Offer.create.mockResolvedValue(mockOffer);
 
       const result = await service.create(userId, offerData);
 
       expect(result).toEqual(mockOffer);
-      expect(mockPrismaService.offer.create).toHaveBeenCalledWith({
+      expect(mockPrismaService.Offer.create).toHaveBeenCalledWith({
         data: {
           ...offerData,
           userId,
@@ -107,12 +107,12 @@ describe('OffersService', () => {
         },
       ];
 
-      mockPrismaService.offer.findMany.mockResolvedValue(mockOffers);
+      mockPrismaService.Offer.findMany.mockResolvedValue(mockOffers);
 
       const result = await service.findAll();
 
       expect(result).toEqual(mockOffers);
-      expect(mockPrismaService.offer.findMany).toHaveBeenCalledWith({
+      expect(mockPrismaService.Offer.findMany).toHaveBeenCalledWith({
         where: {
           status: OfferStatus.ACTIVE,
         },
@@ -130,11 +130,11 @@ describe('OffersService', () => {
         },
       ];
 
-      mockPrismaService.offer.findMany.mockResolvedValue(mockOffers);
+      mockPrismaService.Offer.findMany.mockResolvedValue(mockOffers);
 
       await service.findAll({ type: OfferType.PRODUCT });
 
-      expect(mockPrismaService.offer.findMany).toHaveBeenCalledWith(
+      expect(mockPrismaService.Offer.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: expect.objectContaining({
             status: OfferStatus.ACTIVE,
@@ -153,11 +153,11 @@ describe('OffersService', () => {
         },
       ];
 
-      mockPrismaService.offer.findMany.mockResolvedValue(mockOffers);
+      mockPrismaService.Offer.findMany.mockResolvedValue(mockOffers);
 
       await service.findAll({ category: 'FOOD' });
 
-      expect(mockPrismaService.offer.findMany).toHaveBeenCalledWith(
+      expect(mockPrismaService.Offer.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: expect.objectContaining({
             status: OfferStatus.ACTIVE,
@@ -179,14 +179,14 @@ describe('OffersService', () => {
         interestedUsers: [],
       };
 
-      mockPrismaService.offer.update.mockResolvedValue({});
-      mockPrismaService.offer.findUnique.mockResolvedValue(mockOffer);
+      mockPrismaService.Offer.update.mockResolvedValue({});
+      mockPrismaService.Offer.findUnique.mockResolvedValue(mockOffer);
 
       const result = await service.findOne(offerId);
 
       expect(result).toBeDefined();
       expect(result.userIsInterested).toBe(false);
-      expect(mockPrismaService.offer.update).toHaveBeenCalledWith({
+      expect(mockPrismaService.Offer.update).toHaveBeenCalledWith({
         where: { id: offerId },
         data: {
           views: { increment: 1 },
@@ -197,8 +197,8 @@ describe('OffersService', () => {
     it('should return null if offer not found', async () => {
       const offerId = 'non-existent-id';
 
-      mockPrismaService.offer.update.mockResolvedValue({});
-      mockPrismaService.offer.findUnique.mockResolvedValue(null);
+      mockPrismaService.Offer.update.mockResolvedValue({});
+      mockPrismaService.Offer.findUnique.mockResolvedValue(null);
 
       const result = await service.findOne(offerId);
 
@@ -215,8 +215,8 @@ describe('OffersService', () => {
         interestedUsers: [{ id: 'interest-id' }],
       };
 
-      mockPrismaService.offer.update.mockResolvedValue({});
-      mockPrismaService.offer.findUnique.mockResolvedValue(mockOffer);
+      mockPrismaService.Offer.update.mockResolvedValue({});
+      mockPrismaService.Offer.findUnique.mockResolvedValue(mockOffer);
 
       const result = await service.findOne(offerId, userId);
 
@@ -247,8 +247,8 @@ describe('OffersService', () => {
       };
 
       mockPrismaService.offerInterest.findUnique.mockResolvedValue(null);
-      mockPrismaService.offer.findUnique.mockResolvedValue(mockOffer);
-      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.Offer.findUnique.mockResolvedValue(mockOffer);
+      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
       mockPrismaService.$transaction.mockResolvedValue([{}, {}]);
       mockEmailService.sendOfferInterest.mockResolvedValue(undefined);
 
@@ -305,8 +305,8 @@ describe('OffersService', () => {
       };
 
       mockPrismaService.offerInterest.findUnique.mockResolvedValue(null);
-      mockPrismaService.offer.findUnique.mockResolvedValue(mockOffer);
-      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.Offer.findUnique.mockResolvedValue(mockOffer);
+      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
       mockPrismaService.$transaction.mockResolvedValue([{}, {}]);
 
       await service.toggleInterest(offerId, userId);
@@ -331,12 +331,12 @@ describe('OffersService', () => {
         status: OfferStatus.ACTIVE,
       };
 
-      mockPrismaService.offer.update.mockResolvedValue(mockUpdatedOffer);
+      mockPrismaService.Offer.update.mockResolvedValue(mockUpdatedOffer);
 
       const result = await service.update(offerId, userId, updateData);
 
       expect(result).toEqual(mockUpdatedOffer);
-      expect(mockPrismaService.offer.update).toHaveBeenCalledWith({
+      expect(mockPrismaService.Offer.update).toHaveBeenCalledWith({
         where: { id: offerId, userId },
         data: updateData,
       });
@@ -354,12 +354,12 @@ describe('OffersService', () => {
         status: OfferStatus.CANCELLED,
       };
 
-      mockPrismaService.offer.update.mockResolvedValue(mockCancelledOffer);
+      mockPrismaService.Offer.update.mockResolvedValue(mockCancelledOffer);
 
       const result = await service.delete(offerId, userId);
 
       expect(result.status).toBe(OfferStatus.CANCELLED);
-      expect(mockPrismaService.offer.update).toHaveBeenCalledWith({
+      expect(mockPrismaService.Offer.update).toHaveBeenCalledWith({
         where: { id: offerId, userId },
         data: { status: OfferStatus.CANCELLED },
       });
@@ -389,12 +389,12 @@ describe('OffersService', () => {
         },
       ];
 
-      mockPrismaService.offer.findMany.mockResolvedValue(mockOffers);
+      mockPrismaService.Offer.findMany.mockResolvedValue(mockOffers);
 
       const result = await service.findUserOffers(userId);
 
       expect(result).toEqual(mockOffers);
-      expect(mockPrismaService.offer.findMany).toHaveBeenCalledWith({
+      expect(mockPrismaService.Offer.findMany).toHaveBeenCalledWith({
         where: {
           userId,
           status: {
@@ -437,7 +437,7 @@ describe('OffersService', () => {
         },
       ];
 
-      mockPrismaService.offer.findMany.mockResolvedValue(mockOffers);
+      mockPrismaService.Offer.findMany.mockResolvedValue(mockOffers);
 
       const result = await service.findUserOffers(userId);
 

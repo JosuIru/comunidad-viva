@@ -160,9 +160,9 @@ export class HealthService {
         eventCount,
         transactionCount,
       ] = await Promise.all([
-        this.prisma.user.count(),
+        this.prisma.User.count(),
         this.prisma.community.count(),
-        this.prisma.offer.count(),
+        this.prisma.Offer.count(),
         this.prisma.event.count(),
         this.prisma.creditTransaction.count(),
       ]);

@@ -67,7 +67,7 @@ export class Web3RPCService {
   private async getUserByAddress(address: string) {
     const normalizedAddress = address.toLowerCase();
 
-    return await this.prisma.user.findFirst({
+    return await this.prisma.User.findFirst({
       where: {
         OR: [
           { walletAddress: normalizedAddress },

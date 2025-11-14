@@ -141,7 +141,7 @@ export class MetricsCalculatorService {
       const activeMemberIds = new Set<string>();
 
       // Members who created offers
-      const offersCreators = await this.prisma.offer.findMany({
+      const offersCreators = await this.prisma.Offer.findMany({
         where: {
           communityId: pack.communityId,
           createdAt: { gte: thirtyDaysAgo },

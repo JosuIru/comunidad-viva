@@ -26,7 +26,7 @@ export class TimeBankService {
     const { providerId, offerId, description, hours, scheduledFor } = createRequestDto;
 
     // Validate provider exists
-    const provider = await this.prisma.user.findUnique({
+    const provider = await this.prisma.User.findUnique({
       where: { id: providerId },
     });
     if (!provider) {
@@ -42,12 +42,12 @@ export class TimeBankService {
     if (offerId) {
       const offer = await this.prisma.timeBankOffer.findUnique({
         where: { id: offerId },
-        include: { offer: true },
+        include: { Offer: true },
       });
       if (!offer) {
         throw new NotFoundException('Time bank offer not found');
       }
-      if (offer.offer.userId !== providerId) {
+      if (offer.Offer.userId !== providerId) {
         throw new BadRequestException('Offer does not belong to the specified provider');
       }
     }
@@ -75,18 +75,18 @@ export class TimeBankService {
         },
         timeBankOffer: {
           include: {
-            offer: true,
-            skill: true,
+            Offer: true,
+            Skill: true,
           },
         },
       },
     });
 
     // Send email notification to provider
-    if (transaction.provider.email) {
+    if (transaction.Provider.email) {
       await this.emailService.sendTimeBankRequest(
-        transaction.provider.email,
-        transaction.requester.name,
+        transaction.Provider.email,
+        transaction.Requester.name,
         description,
         hours,
         new Date(scheduledFor),
@@ -128,10 +128,10 @@ export class TimeBankService {
     });
 
     // Send email notification to requester
-    if (updated.requester.email) {
+    if (updated.Requester.email) {
       await this.emailService.sendTimeBankConfirmation(
-        updated.requester.email,
-        updated.provider.name,
+        updated.Requester.email,
+        updated.Provider.name,
         updated.description,
         accept,
       );
@@ -249,16 +249,16 @@ export class TimeBankService {
       }
 
       // Send completion notification to both parties
-      if (updated.requester.email) {
+      if (updated.Requester.email) {
         await this.emailService.sendTimeBankCompletion(
-          updated.requester.email,
+          updated.Requester.email,
           transaction.description,
           transaction.credits,
         );
       }
-      if (updated.provider.email) {
+      if (updated.Provider.email) {
         await this.emailService.sendTimeBankCompletion(
-          updated.provider.email,
+          updated.Provider.email,
           transaction.description,
           transaction.credits,
         );
@@ -340,7 +340,7 @@ export class TimeBankService {
           },
           timeBankOffer: {
             include: {
-              skill: true,
+              Skill: true,
             },
           },
         },
@@ -369,8 +369,8 @@ export class TimeBankService {
         },
         timeBankOffer: {
           include: {
-            offer: true,
-            skill: true,
+            Offer: true,
+            Skill: true,
           },
         },
       },
@@ -424,9 +424,9 @@ export class TimeBankService {
               },
             },
           },
-          skill: true,
+          Skill: true,
         },
-        orderBy: { offer: { createdAt: 'desc' } },
+        orderBy: { Offer: { createdAt: 'desc' } },
         take: limit,
         skip: offset,
       }),
@@ -517,7 +517,7 @@ export class TimeBankService {
             },
           },
         },
-        skill: true,
+        Skill: true,
       },
       orderBy: {
         offer: {

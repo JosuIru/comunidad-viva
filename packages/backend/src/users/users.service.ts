@@ -7,24 +7,24 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async findOne(id: string) {
-    return this.prisma.user.findUnique({
+    return this.prisma.User.findUnique({
       where: { id },
       include: {
-        skills: true,
-        badges: true,
+        Skill: true,
+        Badge: true,
       },
     });
   }
 
   async findByEmail(email: string) {
-    return this.prisma.user.findUnique({ where: { email } });
+    return this.prisma.User.findUnique({ where: { email } });
   }
 
   async update(id: string, requestingUserId: string, data: any) {
     // Check if user is updating their own profile
     if (id !== requestingUserId) {
       // Check if requesting user is an admin
-      const requestingUser = await this.prisma.user.findUnique({
+      const requestingUser = await this.prisma.User.findUnique({
         where: { id: requestingUserId },
         select: { role: true },
       });
@@ -34,14 +34,14 @@ export class UsersService {
       }
     }
 
-    return this.prisma.user.update({
+    return this.prisma.User.update({
       where: { id },
       data,
     });
   }
 
   async getProfile(id: string) {
-    return this.prisma.user.findUnique({
+    return this.prisma.User.findUnique({
       where: { id },
       select: {
         id: true,
@@ -64,8 +64,8 @@ export class UsersService {
         address: true,
         neighborhood: true,
         interests: true,
-        skills: true,
-        badges: true,
+        Skill: true,
+        Badge: true,
         generosityScore: true,
         flowPower: true,
         communityId: true,
@@ -84,7 +84,7 @@ export class UsersService {
   }
 
   async searchByEmail(email: string) {
-    return this.prisma.user.findFirst({
+    return this.prisma.User.findFirst({
       where: {
         email: {
           equals: email,

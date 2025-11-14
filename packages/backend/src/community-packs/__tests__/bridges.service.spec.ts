@@ -136,12 +136,12 @@ describe('BridgesService', () => {
 
   describe('getSharedMembersCount', () => {
     it('should count users who belong to both communities', async () => {
-      mockPrismaService.user.count.mockResolvedValue(3);
+      mockPrismaService.User.count.mockResolvedValue(3);
 
       const count = await service['getSharedMembersCount']('comm-a', 'comm-b');
 
       expect(count).toBe(3);
-      expect(mockPrismaService.user.count).toHaveBeenCalled();
+      expect(mockPrismaService.User.count).toHaveBeenCalled();
     });
   });
 
@@ -229,8 +229,8 @@ describe('BridgesService', () => {
 
       mockPrismaService.communityBridge.findFirst.mockResolvedValue(null);
       mockPrismaService.communityBridge.create.mockResolvedValue({});
-      mockPrismaService.user.count.mockResolvedValue(0);
-      mockPrismaService.offer.count.mockResolvedValue(0);
+      mockPrismaService.User.count.mockResolvedValue(0);
+      mockPrismaService.Offer.count.mockResolvedValue(0);
       mockPrismaService.event.count.mockResolvedValue(0);
 
       const result = await service.detectBridgesBetween('comm-a', 'comm-b');
@@ -270,8 +270,8 @@ describe('BridgesService', () => {
 
       mockPrismaService.communityBridge.findFirst.mockResolvedValue(null);
       mockPrismaService.communityBridge.create.mockResolvedValue({});
-      mockPrismaService.user.count.mockResolvedValue(0);
-      mockPrismaService.offer.count.mockResolvedValue(0);
+      mockPrismaService.User.count.mockResolvedValue(0);
+      mockPrismaService.Offer.count.mockResolvedValue(0);
       mockPrismaService.event.count.mockResolvedValue(0);
 
       const result = await service.detectBridgesBetween('comm-a', 'comm-b');
@@ -311,8 +311,8 @@ describe('BridgesService', () => {
 
       mockPrismaService.communityBridge.findFirst.mockResolvedValue(null);
       mockPrismaService.communityBridge.create.mockResolvedValue({});
-      mockPrismaService.user.count.mockResolvedValue(1); // 1 miembro compartido
-      mockPrismaService.offer.count.mockResolvedValue(0);
+      mockPrismaService.User.count.mockResolvedValue(1); // 1 miembro compartido
+      mockPrismaService.Offer.count.mockResolvedValue(0);
       mockPrismaService.event.count.mockResolvedValue(0);
 
       const result = await service.detectBridgesBetween('comm-a', 'comm-b');

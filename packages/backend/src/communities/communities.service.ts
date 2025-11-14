@@ -42,7 +42,7 @@ export class CommunitiesService {
     });
 
     // Assign the creator as the first member with community relationship
-    await this.prisma.user.update({
+    await this.prisma.User.update({
       where: { id: userId },
       data: { communityId: community.id },
     });
@@ -161,7 +161,7 @@ export class CommunitiesService {
     let canModerate = false;
 
     if (userId) {
-      const user = await this.prisma.user.findUnique({
+      const user = await this.prisma.User.findUnique({
         where: { id: userId },
         select: {
           communityId: true,
@@ -243,7 +243,7 @@ export class CommunitiesService {
     }
 
     // Verificar reputación mínima para proponer cambios
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: userId },
       select: { generosityScore: true },
     });
@@ -418,7 +418,7 @@ export class CommunitiesService {
     }
 
     // Check if already a member
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: userId },
     });
 
@@ -449,7 +449,7 @@ export class CommunitiesService {
         } else if (existingRequest.status === 'APPROVED') {
           // Request was approved, join the community
           await this.prisma.$transaction([
-            this.prisma.user.update({
+            this.prisma.User.update({
               where: { id: userId },
               data: { communityId },
             }),
@@ -478,7 +478,7 @@ export class CommunitiesService {
       });
 
       // Notify community moderators
-      const moderators = await this.prisma.user.findMany({
+      const moderators = await this.prisma.User.findMany({
         where: {
           communityId,
           generosityScore: { gte: 5 }, // Users with moderation permissions
@@ -506,7 +506,7 @@ export class CommunitiesService {
 
     // Join community directly
     await this.prisma.$transaction([
-      this.prisma.user.update({
+      this.prisma.User.update({
         where: { id: userId },
         data: { communityId },
       }),
@@ -529,7 +529,7 @@ export class CommunitiesService {
   }
 
   async leaveCommunity(communityId: string, userId: string) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: userId },
     });
 
@@ -538,7 +538,7 @@ export class CommunitiesService {
     }
 
     await this.prisma.$transaction([
-      this.prisma.user.update({
+      this.prisma.User.update({
         where: { id: userId },
         data: { communityId: null },
       }),
@@ -563,7 +563,7 @@ export class CommunitiesService {
       throw new ForbiddenException('You must be a member to view community members');
     }
 
-    return this.prisma.user.findMany({
+    return this.prisma.User.findMany({
       where: {
         communityId,
       },
@@ -589,7 +589,7 @@ export class CommunitiesService {
     }
 
     // Check if user has moderation permissions (generosityScore >= 5)
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: userId },
       select: { generosityScore: true },
     });
@@ -623,7 +623,7 @@ export class CommunitiesService {
     }
 
     // Check if user has moderation permissions
-    const reviewer = await this.prisma.user.findUnique({
+    const reviewer = await this.prisma.User.findUnique({
       where: { id: reviewerId },
       select: { generosityScore: true, name: true },
     });
@@ -659,7 +659,7 @@ export class CommunitiesService {
           reviewedAt: new Date(),
         },
       }),
-      this.prisma.user.update({
+      this.prisma.User.update({
         where: { id: request.userId },
         data: { communityId },
       }),
@@ -697,7 +697,7 @@ export class CommunitiesService {
     }
 
     // Check if user has moderation permissions
-    const reviewer = await this.prisma.user.findUnique({
+    const reviewer = await this.prisma.User.findUnique({
       where: { id: reviewerId },
       select: { generosityScore: true, name: true },
     });
@@ -827,7 +827,7 @@ export class CommunitiesService {
     // Obtener actividad reciente de diferentes fuentes
     const [offers, events, proposals, posts] = await Promise.all([
       // Ofertas recientes
-      this.prisma.offer.findMany({
+      this.prisma.Offer.findMany({
         where: { communityId },
         take: Math.ceil(limit / 4),
         orderBy: { createdAt: 'desc' },
@@ -894,7 +894,7 @@ export class CommunitiesService {
           _count: {
             select: {
               comments: true,
-              reactions: true,
+              Reaction: true,
             },
           },
         },
@@ -982,7 +982,7 @@ export class CommunitiesService {
       throw new NotFoundException('Community not found');
     }
 
-    const offers = await this.prisma.offer.findMany({
+    const offers = await this.prisma.Offer.findMany({
       where: {
         communityId,
         ...(status && { status: status as any }),

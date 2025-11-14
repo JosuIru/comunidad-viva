@@ -199,7 +199,7 @@ describe('MetricsCalculatorService', () => {
 
       mockPrismaService.communityPack.findUnique.mockResolvedValue(mockPack);
       mockPrismaService.event.count.mockResolvedValue(5);
-      mockPrismaService.offer.findMany.mockResolvedValue([]);
+      mockPrismaService.Offer.findMany.mockResolvedValue([]);
       mockPrismaService.liveEventParticipant.findMany.mockResolvedValue([]);
       mockPrismaService.communityMetric.findFirst.mockResolvedValue(null);
       mockPrismaService.communityMetric.create.mockResolvedValue({});

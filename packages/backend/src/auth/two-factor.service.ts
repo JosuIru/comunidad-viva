@@ -22,7 +22,7 @@ export class TwoFactorService {
    * Generate 2FA secret and QR code for setup
    */
   async generateTwoFactorSecret(userId: string): Promise<TwoFactorSetup> {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: userId },
       select: { email: true, name: true, twoFactorEnabled: true },
     });
@@ -85,7 +85,7 @@ export class TwoFactorService {
     );
 
     // Save to database
-    await this.prisma.user.update({
+    await this.prisma.User.update({
       where: { id: userId },
       data: {
         twoFactorEnabled: true,
@@ -101,7 +101,7 @@ export class TwoFactorService {
    * Disable 2FA for a user
    */
   async disableTwoFactor(userId: string, token: string): Promise<void> {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: userId },
       select: { twoFactorSecret: true, twoFactorEnabled: true },
     });
@@ -123,7 +123,7 @@ export class TwoFactorService {
       throw new UnauthorizedException('Invalid verification code');
     }
 
-    await this.prisma.user.update({
+    await this.prisma.User.update({
       where: { id: userId },
       data: {
         twoFactorEnabled: false,
@@ -139,7 +139,7 @@ export class TwoFactorService {
    * Verify a 2FA token for a user
    */
   async verifyTwoFactorToken(userId: string, token: string): Promise<boolean> {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: userId },
       select: {
         twoFactorSecret: true,
@@ -171,7 +171,7 @@ export class TwoFactorService {
       if (isMatch) {
         // Remove used backup code
         const updatedCodes = user.backupCodes.filter((_, index) => index !== i);
-        await this.prisma.user.update({
+        await this.prisma.User.update({
           where: { id: userId },
           data: { backupCodes: updatedCodes },
         });
@@ -202,7 +202,7 @@ export class TwoFactorService {
    * Regenerate backup codes (requires 2FA token verification)
    */
   async regenerateBackupCodes(userId: string, token: string): Promise<string[]> {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: userId },
       select: { twoFactorSecret: true, twoFactorEnabled: true },
     });
@@ -229,7 +229,7 @@ export class TwoFactorService {
       backupCodes.map(code => bcrypt.hash(code, 10))
     );
 
-    await this.prisma.user.update({
+    await this.prisma.User.update({
       where: { id: userId },
       data: { backupCodes: hashedBackupCodes },
     });
@@ -243,7 +243,7 @@ export class TwoFactorService {
    * Check if user has 2FA enabled
    */
   async isTwoFactorEnabled(userId: string): Promise<boolean> {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: userId },
       select: { twoFactorEnabled: true },
     });

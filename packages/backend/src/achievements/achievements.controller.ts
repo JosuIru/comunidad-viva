@@ -25,7 +25,7 @@ export class AchievementsController {
    */
   @Get('my-badges')
   async getMyBadges(@Request() req) {
-    const userId = req.user.userId;
+    const userId = req.User.userId;
     return this.achievementsService.getUserBadges(userId);
   }
 
@@ -35,7 +35,7 @@ export class AchievementsController {
    */
   @Get('progress')
   async getBadgeProgress(@Request() req) {
-    const userId = req.user.userId;
+    const userId = req.User.userId;
     return this.achievementsService.getBadgeProgress(userId);
   }
 
@@ -45,7 +45,7 @@ export class AchievementsController {
    */
   @Get('stats')
   async getStats(@Request() req) {
-    const userId = req.user.userId;
+    const userId = req.User.userId;
     return this.achievementsService.getUserBadgeStats(userId);
   }
 
@@ -97,7 +97,7 @@ export class AchievementsController {
    */
   @Post('check')
   async checkAchievements(@Request() req) {
-    const userId = req.user.userId;
+    const userId = req.User.userId;
     const newBadges = await this.achievementsService.checkAchievements(userId);
 
     return {
@@ -118,7 +118,7 @@ export class AchievementsController {
     @Request() req,
     @Body() body: { badgeTypes: BadgeType[] },
   ) {
-    const userId = req.user.userId;
+    const userId = req.User.userId;
     await this.achievementsService.markBadgesAsSeen(userId, body.badgeTypes);
 
     return {

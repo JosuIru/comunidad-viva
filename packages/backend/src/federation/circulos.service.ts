@@ -373,7 +373,7 @@ export class CirculosService {
 
     // Also update user's overall consciousness level if significant growth
     if (participation.consciousnessGrowth >= 10) {
-      await this.prisma.user.update({
+      await this.prisma.User.update({
         where: { id: userParsed.userId },
         data: {
           consciousnessLevel: { increment: 1 },

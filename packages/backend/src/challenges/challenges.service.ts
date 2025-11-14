@@ -107,7 +107,7 @@ export class ChallengesService {
     }
 
     // Get user's current credits
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: userId },
       select: { credits: true },
     });
@@ -129,7 +129,7 @@ export class ChallengesService {
           },
         },
       }),
-      this.prisma.user.update({
+      this.prisma.User.update({
         where: { id: userId },
         data: {
           credits: {

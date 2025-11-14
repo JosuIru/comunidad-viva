@@ -275,9 +275,9 @@ describe('HousingService', () => {
       };
 
       mockPrismaService.spaceBank.findUnique.mockResolvedValue(mockSpace);
-      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
       mockPrismaService.spaceBooking.create.mockResolvedValue(mockBooking);
-      mockPrismaService.user.update.mockResolvedValue({});
+      mockPrismaService.User.update.mockResolvedValue({});
 
       const result = await service.bookSpace(userId, spaceId, {
         startTime: new Date('2024-01-01T10:00:00'),
@@ -300,7 +300,7 @@ describe('HousingService', () => {
       };
 
       mockPrismaService.spaceBank.findUnique.mockResolvedValue(mockSpace);
-      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
 
       await expect(
         service.bookSpace('user-id', 'space-id', {
@@ -323,7 +323,7 @@ describe('HousingService', () => {
       };
 
       mockPrismaService.spaceBank.findUnique.mockResolvedValue(mockSpace);
-      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
 
       await expect(
         service.bookSpace('user-id', 'space-id', {
@@ -348,7 +348,7 @@ describe('HousingService', () => {
       };
 
       mockPrismaService.spaceBank.findUnique.mockResolvedValue(mockSpace);
-      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
 
       await expect(
         service.bookSpace('user-id', 'space-id', {
@@ -373,7 +373,7 @@ describe('HousingService', () => {
 
       mockPrismaService.spaceBooking.findUnique.mockResolvedValue(mockBooking);
       mockPrismaService.spaceBooking.update.mockResolvedValue(mockBooking);
-      mockPrismaService.user.update.mockResolvedValue({});
+      mockPrismaService.User.update.mockResolvedValue({});
 
       const result = await service.approveSpaceBooking(ownerId, bookingId);
 
@@ -597,7 +597,7 @@ describe('HousingService', () => {
       mockPrismaService.temporaryHousing.findUnique.mockResolvedValue(
         mockHousing,
       );
-      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
       mockPrismaService.housingBooking.create.mockResolvedValue(mockBooking);
 
       const result = await service.bookHousing(userId, housingId, {
@@ -625,7 +625,7 @@ describe('HousingService', () => {
       mockPrismaService.temporaryHousing.findUnique.mockResolvedValue(
         mockHousing,
       );
-      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
 
       await expect(
         service.bookHousing('user-id', 'housing-id', {
@@ -896,7 +896,7 @@ describe('HousingService', () => {
         status: GuaranteeStatus.PENDING,
       };
 
-      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
       mockPrismaService.communityGuarantee.create.mockResolvedValue(
         mockGuarantee,
       );
@@ -912,7 +912,7 @@ describe('HousingService', () => {
         generosityScore: 30, // Below 50
       };
 
-      mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
+      mockPrismaService.User.findUnique.mockResolvedValue(mockUser);
 
       await expect(service.requestGuarantee('user-id', {})).rejects.toThrow(
         ForbiddenException,

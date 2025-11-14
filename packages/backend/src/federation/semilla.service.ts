@@ -69,7 +69,7 @@ export class SemillaService {
 
       // Check sender's balance (if local user)
       if (fromId) {
-        const sender = await this.prisma.user.findUnique({
+        const sender = await this.prisma.User.findUnique({
           where: { id: fromId },
           select: { semillaBalance: true },
         });
@@ -87,7 +87,7 @@ export class SemillaService {
       const transaction = await this.prisma.$transaction(async (tx) => {
         // Deduct from sender (if local)
         if (fromId) {
-          await tx.user.update({
+          await tx.User.update({
             where: { id: fromId },
             data: { semillaBalance: { decrement: amount } },
           });
@@ -95,7 +95,7 @@ export class SemillaService {
 
         // Add to receiver (if local)
         if (toId) {
-          await tx.user.update({
+          await tx.User.update({
             where: { id: toId },
             data: { semillaBalance: { increment: netAmount } },
           });
@@ -170,7 +170,7 @@ export class SemillaService {
 
       // Update user balance and PoH score
       const result = await this.prisma.$transaction(async (tx) => {
-        const user = await tx.user.update({
+        const user = await tx.User.update({
           where: { id: userId },
           data: {
             semillaBalance: { increment: amount },
@@ -219,7 +219,7 @@ export class SemillaService {
       throw new BadRequestException('Can only query local user balances');
     }
 
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: parsed.userId },
       select: { semillaBalance: true },
     });
@@ -277,7 +277,7 @@ export class SemillaService {
     const systemDID = `did:gailu:${this.didService.getNodeId()}:system:initial-grant`;
 
     const result = await this.prisma.$transaction(async (tx) => {
-      const user = await tx.user.update({
+      const user = await tx.User.update({
         where: { id: parsed.userId },
         data: { semillaBalance: { increment: amount } },
       });
@@ -308,7 +308,7 @@ export class SemillaService {
    * Get total SEMILLA in circulation on this node
    */
   async getTotalSupply(): Promise<number> {
-    const result = await this.prisma.user.aggregate({
+    const result = await this.prisma.User.aggregate({
       _sum: {
         semillaBalance: true,
       },

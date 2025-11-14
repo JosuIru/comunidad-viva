@@ -33,7 +33,7 @@ export class EmailVerifiedGuard implements CanActivate {
     }
 
     // Check if user's email is verified
-    const dbUser = await this.prisma.user.findUnique({
+    const dbUser = await this.prisma.User.findUnique({
       where: { id: user.userId },
       select: { emailVerified: true, email: true },
     });

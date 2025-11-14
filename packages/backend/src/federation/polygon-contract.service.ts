@@ -140,7 +140,7 @@ export class PolygonContractService {
 
     try {
       // Get transaction receipt
-      const receipt = await this.provider.getTransactionReceipt(txHash);
+      const receipt = await this.Provider.getTransactionReceipt(txHash);
 
       if (!receipt) {
         this.logger.warn(`Transaction ${txHash} not found`);
@@ -233,9 +233,9 @@ export class PolygonContractService {
 
     try {
       const [network, blockNumber, feeData] = await Promise.all([
-        this.provider.getNetwork(),
-        this.provider.getBlockNumber(),
-        this.provider.getFeeData(),
+        this.Provider.getNetwork(),
+        this.Provider.getBlockNumber(),
+        this.Provider.getFeeData(),
       ]);
 
       return {

@@ -59,7 +59,7 @@ export class EventsController {
   @UseGuards(JwtAuthGuard)
   @Get('user/registrations')
   async getUserEvents(@Request() req, @Query('upcoming') upcoming?: boolean) {
-    return this.eventsService.getUserEvents(req.user.userId, { upcoming });
+    return this.eventsService.getUserEvents(req.User.userId, { upcoming });
   }
 
   @ApiOperation({ summary: 'Get events created by current user (as organizer)' })
@@ -67,7 +67,7 @@ export class EventsController {
   @UseGuards(JwtAuthGuard)
   @Get('user/my-events')
   async getUserCreatedEvents(@Request() req) {
-    return this.eventsService.getUserCreatedEvents(req.user.userId);
+    return this.eventsService.getUserCreatedEvents(req.User.userId);
   }
 
   @ApiOperation({ summary: 'Get event by ID' })
@@ -82,7 +82,7 @@ export class EventsController {
   @UseGuards(JwtAuthGuard, EmailVerifiedGuard)
   @Post()
   async create(@Request() req, @Body() data: CreateEventDto) {
-    return this.eventsService.create(req.user.userId, data);
+    return this.eventsService.create(req.User.userId, data);
   }
 
   @ApiOperation({ summary: 'Update event (organizer only)' })
@@ -91,7 +91,7 @@ export class EventsController {
   @CheckOwnership('event')
   @Put(':id')
   async update(@Param('id') id: string, @Request() req, @Body() data: UpdateEventDto) {
-    return this.eventsService.update(id, req.user.userId, data);
+    return this.eventsService.update(id, req.User.userId, data);
   }
 
   @ApiOperation({ summary: 'Delete event (organizer only)' })
@@ -100,7 +100,7 @@ export class EventsController {
   @CheckOwnership('event')
   @Delete(':id')
   async remove(@Param('id') id: string, @Request() req) {
-    return this.eventsService.remove(id, req.user.userId);
+    return this.eventsService.remove(id, req.User.userId);
   }
 
   @ApiOperation({ summary: 'Register for event' })
@@ -108,7 +108,7 @@ export class EventsController {
   @UseGuards(JwtAuthGuard)
   @Post(':id/register')
   async register(@Param('id') id: string, @Request() req) {
-    return this.eventsService.register(id, req.user.userId);
+    return this.eventsService.register(id, req.User.userId);
   }
 
   @ApiOperation({ summary: 'Cancel registration for event' })
@@ -116,7 +116,7 @@ export class EventsController {
   @UseGuards(JwtAuthGuard)
   @Delete(':id/register')
   async cancelRegistration(@Param('id') id: string, @Request() req) {
-    return this.eventsService.cancelRegistration(id, req.user.userId);
+    return this.eventsService.cancelRegistration(id, req.User.userId);
   }
 
   @ApiOperation({ summary: 'Get event QR code (organizer only)' })
@@ -124,7 +124,7 @@ export class EventsController {
   @UseGuards(JwtAuthGuard)
   @Get(':id/qr')
   async getQRCode(@Param('id') id: string, @Request() req) {
-    return this.eventsService.getEventQRCode(id, req.user.userId);
+    return this.eventsService.getEventQRCode(id, req.User.userId);
   }
 
   @ApiOperation({ summary: 'Check in to event using QR code' })
@@ -132,7 +132,7 @@ export class EventsController {
   @UseGuards(JwtAuthGuard)
   @Post('checkin')
   async checkIn(@Request() req, @Body() checkInDto: CheckInEventDto) {
-    return this.eventsService.checkIn(checkInDto.qrToken, req.user.userId);
+    return this.eventsService.checkIn(checkInDto.qrToken, req.User.userId);
   }
 
   @ApiOperation({ summary: 'Get event attendees (organizer only)' })
@@ -140,6 +140,6 @@ export class EventsController {
   @UseGuards(JwtAuthGuard)
   @Get(':id/attendees')
   async getAttendees(@Param('id') id: string, @Request() req) {
-    return this.eventsService.getAttendees(id, req.user.userId);
+    return this.eventsService.getAttendees(id, req.User.userId);
   }
 }

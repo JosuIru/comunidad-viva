@@ -77,7 +77,7 @@ describe('CommunityPacksService', () => {
       };
 
       mockPrismaService.community.findUnique.mockResolvedValue(community);
-      mockPrismaService.user.findUnique.mockResolvedValue(user);
+      mockPrismaService.User.findUnique.mockResolvedValue(user);
 
       await expect(
         service.createPack('comm-123', {
@@ -98,7 +98,7 @@ describe('CommunityPacksService', () => {
       };
 
       mockPrismaService.community.findUnique.mockResolvedValue(community);
-      mockPrismaService.user.findUnique.mockResolvedValue(user);
+      mockPrismaService.User.findUnique.mockResolvedValue(user);
       mockPrismaService.communityPack.findUnique.mockResolvedValue(null);
       mockPrismaService.communityPack.create.mockResolvedValue({
         id: 'pack-123',
@@ -125,7 +125,7 @@ describe('CommunityPacksService', () => {
       };
 
       mockPrismaService.community.findUnique.mockResolvedValue(community);
-      mockPrismaService.user.findUnique.mockResolvedValue(user);
+      mockPrismaService.User.findUnique.mockResolvedValue(user);
       mockPrismaService.communityPack.findUnique.mockResolvedValue(null);
       mockPrismaService.communityPack.create.mockResolvedValue({
         id: 'pack-123',
@@ -152,7 +152,7 @@ describe('CommunityPacksService', () => {
       };
 
       mockPrismaService.community.findUnique.mockResolvedValue(community);
-      mockPrismaService.user.findUnique.mockResolvedValue(user);
+      mockPrismaService.User.findUnique.mockResolvedValue(user);
       mockPrismaService.communityPack.findUnique.mockResolvedValue(null);
       mockPrismaService.communityPack.create.mockResolvedValue({
         id: 'pack-123',
@@ -186,7 +186,7 @@ describe('CommunityPacksService', () => {
       };
 
       mockPrismaService.community.findUnique.mockResolvedValue(community);
-      mockPrismaService.user.findUnique.mockResolvedValue(user);
+      mockPrismaService.User.findUnique.mockResolvedValue(user);
       mockPrismaService.communityPack.update.mockResolvedValue({
         id: 'pack-123',
         enabledFeatures: ['feature1', 'feature2'],
@@ -226,7 +226,7 @@ describe('CommunityPacksService', () => {
       };
 
       mockPrismaService.community.findUnique.mockResolvedValue(community);
-      mockPrismaService.user.findUnique.mockResolvedValue(user);
+      mockPrismaService.User.findUnique.mockResolvedValue(user);
       mockPrismaService.communityPack.findUnique.mockResolvedValue(pack);
       mockPrismaService.communitySetupStep.update.mockResolvedValue({
         id: 'step-123',
@@ -273,7 +273,7 @@ describe('CommunityPacksService', () => {
       };
 
       mockPrismaService.community.findUnique.mockResolvedValue(community);
-      mockPrismaService.user.findUnique.mockResolvedValue(user);
+      mockPrismaService.User.findUnique.mockResolvedValue(user);
       mockPrismaService.communityPack.findUnique.mockResolvedValue(pack);
       mockPrismaService.communitySetupStep.update.mockResolvedValue({});
       mockPrismaService.communityPack.update.mockResolvedValue({});
@@ -317,7 +317,7 @@ describe('CommunityPacksService', () => {
       };
 
       mockPrismaService.communityPack.findUnique.mockResolvedValue(pack);
-      mockPrismaService.user.findUnique.mockResolvedValue(user);
+      mockPrismaService.User.findUnique.mockResolvedValue(user);
       mockPrismaService.communityMetric.update.mockResolvedValue({
         id: 'metric-123',
         currentValue: 150,

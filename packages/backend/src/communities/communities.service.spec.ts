@@ -144,7 +144,7 @@ describe('CommunitiesService', () => {
       };
 
       prismaService.community.create.mockResolvedValue(createdCommunity);
-      prismaService.user.update.mockResolvedValue(mockUser);
+      prismaService.User.update.mockResolvedValue(mockUser);
 
       const result = await service.create(userId, createCommunityDto);
 
@@ -162,7 +162,7 @@ describe('CommunitiesService', () => {
           governance: true,
         },
       });
-      expect(prismaService.user.update).toHaveBeenCalledWith({
+      expect(prismaService.User.update).toHaveBeenCalledWith({
         where: { id: userId },
         data: { communityId: createdCommunity.id },
       });
@@ -340,7 +340,7 @@ describe('CommunitiesService', () => {
       };
 
       prismaService.community.findUnique.mockResolvedValue(communityWithGovernance);
-      prismaService.user.findUnique.mockResolvedValue(mockUser);
+      prismaService.User.findUnique.mockResolvedValue(mockUser);
 
       const result = await service.findOne('community-123', 'user-123');
 
@@ -369,7 +369,7 @@ describe('CommunitiesService', () => {
       };
 
       prismaService.community.findUnique.mockResolvedValue(communityWithGovernance);
-      prismaService.user.findUnique.mockResolvedValue(lowReputationUser);
+      prismaService.User.findUnique.mockResolvedValue(lowReputationUser);
 
       const result = await service.findOne('community-123', 'user-123');
 
@@ -398,7 +398,7 @@ describe('CommunitiesService', () => {
       };
 
       prismaService.community.findUnique.mockResolvedValue(privateCommunity);
-      prismaService.user.findUnique.mockResolvedValue(nonMember);
+      prismaService.User.findUnique.mockResolvedValue(nonMember);
 
       const result = await service.findOne('community-123', 'user-456');
 
@@ -465,7 +465,7 @@ describe('CommunitiesService', () => {
       };
 
       prismaService.community.findUnique.mockResolvedValue(communityWithGovernance);
-      prismaService.user.findUnique.mockResolvedValue(mockUser);
+      prismaService.User.findUnique.mockResolvedValue(mockUser);
 
       const result = await service.findOne('community-123', 'user-123');
 
@@ -486,7 +486,7 @@ describe('CommunitiesService', () => {
       };
 
       prismaService.community.findUnique.mockResolvedValue(communityWithGovernance);
-      prismaService.user.findUnique.mockResolvedValue({
+      prismaService.User.findUnique.mockResolvedValue({
         ...mockUser,
         id: 'other-user',
       });
@@ -515,7 +515,7 @@ describe('CommunitiesService', () => {
       };
 
       prismaService.community.findUnique.mockResolvedValue(communityWithGovernance);
-      prismaService.user.findUnique.mockResolvedValue(nonMember);
+      prismaService.User.findUnique.mockResolvedValue(nonMember);
 
       const result = await service.findOne('community-123', 'user-456');
 

@@ -43,7 +43,7 @@ export class AnalyticsController {
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string,
   ) {
-    return this.analyticsService.getUserMetrics(req.user.userId, {
+    return this.analyticsService.getUserMetrics(req.User.userId, {
       startDate: startDate ? new Date(startDate) : undefined,
       endDate: endDate ? new Date(endDate) : undefined,
     });
@@ -99,6 +99,6 @@ export class AnalyticsController {
   @UseGuards(JwtAuthGuard)
   @Get('user/stats')
   async getUserStats(@Request() req) {
-    return this.analyticsService.getUserStats(req.user.userId);
+    return this.analyticsService.getUserStats(req.User.userId);
   }
 }

@@ -26,7 +26,7 @@ export class ViralFeaturesController {
    */
   @Get('onboarding/progress')
   async getOnboardingProgress(@Request() req) {
-    return this.viralFeaturesService.getOnboardingProgress(req.user.userId);
+    return this.viralFeaturesService.getOnboardingProgress(req.User.userId);
   }
 
   @Post('onboarding/track')
@@ -35,7 +35,7 @@ export class ViralFeaturesController {
     @Body() body: { step: number },
   ) {
     return this.viralFeaturesService.trackOnboardingStep(
-      req.user.userId,
+      req.User.userId,
       body.step,
     );
   }
@@ -57,13 +57,13 @@ export class ViralFeaturesController {
 
   @Post('flash-deals/:id/redeem')
   async redeemFlashDeal(@Request() req, @Param('id') dealId: string) {
-    return this.viralFeaturesService.redeemFlashDeal(req.user.userId, dealId);
+    return this.viralFeaturesService.redeemFlashDeal(req.User.userId, dealId);
   }
 
   // Alias for frontend compatibility
   @Post('flash-deals/claim/:id')
   async claimFlashDeal(@Request() req, @Param('id') dealId: string) {
-    return this.viralFeaturesService.redeemFlashDeal(req.user.userId, dealId);
+    return this.viralFeaturesService.redeemFlashDeal(req.User.userId, dealId);
   }
 
   /**
@@ -85,7 +85,7 @@ export class ViralFeaturesController {
    */
   @Get('stories')
   async getActiveStories(@Request() req) {
-    return this.viralFeaturesService.getActiveStories(req.user.userId);
+    return this.viralFeaturesService.getActiveStories(req.User.userId);
   }
 
   @Post('stories')
@@ -99,7 +99,7 @@ export class ViralFeaturesController {
     },
   ) {
     return this.viralFeaturesService.createStory(
-      req.user.userId,
+      req.User.userId,
       body.type,
       body.content,
       body.media,
@@ -108,7 +108,7 @@ export class ViralFeaturesController {
 
   @Post('stories/:id/view')
   async viewStory(@Request() req, @Param('id') storyId: string) {
-    return this.viralFeaturesService.viewStory(req.user.userId, storyId);
+    return this.viralFeaturesService.viewStory(req.User.userId, storyId);
   }
 
   @Post('stories/:id/react')
@@ -118,7 +118,7 @@ export class ViralFeaturesController {
     @Body() body: { emoji: string },
   ) {
     return this.viralFeaturesService.reactToStory(
-      req.user.userId,
+      req.User.userId,
       storyId,
       body.emoji,
     );
@@ -130,7 +130,7 @@ export class ViralFeaturesController {
   @Get('swipe/offers')
   async getSwipeableOffers(@Request() req, @Query('limit') limit?: string) {
     return this.viralFeaturesService.getSwipeableOffers(
-      req.user.userId,
+      req.User.userId,
       limit ? parseInt(limit) : 10,
     );
   }
@@ -139,7 +139,7 @@ export class ViralFeaturesController {
   @Get('swipe/cards')
   async getSwipeCards(@Request() req, @Query('limit') limit?: string) {
     const offers = await this.viralFeaturesService.getSwipeableOffers(
-      req.user.userId,
+      req.User.userId,
       limit ? parseInt(limit) : 10,
     );
     return { cards: offers };
@@ -155,7 +155,7 @@ export class ViralFeaturesController {
     },
   ) {
     return this.viralFeaturesService.swipeOffer(
-      req.user.userId,
+      req.User.userId,
       body.offerId,
       body.direction,
     );
@@ -178,7 +178,7 @@ export class ViralFeaturesController {
       SUPER_LIKE: 'SUPER' as const,
     };
     return this.viralFeaturesService.swipeOffer(
-      req.user.userId,
+      req.User.userId,
       body.cardId,
       directionMap[body.action],
     );
@@ -186,20 +186,20 @@ export class ViralFeaturesController {
 
   @Get('matches')
   async getUserMatches(@Request() req) {
-    return this.viralFeaturesService.getUserMatches(req.user.userId);
+    return this.viralFeaturesService.getUserMatches(req.User.userId);
   }
 
   // Alias for frontend compatibility
   @Get('swipe/matches')
   async getSwipeMatches(@Request() req) {
-    const matches = await this.viralFeaturesService.getUserMatches(req.user.userId);
+    const matches = await this.viralFeaturesService.getUserMatches(req.User.userId);
     return { matches };
   }
 
   @Get('swipe/stats')
   async getSwipeStats(@Request() req) {
     // Return basic stats - can be enhanced later
-    const matches = await this.viralFeaturesService.getUserMatches(req.user.userId);
+    const matches = await this.viralFeaturesService.getUserMatches(req.User.userId);
     return {
       totalSwipes: 0,           // TODO: implement
       likes: 0,                 // TODO: implement
@@ -251,7 +251,7 @@ export class ViralFeaturesController {
     @Body() body: { score: number },
   ) {
     return this.viralFeaturesService.updateChallengeProgress(
-      req.user.userId,
+      req.User.userId,
       challengeId,
       body.score,
     );
@@ -262,29 +262,29 @@ export class ViralFeaturesController {
    */
   @Get('referral/code')
   async getReferralCode(@Request() req) {
-    return this.viralFeaturesService.getReferralCode(req.user.userId);
+    return this.viralFeaturesService.getReferralCode(req.User.userId);
   }
 
   // Alias for frontend compatibility
   @Get('referrals/my-code')
   async getMyReferralCode(@Request() req) {
-    return this.viralFeaturesService.getReferralCode(req.user.userId);
+    return this.viralFeaturesService.getReferralCode(req.User.userId);
   }
 
   @Get('referrals/stats')
   async getReferralStats(@Request() req) {
-    return this.viralFeaturesService.getReferralStats(req.user.userId);
+    return this.viralFeaturesService.getReferralStats(req.User.userId);
   }
 
   @Get('referrals/my-referrals')
   async getMyReferrals(@Request() req) {
-    return this.viralFeaturesService.getMyReferrals(req.user.userId);
+    return this.viralFeaturesService.getMyReferrals(req.User.userId);
   }
 
   @Post('referral/use')
   async useReferralCode(@Request() req, @Body() body: { code: string }) {
     return this.viralFeaturesService.useReferralCode(
-      req.user.userId,
+      req.User.userId,
       body.code,
     );
   }
@@ -295,7 +295,7 @@ export class ViralFeaturesController {
   @Get('suggestions')
   async getPersonalizedSuggestions(@Request() req) {
     return this.viralFeaturesService.getPersonalizedSuggestions(
-      req.user.userId,
+      req.User.userId,
     );
   }
 
@@ -309,7 +309,7 @@ export class ViralFeaturesController {
 
   @Post('live-events/:id/join')
   async joinLiveEvent(@Request() req, @Param('id') eventId: string) {
-    return this.viralFeaturesService.joinLiveEvent(req.user.userId, eventId);
+    return this.viralFeaturesService.joinLiveEvent(req.User.userId, eventId);
   }
 
   /**
@@ -325,7 +325,7 @@ export class ViralFeaturesController {
     },
   ) {
     return this.viralFeaturesService.rewardMicroAction(
-      req.user.userId,
+      req.User.userId,
       body.action,
       body.reward,
     );
@@ -336,25 +336,25 @@ export class ViralFeaturesController {
    */
   @Get('level/progress')
   async getLevelProgress(@Request() req) {
-    return this.viralFeaturesService.getLevelProgress(req.user.userId);
+    return this.viralFeaturesService.getLevelProgress(req.User.userId);
   }
 
   // Alias for frontend compatibility
   @Get('levels/progress')
   async getLevelsProgress(@Request() req) {
-    return this.viralFeaturesService.getLevelProgress(req.user.userId);
+    return this.viralFeaturesService.getLevelProgress(req.User.userId);
   }
 
   @Get('streak')
   async getDailyStreak(@Request() req) {
-    const streak = await this.viralFeaturesService.getDailyStreak(req.user.userId);
+    const streak = await this.viralFeaturesService.getDailyStreak(req.User.userId);
     return { streak };
   }
 
   // Alias for frontend compatibility
   @Get('streaks')
   async getStreaks(@Request() req) {
-    const streak = await this.viralFeaturesService.getDailyStreak(req.user.userId);
+    const streak = await this.viralFeaturesService.getDailyStreak(req.User.userId);
     const currentStreak = streak || 0;
 
     // Calculate next milestone

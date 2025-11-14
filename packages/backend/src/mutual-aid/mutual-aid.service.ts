@@ -212,7 +212,7 @@ export class MutualAidService {
     }
 
     // Check user has enough resources
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: userId },
       select: { credits: true, hoursShared: true },
     });
@@ -266,7 +266,7 @@ export class MutualAidService {
 
       // Deduct credits from user if applicable
       if (data.amountCredits) {
-        await tx.user.update({
+        await tx.User.update({
           where: { id: userId },
           data: {
             credits: { decrement: data.amountCredits },
@@ -603,7 +603,7 @@ export class MutualAidService {
     }
 
     // Check user has enough resources
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: userId },
       select: { credits: true },
     });
@@ -665,7 +665,7 @@ export class MutualAidService {
 
       // Deduct credits from user if applicable
       if (data.amountCredits) {
-        await tx.user.update({
+        await tx.User.update({
           where: { id: userId },
           data: {
             credits: { decrement: data.amountCredits },
@@ -958,7 +958,7 @@ export class MutualAidService {
     // Refund resources
     await this.prisma.$transaction(async (tx) => {
       if (contribution.amountCredits) {
-        await tx.user.update({
+        await tx.User.update({
           where: { id: userId },
           data: {
             credits: { increment: contribution.amountCredits },

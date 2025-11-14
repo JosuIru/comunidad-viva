@@ -19,7 +19,7 @@ export class GroupBuysService {
     const { offerId, minParticipants, maxParticipants, deadline, pickupLat, pickupLng, pickupAddress, priceBreaks } = createGroupBuyDto;
 
     // Validate offer exists and belongs to user
-    const offer = await this.prisma.offer.findUnique({
+    const offer = await this.prisma.Offer.findUnique({
       where: { id: offerId },
     });
 
@@ -117,7 +117,7 @@ export class GroupBuysService {
     };
 
     if (category) {
-      where.offer.category = category;
+      where.Offer.category = category;
     }
 
     // If location provided, filter by proximity
@@ -256,7 +256,7 @@ export class GroupBuysService {
     const groupBuy = await this.prisma.groupBuy.findUnique({
       where: { id: groupBuyId },
       include: {
-        participants: true,
+        Participant: true,
         offer: {
           include: {
             user: {
@@ -311,11 +311,11 @@ export class GroupBuysService {
     });
 
     // Send email to organizer about new participation
-    if (groupBuy.offer.user.email) {
+    if (groupBuy.Offer.User.email) {
       await this.emailService.sendGroupBuyParticipation(
-        groupBuy.offer.user.email,
-        participant.user.name,
-        groupBuy.offer.title,
+        groupBuy.Offer.User.email,
+        participant.User.name,
+        groupBuy.Offer.title,
         groupBuy.currentParticipants + 1,
         groupBuy.minParticipants,
       );
@@ -338,14 +338,14 @@ export class GroupBuysService {
     if (updated && updated.currentParticipants === updated.minParticipants) {
       // Notify all participants that minimum goal has been reached
       const participantEmails = updated.participants
-        .map(p => p.user.email)
+        .map(p => p.User.email)
         .filter((email): email is string => !!email);
 
       for (const email of participantEmails) {
         await this.emailService.sendGroupBuyParticipation(
           email,
           'La meta mínima',
-          groupBuy.offer.title,
+          groupBuy.Offer.title,
           updated.currentParticipants,
           updated.minParticipants,
         );
@@ -445,7 +445,7 @@ export class GroupBuysService {
     const groupBuy = await this.prisma.groupBuy.findUnique({
       where: { id: groupBuyId },
       include: {
-        offer: true,
+        Offer: true,
         participants: {
           include: {
             user: {
@@ -463,7 +463,7 @@ export class GroupBuysService {
       throw new NotFoundException('Group buy not found');
     }
 
-    if (groupBuy.offer.userId !== userId) {
+    if (groupBuy.Offer.userId !== userId) {
       throw new ForbiddenException('Only the organizer can close the group buy');
     }
 
@@ -479,7 +479,7 @@ export class GroupBuysService {
     }
 
     // Update offer status to completed
-    await this.prisma.offer.update({
+    await this.prisma.Offer.update({
       where: { id: groupBuy.offerId },
       data: { status: 'COMPLETED' },
     });
@@ -494,23 +494,23 @@ export class GroupBuysService {
 
     const finalPrice = applicablePriceBreak
       ? applicablePriceBreak.pricePerUnit * totalQuantity
-      : (groupBuy.offer.priceEur || 0) * totalQuantity;
+      : (groupBuy.Offer.priceEur || 0) * totalQuantity;
 
-    const originalPrice = (groupBuy.offer.priceEur || 0) * totalQuantity;
+    const originalPrice = (groupBuy.Offer.priceEur || 0) * totalQuantity;
     const savings = originalPrice - finalPrice;
 
     // Create orders for each participant
     const orderPromises = groupBuy.participants.map(async (participant) => {
       const participantTotal = applicablePriceBreak
         ? applicablePriceBreak.pricePerUnit * participant.quantity
-        : (groupBuy.offer.priceEur || 0) * participant.quantity;
+        : (groupBuy.Offer.priceEur || 0) * participant.quantity;
 
       return this.prisma.groupBuyOrder.create({
         data: {
           groupBuyId: groupBuy.id,
           userId: participant.userId,
           quantity: participant.quantity,
-          pricePerUnit: applicablePriceBreak?.pricePerUnit || groupBuy.offer.priceEur || 0,
+          pricePerUnit: applicablePriceBreak?.pricePerUnit || groupBuy.Offer.priceEur || 0,
           totalAmount: participantTotal,
           status: 'PENDING',
         },
@@ -521,13 +521,13 @@ export class GroupBuysService {
 
     // Send notifications to all participants
     const participantEmails = groupBuy.participants
-      .map(p => p.user.email)
+      .map(p => p.User.email)
       .filter((email): email is string => !!email);
 
     for (const email of participantEmails) {
       await this.emailService.sendGroupBuyClosed(
         email,
-        groupBuy.offer.title,
+        groupBuy.Offer.title,
         finalPrice,
         savings,
       );
@@ -555,7 +555,7 @@ export class GroupBuysService {
             priceBreaks: {
               orderBy: { minQuantity: 'asc' },
             },
-            participants: true,
+            Participant: true,
           },
         },
       },

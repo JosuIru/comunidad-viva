@@ -39,14 +39,14 @@ describe('UsersService', () => {
     };
 
     it('should allow user to update their own profile', async () => {
-      prismaService.user.update.mockResolvedValue({
+      prismaService.User.update.mockResolvedValue({
         ...mockUser,
         ...updateData,
       });
 
       const result = await service.update('user-123', 'user-123', updateData);
 
-      expect(prismaService.user.update).toHaveBeenCalledWith({
+      expect(prismaService.User.update).toHaveBeenCalledWith({
         where: { id: 'user-123' },
         data: updateData,
       });
@@ -54,7 +54,7 @@ describe('UsersService', () => {
     });
 
     it('should throw ForbiddenException when non-admin tries to update another profile', async () => {
-      prismaService.user.findUnique.mockResolvedValue(mockUser);
+      prismaService.User.findUnique.mockResolvedValue(mockUser);
 
       await expect(
         service.update('user-456', 'user-123', updateData)
@@ -66,19 +66,19 @@ describe('UsersService', () => {
     });
 
     it('should allow admin to update any profile', async () => {
-      prismaService.user.findUnique.mockResolvedValue(mockAdmin);
-      prismaService.user.update.mockResolvedValue({
+      prismaService.User.findUnique.mockResolvedValue(mockAdmin);
+      prismaService.User.update.mockResolvedValue({
         ...mockUser,
         ...updateData,
       });
 
       const result = await service.update('user-456', 'admin-123', updateData);
 
-      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+      expect(prismaService.User.findUnique).toHaveBeenCalledWith({
         where: { id: 'admin-123' },
         select: { role: true },
       });
-      expect(prismaService.user.update).toHaveBeenCalledWith({
+      expect(prismaService.User.update).toHaveBeenCalledWith({
         where: { id: 'user-456' },
         data: updateData,
       });
@@ -91,7 +91,7 @@ describe('UsersService', () => {
         role: UserRole.MERCHANT,
       };
 
-      prismaService.user.findUnique.mockResolvedValue(mockMerchant);
+      prismaService.User.findUnique.mockResolvedValue(mockMerchant);
 
       await expect(
         service.update('user-456', 'merchant-123', updateData)
@@ -99,7 +99,7 @@ describe('UsersService', () => {
     });
 
     it('should throw ForbiddenException when requesting user is not found', async () => {
-      prismaService.user.findUnique.mockResolvedValue(null);
+      prismaService.User.findUnique.mockResolvedValue(null);
 
       await expect(
         service.update('user-456', 'nonexistent-123', updateData)
@@ -107,7 +107,7 @@ describe('UsersService', () => {
     });
 
     it('should not check permissions when user updates own profile', async () => {
-      prismaService.user.update.mockResolvedValue({
+      prismaService.User.update.mockResolvedValue({
         ...mockUser,
         ...updateData,
       });
@@ -115,7 +115,7 @@ describe('UsersService', () => {
       await service.update('user-123', 'user-123', updateData);
 
       // Should not call findUnique to check permissions
-      expect(prismaService.user.findUnique).not.toHaveBeenCalled();
+      expect(prismaService.User.findUnique).not.toHaveBeenCalled();
     });
   });
 
@@ -132,11 +132,11 @@ describe('UsersService', () => {
         level: 2,
       };
 
-      prismaService.user.findUnique.mockResolvedValue(mockProfile);
+      prismaService.User.findUnique.mockResolvedValue(mockProfile);
 
       const result = await service.getProfile('user-123');
 
-      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+      expect(prismaService.User.findUnique).toHaveBeenCalledWith({
         where: { id: 'user-123' },
         select: expect.objectContaining({
           id: true,
@@ -163,11 +163,11 @@ describe('UsersService', () => {
         credits: 100,
       };
 
-      prismaService.user.findFirst.mockResolvedValue(mockUser);
+      prismaService.User.findFirst.mockResolvedValue(mockUser);
 
       const result = await service.searchByEmail('USER@TEST.COM');
 
-      expect(prismaService.user.findFirst).toHaveBeenCalledWith({
+      expect(prismaService.User.findFirst).toHaveBeenCalledWith({
         where: {
           email: {
             equals: 'USER@TEST.COM',
@@ -201,15 +201,15 @@ describe('UsersService', () => {
         ],
       };
 
-      prismaService.user.findUnique.mockResolvedValue(mockUser);
+      prismaService.User.findUnique.mockResolvedValue(mockUser);
 
       const result = await service.findOne('user-123');
 
-      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+      expect(prismaService.User.findUnique).toHaveBeenCalledWith({
         where: { id: 'user-123' },
         include: {
-          skills: true,
-          badges: true,
+          Skill: true,
+          Badge: true,
         },
       });
       expect(result).toEqual(mockUser);
@@ -226,11 +226,11 @@ describe('UsersService', () => {
         name: 'Test User',
       };
 
-      prismaService.user.findUnique.mockResolvedValue(mockUser);
+      prismaService.User.findUnique.mockResolvedValue(mockUser);
 
       const result = await service.findByEmail('user@test.com');
 
-      expect(prismaService.user.findUnique).toHaveBeenCalledWith({
+      expect(prismaService.User.findUnique).toHaveBeenCalledWith({
         where: { email: 'user@test.com' },
       });
       expect(result).toEqual(mockUser);

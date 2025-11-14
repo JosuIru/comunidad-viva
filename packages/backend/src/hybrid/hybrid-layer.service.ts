@@ -15,7 +15,7 @@ export class HybridLayerService {
    * MIGRACIÓN ENTRE CAPAS
    */
   async migrateUser(userId: string, dto: MigrateLayerDto) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: userId },
       select: {
         economicLayer: true,
@@ -51,7 +51,7 @@ export class HybridLayerService {
     });
 
     // Actualizar usuario
-    await this.prisma.user.update({
+    await this.prisma.User.update({
       where: { id: userId },
       data: {
         economicLayer: toLayer,
@@ -272,7 +272,7 @@ export class HybridLayerService {
    * ANUNCIAR ABUNDANCIA
    */
   async announceAbundance(userId: string, dto: AnnounceAbundanceDto) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: userId },
       select: { economicLayer: true, communityId: true },
     });
@@ -307,7 +307,7 @@ export class HybridLayerService {
    * EXPRESAR NECESIDAD
    */
   async expressNeed(userId: string, dto: ExpressNeedDto) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: userId },
       select: { economicLayer: true, communityId: true },
     });
@@ -428,7 +428,7 @@ export class HybridLayerService {
    * ACTUALIZAR ESTADÍSTICAS DE CAPAS EN COMUNIDAD
    */
   private async updateCommunityLayerStats(communityId: string) {
-    const stats = await this.prisma.user.groupBy({
+    const stats = await this.prisma.User.groupBy({
       by: ['economicLayer'],
       where: {
         communityId,
@@ -511,7 +511,7 @@ export class HybridLayerService {
     }
 
     // Estadísticas globales
-    const stats = await this.prisma.user.groupBy({
+    const stats = await this.prisma.User.groupBy({
       by: ['economicLayer'],
       _count: true,
     });
@@ -571,7 +571,7 @@ export class HybridLayerService {
    * OBTENER CAPA ACTUAL DEL USUARIO
    */
   async getUserLayer(userId: string) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: userId },
       select: {
         economicLayer: true,

@@ -26,8 +26,8 @@ export class AnalyticsService {
         ...(Object.keys(dateFilter).length > 0 && { createdAt: dateFilter }),
       },
       include: {
-        priceBreaks: true,
-        participants: true,
+        PriceBreak: true,
+        Participant: true,
       },
     });
 
@@ -73,7 +73,7 @@ export class AnalyticsService {
         ...(Object.keys(dateFilter).length > 0 && { checkedInAt: dateFilter }),
       },
       include: {
-        event: true,
+        Event: true,
       },
     });
 
@@ -88,7 +88,7 @@ export class AnalyticsService {
     const totalCO2Avoided = co2FromGroupBuys + co2FromTimeBank + co2FromEvents;
 
     // Get active users count
-    const activeUsers = await this.prisma.user.count();
+    const activeUsers = await this.prisma.User.count();
 
     // Get total credits circulating
     const creditStats = await this.prisma.creditTransaction.aggregate({
@@ -168,7 +168,7 @@ export class AnalyticsService {
       include: {
         groupBuy: {
           include: {
-            priceBreaks: true,
+            PriceBreak: true,
           },
         },
       },

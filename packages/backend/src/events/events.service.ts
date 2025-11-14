@@ -245,9 +245,9 @@ export class EventsService {
     });
 
     // Send email notification
-    if (attendee.user.email) {
+    if (attendee.User.email) {
       await this.emailService.sendEventRegistrationConfirmation(
-        attendee.user.email,
+        attendee.User.email,
         event.title,
         event.startsAt,
         event.address || 'Por determinar',

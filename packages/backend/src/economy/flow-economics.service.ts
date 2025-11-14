@@ -82,8 +82,8 @@ export class FlowEconomicsService {
   ) {
     // Get current balances and user info
     const [fromUser, toUser] = await Promise.all([
-      this.prisma.user.findUnique({ where: { id: fromUserId }, select: { credits: true, name: true, email: true } }),
-      this.prisma.user.findUnique({ where: { id: toUserId }, select: { credits: true, name: true, email: true } }),
+      this.prisma.User.findUnique({ where: { id: fromUserId }, select: { credits: true, name: true, email: true } }),
+      this.prisma.User.findUnique({ where: { id: toUserId }, select: { credits: true, name: true, email: true } }),
     ]);
 
     if (!fromUser || !toUser) {
@@ -99,7 +99,7 @@ export class FlowEconomicsService {
     // Execute transaction with Prisma transaction
     const result = await this.prisma.$transaction(async (tx) => {
       // 1. Deduct from sender (base amount only)
-      const updatedFrom = await tx.user.update({
+      const updatedFrom = await tx.User.update({
         where: { id: fromUserId },
         data: {
           credits: {
@@ -113,7 +113,7 @@ export class FlowEconomicsService {
       });
 
       // 2. Add to receiver (total value with multiplier)
-      const updatedTo = await tx.user.update({
+      const updatedTo = await tx.User.update({
         where: { id: toUserId },
         data: {
           credits: {
@@ -252,7 +252,7 @@ export class FlowEconomicsService {
    * Target: Keep Gini < 0.4 (considered equitable)
    */
   async calculateGiniIndex(): Promise<number> {
-    const users = await this.prisma.user.findMany({
+    const users = await this.prisma.User.findMany({
       select: { credits: true },
       orderBy: { credits: 'asc' },
     });
@@ -281,7 +281,7 @@ export class FlowEconomicsService {
    */
   async getEconomicMetrics() {
     const [users, pools, flowTransactions] = await Promise.all([
-      this.prisma.user.findMany({
+      this.prisma.User.findMany({
         select: { credits: true, generosityScore: true },
         orderBy: { credits: 'desc' },
       }),
@@ -428,7 +428,7 @@ export class FlowEconomicsService {
       });
 
       // Give to recipient
-      const updatedUser = await tx.user.update({
+      const updatedUser = await tx.User.update({
         where: { id: recipientId },
         data: {
           credits: {

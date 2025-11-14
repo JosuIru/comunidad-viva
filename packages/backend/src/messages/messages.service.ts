@@ -52,7 +52,7 @@ export class MessagesService {
           },
         });
 
-        const user = await this.prisma.user.findUnique({
+        const user = await this.prisma.User.findUnique({
           where: { id: otherUserId },
           select: {
             id: true,
@@ -118,7 +118,7 @@ export class MessagesService {
   }
 
   async sendMessage(senderId: string, receiverId: string, sendMessageDto: SendMessageDto) {
-    const receiver = await this.prisma.user.findUnique({
+    const receiver = await this.prisma.User.findUnique({
       where: { id: receiverId },
     });
 

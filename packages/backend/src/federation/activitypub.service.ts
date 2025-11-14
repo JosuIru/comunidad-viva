@@ -134,7 +134,7 @@ export class ActivityPubService {
    * Publish an offer to the federation
    */
   async publishOffer(offerId: string, publisherDID: string, visibility: ActivityVisibility = 'FEDERATED') {
-    const offer = await this.prisma.offer.findUnique({
+    const offer = await this.prisma.Offer.findUnique({
       where: { id: offerId },
       include: {
         user: {
@@ -161,8 +161,8 @@ export class ActivityPubService {
       published: offer.createdAt,
       attributedTo: publisherDID,
       author: {
-        name: offer.user.name,
-        avatar: offer.user.avatar,
+        name: offer.User.name,
+        avatar: offer.User.avatar,
       },
     };
 

@@ -52,7 +52,7 @@ export class ViralFeaturesService {
         });
 
         // Reward 50 credits
-        await this.prisma.user.update({
+        await this.prisma.User.update({
           where: { id: userId },
           data: { credits: { increment: 50 } },
         });
@@ -218,7 +218,7 @@ export class ViralFeaturesService {
       })
       .then((swipes) => swipes.map((s) => s.offerId));
 
-    const offers = await this.prisma.offer.findMany({
+    const offers = await this.prisma.Offer.findMany({
       where: {
         id: { notIn: swipedOfferIds },
         status: 'ACTIVE',
@@ -235,7 +235,7 @@ export class ViralFeaturesService {
     const cards = await Promise.all(
       offers.map(async (offer) => {
         // Contar ofertas activas del usuario
-        const activeOffersCount = await this.prisma.offer.count({
+        const activeOffersCount = await this.prisma.Offer.count({
           where: {
             userId: offer.userId,
             status: 'ACTIVE',
@@ -329,7 +329,7 @@ export class ViralFeaturesService {
 
     // If RIGHT or SUPER, check for match
     if (direction === 'RIGHT' || direction === 'SUPER') {
-      const offer = await this.prisma.offer.findUnique({
+      const offer = await this.prisma.Offer.findUnique({
         where: { id: offerId },
         select: { userId: true },
       });
@@ -466,7 +466,7 @@ export class ViralFeaturesService {
       return existing;
     }
 
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const user = await this.prisma.User.findUnique({ where: { id: userId } });
     const code = `${user.name.substring(0, 3).toUpperCase()}${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
 
     return this.prisma.referralCode.create({
@@ -545,12 +545,12 @@ export class ViralFeaturesService {
     });
 
     // Reward both users
-    await this.prisma.user.update({
+    await this.prisma.User.update({
       where: { id: referralCode.userId },
       data: { credits: { increment: referralCode.rewardForReferrer } },
     });
 
-    await this.prisma.user.update({
+    await this.prisma.User.update({
       where: { id: newUserId },
       data: { credits: { increment: referralCode.rewardForReferred } },
     });
@@ -675,11 +675,11 @@ export class ViralFeaturesService {
     });
 
     const likedCategories = rightSwipes
-      .map((s) => s.offer.category)
+      .map((s) => s.Offer.category)
       .filter((c) => c);
 
     // Find similar offers
-    const suggestedOffers = await this.prisma.offer.findMany({
+    const suggestedOffers = await this.prisma.Offer.findMany({
       where: {
         category: { in: likedCategories },
         status: 'ACTIVE',
@@ -760,7 +760,7 @@ export class ViralFeaturesService {
       },
     });
 
-    await this.prisma.user.update({
+    await this.prisma.User.update({
       where: { id: userId },
       data: {
         credits: { increment: reward },
@@ -783,12 +783,12 @@ export class ViralFeaturesService {
    * Grant credits to user
    */
   async grantCredits(userId: string, amount: number, reason?: string) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const user = await this.prisma.User.findUnique({ where: { id: userId } });
     if (!user) throw new Error('User not found');
 
     const newBalance = user.credits + amount;
 
-    await this.prisma.user.update({
+    await this.prisma.User.update({
       where: { id: userId },
       data: {
         credits: newBalance,
@@ -866,7 +866,7 @@ export class ViralFeaturesService {
    * Check if user leveled up
    */
   async checkLevelUp(userId: string) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const user = await this.prisma.User.findUnique({ where: { id: userId } });
     if (!user) return null;
 
     // Calculate level from experience
@@ -874,7 +874,7 @@ export class ViralFeaturesService {
 
     if (newLevel > user.level) {
       // User leveled up!
-      await this.prisma.user.update({
+      await this.prisma.User.update({
         where: { id: userId },
         data: { level: newLevel },
       });
@@ -940,7 +940,7 @@ export class ViralFeaturesService {
    * Get level progress
    */
   async getLevelProgress(userId: string) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const user = await this.prisma.User.findUnique({ where: { id: userId } });
     if (!user) return null;
 
     const currentLevelXP = user.level * user.level * 100;
@@ -963,7 +963,7 @@ export class ViralFeaturesService {
    * Get daily streak
    */
   async getDailyStreak(userId: string) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const user = await this.prisma.User.findUnique({ where: { id: userId } });
     return user?.activeStreak || 0;
   }
 
@@ -1002,7 +1002,7 @@ export class ViralFeaturesService {
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-    const activeUsers = await this.prisma.user.findMany({
+    const activeUsers = await this.prisma.User.findMany({
       where: {
         lastActiveAt: { gte: sevenDaysAgo },
       },
@@ -1122,10 +1122,10 @@ export class ViralFeaturesService {
       });
 
       // Notify nearby users
-      if (merchant.user.lat && merchant.user.lng) {
+      if (merchant.User.lat && merchant.User.lng) {
         await this.notifyNearbyUsers({
-          lat: merchant.user.lat,
-          lng: merchant.user.lng,
+          lat: merchant.User.lat,
+          lng: merchant.User.lng,
           radiusKm: 5,
           title: `🔥 Flash Deal: ${discount}% OFF`,
           body: `${merchant.businessName} - Solo 2 horas`,
@@ -1268,7 +1268,7 @@ export class ViralFeaturesService {
    */
   @Cron('0 0 * * *')
   async resetDailyActions() {
-    await this.prisma.user.updateMany({
+    await this.prisma.User.updateMany({
       data: {
         dailyActions: 0,
       },
@@ -1292,7 +1292,7 @@ export class ViralFeaturesService {
     today.setHours(0, 0, 0, 0);
 
     // Increment streak for active users
-    await this.prisma.user.updateMany({
+    await this.prisma.User.updateMany({
       where: {
         lastActiveAt: {
           gte: yesterday,
@@ -1305,7 +1305,7 @@ export class ViralFeaturesService {
     });
 
     // Reset streak for inactive users
-    await this.prisma.user.updateMany({
+    await this.prisma.User.updateMany({
       where: {
         lastActiveAt: {
           lt: yesterday,

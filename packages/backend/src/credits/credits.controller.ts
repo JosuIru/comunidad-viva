@@ -25,7 +25,7 @@ export class CreditsController {
   @UseGuards(JwtAuthGuard)
   @Get('balance')
   async getBalance(@Request() req) {
-    return this.creditsService.getBalance(req.user.userId);
+    return this.creditsService.getBalance(req.User.userId);
   }
 
   @ApiOperation({ summary: 'Get earning statistics' })
@@ -33,7 +33,7 @@ export class CreditsController {
   @UseGuards(JwtAuthGuard)
   @Get('stats')
   async getEarningStats(@Request() req) {
-    return this.creditsService.getEarningStats(req.user.userId);
+    return this.creditsService.getEarningStats(req.User.userId);
   }
 
   @ApiOperation({ summary: 'Get credit transactions' })
@@ -49,7 +49,7 @@ export class CreditsController {
     @Query('offset') offset?: number,
     @Query('type') type?: 'earning' | 'spending',
   ) {
-    return this.creditsService.getTransactions(req.user.userId, { limit, offset, type });
+    return this.creditsService.getTransactions(req.User.userId, { limit, offset, type });
   }
 
   @ApiOperation({ summary: 'Get earning opportunities' })
@@ -88,7 +88,7 @@ export class CreditsController {
   @Post('spend')
   async spendCredits(@Request() req, @Body() spendCreditsDto: SpendCreditsDto) {
     return this.creditsService.spendCredits(
-      req.user.userId,
+      req.User.userId,
       spendCreditsDto.amount,
       spendCreditsDto.reason,
       spendCreditsDto.relatedId,

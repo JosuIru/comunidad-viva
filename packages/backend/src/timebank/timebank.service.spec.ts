@@ -117,7 +117,7 @@ describe('TimeBankService', () => {
         provider: mockProvider,
       };
 
-      prismaService.user.findUnique.mockResolvedValue(mockProvider);
+      prismaService.User.findUnique.mockResolvedValue(mockProvider);
       prismaService.timeBankTransaction.create.mockResolvedValue(createdTransaction);
       emailService.sendTimeBankRequest.mockResolvedValue(true);
 
@@ -135,7 +135,7 @@ describe('TimeBankService', () => {
     });
 
     it('should throw NotFoundException when provider not found', async () => {
-      prismaService.user.findUnique.mockResolvedValue(null);
+      prismaService.User.findUnique.mockResolvedValue(null);
 
       await expect(
         service.createRequest('user-123', createRequestDto)
@@ -143,7 +143,7 @@ describe('TimeBankService', () => {
     });
 
     it('should throw BadRequestException when requesting from yourself', async () => {
-      prismaService.user.findUnique.mockResolvedValue(mockUser);
+      prismaService.User.findUnique.mockResolvedValue(mockUser);
 
       await expect(
         service.createRequest('user-123', { ...createRequestDto, providerId: 'user-123' })
@@ -156,7 +156,7 @@ describe('TimeBankService', () => {
         offer: { userId: 'other-user' },
       };
 
-      prismaService.user.findUnique.mockResolvedValue(mockProvider);
+      prismaService.User.findUnique.mockResolvedValue(mockProvider);
       prismaService.timeBankOffer.findUnique.mockResolvedValue(wrongOffer);
 
       await expect(
@@ -173,7 +173,7 @@ describe('TimeBankService', () => {
         provider: mockProvider,
       };
 
-      prismaService.user.findUnique.mockResolvedValue(mockProvider);
+      prismaService.User.findUnique.mockResolvedValue(mockProvider);
       prismaService.timeBankTransaction.create.mockResolvedValue(createdTransaction);
       emailService.sendTimeBankRequest.mockResolvedValue(true);
 

@@ -27,7 +27,7 @@ export class OffersController {
   @UseGuards(JwtAuthGuard)
   @Get('user/my-offers')
   async getUserOffers(@Request() req) {
-    return this.offersService.findUserOffers(req.user.userId);
+    return this.offersService.findUserOffers(req.User.userId);
   }
 
   @ApiOperation({ summary: 'Get offer by ID' })
@@ -48,7 +48,7 @@ export class OffersController {
   @UseGuards(JwtAuthGuard, EmailVerifiedGuard)
   @Post()
   async create(@Request() req, @Body() createOfferDto: CreateOfferDto) {
-    return this.offersService.create(req.user.userId, createOfferDto);
+    return this.offersService.create(req.User.userId, createOfferDto);
   }
 
   @ApiOperation({ summary: 'Update offer' })
@@ -60,7 +60,7 @@ export class OffersController {
   @CheckOwnership('offer')
   @Put(':id')
   async update(@Param('id') id: string, @Request() req, @Body() updateOfferDto: UpdateOfferDto) {
-    return this.offersService.update(id, req.user.userId, updateOfferDto);
+    return this.offersService.update(id, req.User.userId, updateOfferDto);
   }
 
   @ApiOperation({ summary: 'Delete offer' })
@@ -72,7 +72,7 @@ export class OffersController {
   @CheckOwnership('offer')
   @Delete(':id')
   async delete(@Param('id') id: string, @Request() req) {
-    return this.offersService.delete(id, req.user.userId);
+    return this.offersService.delete(id, req.User.userId);
   }
 
   @ApiOperation({ summary: 'Toggle interest in offer' })
@@ -82,6 +82,6 @@ export class OffersController {
   @UseGuards(JwtAuthGuard)
   @Post(':id/interested')
   async toggleInterest(@Param('id') id: string, @Request() req) {
-    return this.offersService.toggleInterest(id, req.user.userId);
+    return this.offersService.toggleInterest(id, req.User.userId);
   }
 }

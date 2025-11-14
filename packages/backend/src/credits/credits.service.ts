@@ -75,7 +75,7 @@ export class CreditsService {
     description?: string,
   ) {
     // Validaciones previas fuera de la transacción (no modifican datos)
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const user = await this.prisma.User.findUnique({ where: { id: userId } });
     if (!user) {
       throw new NotFoundException('User not found');
     }
@@ -112,7 +112,7 @@ export class CreditsService {
     // Usar callback para acceso al balance actualizado
     const result = await this.prisma.$transaction(async (transactionClient) => {
       // 1. Actualizar balance atómicamente con increment
-      const updatedUser = await transactionClient.user.update({
+      const updatedUser = await transactionClient.User.update({
         where: { id: userId },
         data: { credits: { increment: amount } },
         select: { credits: true }, // Retornar el nuevo balance
@@ -164,7 +164,7 @@ export class CreditsService {
     // Previene race conditions donde dos operaciones simultáneas podrían gastar más créditos de los disponibles
     const result = await this.prisma.$transaction(async (transactionClient) => {
       // 1. Obtener usuario y verificar existencia dentro de la transacción
-      const user = await transactionClient.user.findUnique({
+      const user = await transactionClient.User.findUnique({
         where: { id: userId },
         select: { id: true, credits: true },
       });
@@ -179,7 +179,7 @@ export class CreditsService {
       }
 
       // 3. Actualizar balance atómicamente con decrement
-      const updatedUser = await transactionClient.user.update({
+      const updatedUser = await transactionClient.User.update({
         where: { id: userId },
         data: { credits: { decrement: amount } },
         select: { credits: true },
@@ -250,7 +250,7 @@ export class CreditsService {
 
   // Get balance and stats
   async getBalance(userId: string) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.User.findUnique({
       where: { id: userId },
       select: { credits: true },
     });
@@ -325,7 +325,7 @@ export class CreditsService {
 
   // Admin: Get leaderboard
   async getLeaderboard(limit = 10) {
-    const users = await this.prisma.user.findMany({
+    const users = await this.prisma.User.findMany({
       orderBy: { credits: 'desc' },
       take: limit,
       select: {

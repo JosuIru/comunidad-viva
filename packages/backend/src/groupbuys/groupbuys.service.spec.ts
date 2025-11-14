@@ -127,12 +127,12 @@ describe('GroupBuysService', () => {
     };
 
     it('should create a group buy with price breaks', async () => {
-      prismaService.offer.findUnique.mockResolvedValue(mockOffer);
+      prismaService.Offer.findUnique.mockResolvedValue(mockOffer);
       prismaService.groupBuy.create.mockResolvedValue(mockGroupBuy);
 
       const result = await service.createGroupBuy('user-123', createGroupBuyDto);
 
-      expect(prismaService.offer.findUnique).toHaveBeenCalledWith({
+      expect(prismaService.Offer.findUnique).toHaveBeenCalledWith({
         where: { id: 'offer-123' },
       });
       expect(prismaService.groupBuy.create).toHaveBeenCalled();
@@ -140,7 +140,7 @@ describe('GroupBuysService', () => {
     });
 
     it('should throw NotFoundException when offer not found', async () => {
-      prismaService.offer.findUnique.mockResolvedValue(null);
+      prismaService.Offer.findUnique.mockResolvedValue(null);
 
       await expect(
         service.createGroupBuy('user-123', createGroupBuyDto)
@@ -148,7 +148,7 @@ describe('GroupBuysService', () => {
     });
 
     it('should throw ForbiddenException when not offer owner', async () => {
-      prismaService.offer.findUnique.mockResolvedValue({
+      prismaService.Offer.findUnique.mockResolvedValue({
         ...mockOffer,
         userId: 'other-user',
       });
@@ -159,7 +159,7 @@ describe('GroupBuysService', () => {
     });
 
     it('should throw BadRequestException when offer type is not GROUP_BUY', async () => {
-      prismaService.offer.findUnique.mockResolvedValue({
+      prismaService.Offer.findUnique.mockResolvedValue({
         ...mockOffer,
         type: 'SERVICE',
       });
@@ -170,7 +170,7 @@ describe('GroupBuysService', () => {
     });
 
     it('should throw BadRequestException when minParticipants >= maxParticipants', async () => {
-      prismaService.offer.findUnique.mockResolvedValue(mockOffer);
+      prismaService.Offer.findUnique.mockResolvedValue(mockOffer);
 
       await expect(
         service.createGroupBuy('user-123', {
@@ -182,7 +182,7 @@ describe('GroupBuysService', () => {
     });
 
     it('should throw BadRequestException when deadline is in the past', async () => {
-      prismaService.offer.findUnique.mockResolvedValue(mockOffer);
+      prismaService.Offer.findUnique.mockResolvedValue(mockOffer);
 
       await expect(
         service.createGroupBuy('user-123', {
@@ -193,7 +193,7 @@ describe('GroupBuysService', () => {
     });
 
     it('should throw BadRequestException when price breaks do not decrease', async () => {
-      prismaService.offer.findUnique.mockResolvedValue(mockOffer);
+      prismaService.Offer.findUnique.mockResolvedValue(mockOffer);
 
       await expect(
         service.createGroupBuy('user-123', {
@@ -233,7 +233,7 @@ describe('GroupBuysService', () => {
       await service.getActiveGroupBuys({ category: 'FOOD' });
 
       const whereClause = prismaService.groupBuy.findMany.mock.calls[0][0].where;
-      expect(whereClause.offer.category).toBe('FOOD');
+      expect(whereClause.Offer.category).toBe('FOOD');
     });
 
     it('should support pagination', async () => {
@@ -551,13 +551,13 @@ describe('GroupBuysService', () => {
 
     it('should close group buy and create orders', async () => {
       prismaService.groupBuy.findUnique.mockResolvedValue(groupBuyReadyToClose);
-      prismaService.offer.update.mockResolvedValue({ ...mockOffer, status: 'COMPLETED' });
+      prismaService.Offer.update.mockResolvedValue({ ...mockOffer, status: 'COMPLETED' });
       prismaService.groupBuyOrder.create.mockResolvedValue({});
       emailService.sendGroupBuyClosed.mockResolvedValue(true);
 
       const result = await service.closeGroupBuy('groupbuy-123', 'user-123');
 
-      expect(prismaService.offer.update).toHaveBeenCalledWith({
+      expect(prismaService.Offer.update).toHaveBeenCalledWith({
         where: { id: 'offer-123' },
         data: { status: 'COMPLETED' },
       });
@@ -569,7 +569,7 @@ describe('GroupBuysService', () => {
 
     it('should calculate correct pricing with price breaks', async () => {
       prismaService.groupBuy.findUnique.mockResolvedValue(groupBuyReadyToClose);
-      prismaService.offer.update.mockResolvedValue(mockOffer);
+      prismaService.Offer.update.mockResolvedValue(mockOffer);
       prismaService.groupBuyOrder.create.mockResolvedValue({});
       emailService.sendGroupBuyClosed.mockResolvedValue(true);
 

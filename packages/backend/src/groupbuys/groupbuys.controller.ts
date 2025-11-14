@@ -48,7 +48,7 @@ export class GroupBuysController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async createGroupBuy(@Request() req, @Body() createGroupBuyDto: CreateGroupBuyDto) {
-    return this.groupBuysService.createGroupBuy(req.user.userId, createGroupBuyDto);
+    return this.groupBuysService.createGroupBuy(req.User.userId, createGroupBuyDto);
   }
 
   @ApiOperation({ summary: 'Join a group buy' })
@@ -60,7 +60,7 @@ export class GroupBuysController {
     @Request() req,
     @Body() joinGroupBuyDto: JoinGroupBuyDto,
   ) {
-    return this.groupBuysService.joinGroupBuy(id, req.user.userId, joinGroupBuyDto);
+    return this.groupBuysService.joinGroupBuy(id, req.User.userId, joinGroupBuyDto);
   }
 
   @ApiOperation({ summary: 'Update participation (quantity or commitment)' })
@@ -72,7 +72,7 @@ export class GroupBuysController {
     @Request() req,
     @Body() updateParticipationDto: UpdateParticipationDto,
   ) {
-    return this.groupBuysService.updateParticipation(id, req.user.userId, updateParticipationDto);
+    return this.groupBuysService.updateParticipation(id, req.User.userId, updateParticipationDto);
   }
 
   @ApiOperation({ summary: 'Leave a group buy' })
@@ -80,7 +80,7 @@ export class GroupBuysController {
   @UseGuards(JwtAuthGuard)
   @Delete(':id/participation')
   async leaveGroupBuy(@Param('id') id: string, @Request() req) {
-    return this.groupBuysService.leaveGroupBuy(id, req.user.userId);
+    return this.groupBuysService.leaveGroupBuy(id, req.User.userId);
   }
 
   @ApiOperation({ summary: 'Close a group buy (organizer only)' })
@@ -88,7 +88,7 @@ export class GroupBuysController {
   @UseGuards(JwtAuthGuard)
   @Post(':id/close')
   async closeGroupBuy(@Param('id') id: string, @Request() req) {
-    return this.groupBuysService.closeGroupBuy(id, req.user.userId);
+    return this.groupBuysService.closeGroupBuy(id, req.User.userId);
   }
 
   @ApiOperation({ summary: 'Get user participations in group buys' })
@@ -96,6 +96,6 @@ export class GroupBuysController {
   @UseGuards(JwtAuthGuard)
   @Get('user/participations')
   async getUserParticipations(@Request() req) {
-    return this.groupBuysService.getUserParticipations(req.user.userId);
+    return this.groupBuysService.getUserParticipations(req.User.userId);
   }
 }

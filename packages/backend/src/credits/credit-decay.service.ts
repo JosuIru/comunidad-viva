@@ -92,13 +92,13 @@ export class CreditDecayService {
         // (asumiendo que se gastan FIFO - First In First Out)
         const creditsToExpire = transaction.amount;
 
-        if (creditsToExpire > 0 && transaction.user.credits > 0) {
-          const amountToDeduct = Math.min(creditsToExpire, transaction.user.credits);
+        if (creditsToExpire > 0 && transaction.User.credits > 0) {
+          const amountToDeduct = Math.min(creditsToExpire, transaction.User.credits);
 
           // TRANSACCIÓN ATÓMICA: Prevenir race conditions en expiración de créditos
           await this.prisma.$transaction(async (transactionClient) => {
             // 1. Actualizar balance del usuario atómicamente con decrement
-            const updatedUser = await transactionClient.user.update({
+            const updatedUser = await transactionClient.User.update({
               where: { id: transaction.userId },
               data: {
                 credits: {
@@ -160,7 +160,7 @@ export class CreditDecayService {
     const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
 
     // Buscar usuarios con créditos suficientes
-    const users = await this.prisma.user.findMany({
+    const users = await this.prisma.User.findMany({
       where: {
         credits: {
           gte: 100, // Solo usuarios con más de 100 créditos
@@ -203,7 +203,7 @@ export class CreditDecayService {
           // TRANSACCIÓN ATÓMICA: Prevenir race conditions en decay mensual
           await this.prisma.$transaction(async (transactionClient) => {
             // 1. Actualizar balance del usuario atómicamente con decrement
-            const updatedUser = await transactionClient.user.update({
+            const updatedUser = await transactionClient.User.update({
               where: { id: user.id },
               data: {
                 credits: {
@@ -379,7 +379,7 @@ export class CreditDecayService {
         },
       }),
       // Créditos en riesgo (>100 créditos sin usar)
-      this.prisma.user.count({
+      this.prisma.User.count({
         where: {
           credits: {
             gte: 100,

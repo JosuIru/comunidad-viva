@@ -11,7 +11,7 @@ export class OffersService {
   ) {}
 
   async create(userId: string, data: any) {
-    return this.prisma.offer.create({
+    return this.prisma.Offer.create({
       data: {
         ...data,
         userId,
@@ -44,7 +44,7 @@ export class OffersService {
     };
 
     // Fetch all offers matching basic filters
-    let offers = await this.prisma.offer.findMany({
+    let offers = await this.prisma.Offer.findMany({
       where,
       select: {
         id: true,
@@ -112,7 +112,7 @@ export class OffersService {
 
   async findOne(id: string, userId?: string) {
     // Increment views
-    await this.prisma.offer.update({
+    await this.prisma.Offer.update({
       where: { id },
       data: {
         views: {
@@ -121,7 +121,7 @@ export class OffersService {
       },
     });
 
-    const offer = await this.prisma.offer.findUnique({
+    const offer = await this.prisma.Offer.findUnique({
       where: { id },
       include: {
         user: {
@@ -132,9 +132,9 @@ export class OffersService {
             bio: true,
           },
         },
-        groupBuy: true,
+        GroupBuy: true,
         timeBank: true,
-        event: true,
+        Event: true,
         interestedUsers: userId
           ? {
               where: {
@@ -174,7 +174,7 @@ export class OffersService {
         this.prisma.offerInterest.delete({
           where: { id: existingInterest.id },
         }),
-        this.prisma.offer.update({
+        this.prisma.Offer.update({
           where: { id: offerId },
           data: {
             interested: {
@@ -188,7 +188,7 @@ export class OffersService {
     } else {
       // Fetch offer and user data for notifications
       const [offer, user] = await Promise.all([
-        this.prisma.offer.findUnique({
+        this.prisma.Offer.findUnique({
           where: { id: offerId },
           include: {
             user: {
@@ -196,7 +196,7 @@ export class OffersService {
             },
           },
         }),
-        this.prisma.user.findUnique({
+        this.prisma.User.findUnique({
           where: { id: userId },
           select: { id: true, name: true, email: true },
         }),
@@ -210,7 +210,7 @@ export class OffersService {
             offerId,
           },
         }),
-        this.prisma.offer.update({
+        this.prisma.Offer.update({
           where: { id: offerId },
           data: {
             interested: {
@@ -221,9 +221,9 @@ export class OffersService {
       ]);
 
       // Send email notification to offer owner
-      if (offer && user && offer.user.email && offer.userId !== userId) {
+      if (offer && user && offer.User.email && offer.userId !== userId) {
         await this.emailService.sendOfferInterest(
-          offer.user.email,
+          offer.User.email,
           user.name,
           user.email,
           offer.title,
@@ -235,21 +235,21 @@ export class OffersService {
   }
 
   async update(id: string, userId: string, data: any) {
-    return this.prisma.offer.update({
+    return this.prisma.Offer.update({
       where: { id, userId },
       data,
     });
   }
 
   async delete(id: string, userId: string) {
-    return this.prisma.offer.update({
+    return this.prisma.Offer.update({
       where: { id, userId },
       data: { status: OfferStatus.CANCELLED },
     });
   }
 
   async findUserOffers(userId: string) {
-    return this.prisma.offer.findMany({
+    return this.prisma.Offer.findMany({
       where: {
         userId,
         status: {

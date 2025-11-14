@@ -28,7 +28,7 @@ export class HybridLayerController {
    */
   @Post('migrate')
   async migrateLayer(@Request() req, @Body() dto: MigrateLayerDto) {
-    return this.hybridService.migrateUser(req.user.userId, dto);
+    return this.hybridService.migrateUser(req.User.userId, dto);
   }
 
   /**
@@ -37,7 +37,7 @@ export class HybridLayerController {
    */
   @Get('layer')
   async getCurrentLayer(@Request() req) {
-    return this.hybridService.getUserLayer(req.user.userId);
+    return this.hybridService.getUserLayer(req.User.userId);
   }
 
   /**
@@ -55,7 +55,7 @@ export class HybridLayerController {
    */
   @Post('abundance')
   async announceAbundance(@Request() req, @Body() dto: AnnounceAbundanceDto) {
-    return this.hybridService.announceAbundance(req.user.userId, dto);
+    return this.hybridService.announceAbundance(req.User.userId, dto);
   }
 
   /**
@@ -68,7 +68,7 @@ export class HybridLayerController {
     @Query('communityId') communityId?: string,
     @Query('limit') limit?: string,
   ) {
-    const user = await this.hybridService.getUserLayer(req.user.userId);
+    const user = await this.hybridService.getUserLayer(req.User.userId);
 
     return this.hybridService.getAbundanceFeed(
       user.layer,
@@ -83,7 +83,7 @@ export class HybridLayerController {
    */
   @Post('needs')
   async expressNeed(@Request() req, @Body() dto: ExpressNeedDto) {
-    return this.hybridService.expressNeed(req.user.userId, dto);
+    return this.hybridService.expressNeed(req.User.userId, dto);
   }
 
   /**
@@ -97,7 +97,7 @@ export class HybridLayerController {
     @Query('urgency') urgency?: string,
     @Query('limit') limit?: string,
   ) {
-    const user = await this.hybridService.getUserLayer(req.user.userId);
+    const user = await this.hybridService.getUserLayer(req.User.userId);
 
     return this.hybridService.getNeedsFeed(
       user.layer,
@@ -128,7 +128,7 @@ export class HybridLayerController {
    */
   @Get('migrations')
   async getMigrationHistory(@Request() req) {
-    return this.hybridService.getUserMigrationHistory(req.user.userId);
+    return this.hybridService.getUserMigrationHistory(req.User.userId);
   }
 
   /**
@@ -146,7 +146,7 @@ export class HybridLayerController {
    */
   @Post('abundance/:id/take')
   async takeAbundance(@Request() req, @Param('id') abundanceId: string) {
-    return this.hybridService.takeAbundance(req.user.userId, abundanceId);
+    return this.hybridService.takeAbundance(req.User.userId, abundanceId);
   }
 
   /**
@@ -155,7 +155,7 @@ export class HybridLayerController {
    */
   @Post('needs/:id/fulfill')
   async fulfillNeed(@Request() req, @Param('id') needId: string) {
-    return this.hybridService.fulfillNeed(req.user.userId, needId);
+    return this.hybridService.fulfillNeed(req.User.userId, needId);
   }
 
   /**
