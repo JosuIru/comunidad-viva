@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { PostType, Visibility, ReactionType } from '@prisma/client';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class PostsService {
@@ -12,7 +12,7 @@ export class PostsService {
   async create(userId: string, createPostDto: CreatePostDto) {
     return this.prisma.post.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         ...createPostDto,
         authorId: userId,
         visibility: createPostDto.visibility || Visibility.PUBLIC,
@@ -227,7 +227,7 @@ export class PostsService {
       // Create reaction and increment count
       await this.prisma.reaction.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           postId,
           userId,
           type: reactionType,

@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { BridgeType, CommunityBridgeStatus } from '@prisma/client';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 /**
  * Service to detect and track bridges (connections) between communities
@@ -263,7 +263,7 @@ export class BridgesService {
       // Create new bridge
       await this.prisma.communityBridge.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           sourceCommunityId,
           targetCommunityId,
           bridgeType,

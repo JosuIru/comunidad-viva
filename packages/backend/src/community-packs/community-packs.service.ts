@@ -5,7 +5,7 @@ import { UpdateCommunityPackDto } from './dto/update-community-pack.dto';
 import { CompleteStepDto } from './dto/complete-step.dto';
 import { UpdateMetricDto } from './dto/update-metric.dto';
 import { OrganizedCommunityType } from '@prisma/client';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 // Pack configurations - mirrors frontend config
 const PACK_CONFIGS = {
@@ -79,7 +79,7 @@ export class CommunityPacksService {
     // Create pack with defaults
     const pack = await this.prisma.communityPack.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         communityId,
         packType: dto.packType,
         enabledFeatures: dto.enabledFeatures || packConfig.defaultFeatures,
@@ -99,7 +99,7 @@ export class CommunityPacksService {
       const stepKey = packConfig.setupSteps[i];
       await this.prisma.communitySetupStep.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           packId: pack.id,
           stepKey,
           stepOrder: i,
@@ -114,7 +114,7 @@ export class CommunityPacksService {
     for (const metricKey of packConfig.defaultMetrics) {
       await this.prisma.communityMetric.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           packId: pack.id,
           metricKey,
           metricName: metricKey,

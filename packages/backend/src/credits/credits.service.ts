@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreditReason } from '@prisma/client';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 // Earning rules configuration (can be moved to database or config file)
 const EARNING_RULES: Record<CreditReason, { amount: number; dailyLimit?: number; description: string }> = {
@@ -124,7 +124,7 @@ export class CreditsService {
       // 2. Crear registro de transacción con el balance actualizado
       const creditTransaction = await transactionClient.creditTransaction.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           userId,
           amount,
           balance: newBalance,
@@ -192,7 +192,7 @@ export class CreditsService {
       // 4. Crear registro de transacción con el balance actualizado
       const creditTransaction = await transactionClient.creditTransaction.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           userId,
           amount: -amount, // Negative for spending
           balance: newBalance,

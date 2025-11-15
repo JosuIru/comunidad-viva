@@ -4,7 +4,7 @@ import { EmailService } from '../notifications/email.service';
 import { CreateGroupBuyDto } from './dto/create-groupbuy.dto';
 import { JoinGroupBuyDto } from './dto/join-groupbuy.dto';
 import { UpdateParticipationDto } from './dto/update-participation.dto';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class GroupBuysService {
@@ -57,7 +57,7 @@ export class GroupBuysService {
     // Create group buy with price breaks
     const groupBuy = await this.prisma.groupBuy.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         offerId,
         minParticipants,
         maxParticipants,
@@ -68,7 +68,7 @@ export class GroupBuysService {
         pickupAddress,
         PriceBreak: {
           create: priceBreaks.map(pb => ({
-            id: uuidv4(),
+            id: randomUUID(),
             minQuantity: pb.minQuantity,
             pricePerUnit: pb.pricePerUnit,
             savings: pb.savings,
@@ -293,7 +293,7 @@ export class GroupBuysService {
     // Add participant
     const participant = await this.prisma.groupBuyParticipant.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         groupBuyId,
         userId,
         quantity,
@@ -517,7 +517,7 @@ export class GroupBuysService {
 
       return this.prisma.groupBuyOrder.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           groupBuyId: groupBuy.id,
           userId: participant.userId,
           quantity: participant.quantity,

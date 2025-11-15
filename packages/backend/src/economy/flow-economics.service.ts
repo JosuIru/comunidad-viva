@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreditReason, FlowType, PoolType, RequestStatus } from '@prisma/client';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 /**
  * Flow Economics Service
@@ -126,7 +126,7 @@ export class FlowEconomicsService {
       // 3. Create regular credit transactions (for compatibility)
       await tx.creditTransaction.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           userId: fromUserId,
           amount: -baseAmount,
           balance: updatedFrom.credits,
@@ -138,7 +138,7 @@ export class FlowEconomicsService {
 
       await tx.creditTransaction.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           userId: toUserId,
           amount: totalValue,
           balance: updatedTo.credits,
@@ -151,7 +151,7 @@ export class FlowEconomicsService {
       // 4. Create flow transaction record
       const flowTx = await tx.flowTransaction.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           fromUserId,
           toUserId,
           baseAmount,
@@ -171,7 +171,7 @@ export class FlowEconomicsService {
       if (bonusValue > 0) {
         await tx.creditTransaction.create({
           data: {
-            id: uuidv4(),
+            id: randomUUID(),
             userId: toUserId,
             amount: bonusValue,
             balance: updatedTo.credits,
@@ -448,7 +448,7 @@ export class FlowEconomicsService {
       // Create credit transaction
       await tx.creditTransaction.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           userId: recipientId,
           amount,
           balance: updatedUser.credits,

@@ -6,7 +6,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { CreateReactionDto } from './dto/create-reaction.dto';
 import { AchievementsService } from '../achievements/achievements.service';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class SocialService {
@@ -48,7 +48,7 @@ export class SocialService {
 
     const post = await this.prisma.post.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         content: createPostDto.content,
         type: createPostDto.type || PostType.STORY,
         images: createPostDto.media || [],
@@ -270,7 +270,7 @@ export class SocialService {
 
     const comment = await this.prisma.comment.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         postId,
         authorId,
         content: createCommentDto.content,
@@ -364,7 +364,7 @@ export class SocialService {
     // Create new reaction
     const reaction = await this.prisma.reaction.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         postId,
         userId,
         type: createReactionDto.type,

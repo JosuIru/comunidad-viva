@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { DIDService } from './did.service';
 import { ActivityType, ActivityVisibility } from '@prisma/client';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 /**
  * ActivityPub Service
@@ -61,7 +61,7 @@ export class ActivityPubService {
         // Create node record for this instance
         node = await this.prisma.federatedNode.create({
           data: {
-            id: uuidv4(),
+            id: randomUUID(),
             nodeId,
             name: 'Comunidad Viva',
             type: 'GENESIS',

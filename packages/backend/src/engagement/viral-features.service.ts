@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class ViralFeaturesService {
@@ -20,7 +20,7 @@ export class ViralFeaturesService {
     const progress = await this.prisma.onboardingProgress.upsert({
       where: { userId },
       create: {
-        id: uuidv4(),
+        id: randomUUID(),
         userId,
         currentStep: step,
         completedSteps: JSON.stringify([step]),
@@ -99,7 +99,7 @@ export class ViralFeaturesService {
     // Create redemption
     const redemption = await this.prisma.flashDealRedemption.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         dealId,
         userId,
       },
@@ -117,7 +117,7 @@ export class ViralFeaturesService {
 
     const story = await this.prisma.story.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         userId,
         type: type as any,
         content,
@@ -200,7 +200,7 @@ export class ViralFeaturesService {
         storyId_userId: { storyId, userId },
       },
       create: {
-        id: uuidv4(),
+        id: randomUUID(),
         storyId,
         userId,
         reaction: emoji,
@@ -328,7 +328,7 @@ export class ViralFeaturesService {
   async swipeOffer(userId: string, offerId: string, direction: 'LEFT' | 'RIGHT' | 'SUPER') {
     const swipe = await this.prisma.swipe.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         userId,
         offerId,
         direction,
@@ -358,7 +358,7 @@ export class ViralFeaturesService {
           // Create match!
           const match = await this.prisma.match.create({
             data: {
-              id: uuidv4(),
+              id: randomUUID(),
               user1Id: userId,
               user2Id: offer.userId,
               offerId,
@@ -437,7 +437,7 @@ export class ViralFeaturesService {
         challengeId_userId: { challengeId, userId },
       },
       create: {
-        id: uuidv4(),
+        id: randomUUID(),
         challengeId,
         userId,
         progress: score,
@@ -481,7 +481,7 @@ export class ViralFeaturesService {
 
     return this.prisma.referralCode.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         userId,
         code,
         rewardForReferrer: 100,
@@ -550,7 +550,7 @@ export class ViralFeaturesService {
 
     const referral = await this.prisma.referral.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         codeId: referralCode.id,
         referredUserId: newUserId,
       },
@@ -752,7 +752,7 @@ export class ViralFeaturesService {
 
     const participation = await this.prisma.liveEventParticipant.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         eventId,
         userId,
       },
@@ -767,7 +767,7 @@ export class ViralFeaturesService {
   async rewardMicroAction(userId: string, action: string, reward: number) {
     const microAction = await this.prisma.microAction.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         userId,
         action,
         reward,
@@ -812,7 +812,7 @@ export class ViralFeaturesService {
     // Log transaction
     await this.prisma.creditTransaction.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         userId,
         amount,
         balance: newBalance,
@@ -830,7 +830,7 @@ export class ViralFeaturesService {
   async unlockFeature(userId: string, feature: string) {
     const unlock = await this.prisma.userFeatureUnlock.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         userId,
         feature,
         unlockedAt: new Date(),
@@ -861,7 +861,7 @@ export class ViralFeaturesService {
 
     const badge = await this.prisma.userBadge.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         userId,
         badgeType: badgeType as any,
       },
@@ -996,7 +996,7 @@ export class ViralFeaturesService {
   }) {
     return this.prisma.notification.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         userId,
         type: data.type as any,
         title: data.title,
@@ -1129,7 +1129,7 @@ export class ViralFeaturesService {
 
       const deal = await this.prisma.flashDeal.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           merchantId: merchant.id,
           title: `${discount}% descuento en ${merchant.businessName}`,
           product: merchant.category || 'Producto general',
@@ -1173,7 +1173,7 @@ export class ViralFeaturesService {
 
     const happyHour = await this.prisma.liveEvent.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         type: 'HAPPY_HOUR',
         title: '🎉 Happy Hour: Créditos x2',
         description: 'Durante las próximas 2 horas, todos los intercambios dan el doble de créditos',
@@ -1247,7 +1247,7 @@ export class ViralFeaturesService {
 
     const weeklyChallenge = await this.prisma.weeklyChallenge.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         type: challenge.type,
         title: challenge.title,
         description: challenge.description,

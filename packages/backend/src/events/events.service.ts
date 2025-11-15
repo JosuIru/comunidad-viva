@@ -6,7 +6,7 @@ import { CreditReason } from '@prisma/client';
 import { randomBytes } from 'crypto';
 import { LoggerService } from '../common/logger.service';
 import { AchievementsService } from '../achievements/achievements.service';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class EventsService {
@@ -235,7 +235,7 @@ export class EventsService {
 
     const attendee = await this.prisma.eventAttendee.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         eventId,
         userId,
       },

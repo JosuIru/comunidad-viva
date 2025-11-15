@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { OrganizedCommunityType } from '@prisma/client';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 /**
  * Service to automatically calculate and update community pack metrics
@@ -242,7 +242,7 @@ export class MetricsCalculatorService {
         // Create metric if doesn't exist
         await this.prisma.communityMetric.create({
           data: {
-            id: uuidv4(),
+            id: randomUUID(),
             packId,
             metricKey,
             metricName: metricKey, // Use metricKey as default name

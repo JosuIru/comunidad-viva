@@ -1,7 +1,7 @@
 import { Injectable, Logger, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { BridgeChain } from './bridge.service';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 /**
  * Bridge Security Service
@@ -350,7 +350,7 @@ export class BridgeSecurityService {
     try {
       await this.prisma.security_events.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           type: eventType,
           severity: this.getSeverity(eventType),
           details,

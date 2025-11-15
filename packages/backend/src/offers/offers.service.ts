@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { EmailService } from '../notifications/email.service';
 import { OfferType, OfferStatus } from '@prisma/client';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class OffersService {
@@ -207,7 +207,7 @@ export class OffersService {
       await this.prisma.$transaction([
         this.prisma.offerInterest.create({
           data: {
-            id: uuidv4(),
+            id: randomUUID(),
             userId,
             offerId,
           },

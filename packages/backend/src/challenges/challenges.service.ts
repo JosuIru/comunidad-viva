@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { PrismaService } from '../prisma/prisma.service';
 import { SeedType, CreditReason } from '@prisma/client';
 import { ViralFeaturesService } from '../engagement/viral-features.service';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class ChallengesService {
@@ -117,7 +117,7 @@ export class ChallengesService {
     const [completion] = await this.prisma.$transaction([
       this.prisma.userDailySeedCompletion.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           userId,
           dailySeedId: challenge.id,
           creditsAwarded: challenge.creditsReward,
@@ -144,7 +144,7 @@ export class ChallengesService {
       }),
       this.prisma.creditTransaction.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           userId,
           amount: challenge.creditsReward,
           balance: user.credits + challenge.creditsReward,

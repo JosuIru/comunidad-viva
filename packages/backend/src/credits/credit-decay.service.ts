@@ -3,7 +3,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreditReason } from '@prisma/client';
 import { LoggerService } from '../common/logger.service';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 /**
  * Credit Decay Service - Obsolescencia Programada
@@ -112,7 +112,7 @@ export class CreditDecayService {
             // 2. Crear transacción de expiración con el balance actualizado
             await transactionClient.creditTransaction.create({
               data: {
-                id: uuidv4(),
+                id: randomUUID(),
                 userId: transaction.userId,
                 amount: -amountToDeduct,
                 balance: updatedUser.credits,
@@ -130,7 +130,7 @@ export class CreditDecayService {
             // 3. Crear notificación
             await transactionClient.notification.create({
               data: {
-                id: uuidv4(),
+                id: randomUUID(),
                 userId: transaction.userId,
                 type: 'CREDITS_EXPIRING',
                 title: 'Créditos expirados',
@@ -219,7 +219,7 @@ export class CreditDecayService {
             // 2. Crear transacción de decay con el balance actualizado
             await transactionClient.creditTransaction.create({
               data: {
-                id: uuidv4(),
+                id: randomUUID(),
                 userId: user.id,
                 amount: -decayAmount,
                 balance: updatedUser.credits,
@@ -236,7 +236,7 @@ export class CreditDecayService {
             // 3. Crear notificación
             await transactionClient.notification.create({
               data: {
-                id: uuidv4(),
+                id: randomUUID(),
                 userId: user.id,
                 type: 'CREDITS_EXPIRING',
                 title: 'Decay mensual de créditos',
@@ -313,7 +313,7 @@ export class CreditDecayService {
           if (!existingNotification) {
             await this.prisma.notification.create({
               data: {
-                id: uuidv4(),
+                id: randomUUID(),
                 userId: transaction.userId,
                 type: 'CREDITS_EXPIRING',
                 title: `⚠️ Créditos próximos a expirar`,

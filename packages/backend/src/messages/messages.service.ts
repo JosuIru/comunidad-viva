@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { SendMessageDto } from './dto/send-message.dto';
 import { EventsGateway } from '../notifications/events/events.gateway';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class MessagesService {
@@ -129,7 +129,7 @@ export class MessagesService {
 
     const message = await this.prisma.message.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         senderId,
         receiverId,
         content: sendMessageDto.content,

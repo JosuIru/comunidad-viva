@@ -2,7 +2,7 @@ import { Injectable, Logger, BadRequestException, NotFoundException, ForbiddenEx
 import { PrismaService } from '../prisma/prisma.service';
 import { DIDService } from './did.service';
 import { CirculoType, CirculoStatus, ParticipacionRole, ParticipacionStatus } from '@prisma/client';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 /**
  * Círculos de Conciencia Service
@@ -81,7 +81,7 @@ export class CirculosService {
       if (facilitatorIds.length > 0) {
         await this.prisma.circuloParticipacion.create({
           data: {
-            id: uuidv4(),
+            id: randomUUID(),
             userId: facilitatorIds[0],
             circuloId: circulo.id,
             role: 'FACILITATOR',
