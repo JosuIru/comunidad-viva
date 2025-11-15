@@ -483,7 +483,7 @@ export class FlowEconomicsService {
     const now = new Date();
     const request = await this.prisma.poolRequest.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         userId,
         poolId: pool.id,
         amount,
@@ -636,7 +636,7 @@ export class FlowEconomicsService {
     // Create new vote
     const newVote = await this.prisma.poolRequestVote.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         requestId,
         voterId,
         vote,

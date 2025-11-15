@@ -182,7 +182,7 @@ export class ViralFeaturesService {
     }
 
     const view = await this.prisma.storyView.create({
-      data: { id: uuidv4(), storyId, userId },
+      data: { id: randomUUID(), storyId, userId },
     });
 
     // Increment view count
@@ -1029,7 +1029,7 @@ export class ViralFeaturesService {
 
     // Create notifications in batch
     const notifications = activeUsers.map(user => ({
-      id: uuidv4(),
+      id: randomUUID(),
       userId: user.id,
       type: (notification.type || 'ANNOUNCEMENT') as any,
       title: notification.title,
@@ -1073,7 +1073,7 @@ export class ViralFeaturesService {
     `;
 
     const notifications = nearbyUsers.map(user => ({
-      id: uuidv4(),
+      id: randomUUID(),
       userId: user.id,
       type: 'NEARBY_DEAL' as any,
       title: data.title,

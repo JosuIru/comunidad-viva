@@ -59,7 +59,7 @@ export class CirculosService {
     try {
       const circulo = await this.prisma.circuloConciencia.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           name: data.name,
           description: data.description,
           level: data.level,
@@ -148,7 +148,7 @@ export class CirculosService {
 
     const participation = await this.prisma.circuloParticipacion.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         userId,
         circuloId,
         role: 'MEMBER',

@@ -427,7 +427,7 @@ export class BridgesService {
 
     const bridge = await this.prisma.communityBridge.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         sourceCommunityId: mentorCommunityId,
         targetCommunityId: menteeCommunityId,
         bridgeType: 'MENTORSHIP',

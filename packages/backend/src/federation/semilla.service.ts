@@ -287,7 +287,7 @@ export class SemillaService {
 
       const transaction = await tx.semillaTransaction.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           fromDID: systemDID,
           toDID: userDID,
           toId: parsed.userId,

@@ -445,7 +445,7 @@ export class BridgeSecurityService {
   ): Promise<void> {
     await this.prisma.blacklist.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         type,
         value: type === 'ADDRESS' ? value.toLowerCase() : value,
         reason,

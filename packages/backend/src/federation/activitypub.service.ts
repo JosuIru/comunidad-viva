@@ -76,7 +76,7 @@ export class ActivityPubService {
       // Create activity record
       const activity = await this.prisma.federatedActivity.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           activityId,
           type,
           publisherDID,
@@ -202,7 +202,7 @@ export class ActivityPubService {
       // Store activity
       const stored = await this.prisma.federatedActivity.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           activityId: id,
           type: type as ActivityType,
           publisherDID: actor,
@@ -368,7 +368,7 @@ export class ActivityPubService {
     try {
       const node = await this.prisma.federatedNode.create({
         data: {
-          id: uuidv4(),
+          id: randomUUID(),
           nodeId,
           name,
           type: type as any,

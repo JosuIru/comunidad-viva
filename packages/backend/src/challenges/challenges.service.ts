@@ -172,7 +172,7 @@ export class ChallengesService {
 
     return this.prisma.dailySeed.create({
       data: {
-        id: uuidv4(),
+        id: randomUUID(),
         date,
         type: randomChallenge.type,
         challenge: randomChallenge.challenge,
