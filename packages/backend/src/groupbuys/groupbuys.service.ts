@@ -114,13 +114,13 @@ export class GroupBuysService {
 
     const where: any = {
       deadline: { gte: new Date() },
-      offer: {
+      Offer: {
         status: 'ACTIVE',
       },
     };
 
     if (category) {
-      where.offer.category = category;
+      where.Offer.category = category;
     }
 
     // If location provided, filter by proximity

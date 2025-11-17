@@ -402,14 +402,14 @@ export class TimeBankService {
     const { category, experienceLevel, limit = 20, offset = 0 } = params || {};
 
     const where: any = {
-      offer: {
+      Offer: {
         status: 'ACTIVE',
         type: 'TIME_BANK',
       },
     };
 
     if (category) {
-      where.skill = { category };
+      where.Skill = { category };
     }
 
     if (experienceLevel) {
