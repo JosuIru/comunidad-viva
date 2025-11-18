@@ -28,6 +28,8 @@ interface Offer {
 
 export default function MyOffers() {
   const queryClient = useQueryClient();
+  const t = useTranslations('manage');
+  const tCommon = useTranslations('common');
   const tToasts = useTranslations('toasts');
   const [selectedOffer, setSelectedOffer] = useState<Offer | null>(null);
   const [showInterestedModal, setShowInterestedModal] = useState(false);
@@ -85,16 +87,16 @@ export default function MyOffers() {
           <CubeIcon className="h-24 w-24 text-gray-400" />
         </div>
         <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-          No tienes ofertas aún
+          {t('noOffersYet')}
         </h3>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
-          Crea tu primera oferta para empezar a intercambiar con la comunidad
+          {t('createFirstOffer')}
         </p>
         <Link
           href="/offers/create"
           className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
-          Crear Oferta
+          {t('createOffer')}
         </Link>
       </div>
     );
@@ -104,13 +106,13 @@ export default function MyOffers() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-          Mis Ofertas ({offers.length})
+          {t('myOffers')} ({offers.length})
         </h2>
         <Link
           href="/offers/create"
           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
-          + Nueva Oferta
+          + {t('newOffer')}
         </Link>
       </div>
 
@@ -146,7 +148,7 @@ export default function MyOffers() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
-                    {offer.views} vistas
+                    {offer.views} {tCommon('views')}
                   </div>
                   <button
                     onClick={() => {
@@ -158,7 +160,7 @@ export default function MyOffers() {
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
-                    {offer.interested} interesados
+                    {offer.interested} {t('interested')}
                   </button>
                   <span>
                     {new Date(offer.createdAt).toLocaleDateString()}
@@ -170,7 +172,7 @@ export default function MyOffers() {
                 <Link
                   href={`/offers/${offer.id}`}
                   className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
-                  title="Ver detalles"
+                  title={t('viewDetails')}
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -179,12 +181,12 @@ export default function MyOffers() {
                 </Link>
                 <button
                   onClick={() => {
-                    if (confirm('¿Estás seguro de eliminar esta oferta?')) {
+                    if (confirm(t('confirmDeleteOffer'))) {
                       deleteMutation.mutate(offer.id);
                     }
                   }}
                   className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                  title="Eliminar"
+                  title={tCommon('delete')}
                   disabled={deleteMutation.isPending}
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -203,7 +205,7 @@ export default function MyOffers() {
           <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
               <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                Personas Interesadas ({selectedOffer.interestedUsers.length})
+                {t('interestedPeople')} ({selectedOffer.interestedUsers.length})
               </h3>
               <button
                 onClick={() => setShowInterestedModal(false)}
@@ -218,7 +220,7 @@ export default function MyOffers() {
             <div className="p-6">
               {selectedOffer.interestedUsers.length === 0 ? (
                 <p className="text-center text-gray-500 dark:text-gray-400 py-8">
-                  Aún no hay personas interesadas en esta oferta
+                  {t('noInterestedYet')}
                 </p>
               ) : (
                 <div className="space-y-4">
@@ -240,7 +242,7 @@ export default function MyOffers() {
                         href={`mailto:${user.email}`}
                         className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                       >
-                        Contactar
+                        {t('contact')}
                       </Link>
                     </div>
                   ))}

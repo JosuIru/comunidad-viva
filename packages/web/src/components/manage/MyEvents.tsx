@@ -30,6 +30,8 @@ interface Event {
 
 export default function MyEvents() {
   const queryClient = useQueryClient();
+  const t = useTranslations('manage');
+  const tCommon = useTranslations('common');
   const tToasts = useTranslations('toasts');
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [showAttendeesModal, setShowAttendeesModal] = useState(false);
@@ -85,16 +87,16 @@ export default function MyEvents() {
           <CalendarIcon className="h-24 w-24 text-gray-400" />
         </div>
         <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-          No has creado eventos aún
+          {t('noEventsYet')}
         </h3>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
-          Organiza eventos para reunir a la comunidad
+          {t('createFirstEvent')}
         </p>
         <Link
           href="/events/create"
           className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
-          Crear Evento
+          {t('createEvent')}
         </Link>
       </div>
     );
@@ -104,13 +106,13 @@ export default function MyEvents() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-          Mis Eventos ({events.length})
+          {t('myEvents')} ({events.length})
         </h2>
         <Link
           href="/events/create"
           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
-          + Nuevo Evento
+          + {t('newEvent')}
         </Link>
       </div>
 
@@ -137,7 +139,7 @@ export default function MyEvents() {
                       <div className="flex items-center gap-2 mt-1">
                         {isPast && (
                           <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300">
-                            Finalizado
+                            {t('finished')}
                           </span>
                         )}
                         <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -173,8 +175,8 @@ export default function MyEvents() {
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                       </svg>
-                      {event._count.attendees} registrados
-                      {checkedInCount > 0 && ` (${checkedInCount} asistieron)`}
+                      {event._count.attendees} {t('registered')}
+                      {checkedInCount > 0 && ` (${checkedInCount} ${t('attended')})`}
                     </button>
                   </div>
                 </div>
@@ -183,7 +185,7 @@ export default function MyEvents() {
                   <Link
                     href={`/events/${event.id}`}
                     className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
-                    title="Ver detalles"
+                    title={t('viewDetails')}
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -192,12 +194,12 @@ export default function MyEvents() {
                   </Link>
                   <button
                     onClick={() => {
-                      if (confirm('¿Estás seguro de eliminar este evento?')) {
+                      if (confirm(t('confirmDeleteEvent'))) {
                         deleteMutation.mutate(event.id);
                       }
                     }}
                     className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                    title="Eliminar"
+                    title={tCommon('delete')}
                     disabled={deleteMutation.isPending}
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -217,7 +219,7 @@ export default function MyEvents() {
           <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
               <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                Asistentes ({selectedEvent.attendees.length})
+                {t('attendees')} ({selectedEvent.attendees.length})
               </h3>
               <button
                 onClick={() => setShowAttendeesModal(false)}
@@ -232,7 +234,7 @@ export default function MyEvents() {
             <div className="p-6">
               {selectedEvent.attendees.length === 0 ? (
                 <p className="text-center text-gray-500 dark:text-gray-400 py-8">
-                  Aún no hay personas registradas en este evento
+                  {t('noAttendeesYet')}
                 </p>
               ) : (
                 <div className="space-y-4">
@@ -250,17 +252,17 @@ export default function MyEvents() {
                           <div className="text-sm text-gray-600 dark:text-gray-400">
                             {checkedInAt ? (
                               <span className="text-green-600 flex items-center gap-1">
-                                <CheckIcon className="h-4 w-4" /> Asistió {new Date(checkedInAt).toLocaleString()}
+                                <CheckIcon className="h-4 w-4" /> {t('attendedAt')} {new Date(checkedInAt).toLocaleString()}
                               </span>
                             ) : (
-                              <span className="text-gray-500">Registrado</span>
+                              <span className="text-gray-500">{t('registeredStatus')}</span>
                             )}
                           </div>
                         </div>
                       </div>
                       {checkedInAt && (
                         <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                          Confirmado
+                          {t('confirmed')}
                         </span>
                       )}
                     </div>
