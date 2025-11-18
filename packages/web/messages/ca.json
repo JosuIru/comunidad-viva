@@ -45,7 +45,12 @@
         "mutualAid": "Ajuda Mútua",
         "allFeatures": "Totes les funcionalitats",
         "features": "✨ Funcionalitats"
-      }
+      },
+      "main": "Principal",
+      "gamification": "Gamificació",
+      "economy": "Economia i Governança",
+      "economyGovernance": "Economia i Governança",
+      "hybrid": "Híbrid"
     },
     "userMenu": {
       "defaultName": "Usuari",
@@ -75,7 +80,8 @@
     "viewLess": "Veure menys",
     "noImage": "Sense imatge",
     "credits": "crèdits",
-    "views": "visualitzacions"
+    "views": "visualitzacions",
+    "filters": "Filtres"
   },
   "offers": {
     "title": "Ofertes",
@@ -104,7 +110,8 @@
       "Tecnología": "Tecnologia",
       "Servicios": "Serveis",
       "Otros": "Altres"
-    }
+    },
+    "subtitle": "Descobreix productes i serveis de la teva comunitat"
   },
   "events": {
     "title": "Esdeveniments",
@@ -157,7 +164,90 @@
     "superTitle": "Super Like",
     "likeTitle": "M'agrada",
     "counter": "{current} de {total}",
-    "hint": "💡 Llisca per passar, ❤️ per connectar, o ⭐ per super like"
+    "hint": "💡 Llisca per passar, ❤️ per connectar, o ⭐ per super like",
+    "title": "Swipe & Match",
+    "subtitle": "Connecta amb persones que poden ajudar-te i a qui pots ajudar",
+    "stats": {
+      "totalSwipes": "Total Swipes",
+      "likesGiven": "Likes Donats",
+      "matches": "Matches",
+      "superLikesToday": "Super Likes avui"
+    },
+    "tabs": {
+      "discover": "Descobrir",
+      "matches": "Matches"
+    },
+    "level": "Nivell",
+    "mutualConnections": "connexions en comú",
+    "credits": "Crèdits",
+    "reputation": "Reputació",
+    "exchanges": "Intercanvis",
+    "activeOffers": "ofertes actives",
+    "responseRate": "resposta",
+    "aboutMe": "Sobre mi",
+    "languages": "Idiomes",
+    "interests": "Interessos",
+    "canHelpWith": "Puc ajudar amb",
+    "needHelpWith": "Necessito ajuda amb",
+    "memberSince": "Membre des de",
+    "noInterest": "No m'interessa",
+    "superLike": "Super Like",
+    "interested": "M'interessa",
+    "keyboardHints": "Fes servir les fletxes del teclat: ← No, ↑ Super Like, → Sí",
+    "noMoreProfiles": {
+      "title": "No hi ha més perfils ara mateix",
+      "description": "Torna més tard per descobrir noves connexions",
+      "refresh": "Actualitzar"
+    },
+    "matchesTab": {
+      "title": "Matches",
+      "matchSince": "Match des de",
+      "continueChat": "Continuar Xat",
+      "startChat": "Iniciar Xat",
+      "empty": {
+        "title": "Encara no tens matches",
+        "description": "Comença a fer swipe per trobar connexions",
+        "action": "Descobrir Persones"
+      }
+    },
+    "howItWorks": {
+      "title": "Com funciona Swipe & Match?",
+      "step1": {
+        "title": "Descobreix",
+        "description": "Veu perfils de persones amb interessos i necessitats complementàries"
+      },
+      "step2": {
+        "title": "Swipe",
+        "description": "Llisca a la dreta si t'interessa, esquerra si no"
+      },
+      "step3": {
+        "title": "Match",
+        "description": "Si tots dos es donen like, és un match!"
+      },
+      "step4": {
+        "title": "Connecta",
+        "description": "Xateja i coordina com podeu ajudar-vos mútuament"
+      }
+    },
+    "tips": {
+      "title": "Consells per a millors matches",
+      "tip1": "Completa el teu perfil amb informació sobre el que ofereixes i necessites",
+      "tip2": "Sigues específic sobre les teves habilitats i interessos",
+      "tip3": "Fes servir Super Likes estratègicament (3 per dia)",
+      "tip4": "Les connexions mútues augmenten la probabilitat de match"
+    },
+    "matchModal": {
+      "title": "És un Match!",
+      "description": "A {name} també li interesses",
+      "startChat": "Iniciar Xat",
+      "keepDiscovering": "Seguir Descobrint"
+    },
+    "errors": {
+      "noSuperLikes": "No et queden Super Likes avui",
+      "swipeError": "Error en processar swipe"
+    },
+    "loading": "Carregant...",
+    "chatSoon": "Funcionalitat de xat properament"
   },
   "flashDeals": {
     "toastSuccess": "Deal activat! Mostra això al comerç 🎉",
@@ -185,7 +275,76 @@
       "soldOut": "Esgotat",
       "expired": "Caducat",
       "active": "🔥 Activar Deal"
-    }
+    },
+    "title": "Flash Deals",
+    "subtitle": "Ofertes llampec per temps limitat - No te les perdis!",
+    "happyHour": {
+      "active": "Happy Hour Actiu!",
+      "multiplier": "Multiplier",
+      "endsIn": "Acaba en"
+    },
+    "infoCards": {
+      "limitedTime": {
+        "title": "Temps Limitat",
+        "description": "2-4 hores per deal"
+      },
+      "discount": {
+        "title": "Fins a 70% OFF",
+        "description": "Descomptes increïbles"
+      },
+      "limitedStock": {
+        "title": "Estoc Limitat",
+        "description": "Primer en arribar, primer en servir"
+      }
+    },
+    "deal": {
+      "off": "OFF",
+      "originalPrice": "Preu original",
+      "savings": "Estalvies",
+      "stockAvailable": "Estoc disponible",
+      "merchant": "Comerciant",
+      "claimNow": "Reclamar Ara",
+      "soldOut": "Esgotat",
+      "onlyRemaining": "Només en queden {count}!"
+    },
+    "noDeal": {
+      "title": "No hi ha Flash Deals actius",
+      "description": "Els flash deals roten automàticament 3 vegades al dia",
+      "hint": "Torna aviat per no perdre't les ofertes"
+    },
+    "howItWorks": {
+      "title": "Com funcionen els Flash Deals?",
+      "step1": {
+        "title": "Troba un Deal",
+        "description": "Explora les ofertes actives i tria la que més t'interessi"
+      },
+      "step2": {
+        "title": "Reclama Ràpid",
+        "description": "Fes clic a \"Reclamar\" abans que s'esgoti l'estoc"
+      },
+      "step3": {
+        "title": "Obtén el teu Codi",
+        "description": "Rebràs un codi únic per utilitzar el descompte"
+      },
+      "step4": {
+        "title": "Contacta el Venedor",
+        "description": "Fes servir el codi quan contactis el comerciant"
+      }
+    },
+    "claimModal": {
+      "title": "Confirmar Flash Deal",
+      "discount": "Descompte",
+      "important": "Important",
+      "expiresIn": "El codi caduca en",
+      "onceOnly": "Només pots reclamar aquest deal un cop",
+      "contactSeller": "Contacta el venedor per utilitzar el teu codi",
+      "cancel": "Cancel·lar",
+      "claim": "Reclamar",
+      "claiming": "Reclamant..."
+    },
+    "success": "Flash deal reclamat! Codi: {code}",
+    "error": "Error en reclamar flash deal",
+    "loading": "Carregant..."
   },
   "dailySeed": {
     "title": "🌱 Llavor del Dia",
@@ -284,7 +443,10 @@
       "emptyDescription": "Sigues el primer a compartir alguna cosa amb la teva comunitat"
     },
     "loading": "Carregant publicacions...",
-    "helped": "{count, plural, one {{count} persona ajudada} other {{count} persones ajudades}}"
+    "helped": "{count, plural, one {{count} persona ajudada} other {{count} persones ajudades}}",
+    "explore": {
+      "offers": "Explorar ofertes"
+    }
   },
   "timebankStats": {
     "errors": {
@@ -339,6 +501,10 @@
       "completed": {
         "title": "Llest!",
         "description": "Ja formes part activa de la comunitat. A per els teus primers 50 crèdits de bonificació!"
+      },
+      "joinCommunity": {
+        "title": "Uneix-te i Participa",
+        "description": "Assisteix a esdeveniments, coneix veïns i comença a fer servir crèdits comunitaris."
       }
     },
     "toast": {
@@ -352,7 +518,8 @@
       "previous": "← Anterior",
       "next": "Següent",
       "goNow": "Anar-hi ara →",
-      "complete": "Completar! 🎉"
+      "complete": "Completar! 🎉",
+      "createOffer": "Crear la meva primera oferta"
     },
     "progress": {
       "step": "Pas {current} de {total}",
@@ -1012,7 +1179,12 @@
       "passwordTooShort": "La contrasenya ha de tenir almenys 6 caràcters",
       "createFailed": "Error en crear el compte"
     },
-    "success": "Compte creat correctament!"
+    "success": "Compte creat correctament!",
+    "orRegisterWith": "O registra't amb",
+    "web3": {
+      "successNew": "Compte creat amb wallet correctament!",
+      "successExisting": "Sessió iniciada amb wallet correctament!"
+    }
   },
   "login": {
     "title": "Iniciar sessió",
@@ -1109,8 +1281,6 @@
       }
     },
     "sdg": {
-      "title": "Objectius de Desenvolupament Sostenible (ODS)",
-      "description": "Els projectes d'ajuda mútua estan alineats amb els Objectius de Desenvolupament Sostenible de l'ONU, promovent un impacte positiu a la comunitat i el medi ambient.",
       "1": "Fi de la pobresa",
       "2": "Fam zero",
       "3": "Salut i benestar",
@@ -1127,7 +1297,9 @@
       "14": "Vida submarina",
       "15": "Vida d'ecosistemes terrestres",
       "16": "Pau, justícia i institucions sòlides",
-      "17": "Aliances per assolir els objectius"
+      "17": "Aliances per assolir els objectius",
+      "title": "Objectius de Desenvolupament Sostenible (ODS)",
+      "description": "Els projectes d'ajuda mútua estan alineats amb els Objectius de Desenvolupament Sostenible de l'ONU, promovent un impacte positiu a la comunitat i el medi ambient."
     },
     "scope": {
       "PERSONAL": "Personal",
@@ -1146,7 +1318,19 @@
       "FINANCIAL": "Financer",
       "EMPLOYMENT": "Ocupació",
       "OTHER": "Altre"
-    }
+    },
+    "projectType": {
+      "COMMUNITY_SERVICE": "Servei Comunitari",
+      "INFRASTRUCTURE": "Infraestructura",
+      "EDUCATION": "Educació",
+      "HEALTH": "Salut",
+      "ENVIRONMENT": "Medi Ambient",
+      "CULTURAL": "Cultural",
+      "ECONOMIC": "Econòmic",
+      "SOCIAL": "Social",
+      "OTHER": "Altre"
+    },
+    "progress": "Progrés"
   },
   "eventCreate": {
     "layout": {
@@ -1424,6 +1608,56 @@
       },
       "modal": {
         "newProposal": "Nova Proposta Comunitària"
+      }
+    },
+    "delegation": {
+      "layout": {
+        "title": "Delegació de Vots - Truk"
+      },
+      "header": {
+        "title": "Delegació de Vots",
+        "subtitle": "Delega el teu vot en experts de confiança perquè votin en nom teu"
+      },
+      "stats": {
+        "activeDelegations": "Delegacions Actives",
+        "delegatedPower": "Poder Delegat",
+        "receivedDelegations": "Delegacions Rebudes",
+        "totalManaged": "Total Gestionat"
+      },
+      "info": {
+        "title": "Què és la Delegació de Vots?",
+        "description": "Delega el teu poder de vot en persones amb experiència en àrees específiques. Pots revocar la delegació en qualsevol moment i seguir votant directament quan vulguis."
+      },
+      "tabs": {
+        "availableDelegates": "Delegats Disponibles",
+        "myDelegations": "Les Meves Delegacions"
+      },
+      "categories": {
+        "all": "Totes les Categories",
+        "technology": "Tecnologia",
+        "economy": "Economia",
+        "governance": "Governança",
+        "development": "Desenvolupament",
+        "community": "Comunitat",
+        "sustainability": "Sostenibilitat"
+      },
+      "reputation": {
+        "expert": "Expert",
+        "advanced": "Avançat",
+        "trusted": "Fiable",
+        "new": "Nou"
+      },
+      "delegateCard": {
+        "reputation": "Reputació",
+        "delegations": "Delegacions",
+        "success": "Èxit",
+        "expertise": "Àrees d'Experiència"
+      },
+      "toasts": {
+        "delegateSuccess": "Delegació creada correctament!",
+        "delegateError": "Error en crear delegació",
+        "revokeSuccess": "Delegació revocada correctament",
+        "revokeError": "Error en revocar delegació"
       }
     }
   },
@@ -2761,5 +2995,593 @@
         "description": "Normalment responem en 24-48 hores. Per urgències tècniques, utilitza GitHub Issues."
       }
     }
+  },
+  "landing": {
+    "hero": {
+      "title": "Estalvia diners, comparteix recursos, enforteix la teva comunitat",
+      "subtitle": "La plataforma d'economia col·laborativa que connecta veïns per intercanviar serveis, compartir recursos i construir una comunitat més forta.",
+      "cta": {
+        "primary": "Unir-me gratis",
+        "secondary": "Saber-ne més"
+      },
+      "trust": "✓ Gratis · ✓ Sense comissions · ✓ 100% local"
+    },
+    "features": {
+      "title": "Tot el que necessites en un sol lloc",
+      "subtitle": "Tres pilars per transformar la teva economia local",
+      "marketplace": {
+        "title": "Marketplace Local",
+        "description": "Compra, ven i intercanvia amb els teus veïns. Sense intermediaris, sense comissions.",
+        "benefit1": "Ofertes de productes i serveis locals",
+        "benefit2": "Pagament en € o crèdits comunitaris",
+        "benefit3": "Reputació i ressenyes verificades"
+      },
+      "timebank": {
+        "title": "Banc de Temps",
+        "description": "Intercanvia habilitats i temps. Una hora del teu temps val una hora del temps d'un altre.",
+        "benefit1": "1 hora = 1 crèdit, per a tothom igual",
+        "benefit2": "Aprèn noves habilitats gratis",
+        "benefit3": "Ajuda i rep ajuda de la teva comunitat"
+      },
+      "community": {
+        "title": "Xarxa de Suport",
+        "description": "Participa en esdeveniments, projectes d'ajuda mútua i decisions comunitàries.",
+        "benefit1": "Esdeveniments i activitats locals",
+        "benefit2": "Projectes d'ajuda mútua",
+        "benefit3": "Governança participativa"
+      }
+    },
+    "impact": {
+      "title": "El nostre impacte col·lectiu",
+      "subtitle": "Junts estem construint una economia més justa i sostenible"
+    },
+    "howItWorks": {
+      "title": "Com funciona?",
+      "subtitle": "Comença en menys de 5 minuts",
+      "step1": {
+        "title": "Registra't gratis",
+        "description": "Crea el teu compte en 2 minuts. Només necessites un email o la teva wallet Web3."
+      },
+      "step2": {
+        "title": "Explora la teva comunitat",
+        "description": "Descobreix ofertes, serveis i esdeveniments a prop teu al mapa interactiu."
+      },
+      "step3": {
+        "title": "Connecta i col·labora",
+        "description": "Intercanvia, comparteix, ajuda i participa a la teva comunitat local."
+      },
+      "step4": {
+        "title": "Guanya i estalvia",
+        "description": "Acumula crèdits, puja de nivell i estalvia diners mentre enforteixes el teu barri."
+      }
+    },
+    "finalCta": {
+      "title": "Estàs preparat per transformar la teva economia local?",
+      "subtitle": "Uneix-te a centenars de persones que ja estan estalviant diners i construint comunitat.",
+      "button": "Començar ara",
+      "subtitle2": "És gratis · No requereix targeta de crèdit"
+    },
+    "footer": {
+      "rights": "Tots els drets reservats",
+      "privacy": "Privacitat",
+      "terms": "Termes"
+    }
+  },
+  "hybrid": {
+    "dashboard": {
+      "title": "Sistema Híbrid - Truk",
+      "header": {
+        "title": "🔄 Sistema Híbrid de Capes Econòmiques",
+        "subtitle": "Tria com vols participar en l'economia col·laborativa"
+      },
+      "currentLayer": {
+        "label": "La teva capa actual",
+        "changeButton": "Canviar de Capa"
+      },
+      "layers": {
+        "traditional": {
+          "name": "Tradicional",
+          "description": "Sistema capitalista amb preus fixos",
+          "feature1": "Preus en € i crèdits",
+          "feature2": "Transaccions tradicionals",
+          "feature3": "Ressenyes i reputació"
+        },
+        "transitional": {
+          "name": "Transicional",
+          "description": "Economia de regal gradual",
+          "feature1": "\"Paga el que vas rebre\"",
+          "feature2": "Sistema pay-it-forward",
+          "feature3": "Cadena de favors"
+        },
+        "giftPure": {
+          "name": "Regal Pur",
+          "description": "Economia de regal pura, post-diners",
+          "feature1": "Sense preus ni tracking",
+          "feature2": "Compartir abundància",
+          "feature3": "Expressar necessitats"
+        },
+        "chameleon": {
+          "name": "Camaleó",
+          "description": "Mode experimental",
+          "feature1": "Prova diferents capes",
+          "feature2": "Sense compromís",
+          "feature3": "Ideal per explorar"
+        }
+      },
+      "stats": {
+        "title": "📊 Distribució de la Comunitat",
+        "people": "{count, plural, one {{count} persona} other {{count} persones}}",
+        "threshold": {
+          "title": "Llindar Assolit!",
+          "message": "{percent}% de la comunitat viu en economia de regal pura. Voleu migrar tota la comunitat al mode GIFT_PURE?"
+        }
+      },
+      "allLayers": {
+        "title": "🔄 Totes les Capes Disponibles",
+        "currentBadge": "✓ La teva capa actual"
+      },
+      "quickActions": {
+        "celebrations": {
+          "title": "🎉 Celebracions d'Abundància",
+          "description": "Celebra quan la teva comunitat comparteix recursos generosament",
+          "button": "Veure Celebracions"
+        },
+        "bridge": {
+          "title": "🌉 Bridge Events",
+          "description": "Experimenta temporalment amb una altra capa econòmica",
+          "button": "Veure Experiments"
+        }
+      },
+      "migrationModal": {
+        "title": "Migrar a una altra Capa Econòmica",
+        "description": "Tria la capa a la qual vols migrar i explica per què. La teva decisió és reversible en qualsevol moment.",
+        "reasonLabel": "Per què vols canviar de capa?",
+        "reasonPlaceholder": "Explica la teva motivació per migrar...",
+        "cancel": "Cancel·lar",
+        "confirm": "Confirmar Migració",
+        "migrating": "Migrant..."
+      },
+      "toasts": {
+        "migrationSuccess": "Migració correcta! Benvingut a la teva nova capa econòmica",
+        "migrationError": "Error en migrar de capa",
+        "selectLayer": "Selecciona una capa",
+        "explainReason": "Explica per què vols migrar"
+      }
+    },
+    "celebrations": {
+      "header": {
+        "title": "🎉 Celebracions Comunitàries",
+        "subtitle": "Moments màgics on l'abundància va trobar necessitat. Celebracions anònimes de la generositat i solidaritat a la nostra comunitat."
+      },
+      "stats": {
+        "recentCelebrations": "Celebracions recents",
+        "peopleInvolved": "Persones involucrades",
+        "communityMagic": "Màgia comunitària"
+      },
+      "empty": {
+        "title": "Encara no hi ha celebracions",
+        "description": "Les celebracions apareixeran aquí quan la comunitat comparteixi abundància i satisfaci necessitats de forma anònima i generosa."
+      },
+      "participants": "Aproximadament {count, plural, one {{count} persona va participar} other {{count} persones van participar}}",
+      "time": {
+        "fewMinutes": "Fa uns minuts",
+        "hoursAgo": "Fa {hours, plural, one {{hours} hora} other {{hours} hores}}",
+        "yesterday": "Ahir",
+        "locale": "ca-ES"
+      },
+      "info": {
+        "title": "Per què són anònimes?",
+        "description": "Les celebracions són anònimes per protegir la dignitat de qui rep i la humilitat de qui dóna. L'important no és qui va participar, sinó que la comunitat es va unir per satisfer una necessitat. Així celebrem la solidaritat sense assenyalar ningú."
+      }
+    }
+  },
+  "economy": {
+    "dashboard": {
+      "pageTitle": "Tauler Econòmic - Truk",
+      "title": "Tauler de Flow Economics",
+      "subtitle": "Mètriques en temps real de la salut econòmica de la teva comunitat",
+      "errors": {
+        "loadMetrics": "No s'han pogut carregar les mètriques"
+      },
+      "giniIndex": {
+        "label": "Índex de Gini (Igualtat Econòmica)",
+        "measuring": "Mesurant igualtat econòmica...",
+        "scale": "0 = Igualtat perfecta | 1 = Desigualtat extrema"
+      },
+      "metrics": {
+        "activeUsers": "Usuaris Actius",
+        "generousUsers": "{count} usuaris generosos",
+        "averageBalance": "Balanç Mitjà",
+        "median": "Mediana: {amount}",
+        "wealthConcentration": "Concentració de Riquesa",
+        "top10": "Top 10% posseeix",
+        "communityPools": "Pools Comunitaris",
+        "creditsAvailable": "Crèdits disponibles"
+      },
+      "flow": {
+        "transactionsToday": "Transaccions Avui",
+        "averageMultiplier": "Multiplicador mitjà: {multiplier}x",
+        "valueGenerated": "Valor Generat",
+        "creditsCreated": "Crèdits creats per flux"
+      },
+      "quickActions": {
+        "title": "Accions Ràpides",
+        "sendCredits": "Enviar Crèdits",
+        "viewPools": "Veure Pools"
+      },
+      "pools": {
+        "title": "Pools Comunitaris",
+        "balance": "Balanç",
+        "received": "Rebut",
+        "distributed": "Distribuït"
+      },
+      "healthIndicators": {
+        "title": "Indicadors de Salut Econòmica",
+        "giniIndex": "Índex de Gini",
+        "wealthConcentration": "Concentració de Riquesa (Top 10%)",
+        "flowMultiplier": "Multiplicador de Flux Mitjà"
+      },
+      "info": {
+        "title": "Què és Flow Economics?",
+        "description": "Flow Economics és un sistema econòmic dissenyat per promoure la circulació de riquesa i reduir la desigualtat. Quan els crèdits flueixen de balanços més alts a més baixos, es genera valor extra mitjançant multiplicadors.",
+        "bullet1": "Multiplicadors de flux: fins a 1.5x en transaccions d'alt a baix balanç",
+        "bullet2": "Pools comunitaris: 2% de cada transacció va al bé comú",
+        "bullet3": "Índex de Gini: mesura la igualtat econòmica (objectiu: mantenir sota 0.4)",
+        "bullet4": "Generositat premiada: donar augmenta la teva influència a la comunitat"
+      }
+    }
+  },
+  "challenges": {
+    "title": "Reptes i Gamificació",
+    "subtitle": "Completa reptes, puja de nivell i guanya recompenses",
+    "tabs": {
+      "challenges": "Reptes",
+      "leaderboard": "Classificació",
+      "level": "El Meu Nivell",
+      "streak": "Ratxa"
+    },
+    "weeklyChallenge": "Repte Setmanal",
+    "timeRemaining": "restants",
+    "progress": "Progrés",
+    "howToComplete": "Com completar aquest repte?",
+    "challengeTypes": {
+      "HELP_3_NEIGHBORS": "Ajuda 3 veïns diferents fent servir el banc de temps aquesta setmana",
+      "CREATE_5_OFFERS": "Crea 5 ofertes noves en qualsevol categoria",
+      "ATTEND_2_EVENTS": "Assisteix a 2 esdeveniments comunitaris diferents"
+    },
+    "noActiveChallenge": {
+      "title": "No hi ha repte actiu",
+      "description": "El proper repte setmanal començarà aviat"
+    },
+    "flashDealsCard": {
+      "title": "Flash Deals",
+      "description": "Ofertes llampec per temps limitat",
+      "details": "Descomptes de fins a 70% • Només 2-4 hores"
+    },
+    "swipeCard": {
+      "title": "Swipe & Match",
+      "description": "Descobreix ofertes tipus Tinder",
+      "details": "Like • Dislike • Super Like"
+    },
+    "leaderboardTitle": "Classificació Setmanal",
+    "leaderboardSubtitle": "Els millors d'aquesta setmana",
+    "myPosition": "La Teva Posició",
+    "points": "punts",
+    "top10": "TOP 10",
+    "levelTitle": "El Teu Nivell",
+    "xp": "XP",
+    "activeBenefits": "Beneficis Actius",
+    "nextBenefits": "Propers Beneficis",
+    "levelBenefits": {
+      "level1": "Accés a esdeveniments premium",
+      "level2": "Descompte 10% en tot",
+      "level3": "Badge exclusiu",
+      "level10": "Accés VIP complet"
+    },
+    "streakTitle": "Ratxa Actual",
+    "consecutiveDays": "dies consecutius",
+    "bestStreak": "Millor Ratxa",
+    "days": "dies",
+    "multiplier": "Multiplicador",
+    "nextMilestone": "Proper Milestone",
+    "streakMilestones": "Milestones de Ratxa",
+    "milestones": {
+      "7days": "Badge \"Setmana Completa\"",
+      "14days": "Badge \"Dues Setmanes\"",
+      "30days": "Badge \"Un Mes\"",
+      "60days": "Badge \"Dos Mesos\"",
+      "90days": "Badge \"Tres Mesos\""
+    },
+    "loading": "Carregant..."
+  },
+  "groupBuys": {
+    "title": "Compres Grupals",
+    "subtitle": "Uneix-te amb altres i obtén millors descomptes",
+    "createButton": "Crear Compra Grupal",
+    "infoCards": {
+      "morePeople": {
+        "title": "Més Gent",
+        "description": "Major descompte"
+      },
+      "discount": {
+        "title": "Fins a 50% OFF",
+        "description": "Descomptes progressius"
+      },
+      "winWin": {
+        "title": "Win-Win",
+        "description": "Tothom estalvia"
+      }
+    },
+    "filters": {
+      "all": "Totes",
+      "active": "Actives",
+      "completed": "Completades"
+    },
+    "card": {
+      "off": "OFF",
+      "product": "Producte",
+      "savings": "Estalvies",
+      "participants": "Participants",
+      "minRequired": "Mínim {min} participants requerits",
+      "nextLevel": "Proper nivell",
+      "moreNeeded": "Falten {count} persones",
+      "timeRemaining": "restants",
+      "merchant": "Comerciant",
+      "joinNow": "Unir-me Ara",
+      "leavePurchase": "Sortir de la Compra",
+      "purchaseFull": "Compra Plena",
+      "completed": "Compra Completada"
+    },
+    "status": {
+      "ACTIVE": "ACTIVE",
+      "COMPLETED": "COMPLETED",
+      "CANCELLED": "CANCELLED"
+    },
+    "empty": {
+      "title": "No hi ha compres grupals",
+      "active": "Crea la primera o espera que algú més ho faci",
+      "other": "Canvia el filtre per veure altres compres",
+      "createButton": "Crear Compra Grupal"
+    },
+    "howItWorks": {
+      "title": "Com funcionen les Compres Grupals?",
+      "step1": {
+        "title": "Troba o Crea",
+        "description": "Busca una compra grupal activa o crea'n una de nova"
+      },
+      "step2": {
+        "title": "Uneix-t'hi",
+        "description": "Fes clic a \"Unir-me\" per participar"
+      },
+      "step3": {
+        "title": "Espera",
+        "description": "Més persones = major descompte per a tothom"
+      },
+      "step4": {
+        "title": "Compra",
+        "description": "Contacta el venedor amb el descompte final"
+      }
+    },
+    "progressiveDiscounts": {
+      "title": "Descomptes Progressius",
+      "description": "El descompte augmenta automàticament segons el nombre de participants:",
+      "people": "persones",
+      "off": "OFF"
+    },
+    "joinModal": {
+      "title": "Unir-se a Compra Grupal",
+      "currentDiscount": "Descompte actual",
+      "important": "Important",
+      "improveDiscount": "El descompte pot millorar si s'hi uneixen més persones",
+      "expires": "La compra caduca en",
+      "minRequired": "Mínim {min} participants requerits",
+      "codeOnComplete": "Rebràs un codi quan es completi la compra",
+      "cancel": "Cancel·lar",
+      "confirm": "Confirmar",
+      "joining": "Unint-me..."
+    },
+    "createModal": {
+      "title": "Crear Compra Grupal",
+      "form": {
+        "title": "Títol",
+        "titlePlaceholder": "Ex: Pack de productes orgànics",
+        "description": "Descripció",
+        "descriptionPlaceholder": "Descriu què inclou la compra grupal",
+        "product": "Producte",
+        "productPlaceholder": "Nom específic del producte",
+        "basePrice": "Preu Base (€)",
+        "duration": "Durada (hores)",
+        "minParticipants": "Mín. Participants",
+        "maxParticipants": "Màx. Participants",
+        "discountTiers": "Nivells de Descompte",
+        "people": "persones",
+        "off": "% OFF"
+      },
+      "cancel": "Cancel·lar",
+      "create": "Crear Compra Grupal",
+      "creating": "Creant..."
+    },
+    "success": {
+      "joined": "T'has unit a la compra grupal!",
+      "left": "Has sortit de la compra grupal",
+      "created": "Compra grupal creada correctament!"
+    },
+    "errors": {
+      "join": "Error en unir-se a la compra grupal",
+      "leave": "Error en sortir de la compra grupal",
+      "create": "Error en crear compra grupal"
+    },
+    "loading": "Carregant..."
+  },
+  "referrals": {
+    "title": "Sistema de Referits",
+    "subtitle": "Convida amics i guanya recompenses per fer créixer la comunitat",
+    "stats": {
+      "totalReferrals": "Total Referits",
+      "active": "Actius",
+      "pointsEarned": "Punts Guanyats",
+      "currentLevel": "Nivell Actual"
+    },
+    "referralCode": {
+      "title": "El Teu Codi de Referit",
+      "yourLink": "El teu enllaç de referit:",
+      "copy": "Copiar Enllaç",
+      "copied": "Copiat!",
+      "shareWhatsApp": "Compartir a WhatsApp",
+      "shareTelegram": "Compartir a Telegram"
+    },
+    "yourLevel": {
+      "title": "El Teu Nivell de Referits",
+      "multiplier": "Multiplicador",
+      "currentBenefits": "Beneficis actuals:",
+      "nextLevel": "Proper Nivell",
+      "progress": "Progrés",
+      "referrals": "referits",
+      "needed": "Falten {count} referits per assolir {level}",
+      "maxLevel": {
+        "title": "Nivell Màxim Assolit!",
+        "description": "Has arribat al nivell més alt del sistema de referits"
+      }
+    },
+    "allLevels": {
+      "title": "Tots els Nivells",
+      "referralsMin": "referits",
+      "multiplier": "Multiplicador",
+      "unlocked": "Desbloquejat"
+    },
+    "tiers": {
+      "beginner": {
+        "name": "Iniciat",
+        "perks": [
+          "10 punts per referit actiu"
+        ]
+      },
+      "connector": {
+        "name": "Connector",
+        "perks": [
+          "12 punts per referit",
+          "Badge especial"
+        ]
+      },
+      "ambassador": {
+        "name": "Ambaixador",
+        "perks": [
+          "15 punts per referit",
+          "Accés a esdeveniments VIP",
+          "Badge or"
+        ]
+      },
+      "leader": {
+        "name": "Líder Comunitari",
+        "perks": [
+          "20 punts per referit",
+          "Recompenses exclusives",
+          "Reconeixement públic",
+          "Badge platí"
+        ]
+      }
+    },
+    "myReferrals": {
+      "title": "Els Teus Referits",
+      "registered": "Registrat:",
+      "activated": "Activat:",
+      "status": {
+        "PENDING": "Pendent",
+        "ACTIVE": "Actiu",
+        "REWARDED": "Recompensat"
+      },
+      "points": "punts"
+    },
+    "howItWorks": {
+      "title": "Com funciona el Sistema de Referits?",
+      "step1": {
+        "title": "Comparteix",
+        "description": "Copia el teu enllaç de referit i comparteix-lo amb amics"
+      },
+      "step2": {
+        "title": "Es Registren",
+        "description": "Els teus amics fan servir el teu enllaç per crear el seu compte"
+      },
+      "step3": {
+        "title": "S'Activen",
+        "description": "Quan completen accions, es converteixen en referits actius"
+      },
+      "step4": {
+        "title": "Guanyes Punts",
+        "description": "Reps punts i puges de nivell amb més referits"
+      }
+    },
+    "tips": {
+      "title": "Consells per a més referits",
+      "tip1": "Comparteix la teva experiència personal amb Truk",
+      "tip2": "Explica com la plataforma pot ajudar els teus amics",
+      "tip3": "Fes servir xarxes socials i grups de WhatsApp/Telegram",
+      "tip4": "Com més referits actius, major el teu multiplicador de recompenses"
+    },
+    "success": {
+      "linkCopied": "Enllaç copiat al porta-retalls!"
+    },
+    "errors": {
+      "copyLink": "Error en copiar l'enllaç"
+    }
+  },
+  "dashboard": {
+    "customizer": {
+      "title": "Personalitzar Dashboard",
+      "description": "Tria quins widgets mostrar a cada pestanya",
+      "tabs": {
+        "all": "Tots",
+        "discover": "Descobreix",
+        "activity": "La Meva Activitat",
+        "community": "Comunitat"
+      },
+      "widgets": {
+        "quick_actions": {
+          "name": "Accions Ràpides",
+          "description": "Accessos directes a crear ofertes, esdeveniments, etc."
+        },
+        "map_view": {
+          "name": "Vista de Mapa",
+          "description": "Mapa interactiu amb recursos propers"
+        },
+        "community_stats": {
+          "name": "Estadístiques",
+          "description": "Mètriques de la comunitat"
+        },
+        "daily_seed": {
+          "name": "Llavor Diària",
+          "description": "Guanya crèdits diaris"
+        },
+        "personal_feed": {
+          "name": "El Meu Feed",
+          "description": "La teva activitat personal"
+        },
+        "upcoming_events": {
+          "name": "Propers Esdeveniments",
+          "description": "Esdeveniments de la teva comunitat"
+        }
+      },
+      "actions": {
+        "restore": "Restaurar Predeterminats",
+        "cancel": "Cancel·lar",
+        "save": "Desar Canvis"
+      },
+      "status": {
+        "widgetsActive": "widgets actius",
+        "unsavedChanges": "Canvis sense desar",
+        "discardConfirm": "Descartar els canvis no desats?"
+      }
+    },
+    "customize": "Personalitzar"
+  },
+  "communityMembers": {
+    "title": "Membres de",
+    "backTo": "Tornar a",
+    "membersCount": "membres",
+    "loading": "Carregant...",
+    "notFound": "Comunitat no trobada",
+    "noMembers": "Encara no hi ha membres en aquesta comunitat.",
+    "level": "Nivell",
+    "credits": "crèdits"
   }
 }

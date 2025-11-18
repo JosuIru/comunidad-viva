@@ -45,7 +45,12 @@
         "mutualAid": "Mutual Aid",
         "allFeatures": "All features",
         "features": "✨ Features"
-      }
+      },
+      "main": "Main",
+      "gamification": "Gamification",
+      "economy": "Economy & Governance",
+      "economyGovernance": "Economy & Governance",
+      "hybrid": "Hybrid"
     },
     "userMenu": {
       "defaultName": "User",
@@ -75,7 +80,8 @@
     "viewLess": "View less",
     "noImage": "No image",
     "credits": "credits",
-    "views": "views"
+    "views": "views",
+    "filters": "Filters"
   },
   "offers": {
     "title": "Offers",
@@ -104,7 +110,8 @@
       "Tecnología": "Technology",
       "Servicios": "Services",
       "Otros": "Other"
-    }
+    },
+    "subtitle": "Discover products and services from your community"
   },
   "events": {
     "title": "Events",
@@ -157,7 +164,90 @@
     "superTitle": "Super Like",
     "likeTitle": "Like",
     "counter": "{current} of {total}",
-    "hint": "💡 Swipe to pass, ❤️ to connect, or ⭐ for super like"
+    "hint": "💡 Swipe to pass, ❤️ to connect, or ⭐ for super like",
+    "title": "Swipe & Match",
+    "subtitle": "Connect with people who can help you and whom you can help",
+    "stats": {
+      "totalSwipes": "Total Swipes",
+      "likesGiven": "Likes Given",
+      "matches": "Matches",
+      "superLikesToday": "Super Likes today"
+    },
+    "tabs": {
+      "discover": "Discover",
+      "matches": "Matches"
+    },
+    "level": "Level",
+    "mutualConnections": "mutual connections",
+    "credits": "Credits",
+    "reputation": "Reputation",
+    "exchanges": "Exchanges",
+    "activeOffers": "active offers",
+    "responseRate": "response",
+    "aboutMe": "About me",
+    "languages": "Languages",
+    "interests": "Interests",
+    "canHelpWith": "I can help with",
+    "needHelpWith": "I need help with",
+    "memberSince": "Member since",
+    "noInterest": "Not interested",
+    "superLike": "Super Like",
+    "interested": "Interested",
+    "keyboardHints": "Use keyboard arrows: ← No, ↑ Super Like, → Yes",
+    "noMoreProfiles": {
+      "title": "No more profiles for now",
+      "description": "Come back later to discover new connections",
+      "refresh": "Refresh"
+    },
+    "matchesTab": {
+      "title": "Matches",
+      "matchSince": "Match since",
+      "continueChat": "Continue Chat",
+      "startChat": "Start Chat",
+      "empty": {
+        "title": "You don't have any matches yet",
+        "description": "Start swiping to find connections",
+        "action": "Discover People"
+      }
+    },
+    "howItWorks": {
+      "title": "How does Swipe & Match work?",
+      "step1": {
+        "title": "Discover",
+        "description": "View profiles of people with complementary interests and needs"
+      },
+      "step2": {
+        "title": "Swipe",
+        "description": "Swipe right if interested, left if not"
+      },
+      "step3": {
+        "title": "Match",
+        "description": "If both of you like each other, it's a match!"
+      },
+      "step4": {
+        "title": "Connect",
+        "description": "Chat and coordinate how you can help each other"
+      }
+    },
+    "tips": {
+      "title": "Tips for better matches",
+      "tip1": "Complete your profile with information about what you offer and need",
+      "tip2": "Be specific about your skills and interests",
+      "tip3": "Use Super Likes strategically (3 per day)",
+      "tip4": "Mutual connections increase the probability of a match"
+    },
+    "matchModal": {
+      "title": "It's a Match!",
+      "description": "{name} is also interested in you",
+      "startChat": "Start Chat",
+      "keepDiscovering": "Keep Discovering"
+    },
+    "errors": {
+      "noSuperLikes": "You have no Super Likes left today",
+      "swipeError": "Error processing swipe"
+    },
+    "loading": "Loading...",
+    "chatSoon": "Chat functionality coming soon"
   },
   "flashDeals": {
     "toastSuccess": "Deal activated! Show this at the shop 🎉",
@@ -185,7 +275,76 @@
       "soldOut": "Sold out",
       "expired": "Expired",
       "active": "🔥 Activate Deal"
-    }
+    },
+    "title": "Flash Deals",
+    "subtitle": "Limited-time flash offers - Don't miss them!",
+    "happyHour": {
+      "active": "Happy Hour Active!",
+      "multiplier": "Multiplier",
+      "endsIn": "Ends in"
+    },
+    "infoCards": {
+      "limitedTime": {
+        "title": "Limited Time",
+        "description": "2-4 hours per deal"
+      },
+      "discount": {
+        "title": "Up to 70% OFF",
+        "description": "Amazing discounts"
+      },
+      "limitedStock": {
+        "title": "Limited Stock",
+        "description": "First come, first served"
+      }
+    },
+    "deal": {
+      "off": "OFF",
+      "originalPrice": "Original price",
+      "savings": "You save",
+      "stockAvailable": "Stock available",
+      "merchant": "Merchant",
+      "claimNow": "Claim Now",
+      "soldOut": "Sold Out",
+      "onlyRemaining": "Only {count} left!"
+    },
+    "noDeal": {
+      "title": "No active Flash Deals",
+      "description": "Flash deals rotate automatically 3 times a day",
+      "hint": "Come back soon so you don't miss the offers"
+    },
+    "howItWorks": {
+      "title": "How do Flash Deals work?",
+      "step1": {
+        "title": "Find a Deal",
+        "description": "Browse active offers and choose the one that interests you most"
+      },
+      "step2": {
+        "title": "Claim Quickly",
+        "description": "Click \"Claim\" before the stock runs out"
+      },
+      "step3": {
+        "title": "Get Your Code",
+        "description": "You'll receive a unique code to use the discount"
+      },
+      "step4": {
+        "title": "Contact the Seller",
+        "description": "Use the code when you contact the merchant"
+      }
+    },
+    "claimModal": {
+      "title": "Confirm Flash Deal",
+      "discount": "Discount",
+      "important": "Important",
+      "expiresIn": "The code expires in",
+      "onceOnly": "You can only claim this deal once",
+      "contactSeller": "Contact the seller to use your code",
+      "cancel": "Cancel",
+      "claim": "Claim",
+      "claiming": "Claiming..."
+    },
+    "success": "Flash deal claimed! Code: {code}",
+    "error": "Error claiming flash deal",
+    "loading": "Loading..."
   },
   "dailySeed": {
     "title": "🌱 Daily Seed",
@@ -284,7 +443,10 @@
       "emptyDescription": "Be the first to share something with your community"
     },
     "loading": "Loading posts...",
-    "helped": "{count, plural, one {{count} person helped} other {{count} people helped}}"
+    "helped": "{count, plural, one {{count} person helped} other {{count} people helped}}",
+    "explore": {
+      "offers": "Explore offers"
+    }
   },
   "timebankStats": {
     "errors": {
@@ -339,6 +501,10 @@
       "completed": {
         "title": "Ready!",
         "description": "You're now an active part of the community. Get your first 50 bonus credits!"
+      },
+      "joinCommunity": {
+        "title": "Join and Participate",
+        "description": "Attend events, meet neighbors, and start using community credits."
       }
     },
     "toast": {
@@ -352,7 +518,8 @@
       "previous": "← Previous",
       "next": "Next",
       "goNow": "Go now →",
-      "complete": "Complete! 🎉"
+      "complete": "Complete! 🎉",
+      "createOffer": "Create my first offer"
     },
     "progress": {
       "step": "Step {current} of {total}",
@@ -1012,7 +1179,12 @@
       "passwordTooShort": "Password must be at least 6 characters",
       "createFailed": "Error creating account"
     },
-    "success": "Account created successfully!"
+    "success": "Account created successfully!",
+    "orRegisterWith": "Or sign up with",
+    "web3": {
+      "successNew": "Account created with wallet successfully!",
+      "successExisting": "Signed in with wallet successfully!"
+    }
   },
   "login": {
     "title": "Log in",
@@ -1109,8 +1281,6 @@
       }
     },
     "sdg": {
-      "title": "Sustainable Development Goals (SDGs)",
-      "description": "Mutual aid projects are aligned with the UN Sustainable Development Goals, promoting a positive impact on the community and the environment.",
       "1": "No poverty",
       "2": "Zero hunger",
       "3": "Good health and well-being",
@@ -1127,7 +1297,9 @@
       "14": "Life below water",
       "15": "Life on land",
       "16": "Peace, justice and strong institutions",
-      "17": "Partnerships for the goals"
+      "17": "Partnerships for the goals",
+      "title": "Sustainable Development Goals (SDGs)",
+      "description": "Mutual aid projects are aligned with the UN Sustainable Development Goals, promoting a positive impact on the community and the environment."
     },
     "scope": {
       "PERSONAL": "Personal",
@@ -1146,7 +1318,19 @@
       "FINANCIAL": "Financial",
       "EMPLOYMENT": "Employment",
       "OTHER": "Other"
-    }
+    },
+    "projectType": {
+      "COMMUNITY_SERVICE": "Community Service",
+      "INFRASTRUCTURE": "Infrastructure",
+      "EDUCATION": "Education",
+      "HEALTH": "Health",
+      "ENVIRONMENT": "Environment",
+      "CULTURAL": "Cultural",
+      "ECONOMIC": "Economic",
+      "SOCIAL": "Social",
+      "OTHER": "Other"
+    },
+    "progress": "Progress"
   },
   "eventCreate": {
     "layout": {
@@ -1424,6 +1608,56 @@
       },
       "modal": {
         "newProposal": "New Community Proposal"
+      }
+    },
+    "delegation": {
+      "layout": {
+        "title": "Vote Delegation - Truk"
+      },
+      "header": {
+        "title": "Vote Delegation",
+        "subtitle": "Delegate your vote to trusted experts to vote on your behalf"
+      },
+      "stats": {
+        "activeDelegations": "Active Delegations",
+        "delegatedPower": "Delegated Power",
+        "receivedDelegations": "Received Delegations",
+        "totalManaged": "Total Managed"
+      },
+      "info": {
+        "title": "What is Vote Delegation?",
+        "description": "Delegate your voting power to people with experience in specific areas. You can revoke the delegation at any time and continue voting directly whenever you want."
+      },
+      "tabs": {
+        "availableDelegates": "Available Delegates",
+        "myDelegations": "My Delegations"
+      },
+      "categories": {
+        "all": "All Categories",
+        "technology": "Technology",
+        "economy": "Economy",
+        "governance": "Governance",
+        "development": "Development",
+        "community": "Community",
+        "sustainability": "Sustainability"
+      },
+      "reputation": {
+        "expert": "Expert",
+        "advanced": "Advanced",
+        "trusted": "Trusted",
+        "new": "New"
+      },
+      "delegateCard": {
+        "reputation": "Reputation",
+        "delegations": "Delegations",
+        "success": "Success",
+        "expertise": "Areas of Expertise"
+      },
+      "toasts": {
+        "delegateSuccess": "Delegation created successfully!",
+        "delegateError": "Error creating delegation",
+        "revokeSuccess": "Delegation revoked successfully",
+        "revokeError": "Error revoking delegation"
       }
     }
   },
@@ -2761,5 +2995,593 @@
         "description": "We typically respond within 24-48 hours. For technical emergencies, use GitHub Issues."
       }
     }
+  },
+  "landing": {
+    "hero": {
+      "title": "Save money, share resources, strengthen your community",
+      "subtitle": "The collaborative economy platform that connects neighbors to exchange services, share resources, and build a stronger community.",
+      "cta": {
+        "primary": "Join for free",
+        "secondary": "Learn more"
+      },
+      "trust": "✓ Free · ✓ No fees · ✓ 100% local"
+    },
+    "features": {
+      "title": "Everything you need in one place",
+      "subtitle": "Three pillars to transform your local economy",
+      "marketplace": {
+        "title": "Local Marketplace",
+        "description": "Buy, sell, and trade with your neighbors. No intermediaries, no fees.",
+        "benefit1": "Local product and service offers",
+        "benefit2": "Payment in € or community credits",
+        "benefit3": "Verified reputation and reviews"
+      },
+      "timebank": {
+        "title": "Time Bank",
+        "description": "Exchange skills and time. One hour of your time is worth one hour of someone else's.",
+        "benefit1": "1 hour = 1 credit, equal for everyone",
+        "benefit2": "Learn new skills for free",
+        "benefit3": "Help and receive help from your community"
+      },
+      "community": {
+        "title": "Support Network",
+        "description": "Participate in events, mutual aid projects, and community decisions.",
+        "benefit1": "Local events and activities",
+        "benefit2": "Mutual aid projects",
+        "benefit3": "Participatory governance"
+      }
+    },
+    "impact": {
+      "title": "Our collective impact",
+      "subtitle": "Together we are building a fairer and more sustainable economy"
+    },
+    "howItWorks": {
+      "title": "How does it work?",
+      "subtitle": "Get started in less than 5 minutes",
+      "step1": {
+        "title": "Sign up for free",
+        "description": "Create your account in 2 minutes. You only need an email or your Web3 wallet."
+      },
+      "step2": {
+        "title": "Explore your community",
+        "description": "Discover offers, services, and events near you on the interactive map."
+      },
+      "step3": {
+        "title": "Connect and collaborate",
+        "description": "Trade, share, help, and participate in your local community."
+      },
+      "step4": {
+        "title": "Earn and save",
+        "description": "Accumulate credits, level up, and save money while strengthening your neighborhood."
+      }
+    },
+    "finalCta": {
+      "title": "Ready to transform your local economy?",
+      "subtitle": "Join hundreds of people who are already saving money and building community.",
+      "button": "Get started now",
+      "subtitle2": "It's free · No credit card required"
+    },
+    "footer": {
+      "rights": "All rights reserved",
+      "privacy": "Privacy",
+      "terms": "Terms"
+    }
+  },
+  "hybrid": {
+    "dashboard": {
+      "title": "Hybrid System - Truk",
+      "header": {
+        "title": "Hybrid Economic Layer System",
+        "subtitle": "Choose how you want to participate in the collaborative economy"
+      },
+      "currentLayer": {
+        "label": "Your current layer",
+        "changeButton": "Change Layer"
+      },
+      "layers": {
+        "traditional": {
+          "name": "Traditional",
+          "description": "Capitalist system with fixed prices",
+          "feature1": "Prices in € and credits",
+          "feature2": "Traditional transactions",
+          "feature3": "Reviews and reputation"
+        },
+        "transitional": {
+          "name": "Transitional",
+          "description": "Gradual gift economy",
+          "feature1": "\"Pay what you received\"",
+          "feature2": "Pay-it-forward system",
+          "feature3": "Chain of favors"
+        },
+        "giftPure": {
+          "name": "Pure Gift",
+          "description": "Pure gift economy, post-money",
+          "feature1": "No prices or tracking",
+          "feature2": "Sharing abundance",
+          "feature3": "Expressing needs"
+        },
+        "chameleon": {
+          "name": "Chameleon",
+          "description": "Experimental mode",
+          "feature1": "Try different layers",
+          "feature2": "No commitment",
+          "feature3": "Ideal for exploring"
+        }
+      },
+      "stats": {
+        "title": "Community Distribution",
+        "people": "{count, plural, one {{count} person} other {{count} people}}",
+        "threshold": {
+          "title": "Threshold Reached!",
+          "message": "{percent}% of the community lives in pure gift economy. Do you want to migrate the entire community to GIFT_PURE mode?"
+        }
+      },
+      "allLayers": {
+        "title": "All Available Layers",
+        "currentBadge": "Your current layer"
+      },
+      "quickActions": {
+        "celebrations": {
+          "title": "Abundance Celebrations",
+          "description": "Celebrate when your community shares resources generously",
+          "button": "View Celebrations"
+        },
+        "bridge": {
+          "title": "Bridge Events",
+          "description": "Temporarily experiment with another economic layer",
+          "button": "View Experiments"
+        }
+      },
+      "migrationModal": {
+        "title": "Migrate to Another Economic Layer",
+        "description": "Choose the layer you want to migrate to and explain why. Your decision is reversible at any time.",
+        "reasonLabel": "Why do you want to change layers?",
+        "reasonPlaceholder": "Explain your motivation to migrate...",
+        "cancel": "Cancel",
+        "confirm": "Confirm Migration",
+        "migrating": "Migrating..."
+      },
+      "toasts": {
+        "migrationSuccess": "Migration successful! Welcome to your new economic layer",
+        "migrationError": "Error migrating layer",
+        "selectLayer": "Select a layer",
+        "explainReason": "Explain why you want to migrate"
+      }
+    },
+    "celebrations": {
+      "header": {
+        "title": "Community Celebrations",
+        "subtitle": "Magical moments where abundance met need. Anonymous celebrations of generosity and solidarity in our community."
+      },
+      "stats": {
+        "recentCelebrations": "Recent celebrations",
+        "peopleInvolved": "People involved",
+        "communityMagic": "Community magic"
+      },
+      "empty": {
+        "title": "No celebrations yet",
+        "description": "Celebrations will appear here when the community shares abundance and meets needs anonymously and generously."
+      },
+      "participants": "Approximately {count, plural, one {{count} person participated} other {{count} people participated}}",
+      "time": {
+        "fewMinutes": "A few minutes ago",
+        "hoursAgo": "{hours, plural, one {{hours} hour ago} other {{hours} hours ago}}",
+        "yesterday": "Yesterday",
+        "locale": "en-US"
+      },
+      "info": {
+        "title": "Why are they anonymous?",
+        "description": "Celebrations are anonymous to protect the dignity of those who receive and the humility of those who give. What matters is not who participated, but that the community came together to meet a need. This is how we celebrate solidarity without singling anyone out."
+      }
+    }
+  },
+  "economy": {
+    "dashboard": {
+      "pageTitle": "Economic Dashboard - Truk",
+      "title": "Flow Economics Dashboard",
+      "subtitle": "Real-time metrics of your community's economic health",
+      "errors": {
+        "loadMetrics": "Could not load metrics"
+      },
+      "giniIndex": {
+        "label": "Gini Index (Economic Equality)",
+        "measuring": "Measuring economic equality...",
+        "scale": "0 = Perfect equality | 1 = Extreme inequality"
+      },
+      "metrics": {
+        "activeUsers": "Active Users",
+        "generousUsers": "{count} generous users",
+        "averageBalance": "Average Balance",
+        "median": "Median: {amount}",
+        "wealthConcentration": "Wealth Concentration",
+        "top10": "Top 10% owns",
+        "communityPools": "Community Pools",
+        "creditsAvailable": "Credits available"
+      },
+      "flow": {
+        "transactionsToday": "Transactions Today",
+        "averageMultiplier": "Average multiplier: {multiplier}x",
+        "valueGenerated": "Value Generated",
+        "creditsCreated": "Credits created by flow"
+      },
+      "quickActions": {
+        "title": "Quick Actions",
+        "sendCredits": "Send Credits",
+        "viewPools": "View Pools"
+      },
+      "pools": {
+        "title": "Community Pools",
+        "balance": "Balance",
+        "received": "Received",
+        "distributed": "Distributed"
+      },
+      "healthIndicators": {
+        "title": "Economic Health Indicators",
+        "giniIndex": "Gini Index",
+        "wealthConcentration": "Wealth Concentration (Top 10%)",
+        "flowMultiplier": "Average Flow Multiplier"
+      },
+      "info": {
+        "title": "What is Flow Economics?",
+        "description": "Flow Economics is an economic system designed to promote wealth circulation and reduce inequality. When credits flow from higher balances to lower ones, extra value is generated through multipliers.",
+        "bullet1": "Flow multipliers: up to 1.5x on transactions from high to low balance",
+        "bullet2": "Community pools: 2% of each transaction goes to the common good",
+        "bullet3": "Gini Index: measures economic equality (goal: keep below 0.4)",
+        "bullet4": "Generosity rewarded: giving increases your influence in the community"
+      }
+    }
+  },
+  "challenges": {
+    "title": "Challenges and Gamification",
+    "subtitle": "Complete challenges, level up, and earn rewards",
+    "tabs": {
+      "challenges": "Challenges",
+      "leaderboard": "Leaderboard",
+      "level": "My Level",
+      "streak": "Streak"
+    },
+    "weeklyChallenge": "Weekly Challenge",
+    "timeRemaining": "remaining",
+    "progress": "Progress",
+    "howToComplete": "How to complete this challenge?",
+    "challengeTypes": {
+      "HELP_3_NEIGHBORS": "Help 3 different neighbors using the time bank this week",
+      "CREATE_5_OFFERS": "Create 5 new offers in any category",
+      "ATTEND_2_EVENTS": "Attend 2 different community events"
+    },
+    "noActiveChallenge": {
+      "title": "No active challenge",
+      "description": "The next weekly challenge will start soon"
+    },
+    "flashDealsCard": {
+      "title": "Flash Deals",
+      "description": "Limited-time flash offers",
+      "details": "Discounts up to 70% • Only 2-4 hours"
+    },
+    "swipeCard": {
+      "title": "Swipe & Match",
+      "description": "Discover Tinder-style offers",
+      "details": "Like • Dislike • Super Like"
+    },
+    "leaderboardTitle": "Weekly Leaderboard",
+    "leaderboardSubtitle": "Top performers this week",
+    "myPosition": "Your Position",
+    "points": "points",
+    "top10": "TOP 10",
+    "levelTitle": "Your Level",
+    "xp": "XP",
+    "activeBenefits": "Active Benefits",
+    "nextBenefits": "Next Benefits",
+    "levelBenefits": {
+      "level1": "Access to premium events",
+      "level2": "10% discount on everything",
+      "level3": "Exclusive badge",
+      "level10": "Full VIP access"
+    },
+    "streakTitle": "Current Streak",
+    "consecutiveDays": "consecutive days",
+    "bestStreak": "Best Streak",
+    "days": "days",
+    "multiplier": "Multiplier",
+    "nextMilestone": "Next Milestone",
+    "streakMilestones": "Streak Milestones",
+    "milestones": {
+      "7days": "\"Full Week\" Badge",
+      "14days": "\"Two Weeks\" Badge",
+      "30days": "\"One Month\" Badge",
+      "60days": "\"Two Months\" Badge",
+      "90days": "\"Three Months\" Badge"
+    },
+    "loading": "Loading..."
+  },
+  "groupBuys": {
+    "title": "Group Purchases",
+    "subtitle": "Join others and get better discounts",
+    "createButton": "Create Group Purchase",
+    "infoCards": {
+      "morePeople": {
+        "title": "More People",
+        "description": "Greater discount"
+      },
+      "discount": {
+        "title": "Up to 50% OFF",
+        "description": "Progressive discounts"
+      },
+      "winWin": {
+        "title": "Win-Win",
+        "description": "Everyone saves"
+      }
+    },
+    "filters": {
+      "all": "All",
+      "active": "Active",
+      "completed": "Completed"
+    },
+    "card": {
+      "off": "OFF",
+      "product": "Product",
+      "savings": "You save",
+      "participants": "Participants",
+      "minRequired": "Minimum {min} participants required",
+      "nextLevel": "Next level",
+      "moreNeeded": "{count} more people needed",
+      "timeRemaining": "remaining",
+      "merchant": "Merchant",
+      "joinNow": "Join Now",
+      "leavePurchase": "Leave Purchase",
+      "purchaseFull": "Purchase Full",
+      "completed": "Purchase Completed"
+    },
+    "status": {
+      "ACTIVE": "ACTIVE",
+      "COMPLETED": "COMPLETED",
+      "CANCELLED": "CANCELLED"
+    },
+    "empty": {
+      "title": "No group purchases",
+      "active": "Create the first one or wait for someone else to do it",
+      "other": "Change the filter to see other purchases",
+      "createButton": "Create Group Purchase"
+    },
+    "howItWorks": {
+      "title": "How do Group Purchases work?",
+      "step1": {
+        "title": "Find or Create",
+        "description": "Look for an active group purchase or create a new one"
+      },
+      "step2": {
+        "title": "Join",
+        "description": "Click \"Join\" to participate"
+      },
+      "step3": {
+        "title": "Wait",
+        "description": "More people = greater discount for everyone"
+      },
+      "step4": {
+        "title": "Buy",
+        "description": "Contact the seller with the final discount"
+      }
+    },
+    "progressiveDiscounts": {
+      "title": "Progressive Discounts",
+      "description": "The discount increases automatically based on the number of participants:",
+      "people": "people",
+      "off": "OFF"
+    },
+    "joinModal": {
+      "title": "Join Group Purchase",
+      "currentDiscount": "Current discount",
+      "important": "Important",
+      "improveDiscount": "The discount may improve if more people join",
+      "expires": "The purchase expires in",
+      "minRequired": "Minimum {min} participants required",
+      "codeOnComplete": "You'll receive a code when the purchase is completed",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "joining": "Joining..."
+    },
+    "createModal": {
+      "title": "Create Group Purchase",
+      "form": {
+        "title": "Title",
+        "titlePlaceholder": "E.g.: Pack of organic products",
+        "description": "Description",
+        "descriptionPlaceholder": "Describe what the group purchase includes",
+        "product": "Product",
+        "productPlaceholder": "Specific product name",
+        "basePrice": "Base Price (€)",
+        "duration": "Duration (hours)",
+        "minParticipants": "Min. Participants",
+        "maxParticipants": "Max. Participants",
+        "discountTiers": "Discount Tiers",
+        "people": "people",
+        "off": "% OFF"
+      },
+      "cancel": "Cancel",
+      "create": "Create Group Purchase",
+      "creating": "Creating..."
+    },
+    "success": {
+      "joined": "You've joined the group purchase!",
+      "left": "You've left the group purchase",
+      "created": "Group purchase created successfully!"
+    },
+    "errors": {
+      "join": "Error joining group purchase",
+      "leave": "Error leaving group purchase",
+      "create": "Error creating group purchase"
+    },
+    "loading": "Loading..."
+  },
+  "referrals": {
+    "title": "Referral System",
+    "subtitle": "Invite friends and earn rewards for growing the community",
+    "stats": {
+      "totalReferrals": "Total Referrals",
+      "active": "Active",
+      "pointsEarned": "Points Earned",
+      "currentLevel": "Current Level"
+    },
+    "referralCode": {
+      "title": "Your Referral Code",
+      "yourLink": "Your referral link:",
+      "copy": "Copy Link",
+      "copied": "Copied!",
+      "shareWhatsApp": "Share on WhatsApp",
+      "shareTelegram": "Share on Telegram"
+    },
+    "yourLevel": {
+      "title": "Your Referral Level",
+      "multiplier": "Multiplier",
+      "currentBenefits": "Current benefits:",
+      "nextLevel": "Next Level",
+      "progress": "Progress",
+      "referrals": "referrals",
+      "needed": "{count} more referrals needed to reach {level}",
+      "maxLevel": {
+        "title": "Maximum Level Reached!",
+        "description": "You've reached the highest level in the referral system"
+      }
+    },
+    "allLevels": {
+      "title": "All Levels",
+      "referralsMin": "referrals",
+      "multiplier": "Multiplier",
+      "unlocked": "Unlocked"
+    },
+    "tiers": {
+      "beginner": {
+        "name": "Beginner",
+        "perks": [
+          "10 points per active referral"
+        ]
+      },
+      "connector": {
+        "name": "Connector",
+        "perks": [
+          "12 points per referral",
+          "Special badge"
+        ]
+      },
+      "ambassador": {
+        "name": "Ambassador",
+        "perks": [
+          "15 points per referral",
+          "Access to VIP events",
+          "Gold badge"
+        ]
+      },
+      "leader": {
+        "name": "Community Leader",
+        "perks": [
+          "20 points per referral",
+          "Exclusive rewards",
+          "Public recognition",
+          "Platinum badge"
+        ]
+      }
+    },
+    "myReferrals": {
+      "title": "Your Referrals",
+      "registered": "Registered:",
+      "activated": "Activated:",
+      "status": {
+        "PENDING": "Pending",
+        "ACTIVE": "Active",
+        "REWARDED": "Rewarded"
+      },
+      "points": "points"
+    },
+    "howItWorks": {
+      "title": "How does the Referral System work?",
+      "step1": {
+        "title": "Share",
+        "description": "Copy your referral link and share it with friends"
+      },
+      "step2": {
+        "title": "They Sign Up",
+        "description": "Your friends use your link to create their account"
+      },
+      "step3": {
+        "title": "They Activate",
+        "description": "When they complete actions, they become active referrals"
+      },
+      "step4": {
+        "title": "You Earn Points",
+        "description": "You receive points and level up with more referrals"
+      }
+    },
+    "tips": {
+      "title": "Tips for more referrals",
+      "tip1": "Share your personal experience with Truk",
+      "tip2": "Explain how the platform can help your friends",
+      "tip3": "Use social media and WhatsApp/Telegram groups",
+      "tip4": "The more active referrals, the higher your reward multiplier"
+    },
+    "success": {
+      "linkCopied": "Link copied to clipboard!"
+    },
+    "errors": {
+      "copyLink": "Error copying link"
+    }
+  },
+  "dashboard": {
+    "customizer": {
+      "title": "Customize Dashboard",
+      "description": "Choose which widgets to show in each tab",
+      "tabs": {
+        "all": "All",
+        "discover": "Discover",
+        "activity": "My Activity",
+        "community": "Community"
+      },
+      "widgets": {
+        "quick_actions": {
+          "name": "Quick Actions",
+          "description": "Shortcuts to create offers, events, etc."
+        },
+        "map_view": {
+          "name": "Map View",
+          "description": "Interactive map with nearby resources"
+        },
+        "community_stats": {
+          "name": "Statistics",
+          "description": "Community metrics"
+        },
+        "daily_seed": {
+          "name": "Daily Seed",
+          "description": "Earn daily credits"
+        },
+        "personal_feed": {
+          "name": "My Feed",
+          "description": "Your personal activity"
+        },
+        "upcoming_events": {
+          "name": "Upcoming Events",
+          "description": "Events in your community"
+        }
+      },
+      "actions": {
+        "restore": "Restore Defaults",
+        "cancel": "Cancel",
+        "save": "Save Changes"
+      },
+      "status": {
+        "widgetsActive": "widgets active",
+        "unsavedChanges": "Unsaved changes",
+        "discardConfirm": "Discard unsaved changes?"
+      }
+    },
+    "customize": "Customize"
+  },
+  "communityMembers": {
+    "title": "Members of",
+    "backTo": "Back to",
+    "membersCount": "members",
+    "loading": "Loading...",
+    "notFound": "Community not found",
+    "noMembers": "There are no members in this community yet.",
+    "level": "Level",
+    "credits": "credits"
   }
 }
