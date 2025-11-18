@@ -8,27 +8,27 @@ import { useTranslations } from 'next-intl';
 import { getI18nProps } from '@/lib/i18n';
 import { logger } from '@/lib/logger';
 
-const CATEGORIES = [
-  'Educación',
-  'Tecnología',
-  'Hogar',
-  'Transporte',
-  'Salud y Bienestar',
-  'Arte y Creatividad',
-  'Jardinería',
-  'Reparaciones',
-  'Idiomas',
-  'Cocina',
-  'Cuidados',
-  'Deportes',
-  'Asesoría',
-  'Otros',
+const CATEGORY_KEYS = [
+  'education',
+  'technology',
+  'home',
+  'transport',
+  'health',
+  'art',
+  'gardening',
+  'repairs',
+  'languages',
+  'cooking',
+  'care',
+  'sports',
+  'consulting',
+  'other',
 ];
 
-const EXPERIENCE_LEVELS = [
-  { value: 'BEGINNER', label: 'Principiante', description: 'Estoy aprendiendo' },
-  { value: 'INTERMEDIATE', label: 'Intermedio', description: 'Tengo experiencia' },
-  { value: 'EXPERT', label: 'Experto', description: 'Domino la materia' },
+const EXPERIENCE_LEVEL_KEYS = [
+  { value: 'BEGINNER', labelKey: 'beginner', descKey: 'beginnerDesc' },
+  { value: 'INTERMEDIATE', labelKey: 'intermediate', descKey: 'intermediateDesc' },
+  { value: 'EXPERT', labelKey: 'expert', descKey: 'expertDesc' },
 ];
 
 export default function CreateTimeBankOffer() {
@@ -126,10 +126,10 @@ export default function CreateTimeBankOffer() {
   return (
     <>
       <Head>
-        <title>Crear Servicio de Tiempo - Banco de Tiempo | Truk</title>
+        <title>{t('create.pageTitle')}</title>
         <meta
           name="description"
-          content="Ofrece tus habilidades y tiempo a la comunidad. Intercambia servicios basados en horas."
+          content={t('create.metaDescription')}
         />
       </Head>
 
@@ -145,14 +145,14 @@ export default function CreateTimeBankOffer() {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
-                Volver
+                {t('create.back')}
               </button>
 
               <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                ⏰ Crear Servicio de Tiempo
+                {t('create.title')}
               </h1>
               <p className="text-lg text-gray-600 dark:text-gray-400">
-                Comparte tus habilidades con la comunidad. Cada hora vale un crédito, sin importar el tipo de servicio.
+                {t('create.description')}
               </p>
 
               {/* Info Box */}
@@ -162,11 +162,11 @@ export default function CreateTimeBankOffer() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <div className="text-sm text-blue-900 dark:text-blue-100">
-                    <p className="font-semibold mb-1">¿Cómo funciona el Banco de Tiempo?</p>
+                    <p className="font-semibold mb-1">{t('create.infoTitle')}</p>
                     <ul className="list-disc list-inside space-y-1 text-blue-800 dark:text-blue-200">
-                      <li>1 hora de tu tiempo = 1 crédito</li>
-                      <li>Todos los servicios valen lo mismo por hora</li>
-                      <li>Ofreces servicios y ganas créditos para usar en otros servicios</li>
+                      <li>{t('create.infoBullet1')}</li>
+                      <li>{t('create.infoBullet2')}</li>
+                      <li>{t('create.infoBullet3')}</li>
                     </ul>
                   </div>
                 </div>
@@ -175,10 +175,10 @@ export default function CreateTimeBankOffer() {
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 space-y-6">
-              {/* Título */}
+              {/* Titulo */}
               <div>
                 <label htmlFor="title" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  Título del servicio *
+                  {t('create.serviceTitle')}
                 </label>
                 <input
                   type="text"
@@ -186,15 +186,15 @@ export default function CreateTimeBankOffer() {
                   value={formData.title}
                   onChange={(e) => handleChange('title', e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  placeholder="Ej: Clases de euskera, Reparación de bicicletas, Ayuda con mudanza..."
+                  placeholder={t('create.serviceTitlePlaceholder')}
                   required
                 />
               </div>
 
-              {/* Descripción */}
+              {/* Descripcion */}
               <div>
                 <label htmlFor="description" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  Descripción detallada *
+                  {t('create.detailedDescription')}
                 </label>
                 <textarea
                   id="description"
@@ -202,15 +202,15 @@ export default function CreateTimeBankOffer() {
                   onChange={(e) => handleChange('description', e.target.value)}
                   rows={5}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  placeholder="Describe qué servicio ofreces, qué incluye, requisitos previos, etc."
+                  placeholder={t('create.detailedDescPlaceholder')}
                   required
                 />
               </div>
 
-              {/* Categoría */}
+              {/* Categoria */}
               <div>
                 <label htmlFor="category" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  Categoría *
+                  {t('create.category')}
                 </label>
                 <select
                   id="category"
@@ -219,10 +219,10 @@ export default function CreateTimeBankOffer() {
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                   required
                 >
-                  <option value="">Selecciona una categoría</option>
-                  {CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
+                  <option value="">{t('create.selectCategory')}</option>
+                  {CATEGORY_KEYS.map((categoryKey) => (
+                    <option key={categoryKey} value={t(`categories.${categoryKey}`)}>
+                      {t(`categories.${categoryKey}`)}
                     </option>
                   ))}
                 </select>
@@ -231,7 +231,7 @@ export default function CreateTimeBankOffer() {
               {/* Horas estimadas */}
               <div>
                 <label htmlFor="estimatedHours" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  Horas estimadas por sesión
+                  {t('create.estimatedHoursLabel')}
                 </label>
                 <div className="flex items-center gap-4">
                   <input
@@ -244,21 +244,23 @@ export default function CreateTimeBankOffer() {
                     className="w-32 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                   />
                   <span className="text-gray-600 dark:text-gray-400">
-                    = {formData.estimatedHours} crédito{formData.estimatedHours !== 1 ? 's' : ''}
+                    = {formData.estimatedHours !== 1
+                      ? t('create.creditsLabelPlural', { credits: formData.estimatedHours })
+                      : t('create.creditsLabel', { credits: formData.estimatedHours })}
                   </span>
                 </div>
                 <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                  Duración aproximada de una sesión de este servicio
+                  {t('create.sessionDuration')}
                 </p>
               </div>
 
               {/* Nivel de experiencia */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                  Tu nivel de experiencia *
+                  {t('create.experienceLevel')}
                 </label>
                 <div className="space-y-3">
-                  {EXPERIENCE_LEVELS.map((level) => (
+                  {EXPERIENCE_LEVEL_KEYS.map((level) => (
                     <label
                       key={level.value}
                       className={`flex items-start p-4 border-2 rounded-lg cursor-pointer transition-all ${
@@ -276,15 +278,15 @@ export default function CreateTimeBankOffer() {
                         className="mt-1"
                       />
                       <div className="ml-3">
-                        <p className="font-medium text-gray-900 dark:text-white">{level.label}</p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">{level.description}</p>
+                        <p className="font-medium text-gray-900 dark:text-white">{t(`experienceLevels.${level.labelKey}`)}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{t(`experienceLevels.${level.descKey}`)}</p>
                       </div>
                     </label>
                   ))}
                 </div>
               </div>
 
-              {/* Puede enseñar */}
+              {/* Puede ensenar */}
               <div className="flex items-start gap-3 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
                 <input
                   type="checkbox"
@@ -294,9 +296,9 @@ export default function CreateTimeBankOffer() {
                   className="mt-1"
                 />
                 <label htmlFor="canTeach" className="flex-1 cursor-pointer">
-                  <p className="font-medium text-gray-900 dark:text-white">¿Puedes enseñar esta habilidad?</p>
+                  <p className="font-medium text-gray-900 dark:text-white">{t('create.canTeachQuestion')}</p>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    Marca esta opción si además de ofrecer el servicio, puedes enseñar a otros a hacerlo
+                    {t('create.canTeachDescription')}
                   </p>
                 </label>
               </div>
@@ -304,7 +306,7 @@ export default function CreateTimeBankOffer() {
               {/* Etiquetas */}
               <div>
                 <label htmlFor="tagInput" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  Etiquetas (opcional)
+                  {t('create.tagsLabel')}
                 </label>
                 <div className="flex gap-2">
                   <input
@@ -314,14 +316,14 @@ export default function CreateTimeBankOffer() {
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                     className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                    placeholder="Añade etiquetas y presiona Enter"
+                    placeholder={t('create.tagsPlaceholder')}
                   />
                   <button
                     type="button"
                     onClick={addTag}
                     className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600"
                   >
-                    Añadir
+                    {t('create.addButton')}
                   </button>
                 </div>
                 {formData.tags.length > 0 && (
@@ -352,7 +354,7 @@ export default function CreateTimeBankOffer() {
                   onClick={() => router.back()}
                   className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
-                  Cancelar
+                  {t('create.cancelButton')}
                 </button>
                 <button
                   type="submit"
@@ -362,10 +364,10 @@ export default function CreateTimeBankOffer() {
                   {isSubmitting ? (
                     <span className="flex items-center justify-center gap-2">
                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                      Creando...
+                      {t('create.submitting')}
                     </span>
                   ) : (
-                    '⏰ Crear Servicio de Tiempo'
+                    t('create.submitButton')
                   )}
                 </button>
               </div>

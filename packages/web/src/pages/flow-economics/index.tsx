@@ -4,6 +4,7 @@ import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import Link from 'next/link';
 import { getI18nProps } from '@/lib/i18n';
+import { useTranslations } from 'next-intl';
 import {
   ChartBarIcon,
   ArrowTrendingUpIcon,
@@ -28,6 +29,7 @@ interface EconomicMetrics {
 }
 
 export default function FlowEconomicsDashboard() {
+  const t = useTranslations('flowEconomics');
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
@@ -68,31 +70,31 @@ export default function FlowEconomicsDashboard() {
 
   const features = [
     {
-      title: 'Métricas Económicas',
-      description: 'Visualiza la salud de la economía en tiempo real',
+      title: t('features.economicMetrics.title'),
+      description: t('features.economicMetrics.description'),
       icon: ChartBarIcon,
       href: '/flow-economics/metrics',
       color: 'bg-gradient-to-br from-blue-600 to-blue-700',
-      badge: isAdmin ? 'Admin' : undefined,
+      badge: isAdmin ? t('admin') : undefined,
     },
     {
-      title: 'Solicitudes de Pool',
-      description: 'Gestiona solicitudes de fondos comunitarios',
+      title: t('features.poolRequests.title'),
+      description: t('features.poolRequests.description'),
       icon: CircleStackIcon,
       href: '/flow-economics/pool-requests',
       color: 'bg-gradient-to-br from-green-600 to-emerald-700',
     },
     {
-      title: 'Historial de Flujo',
-      description: 'Analiza métricas históricas y tendencias',
+      title: t('features.flowHistory.title'),
+      description: t('features.flowHistory.description'),
       icon: ArrowTrendingUpIcon,
       href: '/flow-economics/history',
       color: 'bg-gradient-to-br from-purple-600 to-indigo-700',
-      badge: isAdmin ? 'Admin' : undefined,
+      badge: isAdmin ? t('admin') : undefined,
     },
     {
-      title: 'Enviar con Multiplicador',
-      description: 'Transfiere créditos con bonus de flujo',
+      title: t('features.sendWithMultiplier.title'),
+      description: t('features.sendWithMultiplier.description'),
       icon: BanknotesIcon,
       href: '/flow-economics/send',
       color: 'bg-gradient-to-br from-orange-600 to-yellow-600',
@@ -107,11 +109,11 @@ export default function FlowEconomicsDashboard() {
             <div className="flex items-center gap-3 mb-4">
               <SparklesIcon className="h-8 w-8 text-blue-600" />
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Economía de Flujo
+                {t('title')}
               </h1>
             </div>
             <p className="text-gray-600 dark:text-gray-400">
-              Sistema económico con multiplicadores de flujo y pools comunitarios
+              {t('description')}
             </p>
           </div>
 
@@ -144,35 +146,34 @@ export default function FlowEconomicsDashboard() {
           {/* Info Box */}
           <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900 dark:to-purple-900 dark:bg-opacity-20 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              💡 ¿Qué es la Economía de Flujo?
+              {t('infoBox.title')}
             </h3>
             <p className="text-gray-700 dark:text-gray-300 mb-4">
-              Un sistema económico que recompensa la velocidad de circulación del dinero.
-              Cuanto más rápido circulas créditos, mayor multiplicador recibes en tus transacciones.
+              {t('infoBox.description')}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
                 <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-2">
-                  🔄 Multiplicador de Flujo
+                  {t('infoBox.flowMultiplier.title')}
                 </h4>
                 <p className="text-xs text-gray-600 dark:text-gray-400">
-                  Gana hasta 2x en transacciones por circular créditos rápido
+                  {t('infoBox.flowMultiplier.description')}
                 </p>
               </div>
               <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
                 <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-2">
-                  💰 Pools Comunitarios
+                  {t('infoBox.communityPools.title')}
                 </h4>
                 <p className="text-xs text-gray-600 dark:text-gray-400">
-                  Emergencias, proyectos comunitarios y recompensas
+                  {t('infoBox.communityPools.description')}
                 </p>
               </div>
               <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
                 <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-2">
-                  📊 Economía Saludable
+                  {t('infoBox.healthyEconomy.title')}
                 </h4>
                 <p className="text-xs text-gray-600 dark:text-gray-400">
-                  Incentiva circulación y reduce acumulación
+                  {t('infoBox.healthyEconomy.description')}
                 </p>
               </div>
             </div>
@@ -190,11 +191,11 @@ export default function FlowEconomicsDashboard() {
           <div className="flex items-center gap-3 mb-4">
             <SparklesIcon className="h-8 w-8 text-blue-600" />
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Dashboard de Economía de Flujo
+              {t('dashboardTitle')}
             </h1>
           </div>
           <p className="text-gray-600 dark:text-gray-400">
-            Métricas y análisis del sistema económico
+            {t('metricsDescription')}
           </p>
         </div>
 
@@ -213,7 +214,7 @@ export default function FlowEconomicsDashboard() {
                   </div>
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
-                  Créditos Totales
+                  {t('metrics.totalCredits')}
                 </p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white">
                   {metrics?.totalCredits.toLocaleString() || 0}
@@ -227,7 +228,7 @@ export default function FlowEconomicsDashboard() {
                   </div>
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
-                  Velocidad Promedio
+                  {t('metrics.averageVelocity')}
                 </p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white">
                   {metrics?.averageVelocity.toFixed(2) || 0}
@@ -241,7 +242,7 @@ export default function FlowEconomicsDashboard() {
                   </div>
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
-                  Multiplicador Promedio
+                  {t('metrics.averageMultiplier')}
                 </p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white">
                   {metrics?.averageFlowMultiplier.toFixed(2) || 0}x
@@ -255,7 +256,7 @@ export default function FlowEconomicsDashboard() {
                   </div>
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
-                  Índice Gini
+                  {t('metrics.giniIndex')}
                 </p>
                 <p className={`text-3xl font-bold ${getGiniColor(giniData?.giniIndex || 0)}`}>
                   {giniData?.giniIndex.toFixed(3) || 0}
@@ -269,42 +270,42 @@ export default function FlowEconomicsDashboard() {
             {/* Pool Balances */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-                Balances de Pools Comunitarios
+                {t('poolBalances.title')}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-red-50 dark:bg-red-900 dark:bg-opacity-20 rounded-lg p-6">
                   <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    🚨 Emergencias
+                    {t('poolBalances.emergency')}
                   </h3>
                   <p className="text-3xl font-bold text-red-600 dark:text-red-400">
                     {metrics?.poolBalance.EMERGENCY.toLocaleString() || 0}
                   </p>
                   <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                    Créditos disponibles
+                    {t('poolBalances.creditsAvailable')}
                   </p>
                 </div>
 
                 <div className="bg-green-50 dark:bg-green-900 dark:bg-opacity-20 rounded-lg p-6">
                   <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    🏘️ Comunidad
+                    {t('poolBalances.community')}
                   </h3>
                   <p className="text-3xl font-bold text-green-600 dark:text-green-400">
                     {metrics?.poolBalance.COMMUNITY.toLocaleString() || 0}
                   </p>
                   <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                    Créditos disponibles
+                    {t('poolBalances.creditsAvailable')}
                   </p>
                 </div>
 
                 <div className="bg-yellow-50 dark:bg-yellow-900 dark:bg-opacity-20 rounded-lg p-6">
                   <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    🎁 Recompensas
+                    {t('poolBalances.rewards')}
                   </h3>
                   <p className="text-3xl font-bold text-yellow-600 dark:text-yellow-400">
                     {metrics?.poolBalance.REWARDS.toLocaleString() || 0}
                   </p>
                   <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                    Créditos disponibles
+                    {t('poolBalances.creditsAvailable')}
                   </p>
                 </div>
               </div>
@@ -346,23 +347,23 @@ export default function FlowEconomicsDashboard() {
             {/* Info Box */}
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900 dark:to-purple-900 dark:bg-opacity-20 rounded-lg p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                📊 Interpretación de Métricas
+                {t('metricsInterpretation.title')}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-2">
-                    Velocidad de Flujo
+                    {t('metricsInterpretation.flowVelocity.title')}
                   </h4>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
-                    Mide qué tan rápido circulan los créditos. Mayor velocidad = economía más saludable.
+                    {t('metricsInterpretation.flowVelocity.description')}
                   </p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-2">
-                    Índice Gini
+                    {t('metricsInterpretation.giniIndex.title')}
                   </h4>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
-                    Mide desigualdad económica. 0 = perfecta igualdad, 1 = perfecta desigualdad.
+                    {t('metricsInterpretation.giniIndex.description')}
                   </p>
                 </div>
               </div>

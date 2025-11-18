@@ -1400,7 +1400,63 @@
     },
     "servicePlaceholder": "Ej: Clases de euskera, Reparación de bicicletas, Ayuda con mudanza...",
     "serviceDescPlaceholder": "Describe qué servicio ofreces, qué incluye, requisitos previos, etc.",
-    "describeNeed": "Describe qué necesitas..."
+    "describeNeed": "Describe qué necesitas...",
+    "create": {
+      "pageTitle": "Crear Servicio de Tiempo - Banco de Tiempo | Truk",
+      "metaDescription": "Ofrece tus habilidades y tiempo a la comunidad. Intercambia servicios basados en horas.",
+      "back": "Volver",
+      "title": "Crear Servicio de Tiempo",
+      "description": "Comparte tus habilidades con la comunidad. Cada hora vale un credito, sin importar el tipo de servicio.",
+      "infoTitle": "Como funciona el Banco de Tiempo?",
+      "infoBullet1": "1 hora de tu tiempo = 1 credito",
+      "infoBullet2": "Todos los servicios valen lo mismo por hora",
+      "infoBullet3": "Ofreces servicios y ganas creditos para usar en otros servicios",
+      "serviceTitle": "Titulo del servicio *",
+      "serviceTitlePlaceholder": "Ej: Clases de euskera, Reparacion de bicicletas, Ayuda con mudanza...",
+      "detailedDescription": "Descripcion detallada *",
+      "detailedDescPlaceholder": "Describe que servicio ofreces, que incluye, requisitos previos, etc.",
+      "category": "Categoria *",
+      "selectCategory": "Selecciona una categoria",
+      "estimatedHoursLabel": "Horas estimadas por sesion",
+      "creditsLabel": "{credits} credito",
+      "creditsLabelPlural": "{credits} creditos",
+      "sessionDuration": "Duracion aproximada de una sesion de este servicio",
+      "experienceLevel": "Tu nivel de experiencia *",
+      "canTeachQuestion": "Puedes ensenar esta habilidad?",
+      "canTeachDescription": "Marca esta opcion si ademas de ofrecer el servicio, puedes ensenar a otros a hacerlo",
+      "tagsLabel": "Etiquetas (opcional)",
+      "tagsPlaceholder": "Anade etiquetas y presiona Enter",
+      "addButton": "Anadir",
+      "cancelButton": "Cancelar",
+      "submitButton": "Crear Servicio de Tiempo",
+      "submitting": "Creando..."
+    },
+    "categories": {
+      "education": "Educacion",
+      "technology": "Tecnologia",
+      "home": "Hogar",
+      "transport": "Transporte",
+      "health": "Salud y Bienestar",
+      "art": "Arte y Creatividad",
+      "gardening": "Jardineria",
+      "repairs": "Reparaciones",
+      "languages": "Idiomas",
+      "cooking": "Cocina",
+      "care": "Cuidados",
+      "sports": "Deportes",
+      "consulting": "Asesoria",
+      "other": "Otros"
+    },
+    "experienceLevels": {
+      "beginner": "Principiante",
+      "beginnerDesc": "Estoy aprendiendo",
+      "intermediate": "Intermedio",
+      "intermediateDesc": "Tengo experiencia",
+      "expert": "Experto",
+      "expertDesc": "Domino la materia"
+    },
+    "credits": "{credits} creditos",
+    "hours": "{hours}h"
   },
   "managePage": {
     "description": "Administra tus ofertas, eventos y perfil en un solo lugar"
@@ -4945,5 +5001,150 @@
   },
   "proximity": {
     "locationPlaceholder": "Ej: Bilbao, Pamplona, Madrid..."
+  },
+  "flowEconomics": {
+    "title": "Economia de Flujo",
+    "dashboardTitle": "Dashboard de Economia de Flujo",
+    "description": "Sistema economico con multiplicadores de flujo y pools comunitarios",
+    "metricsDescription": "Metricas y analisis del sistema economico",
+    "features": {
+      "economicMetrics": {
+        "title": "Metricas Economicas",
+        "description": "Visualiza la salud de la economia en tiempo real"
+      },
+      "poolRequests": {
+        "title": "Solicitudes de Pool",
+        "description": "Gestiona solicitudes de fondos comunitarios"
+      },
+      "flowHistory": {
+        "title": "Historial de Flujo",
+        "description": "Analiza metricas historicas y tendencias"
+      },
+      "sendWithMultiplier": {
+        "title": "Enviar con Multiplicador",
+        "description": "Transfiere creditos con bonus de flujo"
+      }
+    },
+    "admin": "Admin",
+    "infoBox": {
+      "title": "Que es la Economia de Flujo?",
+      "description": "Un sistema economico que recompensa la velocidad de circulacion del dinero. Cuanto mas rapido circulas creditos, mayor multiplicador recibes en tus transacciones.",
+      "flowMultiplier": {
+        "title": "Multiplicador de Flujo",
+        "description": "Gana hasta 2x en transacciones por circular creditos rapido"
+      },
+      "communityPools": {
+        "title": "Pools Comunitarios",
+        "description": "Emergencias, proyectos comunitarios y recompensas"
+      },
+      "healthyEconomy": {
+        "title": "Economia Saludable",
+        "description": "Incentiva circulacion y reduce acumulacion"
+      }
+    },
+    "metrics": {
+      "totalCredits": "Creditos Totales",
+      "averageVelocity": "Velocidad Promedio",
+      "averageMultiplier": "Multiplicador Promedio",
+      "giniIndex": "Indice Gini"
+    },
+    "poolBalances": {
+      "title": "Balances de Pools Comunitarios",
+      "emergency": "Emergencias",
+      "community": "Comunidad",
+      "rewards": "Recompensas",
+      "creditsAvailable": "Creditos disponibles"
+    },
+    "metricsInterpretation": {
+      "title": "Interpretacion de Metricas",
+      "flowVelocity": {
+        "title": "Velocidad de Flujo",
+        "description": "Mide que tan rapido circulan los creditos. Mayor velocidad = economia mas saludable."
+      },
+      "giniIndex": {
+        "title": "Indice Gini",
+        "description": "Mide desigualdad economica. 0 = perfecta igualdad, 1 = perfecta desigualdad."
+      }
+    },
+    "send": {
+      "backToDashboard": "Volver al Dashboard",
+      "title": "Enviar con Multiplicador de Flujo",
+      "description": "Transfiere creditos y obten bonificaciones por impulsar el flujo economico",
+      "howItWorks": {
+        "title": "Como funciona el multiplicador de flujo?",
+        "balanceDifference": "Mayor diferencia de balance = mayor multiplicador (hasta 1.5x)",
+        "lowerBalance": "Cuando envias a alguien con menos balance, generas valor extra",
+        "poolContribution": "El 2% de cada transaccion va al pool comunitario",
+        "incentive": "Incentiva la circulacion y reduce la acumulacion"
+      },
+      "sendCredits": "Enviar Creditos",
+      "searchRecipient": "Buscar destinatario",
+      "searchPlaceholder": "Buscar por nombre o email...",
+      "searching": "Buscando...",
+      "sendingTo": "Enviando a:",
+      "changeRecipient": "Cambiar destinatario",
+      "amount": "Cantidad (creditos)",
+      "message": "Mensaje (opcional)",
+      "messagePlaceholder": "Agrega un mensaje personal...",
+      "sending": "Enviando...",
+      "sendButton": "Enviar Creditos"
+    },
+    "preview": {
+      "title": "Vista Previa del Multiplicador",
+      "excellent": "Excelente!",
+      "veryGood": "Muy Bueno",
+      "good": "Bueno",
+      "standard": "Estandar",
+      "originalAmount": "Cantidad original:",
+      "multiplier": "Multiplicador:",
+      "communityPool": "Pool comunitario (2%):",
+      "willReceive": "Recibira:",
+      "credits": "creditos",
+      "balanceInfo": {
+        "title": "Informacion de balances:",
+        "yourBalance": "Tu balance:",
+        "recipientBalance": "Balance del destinatario:",
+        "difference": "Diferencia:"
+      },
+      "tip": "Tip: Mayor diferencia de balance genera un multiplicador mas alto. Esto incentiva que los creditos fluyan de quienes mas tienen hacia quienes mas lo necesitan.",
+      "selectRecipient": "Selecciona un destinatario e ingresa una cantidad para ver el multiplicador"
+    },
+    "history": {
+      "backToDashboard": "Volver al Dashboard",
+      "title": "Historial de Flujo Economico",
+      "description": "Analiza la evolucion de las transacciones con multiplicador de flujo",
+      "restricted": {
+        "title": "Acceso Restringido",
+        "description": "Esta pagina solo esta disponible para administradores del sistema.",
+        "backButton": "Volver al Dashboard de Economia"
+      },
+      "timeRange": {
+        "last7days": "Ultimos 7 dias",
+        "last30days": "Ultimos 30 dias",
+        "last90days": "Ultimos 90 dias",
+        "allTime": "Todo el tiempo"
+      },
+      "summary": {
+        "totalTransactions": "Transacciones Totales",
+        "averageMultiplier": "Multiplicador Promedio",
+        "totalVolume": "Volumen Total",
+        "activeUsers": "Usuarios Activos"
+      },
+      "dailyEvolution": "Evolucion Diaria",
+      "table": {
+        "date": "Fecha",
+        "transactions": "Transacciones",
+        "multiplier": "Multiplicador",
+        "volume": "Volumen",
+        "users": "Usuarios"
+      },
+      "recentTransactions": "Transacciones Recientes",
+      "noTransactions": {
+        "title": "No hay transacciones",
+        "description": "No se encontraron transacciones con multiplicador de flujo en este periodo"
+      },
+      "user": "Usuario",
+      "multiplierLabel": "multiplicador"
+    }
   }
 }

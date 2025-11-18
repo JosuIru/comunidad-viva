@@ -32,6 +32,7 @@ interface FlowPreview {
 }
 
 export default function FlowSendPage() {
+  const t = useTranslations('flowEconomics');
   const tToasts = useTranslations('toasts');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -104,12 +105,12 @@ export default function FlowSendPage() {
 
   const getMultiplierBadge = (multiplier: number) => {
     if (multiplier >= 1.5)
-      return { text: '¡Excelente!', color: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' };
+      return { text: t('preview.excellent'), color: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' };
     if (multiplier >= 1.25)
-      return { text: 'Muy Bueno', color: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' };
+      return { text: t('preview.veryGood'), color: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' };
     if (multiplier >= 1.1)
-      return { text: 'Bueno', color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' };
-    return { text: 'Estándar', color: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200' };
+      return { text: t('preview.good'), color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' };
+    return { text: t('preview.standard'), color: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200' };
   };
 
   return (
@@ -122,16 +123,16 @@ export default function FlowSendPage() {
             className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 mb-4"
           >
             <ArrowLeftIcon className="h-5 w-5" />
-            Volver al Dashboard
+            {t('send.backToDashboard')}
           </Link>
           <div className="flex items-center gap-3 mb-4">
             <PaperAirplaneIcon className="h-8 w-8 text-blue-600" />
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Enviar con Multiplicador de Flujo
+              {t('send.title')}
             </h1>
           </div>
           <p className="text-gray-600 dark:text-gray-400">
-            Transfiere créditos y obtén bonificaciones por impulsar el flujo económico
+            {t('send.description')}
           </p>
         </div>
 
@@ -141,15 +142,15 @@ export default function FlowSendPage() {
             <InformationCircleIcon className="h-6 w-6 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-1" />
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                ¿Cómo funciona el multiplicador de flujo?
+                {t('send.howItWorks.title')}
               </h3>
               <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
                 <li>
-                  • <strong>Mayor diferencia de balance = mayor multiplicador</strong> (hasta 1.5x)
+                  • <strong>{t('send.howItWorks.balanceDifference')}</strong>
                 </li>
-                <li>• Cuando envías a alguien con menos balance, generas valor extra</li>
-                <li>• El 2% de cada transacción va al pool comunitario</li>
-                <li>• Incentiva la circulación y reduce la acumulación</li>
+                <li>• {t('send.howItWorks.lowerBalance')}</li>
+                <li>• {t('send.howItWorks.poolContribution')}</li>
+                <li>• {t('send.howItWorks.incentive')}</li>
               </ul>
             </div>
           </div>
@@ -159,20 +160,20 @@ export default function FlowSendPage() {
           {/* Send Form */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-              📤 Enviar Créditos
+              {t('send.sendCredits')}
             </h2>
 
             {/* Search User */}
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Buscar destinatario
+                {t('send.searchRecipient')}
               </label>
               <div className="relative">
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Buscar por nombre o email..."
+                  placeholder={t('send.searchPlaceholder')}
                   className="w-full px-4 py-3 pl-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
                 <MagnifyingGlassIcon className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
@@ -180,7 +181,7 @@ export default function FlowSendPage() {
 
               {/* Search Results */}
               {searchingUsers && (
-                <div className="mt-2 text-sm text-gray-500">Buscando...</div>
+                <div className="mt-2 text-sm text-gray-500">{t('send.searching')}</div>
               )}
               {users && users.length > 0 && (
                 <div className="mt-2 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
@@ -207,7 +208,7 @@ export default function FlowSendPage() {
             {selectedUser && (
               <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-2 border-blue-200 dark:border-blue-800">
                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                  Enviando a:
+                  {t('send.sendingTo')}
                 </div>
                 <div className="font-semibold text-gray-900 dark:text-white">
                   {selectedUser.name}
@@ -219,7 +220,7 @@ export default function FlowSendPage() {
                   onClick={() => setSelectedUser(null)}
                   className="mt-2 text-sm text-blue-600 dark:text-blue-400 hover:underline"
                 >
-                  Cambiar destinatario
+                  {t('send.changeRecipient')}
                 </button>
               </div>
             )}
@@ -227,7 +228,7 @@ export default function FlowSendPage() {
             {/* Amount Input */}
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Cantidad (créditos)
+                {t('send.amount')}
               </label>
               <input
                 type="number"
@@ -243,12 +244,12 @@ export default function FlowSendPage() {
             {/* Message Input */}
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Mensaje (opcional)
+                {t('send.message')}
               </label>
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                placeholder="Agrega un mensaje personal..."
+                placeholder={t('send.messagePlaceholder')}
                 rows={3}
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none"
               />
@@ -263,12 +264,12 @@ export default function FlowSendPage() {
               {sendMutation.isPending ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  Enviando...
+                  {t('send.sending')}
                 </>
               ) : (
                 <>
                   <PaperAirplaneIcon className="h-5 w-5" />
-                  Enviar Créditos
+                  {t('send.sendButton')}
                 </>
               )}
             </button>
@@ -277,7 +278,7 @@ export default function FlowSendPage() {
           {/* Preview Panel */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-              ✨ Vista Previa del Multiplicador
+              {t('preview.title')}
             </h2>
 
             {loadingPreview ? (
@@ -308,34 +309,34 @@ export default function FlowSendPage() {
                 {/* Flow Details */}
                 <div className="space-y-4">
                   <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
-                    <span className="text-gray-600 dark:text-gray-400">Cantidad original:</span>
+                    <span className="text-gray-600 dark:text-gray-400">{t('preview.originalAmount')}</span>
                     <span className="font-semibold text-gray-900 dark:text-white">
-                      {flowPreview.originalAmount.toLocaleString()} créditos
+                      {flowPreview.originalAmount.toLocaleString()} {t('preview.credits')}
                     </span>
                   </div>
 
                   <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
-                    <span className="text-gray-600 dark:text-gray-400">Multiplicador:</span>
+                    <span className="text-gray-600 dark:text-gray-400">{t('preview.multiplier')}</span>
                     <span className={`font-bold ${getMultiplierColor(flowPreview.multiplier)}`}>
-                      ×{flowPreview.multiplier.toFixed(2)}
+                      x{flowPreview.multiplier.toFixed(2)}
                     </span>
                   </div>
 
                   <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
                     <span className="text-gray-600 dark:text-gray-400">
-                      Pool comunitario (2%):
+                      {t('preview.communityPool')}
                     </span>
                     <span className="text-purple-600 dark:text-purple-400 font-semibold">
-                      -{flowPreview.poolContribution.toLocaleString()} créditos
+                      -{flowPreview.poolContribution.toLocaleString()} {t('preview.credits')}
                     </span>
                   </div>
 
                   <div className="flex justify-between items-center py-4 bg-green-50 dark:bg-green-900/20 rounded-lg px-4">
                     <span className="font-semibold text-gray-900 dark:text-white">
-                      Recibirá:
+                      {t('preview.willReceive')}
                     </span>
                     <span className="text-2xl font-bold text-green-600 dark:text-green-400">
-                      {flowPreview.finalAmount.toLocaleString()} créditos
+                      {flowPreview.finalAmount.toLocaleString()} {t('preview.credits')}
                     </span>
                   </div>
                 </div>
@@ -343,27 +344,27 @@ export default function FlowSendPage() {
                 {/* Balance Info */}
                 <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                    Información de balances:
+                    {t('preview.balanceInfo.title')}
                   </h3>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-400">Tu balance:</span>
+                      <span className="text-gray-600 dark:text-gray-400">{t('preview.balanceInfo.yourBalance')}</span>
                       <span className="font-medium text-gray-900 dark:text-white">
-                        {flowPreview.senderBalance.toLocaleString()} créditos
+                        {flowPreview.senderBalance.toLocaleString()} {t('preview.credits')}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600 dark:text-gray-400">
-                        Balance del destinatario:
+                        {t('preview.balanceInfo.recipientBalance')}
                       </span>
                       <span className="font-medium text-gray-900 dark:text-white">
-                        {flowPreview.receiverBalance.toLocaleString()} créditos
+                        {flowPreview.receiverBalance.toLocaleString()} {t('preview.credits')}
                       </span>
                     </div>
                     <div className="flex justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400">Diferencia:</span>
+                      <span className="text-gray-600 dark:text-gray-400">{t('preview.balanceInfo.difference')}</span>
                       <span className="font-semibold text-blue-600 dark:text-blue-400">
-                        {flowPreview.balanceDifference.toLocaleString()} créditos
+                        {flowPreview.balanceDifference.toLocaleString()} {t('preview.credits')}
                       </span>
                     </div>
                   </div>
@@ -371,15 +372,14 @@ export default function FlowSendPage() {
 
                 {/* Explanation */}
                 <div className="text-xs text-gray-500 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/10 rounded-lg p-3">
-                  💡 <strong>Tip:</strong> Mayor diferencia de balance genera un multiplicador más alto.
-                  Esto incentiva que los créditos fluyan de quienes más tienen hacia quienes más lo necesitan.
+                  {t('preview.tip')}
                 </div>
               </div>
             ) : (
               <div className="text-center py-12">
                 <SparklesIcon className="h-16 w-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
                 <p className="text-gray-500 dark:text-gray-400">
-                  Selecciona un destinatario e ingresa una cantidad para ver el multiplicador
+                  {t('preview.selectRecipient')}
                 </p>
               </div>
             )}

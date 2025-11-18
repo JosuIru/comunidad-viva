@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
+import { useTranslations } from 'next-intl';
 import {
   ArrowLeftIcon,
   ArrowTrendingUpIcon,
@@ -41,6 +42,7 @@ interface HistoricalMetrics {
 }
 
 export default function FlowHistoryPage() {
+  const t = useTranslations('flowEconomics');
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
@@ -141,17 +143,17 @@ export default function FlowHistoryPage() {
           <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-lg p-8">
             <div className="text-6xl mb-4">🔒</div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-              Acceso Restringido
+              {t('history.restricted.title')}
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Esta página solo está disponible para administradores del sistema.
+              {t('history.restricted.description')}
             </p>
             <Link
               href="/flow-economics"
               className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
             >
               <ArrowLeftIcon className="h-5 w-5" />
-              Volver al Dashboard de Economía
+              {t('history.restricted.backButton')}
             </Link>
           </div>
         </div>
@@ -169,16 +171,16 @@ export default function FlowHistoryPage() {
             className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 mb-4"
           >
             <ArrowLeftIcon className="h-5 w-5" />
-            Volver al Dashboard
+            {t('history.backToDashboard')}
           </Link>
           <div className="flex items-center gap-3 mb-4">
             <ClockIcon className="h-8 w-8 text-purple-600" />
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Historial de Flujo Económico
+              {t('history.title')}
             </h1>
           </div>
           <p className="text-gray-600 dark:text-gray-400">
-            Analiza la evolución de las transacciones con multiplicador de flujo
+            {t('history.description')}
           </p>
         </div>
 
@@ -186,10 +188,10 @@ export default function FlowHistoryPage() {
         <div className="mb-8">
           <div className="inline-flex rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 p-1">
             {[
-              { value: '7d', label: 'Últimos 7 días' },
-              { value: '30d', label: 'Últimos 30 días' },
-              { value: '90d', label: 'Últimos 90 días' },
-              { value: 'all', label: 'Todo el tiempo' },
+              { value: '7d', label: t('history.timeRange.last7days') },
+              { value: '30d', label: t('history.timeRange.last30days') },
+              { value: '90d', label: t('history.timeRange.last90days') },
+              { value: 'all', label: t('history.timeRange.allTime') },
             ].map((option) => (
               <button
                 key={option.value}
@@ -219,7 +221,7 @@ export default function FlowHistoryPage() {
                   <div className="flex items-center gap-2 mb-2">
                     <ChartBarIcon className="h-5 w-5 text-purple-500" />
                     <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      Transacciones Totales
+                      {t('history.summary.totalTransactions')}
                     </h3>
                   </div>
                   <p className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -231,7 +233,7 @@ export default function FlowHistoryPage() {
                   <div className="flex items-center gap-2 mb-2">
                     <SparklesIcon className="h-5 w-5 text-green-500" />
                     <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      Multiplicador Promedio
+                      {t('history.summary.averageMultiplier')}
                     </h3>
                   </div>
                   <p className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -247,14 +249,14 @@ export default function FlowHistoryPage() {
                   <div className="flex items-center gap-2 mb-2">
                     <ArrowTrendingUpIcon className="h-5 w-5 text-blue-500" />
                     <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      Volumen Total
+                      {t('history.summary.totalVolume')}
                     </h3>
                   </div>
                   <p className="text-3xl font-bold text-gray-900 dark:text-white">
                     {historicalMetrics
                       .reduce((sum, m) => sum + m.totalVolume, 0)
                       .toLocaleString()}{' '}
-                    <span className="text-sm text-gray-500">créditos</span>
+                    <span className="text-sm text-gray-500">{t('preview.credits')}</span>
                   </p>
                 </div>
 
@@ -262,7 +264,7 @@ export default function FlowHistoryPage() {
                   <div className="flex items-center gap-2 mb-2">
                     <ClockIcon className="h-5 w-5 text-orange-500" />
                     <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      Usuarios Activos
+                      {t('history.summary.activeUsers')}
                     </h3>
                   </div>
                   <p className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -276,26 +278,26 @@ export default function FlowHistoryPage() {
             {historicalMetrics && historicalMetrics.length > 0 && (
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-                  📊 Evolución Diaria
+                  {t('history.dailyEvolution')}
                 </h2>
                 <div className="overflow-x-auto">
                   <table className="min-w-full">
                     <thead>
                       <tr className="border-b border-gray-200 dark:border-gray-700">
                         <th className="text-left py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
-                          Fecha
+                          {t('history.table.date')}
                         </th>
                         <th className="text-right py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
-                          Transacciones
+                          {t('history.table.transactions')}
                         </th>
                         <th className="text-right py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
-                          Multiplicador
+                          {t('history.table.multiplier')}
                         </th>
                         <th className="text-right py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
-                          Volumen
+                          {t('history.table.volume')}
                         </th>
                         <th className="text-right py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">
-                          Usuarios
+                          {t('history.table.users')}
                         </th>
                       </tr>
                     </thead>
@@ -333,17 +335,17 @@ export default function FlowHistoryPage() {
             {/* Transactions List */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-                🔄 Transacciones Recientes
+                {t('history.recentTransactions')}
               </h2>
 
               {!transactions || transactions.length === 0 ? (
                 <div className="text-center py-12">
                   <div className="text-6xl mb-4">📭</div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                    No hay transacciones
+                    {t('history.noTransactions.title')}
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400">
-                    No se encontraron transacciones con multiplicador de flujo en este período
+                    {t('history.noTransactions.description')}
                   </p>
                 </div>
               ) : (
@@ -365,11 +367,11 @@ export default function FlowHistoryPage() {
                           </div>
                           <div className="flex items-center gap-2 text-sm">
                             <span className="font-medium text-gray-900 dark:text-white">
-                              {tx.fromUser?.name || 'Usuario'}
+                              {tx.fromUser?.name || t('history.user')}
                             </span>
                             <span className="text-gray-400">→</span>
                             <span className="font-medium text-gray-900 dark:text-white">
-                              {tx.toUser?.name || 'Usuario'}
+                              {tx.toUser?.name || t('history.user')}
                             </span>
                           </div>
                         </div>
@@ -388,7 +390,7 @@ export default function FlowHistoryPage() {
                               tx.multiplier
                             )}`}
                           >
-                            {tx.multiplier.toFixed(2)}x multiplicador
+                            {tx.multiplier.toFixed(2)}x {t('history.multiplierLabel')}
                           </div>
                         </div>
                       </div>

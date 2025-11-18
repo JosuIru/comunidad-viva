@@ -1384,9 +1384,65 @@
       "provider": "Proveïdor",
       "requester": "Sol·licitant"
     },
-    "servicePlaceholder": "Ex: Classes de català, Reparació de bicicletes, Ajuda amb mudança...",
-    "serviceDescPlaceholder": "Descriu quin servei ofereixes, què inclou, requisits previs, etc.",
-    "describeNeed": "Descriu què necessites..."
+    "servicePlaceholder": "Ex: Classes de catala, Reparacio de bicicletes, Ajuda amb mudanca...",
+    "serviceDescPlaceholder": "Descriu quin servei ofereixes, que inclou, requisits previs, etc.",
+    "describeNeed": "Descriu que necessites...",
+    "create": {
+      "pageTitle": "Crear Servei de Temps - Banc del Temps | Truk",
+      "metaDescription": "Ofereix les teves habilitats i temps a la comunitat. Intercanvia serveis basats en hores.",
+      "back": "Tornar",
+      "title": "Crear Servei de Temps",
+      "description": "Comparteix les teves habilitats amb la comunitat. Cada hora val un credit, independentment del tipus de servei.",
+      "infoTitle": "Com funciona el Banc del Temps?",
+      "infoBullet1": "1 hora del teu temps = 1 credit",
+      "infoBullet2": "Tots els serveis valen el mateix per hora",
+      "infoBullet3": "Ofereixes serveis i guanyes credits per utilitzar en altres serveis",
+      "serviceTitle": "Titol del servei *",
+      "serviceTitlePlaceholder": "Ex: Classes de catala, Reparacio de bicicletes, Ajuda amb mudanca...",
+      "detailedDescription": "Descripcio detallada *",
+      "detailedDescPlaceholder": "Descriu quin servei ofereixes, que inclou, requisits previs, etc.",
+      "category": "Categoria *",
+      "selectCategory": "Selecciona una categoria",
+      "estimatedHoursLabel": "Hores estimades per sessio",
+      "creditsLabel": "{credits} credit",
+      "creditsLabelPlural": "{credits} credits",
+      "sessionDuration": "Duracio aproximada d'una sessio d'aquest servei",
+      "experienceLevel": "El teu nivell d'experiencia *",
+      "canTeachQuestion": "Pots ensenyar aquesta habilitat?",
+      "canTeachDescription": "Marca aquesta opcio si a mes d'oferir el servei, pots ensenyar als altres com fer-ho",
+      "tagsLabel": "Etiquetes (opcional)",
+      "tagsPlaceholder": "Afegeix etiquetes i prem Enter",
+      "addButton": "Afegir",
+      "cancelButton": "Cancellar",
+      "submitButton": "Crear Servei de Temps",
+      "submitting": "Creant..."
+    },
+    "categories": {
+      "education": "Educacio",
+      "technology": "Tecnologia",
+      "home": "Llar",
+      "transport": "Transport",
+      "health": "Salut i Benestar",
+      "art": "Art i Creativitat",
+      "gardening": "Jardineria",
+      "repairs": "Reparacions",
+      "languages": "Idiomes",
+      "cooking": "Cuina",
+      "care": "Cures",
+      "sports": "Esports",
+      "consulting": "Assessoria",
+      "other": "Altres"
+    },
+    "experienceLevels": {
+      "beginner": "Principiant",
+      "beginnerDesc": "Estic aprenent",
+      "intermediate": "Intermedi",
+      "intermediateDesc": "Tinc experiencia",
+      "expert": "Expert",
+      "expertDesc": "Domino la materia"
+    },
+    "credits": "{credits} credits",
+    "hours": "{hours}h"
   },
   "managePage": {
     "description": "Administra les teves ofertes, esdeveniments i perfil en un sol lloc"
@@ -4996,5 +5052,150 @@
   },
   "proximity": {
     "locationPlaceholder": "Ex: Barcelona, Girona, Tarragona..."
+  },
+  "flowEconomics": {
+    "title": "Economia de Flux",
+    "dashboardTitle": "Dashboard d'Economia de Flux",
+    "description": "Sistema economic amb multiplicadors de flux i pools comunitaris",
+    "metricsDescription": "Metriques i analisi del sistema economic",
+    "features": {
+      "economicMetrics": {
+        "title": "Metriques Economiques",
+        "description": "Visualitza la salut de l'economia en temps real"
+      },
+      "poolRequests": {
+        "title": "Sol·licituds de Pool",
+        "description": "Gestiona sol·licituds de fons comunitaris"
+      },
+      "flowHistory": {
+        "title": "Historial de Flux",
+        "description": "Analitza metriques historiques i tendencies"
+      },
+      "sendWithMultiplier": {
+        "title": "Enviar amb Multiplicador",
+        "description": "Transfereix credits amb bonus de flux"
+      }
+    },
+    "admin": "Admin",
+    "infoBox": {
+      "title": "Que es l'Economia de Flux?",
+      "description": "Un sistema economic que recompensa la velocitat de circulacio dels diners. Com mes rapid circulis credits, major multiplicador reps en les teves transaccions.",
+      "flowMultiplier": {
+        "title": "Multiplicador de Flux",
+        "description": "Guanya fins a 2x en transaccions per circular credits rapid"
+      },
+      "communityPools": {
+        "title": "Pools Comunitaris",
+        "description": "Emergencies, projectes comunitaris i recompenses"
+      },
+      "healthyEconomy": {
+        "title": "Economia Saludable",
+        "description": "Incentiva circulacio i redueix acumulacio"
+      }
+    },
+    "metrics": {
+      "totalCredits": "Credits Totals",
+      "averageVelocity": "Velocitat Mitjana",
+      "averageMultiplier": "Multiplicador Mitja",
+      "giniIndex": "Index Gini"
+    },
+    "poolBalances": {
+      "title": "Balancos de Pools Comunitaris",
+      "emergency": "Emergencies",
+      "community": "Comunitat",
+      "rewards": "Recompenses",
+      "creditsAvailable": "Credits disponibles"
+    },
+    "metricsInterpretation": {
+      "title": "Interpretacio de Metriques",
+      "flowVelocity": {
+        "title": "Velocitat de Flux",
+        "description": "Mesura com de rapid circulen els credits. Major velocitat = economia mes saludable."
+      },
+      "giniIndex": {
+        "title": "Index Gini",
+        "description": "Mesura desigualtat economica. 0 = perfecta igualtat, 1 = perfecta desigualtat."
+      }
+    },
+    "send": {
+      "backToDashboard": "Tornar al Dashboard",
+      "title": "Enviar amb Multiplicador de Flux",
+      "description": "Transfereix credits i obte bonificacions per impulsar el flux economic",
+      "howItWorks": {
+        "title": "Com funciona el multiplicador de flux?",
+        "balanceDifference": "Major diferencia de balanc = major multiplicador (fins a 1.5x)",
+        "lowerBalance": "Quan envies a algu amb menys balanc, generes valor extra",
+        "poolContribution": "El 2% de cada transaccio va al pool comunitari",
+        "incentive": "Incentiva la circulacio i redueix l'acumulacio"
+      },
+      "sendCredits": "Enviar Credits",
+      "searchRecipient": "Cercar destinatari",
+      "searchPlaceholder": "Cercar per nom o email...",
+      "searching": "Cercant...",
+      "sendingTo": "Enviant a:",
+      "changeRecipient": "Canviar destinatari",
+      "amount": "Quantitat (credits)",
+      "message": "Missatge (opcional)",
+      "messagePlaceholder": "Afegeix un missatge personal...",
+      "sending": "Enviant...",
+      "sendButton": "Enviar Credits"
+    },
+    "preview": {
+      "title": "Vista Previa del Multiplicador",
+      "excellent": "Excel·lent!",
+      "veryGood": "Molt Bo",
+      "good": "Bo",
+      "standard": "Estandard",
+      "originalAmount": "Quantitat original:",
+      "multiplier": "Multiplicador:",
+      "communityPool": "Pool comunitari (2%):",
+      "willReceive": "Rebra:",
+      "credits": "credits",
+      "balanceInfo": {
+        "title": "Informacio de balancos:",
+        "yourBalance": "El teu balanc:",
+        "recipientBalance": "Balanc del destinatari:",
+        "difference": "Diferencia:"
+      },
+      "tip": "Consell: Major diferencia de balanc genera un multiplicador mes alt. Aixo incentiva que els credits flueixin de qui mes te cap a qui mes ho necessita.",
+      "selectRecipient": "Selecciona un destinatari i introdueix una quantitat per veure el multiplicador"
+    },
+    "history": {
+      "backToDashboard": "Tornar al Dashboard",
+      "title": "Historial de Flux Economic",
+      "description": "Analitza l'evolucio de les transaccions amb multiplicador de flux",
+      "restricted": {
+        "title": "Acces Restringit",
+        "description": "Aquesta pagina nomes esta disponible per administradors del sistema.",
+        "backButton": "Tornar al Dashboard d'Economia"
+      },
+      "timeRange": {
+        "last7days": "Ultims 7 dies",
+        "last30days": "Ultims 30 dies",
+        "last90days": "Ultims 90 dies",
+        "allTime": "Tot el temps"
+      },
+      "summary": {
+        "totalTransactions": "Transaccions Totals",
+        "averageMultiplier": "Multiplicador Mitja",
+        "totalVolume": "Volum Total",
+        "activeUsers": "Usuaris Actius"
+      },
+      "dailyEvolution": "Evolucio Diaria",
+      "table": {
+        "date": "Data",
+        "transactions": "Transaccions",
+        "multiplier": "Multiplicador",
+        "volume": "Volum",
+        "users": "Usuaris"
+      },
+      "recentTransactions": "Transaccions Recents",
+      "noTransactions": {
+        "title": "No hi ha transaccions",
+        "description": "No s'han trobat transaccions amb multiplicador de flux en aquest periode"
+      },
+      "user": "Usuari",
+      "multiplierLabel": "multiplicador"
+    }
   }
 }

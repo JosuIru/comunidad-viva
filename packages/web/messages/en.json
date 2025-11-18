@@ -1386,7 +1386,63 @@
     },
     "servicePlaceholder": "E.g.: Basque lessons, Bike repair, Moving help...",
     "serviceDescPlaceholder": "Describe what service you offer, what it includes, prerequisites, etc.",
-    "describeNeed": "Describe what you need..."
+    "describeNeed": "Describe what you need...",
+    "create": {
+      "pageTitle": "Create Time Service - Time Bank | Truk",
+      "metaDescription": "Offer your skills and time to the community. Exchange services based on hours.",
+      "back": "Back",
+      "title": "Create Time Service",
+      "description": "Share your skills with the community. Each hour is worth one credit, regardless of the type of service.",
+      "infoTitle": "How does the Time Bank work?",
+      "infoBullet1": "1 hour of your time = 1 credit",
+      "infoBullet2": "All services are worth the same per hour",
+      "infoBullet3": "You offer services and earn credits to use on other services",
+      "serviceTitle": "Service title *",
+      "serviceTitlePlaceholder": "E.g.: Basque lessons, Bike repair, Moving help...",
+      "detailedDescription": "Detailed description *",
+      "detailedDescPlaceholder": "Describe what service you offer, what it includes, prerequisites, etc.",
+      "category": "Category *",
+      "selectCategory": "Select a category",
+      "estimatedHoursLabel": "Estimated hours per session",
+      "creditsLabel": "{credits} credit",
+      "creditsLabelPlural": "{credits} credits",
+      "sessionDuration": "Approximate duration of a session for this service",
+      "experienceLevel": "Your experience level *",
+      "canTeachQuestion": "Can you teach this skill?",
+      "canTeachDescription": "Check this option if in addition to offering the service, you can teach others how to do it",
+      "tagsLabel": "Tags (optional)",
+      "tagsPlaceholder": "Add tags and press Enter",
+      "addButton": "Add",
+      "cancelButton": "Cancel",
+      "submitButton": "Create Time Service",
+      "submitting": "Creating..."
+    },
+    "categories": {
+      "education": "Education",
+      "technology": "Technology",
+      "home": "Home",
+      "transport": "Transport",
+      "health": "Health & Wellness",
+      "art": "Art & Creativity",
+      "gardening": "Gardening",
+      "repairs": "Repairs",
+      "languages": "Languages",
+      "cooking": "Cooking",
+      "care": "Care",
+      "sports": "Sports",
+      "consulting": "Consulting",
+      "other": "Other"
+    },
+    "experienceLevels": {
+      "beginner": "Beginner",
+      "beginnerDesc": "I am learning",
+      "intermediate": "Intermediate",
+      "intermediateDesc": "I have experience",
+      "expert": "Expert",
+      "expertDesc": "I master the subject"
+    },
+    "credits": "{credits} credits",
+    "hours": "{hours}h"
   },
   "managePage": {
     "description": "Manage your offers, events and profile in one place"
@@ -4996,5 +5052,150 @@
   },
   "proximity": {
     "locationPlaceholder": "E.g.: London, Paris, Berlin..."
+  },
+  "flowEconomics": {
+    "title": "Flow Economics",
+    "dashboardTitle": "Flow Economics Dashboard",
+    "description": "Economic system with flow multipliers and community pools",
+    "metricsDescription": "Metrics and analysis of the economic system",
+    "features": {
+      "economicMetrics": {
+        "title": "Economic Metrics",
+        "description": "Visualize the health of the economy in real time"
+      },
+      "poolRequests": {
+        "title": "Pool Requests",
+        "description": "Manage community fund requests"
+      },
+      "flowHistory": {
+        "title": "Flow History",
+        "description": "Analyze historical metrics and trends"
+      },
+      "sendWithMultiplier": {
+        "title": "Send with Multiplier",
+        "description": "Transfer credits with flow bonus"
+      }
+    },
+    "admin": "Admin",
+    "infoBox": {
+      "title": "What is Flow Economics?",
+      "description": "An economic system that rewards the speed of money circulation. The faster you circulate credits, the higher multiplier you receive on your transactions.",
+      "flowMultiplier": {
+        "title": "Flow Multiplier",
+        "description": "Earn up to 2x on transactions by circulating credits fast"
+      },
+      "communityPools": {
+        "title": "Community Pools",
+        "description": "Emergencies, community projects and rewards"
+      },
+      "healthyEconomy": {
+        "title": "Healthy Economy",
+        "description": "Incentivizes circulation and reduces accumulation"
+      }
+    },
+    "metrics": {
+      "totalCredits": "Total Credits",
+      "averageVelocity": "Average Velocity",
+      "averageMultiplier": "Average Multiplier",
+      "giniIndex": "Gini Index"
+    },
+    "poolBalances": {
+      "title": "Community Pool Balances",
+      "emergency": "Emergencies",
+      "community": "Community",
+      "rewards": "Rewards",
+      "creditsAvailable": "Credits available"
+    },
+    "metricsInterpretation": {
+      "title": "Metrics Interpretation",
+      "flowVelocity": {
+        "title": "Flow Velocity",
+        "description": "Measures how fast credits circulate. Higher velocity = healthier economy."
+      },
+      "giniIndex": {
+        "title": "Gini Index",
+        "description": "Measures economic inequality. 0 = perfect equality, 1 = perfect inequality."
+      }
+    },
+    "send": {
+      "backToDashboard": "Back to Dashboard",
+      "title": "Send with Flow Multiplier",
+      "description": "Transfer credits and get bonuses for boosting economic flow",
+      "howItWorks": {
+        "title": "How does the flow multiplier work?",
+        "balanceDifference": "Higher balance difference = higher multiplier (up to 1.5x)",
+        "lowerBalance": "When you send to someone with less balance, you generate extra value",
+        "poolContribution": "2% of each transaction goes to the community pool",
+        "incentive": "Incentivizes circulation and reduces accumulation"
+      },
+      "sendCredits": "Send Credits",
+      "searchRecipient": "Search recipient",
+      "searchPlaceholder": "Search by name or email...",
+      "searching": "Searching...",
+      "sendingTo": "Sending to:",
+      "changeRecipient": "Change recipient",
+      "amount": "Amount (credits)",
+      "message": "Message (optional)",
+      "messagePlaceholder": "Add a personal message...",
+      "sending": "Sending...",
+      "sendButton": "Send Credits"
+    },
+    "preview": {
+      "title": "Multiplier Preview",
+      "excellent": "Excellent!",
+      "veryGood": "Very Good",
+      "good": "Good",
+      "standard": "Standard",
+      "originalAmount": "Original amount:",
+      "multiplier": "Multiplier:",
+      "communityPool": "Community pool (2%):",
+      "willReceive": "Will receive:",
+      "credits": "credits",
+      "balanceInfo": {
+        "title": "Balance information:",
+        "yourBalance": "Your balance:",
+        "recipientBalance": "Recipient balance:",
+        "difference": "Difference:"
+      },
+      "tip": "Tip: Higher balance difference generates a higher multiplier. This incentivizes credits to flow from those who have more to those who need it most.",
+      "selectRecipient": "Select a recipient and enter an amount to see the multiplier"
+    },
+    "history": {
+      "backToDashboard": "Back to Dashboard",
+      "title": "Economic Flow History",
+      "description": "Analyze the evolution of transactions with flow multiplier",
+      "restricted": {
+        "title": "Restricted Access",
+        "description": "This page is only available to system administrators.",
+        "backButton": "Back to Economics Dashboard"
+      },
+      "timeRange": {
+        "last7days": "Last 7 days",
+        "last30days": "Last 30 days",
+        "last90days": "Last 90 days",
+        "allTime": "All time"
+      },
+      "summary": {
+        "totalTransactions": "Total Transactions",
+        "averageMultiplier": "Average Multiplier",
+        "totalVolume": "Total Volume",
+        "activeUsers": "Active Users"
+      },
+      "dailyEvolution": "Daily Evolution",
+      "table": {
+        "date": "Date",
+        "transactions": "Transactions",
+        "multiplier": "Multiplier",
+        "volume": "Volume",
+        "users": "Users"
+      },
+      "recentTransactions": "Recent Transactions",
+      "noTransactions": {
+        "title": "No transactions",
+        "description": "No transactions with flow multiplier found in this period"
+      },
+      "user": "User",
+      "multiplierLabel": "multiplier"
+    }
   }
 }

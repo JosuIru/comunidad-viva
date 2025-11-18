@@ -1400,7 +1400,63 @@
     },
     "servicePlaceholder": "Adib: Euskara klaseak, Bizikleta konponketa, Mugitze laguntza...",
     "serviceDescPlaceholder": "Deskribatu zer zerbitzu eskaintzen duzun, zer biltzen duen, aurre-baldintzak, etab.",
-    "describeNeed": "Deskribatu zer behar duzun..."
+    "describeNeed": "Deskribatu zer behar duzun...",
+    "create": {
+      "pageTitle": "Denbora Zerbitzua Sortu - Denbora Bankua | Truk",
+      "metaDescription": "Eskaini zure gaitasunak eta denbora komunitateari. Trukatu zerbitzuak orduen arabera.",
+      "back": "Atzera",
+      "title": "Denbora Zerbitzua Sortu",
+      "description": "Partekatu zure gaitasunak komunitatearekin. Ordu bakoitza kreditu bat balio du, zerbitzu mota edozein dela ere.",
+      "infoTitle": "Nola funtzionatzen du Denbora Bankuak?",
+      "infoBullet1": "Zure denboraren ordu 1 = kreditu 1",
+      "infoBullet2": "Zerbitzu guztiek berdina balio dute orduko",
+      "infoBullet3": "Zerbitzuak eskaintzen dituzu eta kredituak irabazten dituzu beste zerbitzu batzuetan erabiltzeko",
+      "serviceTitle": "Zerbitzuaren izenburua *",
+      "serviceTitlePlaceholder": "Adib: Euskara klaseak, Bizikleta konponketa, Mugitze laguntza...",
+      "detailedDescription": "Deskribapen zehatza *",
+      "detailedDescPlaceholder": "Deskribatu zer zerbitzu eskaintzen duzun, zer biltzen duen, aurre-baldintzak, etab.",
+      "category": "Kategoria *",
+      "selectCategory": "Hautatu kategoria bat",
+      "estimatedHoursLabel": "Saioko ordu estimatuak",
+      "creditsLabel": "{credits} kreditu",
+      "creditsLabelPlural": "{credits} kreditu",
+      "sessionDuration": "Zerbitzu honetako saio baten iraupen hurbilekoa",
+      "experienceLevel": "Zure esperientzia maila *",
+      "canTeachQuestion": "Gaitasun hau irakatsi dezakezu?",
+      "canTeachDescription": "Markatu aukera hau zerbitzua eskaintzeaz gain, besteei nola egin irakatsi badezakezu",
+      "tagsLabel": "Etiketak (aukerakoa)",
+      "tagsPlaceholder": "Gehitu etiketak eta sakatu Enter",
+      "addButton": "Gehitu",
+      "cancelButton": "Utzi",
+      "submitButton": "Denbora Zerbitzua Sortu",
+      "submitting": "Sortzen..."
+    },
+    "categories": {
+      "education": "Hezkuntza",
+      "technology": "Teknologia",
+      "home": "Etxea",
+      "transport": "Garraioa",
+      "health": "Osasuna eta Ongizatea",
+      "art": "Artea eta Sormena",
+      "gardening": "Lorezaintza",
+      "repairs": "Konponketak",
+      "languages": "Hizkuntzak",
+      "cooking": "Sukaldea",
+      "care": "Zainketak",
+      "sports": "Kirolak",
+      "consulting": "Aholkularitza",
+      "other": "Beste batzuk"
+    },
+    "experienceLevels": {
+      "beginner": "Hasiberria",
+      "beginnerDesc": "Ikasten ari naiz",
+      "intermediate": "Ertaina",
+      "intermediateDesc": "Esperientzia daukat",
+      "expert": "Aditua",
+      "expertDesc": "Gaia menperatzen dut"
+    },
+    "credits": "{credits} kreditu",
+    "hours": "{hours}h"
   },
   "managePage": {
     "description": "Kudeatu zure eskaintzak, ekitaldiak eta profila leku bakarrean"
@@ -4939,5 +4995,150 @@
   },
   "proximity": {
     "locationPlaceholder": "Adib: Bilbo, Iruña, Madril..."
+  },
+  "flowEconomics": {
+    "title": "Fluxu Ekonomia",
+    "dashboardTitle": "Fluxu Ekonomiaren Dashboard-a",
+    "description": "Sistema ekonomikoa fluxu biderkatzaileekin eta komunitate putzuekin",
+    "metricsDescription": "Sistema ekonomikoaren metrikak eta azterketa",
+    "features": {
+      "economicMetrics": {
+        "title": "Metrika Ekonomikoak",
+        "description": "Bistaratu ekonomiaren osasuna denbora errealean"
+      },
+      "poolRequests": {
+        "title": "Putzu Eskaerak",
+        "description": "Kudeatu komunitate funtsen eskaerak"
+      },
+      "flowHistory": {
+        "title": "Fluxu Historiala",
+        "description": "Aztertu metrika historikoak eta joerak"
+      },
+      "sendWithMultiplier": {
+        "title": "Bidali Biderkatzailearekin",
+        "description": "Transferitu kredituak fluxu bonusarekin"
+      }
+    },
+    "admin": "Admin",
+    "infoBox": {
+      "title": "Zer da Fluxu Ekonomia?",
+      "description": "Diruaren zirkulazio abiadura saritzen duen sistema ekonomikoa. Zenbat eta azkarrago zirkulatu kredituak, orduan eta biderkatzaile handiagoa jasoko duzu zure transakzioetan.",
+      "flowMultiplier": {
+        "title": "Fluxu Biderkatzailea",
+        "description": "Irabazi 2x arte transakzioetan kredituak azkar zirkulatuz"
+      },
+      "communityPools": {
+        "title": "Komunitate Putzuak",
+        "description": "Larrialdiiak, komunitate proiektuak eta sariak"
+      },
+      "healthyEconomy": {
+        "title": "Ekonomia Osasuntsua",
+        "description": "Zirkulazioa bultzatzen du eta pilaketa murrizten du"
+      }
+    },
+    "metrics": {
+      "totalCredits": "Kreditu Guztira",
+      "averageVelocity": "Batez Besteko Abiadura",
+      "averageMultiplier": "Batez Besteko Biderkatzailea",
+      "giniIndex": "Gini Indizea"
+    },
+    "poolBalances": {
+      "title": "Komunitate Putzuen Balantzeak",
+      "emergency": "Larrialdiiak",
+      "community": "Komunitatea",
+      "rewards": "Sariak",
+      "creditsAvailable": "Kreditu eskuragarriak"
+    },
+    "metricsInterpretation": {
+      "title": "Metriken Interpretazioa",
+      "flowVelocity": {
+        "title": "Fluxu Abiadura",
+        "description": "Kredituak zein azkar zirkulatzen duten neurtzen du. Abiadura handiagoa = ekonomia osasuntsuagoa."
+      },
+      "giniIndex": {
+        "title": "Gini Indizea",
+        "description": "Desberdintasun ekonomikoa neurtzen du. 0 = berdintasun perfektua, 1 = desberdintasun perfektua."
+      }
+    },
+    "send": {
+      "backToDashboard": "Itzuli Dashboard-era",
+      "title": "Bidali Fluxu Biderkatzailearekin",
+      "description": "Transferitu kredituak eta lortu bonusak fluxu ekonomikoa bultzatzeagatik",
+      "howItWorks": {
+        "title": "Nola funtzionatzen du fluxu biderkatzaileak?",
+        "balanceDifference": "Balantze diferentzia handiagoa = biderkatzaile handiagoa (1.5x arte)",
+        "lowerBalance": "Balantze gutxiago duen norbaiti bidaltzen diozunean, balio gehigarria sortzen duzu",
+        "poolContribution": "Transakzio bakoitzaren %2a komunitate putzura doa",
+        "incentive": "Zirkulazioa bultzatzen du eta pilaketa murrizten du"
+      },
+      "sendCredits": "Bidali Kredituak",
+      "searchRecipient": "Bilatu hartzailea",
+      "searchPlaceholder": "Bilatu izen edo emailaren arabera...",
+      "searching": "Bilatzen...",
+      "sendingTo": "Hona bidaltzen:",
+      "changeRecipient": "Aldatu hartzailea",
+      "amount": "Kopurua (kredituak)",
+      "message": "Mezua (aukerakoa)",
+      "messagePlaceholder": "Gehitu mezu pertsonala...",
+      "sending": "Bidaltzen...",
+      "sendButton": "Bidali Kredituak"
+    },
+    "preview": {
+      "title": "Biderkatzailearen Aurrebista",
+      "excellent": "Bikaina!",
+      "veryGood": "Oso Ona",
+      "good": "Ona",
+      "standard": "Estandarra",
+      "originalAmount": "Jatorrizko kopurua:",
+      "multiplier": "Biderkatzailea:",
+      "communityPool": "Komunitate putzua (%2):",
+      "willReceive": "Jasoko du:",
+      "credits": "kreditu",
+      "balanceInfo": {
+        "title": "Balantze informazioa:",
+        "yourBalance": "Zure balantzea:",
+        "recipientBalance": "Hartzailearen balantzea:",
+        "difference": "Diferentzia:"
+      },
+      "tip": "Aholkua: Balantze diferentzia handiagoak biderkatzaile handiagoa sortzen du. Honek kredituak gehien dutenetatik gehien behar dutenetara fluxu dezaten bultzatzen du.",
+      "selectRecipient": "Hautatu hartzailea eta sartu kopurua biderkatzailea ikusteko"
+    },
+    "history": {
+      "backToDashboard": "Itzuli Dashboard-era",
+      "title": "Fluxu Ekonomikoaren Historiala",
+      "description": "Aztertu fluxu biderkatzailea duten transakzioen eboluzioa",
+      "restricted": {
+        "title": "Sarbide Murriztua",
+        "description": "Orrialde hau sistemaren administratzaileentzat soilik dago eskuragarri.",
+        "backButton": "Itzuli Ekonomia Dashboard-era"
+      },
+      "timeRange": {
+        "last7days": "Azken 7 egunak",
+        "last30days": "Azken 30 egunak",
+        "last90days": "Azken 90 egunak",
+        "allTime": "Denbora guztia"
+      },
+      "summary": {
+        "totalTransactions": "Transakzio Guztira",
+        "averageMultiplier": "Batez Besteko Biderkatzailea",
+        "totalVolume": "Bolumen Totala",
+        "activeUsers": "Erabiltzaile Aktiboak"
+      },
+      "dailyEvolution": "Eguneko Eboluzioa",
+      "table": {
+        "date": "Data",
+        "transactions": "Transakzioak",
+        "multiplier": "Biderkatzailea",
+        "volume": "Bolumena",
+        "users": "Erabiltzaileak"
+      },
+      "recentTransactions": "Azken Transakzioak",
+      "noTransactions": {
+        "title": "Ez dago transakziorik",
+        "description": "Ez da fluxu biderkatzailea duten transakziorik aurkitu tarte honetan"
+      },
+      "user": "Erabiltzailea",
+      "multiplierLabel": "biderkatzailea"
+    }
   }
 }

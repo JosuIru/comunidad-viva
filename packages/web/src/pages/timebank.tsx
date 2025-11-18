@@ -265,11 +265,10 @@ export default function TimeBankPage() {
                               </div>
                               <p className="text-gray-900 dark:text-gray-100 mb-2">{transaction.description}</p>
                               <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                                <span>⏱️ {transaction.hours}h</span>
-                                <span>💰 {transaction.credits} créditos</span>
+                                <span>{t('hours', { hours: transaction.hours })}</span>
+                                <span>{t('credits', { credits: transaction.credits })}</span>
                                 <span>
-                                  📅{' '}
-                                  {new Date(transaction.scheduledFor).toLocaleDateString('es-ES')}
+                                  {new Date(transaction.scheduledFor).toLocaleDateString()}
                                 </span>
                               </div>
                             </div>
