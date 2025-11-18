@@ -1295,8 +1295,6 @@
       }
     },
     "sdg": {
-      "title": "Garapen Iraunkorrerako Helburuak (GIH)",
-      "description": "Elkar-laguntzako proiektuak NBEren Garapen Iraunkorrerako Helburuekin lerrokatuta daude, komunitatean eta ingurumenean eragin positiboa sustatuz.",
       "1": "Pobreziaren amaiera",
       "2": "Goserik ez",
       "3": "Osasuna eta ongizatea",
@@ -1313,7 +1311,9 @@
       "14": "Itsaspeko bizitza",
       "15": "Lurrezko ekosistemen bizitza",
       "16": "Bakea, justizia eta erakunde sendoak",
-      "17": "Helburuak lortzeko aliantzak"
+      "17": "Helburuak lortzeko aliantzak",
+      "title": "Garapen Iraunkorrerako Helburuak (GIH)",
+      "description": "Elkar-laguntzako proiektuak NBEren Garapen Iraunkorrerako Helburuekin lerrokatuta daude, komunitatean eta ingurumenean eragin positiboa sustatuz."
     },
     "scope": {
       "PERSONAL": "Pertsonala",
@@ -1838,6 +1838,34 @@
       "title": "Komunitateak kudeatu nahi dituzu?",
       "description": "Sortu eta administratu ekonomia kolaboratiboko komunitate lokalak. Konektatu auzokoak, antolatu ekitaldiak eta eraiki elkarlaguntzarako sareak.",
       "action": "Joan Kudeaketa Panelera"
+    },
+    "setup": {
+      "pageTitle": "{name} konfiguratu",
+      "step": "{current}. urratsa {total}(e)tik",
+      "benefits": {
+        "dashboard": "Zure dashboard pertsonalizatura sartu",
+        "inviteMore": "Kide gehiago gonbidatu",
+        "allFeatures": "Funtzionalitate guztiak erabiltzen hasi",
+        "metrics": "Zure inpaktu-metrikak ikusi denbora errealean"
+      },
+      "hints": {
+        "skipInvite": "💡 Urrats hau saltatu eta gonbidapenak geroago bidali ditzakezu zure dashboard-etik"
+      }
+    },
+    "packSetup": {
+      "steps": {
+        "selectType": "Hautatu zure komunitate mota",
+        "confirm": "Berretsi zure hautaketa"
+      },
+      "hints": {
+        "selectHint": "Aukeratu zure komunitatearen beharretara hobekien egokitzen den pack-a",
+        "confirmHint": "Berrikusi konfigurazioa aktibatu aurretik",
+        "completeHint": "Zure komunitateak funtzionalitate guztietara sarbidea du dagoeneko"
+      },
+      "labels": {
+        "whatYouGet": "✅ Zer jasoko duzu:",
+        "nextSteps": "📝 Hurrengo urratsak:"
+      }
     }
   },
   "communityDetail": {
@@ -3526,5 +3554,283 @@
     "noMembers": "Oraindik ez dago kiderik komunitate honetan.",
     "level": "Maila",
     "credits": "kreditu"
+  },
+  "toasts": {
+    "success": {
+      "offerDeleted": "Eskaintza ondo ezabatu da",
+      "offerUpdated": "Eskaintza ondo eguneratu da",
+      "eventDeleted": "Ekitaldia ondo ezabatu da",
+      "eventCreated": "Ekitaldia ondo sortu da",
+      "profileUpdated": "Profila ondo eguneratu da",
+      "communityLeft": "Komunitatea ondo utzi duzu",
+      "communityCreated": "Komunitatea ondo sortu da!",
+      "joinedSuccessfully": "Ondo batu zara!",
+      "solutionDeleted": "Irtenbidea ondo ezabatu da",
+      "housingCreated": "Etxebizitza-irtenbidea ondo sortu da",
+      "timebankCreated": "Denbora-zerbitzua ondo sortu da! 🎉",
+      "creditsSent": "Kredituak ondo bidali dira! 🎉",
+      "walletConnected": "Wallet-a ondo konektatu da",
+      "walletDisconnected": "Wallet-a ondo deskonektatu da",
+      "transferSuccess": "Transferentzia ondo egin da!",
+      "semillaReceived": "100 SEMILLA jaso dituzu! Ongi etorri federaziora",
+      "requestCreated": "Eskaera ondo sortu da!",
+      "voteRecorded": "Botoa erregistratu da!",
+      "packConfigured": "Pack-a ondo konfiguratu da",
+      "reactionSent": "Erreakzioa bidali da!",
+      "bridgeStarted": "Bridge-a hasi da! Tokenak minutu batzuetan iritsiko dira",
+      "returnBridgeComplete": "Itzulera Bridge-a osatu da!"
+    },
+    "error": {
+      "generic": "Errore bat gertatu da",
+      "deleteOffer": "Errorea eskaintza ezabatzean",
+      "updateOffer": "Errorea eskaintza eguneratzean",
+      "uploadImage": "Errorea irudia igotzean",
+      "deleteEvent": "Errorea ekitaldia ezabatzean",
+      "createEvent": "Errorea ekitaldia sortzean",
+      "updateProfile": "Errorea profila eguneratzean",
+      "leaveCommunity": "Errorea komunitatea uztean",
+      "createCommunity": "Errorea komunitatea sortzean",
+      "joinFailed": "Errorea batzean",
+      "deleteSolution": "Errorea ezabatzean",
+      "createHousing": "Errorea irtenbidea sortzean",
+      "createTimebank": "Errorea zerbitzua sortzean",
+      "sendCredits": "Errorea kredituak bidaltzean",
+      "connectWallet": "Errorea wallet-a konektatzean",
+      "disconnectWallet": "Errorea wallet-a deskonektatzean",
+      "sendSemilla": "Errorea SEMILLA bidaltzean",
+      "loadBridge": "Errorea bridge-aren datuak kargatzean",
+      "createBridge": "Errorea bridge-a sortzean",
+      "unlockFailed": "Errorea desblokeatzean",
+      "createPost": "Errorea argitalpena sortzean",
+      "verifyPermissions": "Errorea baimenak egiaztatzean",
+      "invalidImageType": "Irudiak bakarrik onartzen dira (JPG, PNG, GIF, WEBP)",
+      "imageTooLarge": "Irudiek 5MB baino txikiagoak izan behar dute",
+      "metamaskNotInstalled": "MetaMask ez dago instalatuta",
+      "phantomNotInstalled": "Phantom ez dago instalatuta",
+      "walletNotConnected": "Lehenik konektatu zure wallet-a",
+      "chainNotSupported": "Katea ez da onartzen",
+      "insufficientBalance": "Saldo nahikorik ez",
+      "invalidAmount": "Sartu baliozko kopuru bat",
+      "txHashRequired": "Sartu transakzioaren hash-a",
+      "minimumAmount": "Gutxienekoa: {min} SEMILLA",
+      "allFieldsRequired": "Mesedez, bete derrigorrezko eremu guztiak",
+      "selectRecipient": "Hautatu hartzaile bat",
+      "titleRequired": "Izenburua derrigorrezkoa da",
+      "descriptionRequired": "Deskribapena derrigorrezkoa da",
+      "categoryRequired": "Hautatu kategoria bat",
+      "dateTimeRequired": "Mesedez, hautatu data eta ordua",
+      "minimumQuantity": "Kopuruak gutxienez 1 izan behar du",
+      "groupBuyFull": "Taldeko erosketa beteta dago",
+      "reasonRequired": "Arrazoi bat eman behar duzu",
+      "invalidCommunityType": "Komunitate mota ez da baliozkoa",
+      "loginRequired": "Saioa hasi behar duzu",
+      "adminOnly": "Administratzaileek bakarrik konfigura ditzakete pack-ak",
+      "locationNotFound": "Ez da kokapena aurkitu",
+      "searchFailed": "Errorea kokapena bilatzean"
+    },
+    "info": {
+      "walletConnectComingSoon": "WalletConnect laster eskuragarri",
+      "coinbaseComingSoon": "Coinbase Wallet laster eskuragarri",
+      "trustComingSoon": "Trust Wallet laster eskuragarri"
+    }
+  },
+  "confirmations": {
+    "deleteOffer": "Ziur zaude eskaintza hau ezabatu nahi duzula?",
+    "deleteEvent": "Ziur zaude ekitaldi hau ezabatu nahi duzula?"
+  },
+  "buttons": {
+    "confirm": "Berretsi",
+    "cancel": "Utzi",
+    "add": "Gehitu",
+    "remove": "Kendu",
+    "back": "Atzera",
+    "next": "Hurrengoa",
+    "previous": "Aurrekoa",
+    "finish": "Amaitu",
+    "creating": "Sortzen...",
+    "configuring": "Konfiguratzen...",
+    "send": "Bidali",
+    "sending": "Bidaltzen...",
+    "login": "Hasi saioa",
+    "backToAdmin": "Admin-era itzuli",
+    "backToCommunity": "Komunitatera itzuli",
+    "newRequest": "Eskaera berria",
+    "approve": "Alde",
+    "reject": "Kontra",
+    "createRequest": "Eskaera sortu",
+    "confirmActivate": "Berretsi eta aktibatu",
+    "addEmail": "+ Beste email bat gehitu",
+    "addToBlacklist": "+ Zerrenda beltza gehitu"
+  },
+  "labels": {
+    "authRequired": "Autentifikazioa beharrezkoa",
+    "verifying": "Baimenak egiaztatzen...",
+    "loading": "Kargatzen...",
+    "availableBalance": "Saldo erabilgarria",
+    "transactionHistory": "Transakzioen historia",
+    "received": "Jasota",
+    "sent": "Bidalita",
+    "recipientDid": "Hartzailearen DID-a",
+    "amount": "Kopurua",
+    "reason": "Arrazoia",
+    "poolType": "Pool mota",
+    "groupName": "Taldearen izena",
+    "description": "Deskribapena",
+    "location": "Kokapena",
+    "pickupDay": "Nahiago duzun jasotze-eguna",
+    "pickupLocation": "Jasotze-lekua",
+    "pickupInstructions": "Jasotze-argibideak",
+    "orderFrequency": "Eskaeren maiztasuna",
+    "inviteMembers": "Gonbidatu zure taldeko lehen kideak...",
+    "ready": "Dena prest! 🎉"
+  },
+  "placeholders": {
+    "groupName": "adib. Zurriola Kontsumo Taldea",
+    "description": "Deskribatu zure taldea laburki...",
+    "location": "adib. Donostia, Gipuzkoa",
+    "email": "emaila@adibidea.com",
+    "select": "Hautatu...",
+    "pickupDay": "adib. Ostirala",
+    "pickupLocation": "adib. Komun taberna, Kale Nagusia 45",
+    "pickupInstructions": "Ordutegia, leku zehatza, kontaktua...",
+    "reasonPlaceholder": "Zergatik bidaltzen ari zara SEMILLA?",
+    "skills": "adib: aroztza, diseinua, kontabilitatea"
+  },
+  "orderFrequencies": {
+    "weekly": "Astero",
+    "biweekly": "Bi astero",
+    "monthly": "Hilero"
+  },
+  "poolTypes": {
+    "emergency": "🚨 Larrialdiak",
+    "community": "🏘️ Komunitatea",
+    "rewards": "🎁 Sariak"
+  },
+  "messages": {
+    "loginRequired": "Saioa hasi behar duzu sartzeko",
+    "noTransactions": "Oraindik ez dago transakziorik",
+    "startTransacting": "Hasi SEMILLA bidaltzen edo jasotzen",
+    "noRequests": "Oraindik ez dago eskaerarik",
+    "readyDescription": "Zure komunitatearen oinarrizko konfigurazioa osatu duzu",
+    "circuitBreakerOpened": "Circuit Breaker IREKITA - Bridge-aren eragiketa guztiak geldituta daude",
+    "circuitBreakerClosed": "Circuit Breaker ITXITA - Bridge-aren eragiketak berrabiarazi dira",
+    "entryAdded": "{type} zerrenda beltzean gehitu da",
+    "entryRemoved": "Sarrera zerrenda beltzetik kendu da",
+    "packComplete": "Pack-a ondo konfiguratu da!"
+  },
+  "admin": {
+    "bridge": {
+      "title": "Bridge-aren Segurtasun Dashboard-a",
+      "subtitle": "Blockchain bridge-aren segurtasunaren denbora errealeko jarraipena",
+      "loading": "Segurtasun dashboard-a kargatzen...",
+      "tabs": {
+        "overview": "📊 Laburpena",
+        "events": "🔔 Gertaerak",
+        "blacklist": "🚫 Zerrenda beltza"
+      },
+      "metrics": {
+        "totalEvents": "Gertaera guztira",
+        "last24h": "Azken 24 orduak",
+        "lastHour": "Azken ordua",
+        "critical": "Kritikoak"
+      },
+      "labels": {
+        "eventsBySeverity": "Gertaerak larritasunaren arabera (24 ordu)",
+        "topEventTypes": "Gertaera mota nagusiak (24 ordu)",
+        "blockedDids": "Blokeatutako DID-ak",
+        "blockedAddresses": "Blokeatutako helbideak",
+        "emergencyControl": "Larrialdi-kontrola",
+        "recentEvents": "Azken segurtasun-gertaerak"
+      },
+      "alerts": {
+        "active": "⚠️ CIRCUIT BREAKER AKTIBO",
+        "allOperationsStopped": "Bridge-aren eragiketa guztiak geldituta daude"
+      },
+      "statuses": {
+        "resolved": "✓ Ebatzita",
+        "pending": "⏳ Zain"
+      },
+      "modals": {
+        "openTitle": "⚠️ Circuit Breaker ireki",
+        "openDescription": "Honek bridge-aren eragiketa GUZTIAK geldituko ditu. Ekintza hau itzulgarria da baina larrialdi-kasuetan bakarrik erabili behar da.",
+        "reasonLabel": "Arrazoia (derrigorrezkoa):",
+        "reasonPlaceholder": "Adib.: Erasoa detektatua, ahultasun kritikoa, etab.",
+        "blacklistTitle": "Zerrenda beltzean gehitu"
+      },
+      "form": {
+        "addressType": "Helbidea (Address)",
+        "address": "Helbidea",
+        "reason": "Arrazoia:"
+      },
+      "buttons": {
+        "openCircuitBreaker": "🚨 Circuit Breaker ireki (Larrialdi-geldialdia)",
+        "normalOperations": "✅ Circuit Breaker itxita dago - Eragiketa normalak"
+      }
+    }
+  },
+  "federation": {
+    "semilla": {
+      "title": "SEMILLA Wallet-a",
+      "subtitle": "Zure moneta federatua komunitateen arteko transakzioetarako",
+      "faqs": {
+        "whatIs": {
+          "title": "Zer da SEMILLA?",
+          "content": "SEMILLA Truk-eko komunitate guztiak lotzen dituen moneta federatua da. Talde ezberdinen arteko transakzio gardenak eta trazagarriak ahalbidetzen ditu."
+        },
+        "howToEarn": {
+          "title": "Nola irabazi SEMILLA"
+        },
+        "uses": {
+          "title": "SEMILLA-ren erabilerak"
+        }
+      },
+      "modals": {
+        "sendTitle": "SEMILLA bidali"
+      },
+      "buttons": {
+        "claim": "100 SEMILLA eskatu"
+      }
+    }
+  },
+  "flow": {
+    "poolRequests": {
+      "title": "Pool eskaerak",
+      "subtitle": "Eskatu funtsak komunitatearen pool-etatik",
+      "format": {
+        "request": "{poolType} - {amount} kreditu",
+        "by": "{name}(e)k • {date}"
+      },
+      "modals": {
+        "title": "Pool eskaera berria"
+      },
+      "form": {
+        "amount": "Kreditu kopurua",
+        "reasonPlaceholder": "Deskribatu zergatik behar dituzun funts hauek..."
+      }
+    }
+  },
+  "web3Modal": {
+    "title": "Zer da Web3 Wallet bat?",
+    "subtitle": "Zure diru-zorro digital deszentralizatua",
+    "sections": {
+      "simple": "Azalpen sinplea",
+      "faq": "Ohiko galderak"
+    },
+    "content": {
+      "walletExplanation": "Wallet-a zure diru-zorro digitala bezalakoa da, baina zuk duzu kontrol osoa. Ez du inongo banku edo enpresaren menpe.",
+      "benefit1": "Pasahitzik gabe konektatu - Autentifikazio segurua zure wallet-arekin",
+      "benefit2": "Zure tokenen jabea izan - Zuk kontrolatzen dituzu zure aktibo digitalak",
+      "benefit3": "Transakzio zuzenak - Bitartekorik eta ezkutuko komisiorik gabe"
+    },
+    "faqs": {
+      "question1": "Kriptomoneta erosi behar dut?",
+      "answer1": "Ez, Truk plataforma osoa erabil dezakezu kriptomonetak erosi gabe. Wallet-ak aukerazko funtzio gehigarriak bakarrik ematen dizkizu.",
+      "question2": "Segurua da?",
+      "answer2": "Bai, zure wallet-a zuk bakarrik kontrolatzen duzu. Beste inork ezin ditu zure funtsak atzitu edo transakzioak egin zure onespenik gabe.",
+      "question3": "Zein wallet dira bateragarriak?",
+      "wallet1": "MetaMask - Ethereum eta sare bateragarriak",
+      "wallet2": "Phantom - Solana eta sare bateragarriak",
+      "walletsComingSoon": "Wallet gehiago laster: WalletConnect, Coinbase, Trust Wallet"
+    }
   }
 }

@@ -1824,6 +1824,34 @@
       "title": "Want to manage communities?",
       "description": "Create and manage local collaborative economy communities. Connect neighbours, organise events and build mutual support networks.",
       "action": "Go to Management Panel"
+    },
+    "setup": {
+      "pageTitle": "Set up {name}",
+      "step": "Step {current} of {total}",
+      "benefits": {
+        "dashboard": "Access your personalized dashboard",
+        "inviteMore": "Invite more members",
+        "allFeatures": "Start using all features",
+        "metrics": "View your real-time impact metrics"
+      },
+      "hints": {
+        "skipInvite": "💡 You can also skip this step and send invitations later from your dashboard"
+      }
+    },
+    "packSetup": {
+      "steps": {
+        "selectType": "Select your community type",
+        "confirm": "Confirm your selection"
+      },
+      "hints": {
+        "selectHint": "Choose the pack that best fits your community's needs",
+        "confirmHint": "Review the configuration before activating",
+        "completeHint": "Your community now has access to all features"
+      },
+      "labels": {
+        "whatYouGet": "✅ What you get:",
+        "nextSteps": "📝 Next steps:"
+      }
     }
   },
   "communityDetail": {
@@ -3583,5 +3611,283 @@
     "noMembers": "There are no members in this community yet.",
     "level": "Level",
     "credits": "credits"
+  },
+  "toasts": {
+    "success": {
+      "offerDeleted": "Offer deleted successfully",
+      "offerUpdated": "Offer updated successfully",
+      "eventDeleted": "Event deleted successfully",
+      "eventCreated": "Event created successfully",
+      "profileUpdated": "Profile updated successfully",
+      "communityLeft": "You have left the community successfully",
+      "communityCreated": "Community created successfully!",
+      "joinedSuccessfully": "You have joined successfully!",
+      "solutionDeleted": "Solution deleted successfully",
+      "housingCreated": "Housing solution created successfully",
+      "timebankCreated": "Time service created successfully! 🎉",
+      "creditsSent": "Credits sent successfully! 🎉",
+      "walletConnected": "Wallet connected successfully",
+      "walletDisconnected": "Wallet disconnected successfully",
+      "transferSuccess": "Transfer successful!",
+      "semillaReceived": "100 SEMILLA received! Welcome to the federation",
+      "requestCreated": "Request created successfully!",
+      "voteRecorded": "Vote recorded!",
+      "packConfigured": "Pack configured successfully",
+      "reactionSent": "Reaction sent!",
+      "bridgeStarted": "Bridge started! Tokens will arrive in a few minutes",
+      "returnBridgeComplete": "Return Bridge completed!"
+    },
+    "error": {
+      "generic": "An error has occurred",
+      "deleteOffer": "Error deleting the offer",
+      "updateOffer": "Error updating the offer",
+      "uploadImage": "Error uploading image",
+      "deleteEvent": "Error deleting the event",
+      "createEvent": "Error creating the event",
+      "updateProfile": "Error updating profile",
+      "leaveCommunity": "Error leaving the community",
+      "createCommunity": "Error creating the community",
+      "joinFailed": "Error joining",
+      "deleteSolution": "Error deleting",
+      "createHousing": "Error creating the solution",
+      "createTimebank": "Error creating the service",
+      "sendCredits": "Error sending credits",
+      "connectWallet": "Error connecting wallet",
+      "disconnectWallet": "Error disconnecting wallet",
+      "sendSemilla": "Error sending SEMILLA",
+      "loadBridge": "Error loading bridge data",
+      "createBridge": "Error creating bridge",
+      "unlockFailed": "Error unlocking",
+      "createPost": "Error creating the post",
+      "verifyPermissions": "Error verifying permissions",
+      "invalidImageType": "Only images are allowed (JPG, PNG, GIF, WEBP)",
+      "imageTooLarge": "Images must be smaller than 5MB",
+      "metamaskNotInstalled": "MetaMask is not installed",
+      "phantomNotInstalled": "Phantom is not installed",
+      "walletNotConnected": "Connect your wallet first",
+      "chainNotSupported": "Chain not supported",
+      "insufficientBalance": "Insufficient balance",
+      "invalidAmount": "Enter a valid amount",
+      "txHashRequired": "Enter the transaction hash",
+      "minimumAmount": "Minimum: {min} SEMILLA",
+      "allFieldsRequired": "Please complete all required fields",
+      "selectRecipient": "Select a recipient",
+      "titleRequired": "Title is required",
+      "descriptionRequired": "Description is required",
+      "categoryRequired": "Select a category",
+      "dateTimeRequired": "Please select a date and time",
+      "minimumQuantity": "Quantity must be at least 1",
+      "groupBuyFull": "The group buy is full",
+      "reasonRequired": "You must provide a reason",
+      "invalidCommunityType": "Invalid community type",
+      "loginRequired": "You must log in",
+      "adminOnly": "Only administrators can configure packs",
+      "locationNotFound": "Location not found",
+      "searchFailed": "Error searching for location"
+    },
+    "info": {
+      "walletConnectComingSoon": "WalletConnect coming soon",
+      "coinbaseComingSoon": "Coinbase Wallet coming soon",
+      "trustComingSoon": "Trust Wallet coming soon"
+    }
+  },
+  "confirmations": {
+    "deleteOffer": "Are you sure you want to delete this offer?",
+    "deleteEvent": "Are you sure you want to delete this event?"
+  },
+  "buttons": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "add": "Add",
+    "remove": "Remove",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "finish": "Finish",
+    "creating": "Creating...",
+    "configuring": "Configuring...",
+    "send": "Send",
+    "sending": "Sending...",
+    "login": "Log In",
+    "backToAdmin": "Back to admin",
+    "backToCommunity": "Back to community",
+    "newRequest": "New Request",
+    "approve": "In Favor",
+    "reject": "Against",
+    "createRequest": "Create Request",
+    "confirmActivate": "Confirm and Activate",
+    "addEmail": "+ Add another email",
+    "addToBlacklist": "+ Add to Blacklist"
+  },
+  "labels": {
+    "authRequired": "Authentication required",
+    "verifying": "Verifying permissions...",
+    "loading": "Loading...",
+    "availableBalance": "Available Balance",
+    "transactionHistory": "Transaction History",
+    "received": "Received",
+    "sent": "Sent",
+    "recipientDid": "Recipient DID",
+    "amount": "Amount",
+    "reason": "Reason",
+    "poolType": "Pool Type",
+    "groupName": "Group Name",
+    "description": "Description",
+    "location": "Location",
+    "pickupDay": "Preferred pickup day",
+    "pickupLocation": "Pickup location",
+    "pickupInstructions": "Pickup instructions",
+    "orderFrequency": "Order frequency",
+    "inviteMembers": "Invite the first members of your group...",
+    "ready": "All set! 🎉"
+  },
+  "placeholders": {
+    "groupName": "e.g. Zurriola Consumer Group",
+    "description": "Briefly describe your group...",
+    "location": "e.g. Donostia, Gipuzkoa",
+    "email": "email@example.com",
+    "select": "Select...",
+    "pickupDay": "e.g. Friday",
+    "pickupLocation": "e.g. Bar Komun, 45 Main Street",
+    "pickupInstructions": "Schedule, exact location, contact...",
+    "reasonPlaceholder": "Why are you sending SEMILLA?",
+    "skills": "e.g: carpentry, design, accounting"
+  },
+  "orderFrequencies": {
+    "weekly": "Weekly",
+    "biweekly": "Biweekly",
+    "monthly": "Monthly"
+  },
+  "poolTypes": {
+    "emergency": "🚨 Emergencies",
+    "community": "🏘️ Community",
+    "rewards": "🎁 Rewards"
+  },
+  "messages": {
+    "loginRequired": "You need to log in to access",
+    "noTransactions": "No transactions yet",
+    "startTransacting": "Start by sending or receiving SEMILLA",
+    "noRequests": "No requests yet",
+    "readyDescription": "You have completed the basic setup of your community",
+    "circuitBreakerOpened": "Circuit Breaker OPEN - All bridge operations are stopped",
+    "circuitBreakerClosed": "Circuit Breaker CLOSED - Bridge operations resumed",
+    "entryAdded": "{type} added to blacklist",
+    "entryRemoved": "Entry removed from blacklist",
+    "packComplete": "Pack configured successfully!"
+  },
+  "admin": {
+    "bridge": {
+      "title": "Bridge Security Dashboard",
+      "subtitle": "Real-time monitoring of blockchain bridge security",
+      "loading": "Loading security dashboard...",
+      "tabs": {
+        "overview": "📊 Overview",
+        "events": "🔔 Events",
+        "blacklist": "🚫 Blacklist"
+      },
+      "metrics": {
+        "totalEvents": "Total Events",
+        "last24h": "Last 24h",
+        "lastHour": "Last Hour",
+        "critical": "Critical"
+      },
+      "labels": {
+        "eventsBySeverity": "Events by Severity (24h)",
+        "topEventTypes": "Top Event Types (24h)",
+        "blockedDids": "Blocked DIDs",
+        "blockedAddresses": "Blocked Addresses",
+        "emergencyControl": "Emergency Control",
+        "recentEvents": "Recent Security Events"
+      },
+      "alerts": {
+        "active": "⚠️ CIRCUIT BREAKER ACTIVE",
+        "allOperationsStopped": "All bridge operations are stopped"
+      },
+      "statuses": {
+        "resolved": "✓ Resolved",
+        "pending": "⏳ Pending"
+      },
+      "modals": {
+        "openTitle": "⚠️ Open Circuit Breaker",
+        "openDescription": "This will stop ALL bridge operations. This action is reversible but should only be used in emergencies.",
+        "reasonLabel": "Reason (required):",
+        "reasonPlaceholder": "E.g.: Attack detected, critical vulnerability, etc.",
+        "blacklistTitle": "Add to Blacklist"
+      },
+      "form": {
+        "addressType": "Address",
+        "address": "Address",
+        "reason": "Reason:"
+      },
+      "buttons": {
+        "openCircuitBreaker": "🚨 Open Circuit Breaker (Emergency Stop)",
+        "normalOperations": "✅ Circuit Breaker is closed - Normal operations"
+      }
+    }
+  },
+  "federation": {
+    "semilla": {
+      "title": "SEMILLA Wallet",
+      "subtitle": "Your federated currency for inter-community transactions",
+      "faqs": {
+        "whatIs": {
+          "title": "What is SEMILLA?",
+          "content": "SEMILLA is the federated currency that connects all Truk communities. It enables transparent and traceable transactions between different groups."
+        },
+        "howToEarn": {
+          "title": "How to earn SEMILLA"
+        },
+        "uses": {
+          "title": "Uses of SEMILLA"
+        }
+      },
+      "modals": {
+        "sendTitle": "Send SEMILLA"
+      },
+      "buttons": {
+        "claim": "Claim 100 SEMILLA"
+      }
+    }
+  },
+  "flow": {
+    "poolRequests": {
+      "title": "Pool Requests",
+      "subtitle": "Request funds from community pools",
+      "format": {
+        "request": "{poolType} - {amount} credits",
+        "by": "By {name} • {date}"
+      },
+      "modals": {
+        "title": "New Pool Request"
+      },
+      "form": {
+        "amount": "Credit Amount",
+        "reasonPlaceholder": "Describe why you need these funds..."
+      }
+    }
+  },
+  "web3Modal": {
+    "title": "What is a Web3 Wallet?",
+    "subtitle": "Your decentralized digital wallet",
+    "sections": {
+      "simple": "Simple explanation",
+      "faq": "Frequently asked questions"
+    },
+    "content": {
+      "walletExplanation": "A wallet is like your digital wallet, but you have full control. It doesn't depend on any bank or company.",
+      "benefit1": "Connect without password - Secure authentication with your wallet",
+      "benefit2": "Own your tokens - You control your digital assets",
+      "benefit3": "Direct transactions - No intermediaries or hidden fees"
+    },
+    "faqs": {
+      "question1": "Do I need to buy cryptocurrencies?",
+      "answer1": "No, you can use the entire Truk platform without buying cryptocurrencies. The wallet only gives you optional extra features.",
+      "question2": "Is it safe?",
+      "answer2": "Yes, your wallet is controlled only by you. No one else can access your funds or make transactions without your approval.",
+      "question3": "Which wallets are compatible?",
+      "wallet1": "MetaMask - Ethereum and compatible networks",
+      "wallet2": "Phantom - Solana and compatible networks",
+      "walletsComingSoon": "More wallets coming soon: WalletConnect, Coinbase, Trust Wallet"
+    }
   }
 }

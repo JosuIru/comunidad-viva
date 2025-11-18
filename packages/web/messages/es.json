@@ -1295,8 +1295,6 @@
       }
     },
     "sdg": {
-      "title": "Objetivos de Desarrollo Sostenible (ODS)",
-      "description": "Los proyectos de ayuda mutua están alineados con los Objetivos de Desarrollo Sostenible de la ONU, promoviendo un impacto positivo en la comunidad y el medio ambiente.",
       "1": "Fin de la pobreza",
       "2": "Hambre cero",
       "3": "Salud y bienestar",
@@ -1313,7 +1311,9 @@
       "14": "Vida submarina",
       "15": "Vida de ecosistemas terrestres",
       "16": "Paz, justicia e instituciones sólidas",
-      "17": "Alianzas para lograr los objetivos"
+      "17": "Alianzas para lograr los objetivos",
+      "title": "Objetivos de Desarrollo Sostenible (ODS)",
+      "description": "Los proyectos de ayuda mutua están alineados con los Objetivos de Desarrollo Sostenible de la ONU, promoviendo un impacto positivo en la comunidad y el medio ambiente."
     },
     "scope": {
       "PERSONAL": "Personal",
@@ -1838,6 +1838,34 @@
       "title": "¿Quieres gestionar comunidades?",
       "description": "Crea y administra comunidades locales de economía colaborativa. Conecta vecinos, organiza eventos y construye redes de apoyo mutuo.",
       "action": "Ir al Panel de Gestión"
+    },
+    "setup": {
+      "pageTitle": "Configurar {name}",
+      "step": "Paso {current} de {total}",
+      "benefits": {
+        "dashboard": "Acceder a tu dashboard personalizado",
+        "inviteMore": "Invitar a más miembros",
+        "allFeatures": "Empezar a usar todas las funcionalidades",
+        "metrics": "Ver tus métricas de impacto en tiempo real"
+      },
+      "hints": {
+        "skipInvite": "💡 También puedes saltarte este paso y enviar invitaciones más tarde desde tu dashboard"
+      }
+    },
+    "packSetup": {
+      "steps": {
+        "selectType": "Selecciona tu tipo de comunidad",
+        "confirm": "Confirma tu selección"
+      },
+      "hints": {
+        "selectHint": "Elige el pack que mejor se adapte a las necesidades de tu comunidad",
+        "confirmHint": "Revisa la configuración antes de activar",
+        "completeHint": "Tu comunidad ya tiene acceso a todas las funcionalidades"
+      },
+      "labels": {
+        "whatYouGet": "✅ Qué obtienes:",
+        "nextSteps": "📝 Próximos pasos:"
+      }
     }
   },
   "communityDetail": {
@@ -3526,5 +3554,283 @@
     "noMembers": "No hay miembros en esta comunidad todavía.",
     "level": "Nivel",
     "credits": "créditos"
+  },
+  "toasts": {
+    "success": {
+      "offerDeleted": "Oferta eliminada exitosamente",
+      "offerUpdated": "Oferta actualizada exitosamente",
+      "eventDeleted": "Evento eliminado exitosamente",
+      "eventCreated": "Evento creado exitosamente",
+      "profileUpdated": "Perfil actualizado correctamente",
+      "communityLeft": "Has abandonado la comunidad correctamente",
+      "communityCreated": "¡Comunidad creada con éxito!",
+      "joinedSuccessfully": "¡Te has unido exitosamente!",
+      "solutionDeleted": "Solución eliminada exitosamente",
+      "housingCreated": "Solución de vivienda creada exitosamente",
+      "timebankCreated": "¡Servicio de tiempo creado exitosamente! 🎉",
+      "creditsSent": "¡Créditos enviados con éxito! 🎉",
+      "walletConnected": "Wallet conectada exitosamente",
+      "walletDisconnected": "Wallet desconectada exitosamente",
+      "transferSuccess": "¡Transferencia exitosa!",
+      "semillaReceived": "¡100 SEMILLA recibidos! Bienvenido a la federación",
+      "requestCreated": "¡Solicitud creada exitosamente!",
+      "voteRecorded": "¡Voto registrado!",
+      "packConfigured": "Pack configurado correctamente",
+      "reactionSent": "Reacción enviada!",
+      "bridgeStarted": "Bridge iniciado! Los tokens llegarán en unos minutos",
+      "returnBridgeComplete": "Bridge de regreso completado!"
+    },
+    "error": {
+      "generic": "Ha ocurrido un error",
+      "deleteOffer": "Error al eliminar la oferta",
+      "updateOffer": "Error al actualizar la oferta",
+      "uploadImage": "Error al subir imagen",
+      "deleteEvent": "Error al eliminar el evento",
+      "createEvent": "Error al crear el evento",
+      "updateProfile": "Error al actualizar el perfil",
+      "leaveCommunity": "Error al abandonar la comunidad",
+      "createCommunity": "Error al crear la comunidad",
+      "joinFailed": "Error al unirse",
+      "deleteSolution": "Error al eliminar",
+      "createHousing": "Error al crear la solución",
+      "createTimebank": "Error al crear el servicio",
+      "sendCredits": "Error al enviar créditos",
+      "connectWallet": "Error al conectar wallet",
+      "disconnectWallet": "Error al desconectar wallet",
+      "sendSemilla": "Error al enviar SEMILLA",
+      "loadBridge": "Error cargando datos del bridge",
+      "createBridge": "Error al crear bridge",
+      "unlockFailed": "Error al desbloquear",
+      "createPost": "Error al crear la publicación",
+      "verifyPermissions": "Error al verificar permisos",
+      "invalidImageType": "Solo se permiten imágenes (JPG, PNG, GIF, WEBP)",
+      "imageTooLarge": "Las imágenes deben ser menores a 5MB",
+      "metamaskNotInstalled": "MetaMask no está instalado",
+      "phantomNotInstalled": "Phantom no está instalado",
+      "walletNotConnected": "Conecta tu wallet primero",
+      "chainNotSupported": "Chain no soportada",
+      "insufficientBalance": "Balance insuficiente",
+      "invalidAmount": "Ingresa una cantidad válida",
+      "txHashRequired": "Ingresa el hash de la transacción",
+      "minimumAmount": "Mínimo: {min} SEMILLA",
+      "allFieldsRequired": "Por favor completa todos los campos obligatorios",
+      "selectRecipient": "Selecciona un destinatario",
+      "titleRequired": "El título es obligatorio",
+      "descriptionRequired": "La descripción es obligatoria",
+      "categoryRequired": "Selecciona una categoría",
+      "dateTimeRequired": "Por favor selecciona una fecha y hora",
+      "minimumQuantity": "La cantidad debe ser al menos 1",
+      "groupBuyFull": "La compra colectiva está llena",
+      "reasonRequired": "Debes proporcionar una razón",
+      "invalidCommunityType": "Tipo de comunidad no válido",
+      "loginRequired": "Debes iniciar sesión",
+      "adminOnly": "Solo los administradores pueden configurar packs",
+      "locationNotFound": "No se encontró la ubicación",
+      "searchFailed": "Error al buscar la ubicación"
+    },
+    "info": {
+      "walletConnectComingSoon": "WalletConnect próximamente disponible",
+      "coinbaseComingSoon": "Coinbase Wallet próximamente disponible",
+      "trustComingSoon": "Trust Wallet próximamente disponible"
+    }
+  },
+  "confirmations": {
+    "deleteOffer": "¿Estás seguro de que deseas eliminar esta oferta?",
+    "deleteEvent": "¿Estás seguro de que deseas eliminar este evento?"
+  },
+  "buttons": {
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "add": "Añadir",
+    "remove": "Remover",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "finish": "Finalizar",
+    "creating": "Creando...",
+    "configuring": "Configurando...",
+    "send": "Enviar",
+    "sending": "Enviando...",
+    "login": "Iniciar Sesión",
+    "backToAdmin": "Volver al admin",
+    "backToCommunity": "Volver a la comunidad",
+    "newRequest": "Nueva Solicitud",
+    "approve": "A Favor",
+    "reject": "En Contra",
+    "createRequest": "Crear Solicitud",
+    "confirmActivate": "Confirmar y Activar",
+    "addEmail": "+ Añadir otro email",
+    "addToBlacklist": "+ Añadir a Lista Negra"
+  },
+  "labels": {
+    "authRequired": "Autenticación requerida",
+    "verifying": "Verificando permisos...",
+    "loading": "Cargando...",
+    "availableBalance": "Balance Disponible",
+    "transactionHistory": "Historial de Transacciones",
+    "received": "Recibido",
+    "sent": "Enviado",
+    "recipientDid": "DID del destinatario",
+    "amount": "Cantidad",
+    "reason": "Motivo",
+    "poolType": "Tipo de Pool",
+    "groupName": "Nombre del Grupo",
+    "description": "Descripción",
+    "location": "Ubicación",
+    "pickupDay": "Día de recogida preferido",
+    "pickupLocation": "Lugar de recogida",
+    "pickupInstructions": "Instrucciones de recogida",
+    "orderFrequency": "Frecuencia de pedidos",
+    "inviteMembers": "Invita a las primeras personas de tu grupo...",
+    "ready": "¡Todo listo! 🎉"
+  },
+  "placeholders": {
+    "groupName": "ej. Grupo Consumo Zurriola",
+    "description": "Describe brevemente tu grupo...",
+    "location": "ej. Donostia, Gipuzkoa",
+    "email": "email@ejemplo.com",
+    "select": "Selecciona...",
+    "pickupDay": "ej. Viernes",
+    "pickupLocation": "ej. Bar Komún, Calle Mayor 45",
+    "pickupInstructions": "Horario, punto exacto, contacto...",
+    "reasonPlaceholder": "¿Por qué estás enviando SEMILLA?",
+    "skills": "ej: carpintería, diseño, contabilidad"
+  },
+  "orderFrequencies": {
+    "weekly": "Semanal",
+    "biweekly": "Quincenal",
+    "monthly": "Mensual"
+  },
+  "poolTypes": {
+    "emergency": "🚨 Emergencias",
+    "community": "🏘️ Comunidad",
+    "rewards": "🎁 Recompensas"
+  },
+  "messages": {
+    "loginRequired": "Necesitas iniciar sesión para acceder",
+    "noTransactions": "No hay transacciones todavía",
+    "startTransacting": "Comienza enviando o recibiendo SEMILLA",
+    "noRequests": "No hay solicitudes todavía",
+    "readyDescription": "Has completado la configuración básica de tu comunidad",
+    "circuitBreakerOpened": "Circuit Breaker ABIERTO - Todas las operaciones del bridge están detenidas",
+    "circuitBreakerClosed": "Circuit Breaker CERRADO - Operaciones del bridge reanudadas",
+    "entryAdded": "{type} añadido a la lista negra",
+    "entryRemoved": "Entrada removida de la lista negra",
+    "packComplete": "¡Pack configurado correctamente!"
+  },
+  "admin": {
+    "bridge": {
+      "title": "Dashboard de Seguridad del Bridge",
+      "subtitle": "Monitoreo en tiempo real de la seguridad del bridge blockchain",
+      "loading": "Cargando dashboard de seguridad...",
+      "tabs": {
+        "overview": "📊 Resumen",
+        "events": "🔔 Eventos",
+        "blacklist": "🚫 Lista Negra"
+      },
+      "metrics": {
+        "totalEvents": "Total Eventos",
+        "last24h": "Últimas 24h",
+        "lastHour": "Última Hora",
+        "critical": "Críticos"
+      },
+      "labels": {
+        "eventsBySeverity": "Eventos por Severidad (24h)",
+        "topEventTypes": "Top Tipos de Eventos (24h)",
+        "blockedDids": "DIDs Bloqueados",
+        "blockedAddresses": "Direcciones Bloqueadas",
+        "emergencyControl": "Control de Emergencia",
+        "recentEvents": "Eventos de Seguridad Recientes"
+      },
+      "alerts": {
+        "active": "⚠️ CIRCUIT BREAKER ACTIVO",
+        "allOperationsStopped": "Todas las operaciones del bridge están detenidas"
+      },
+      "statuses": {
+        "resolved": "✓ Resuelto",
+        "pending": "⏳ Pendiente"
+      },
+      "modals": {
+        "openTitle": "⚠️ Abrir Circuit Breaker",
+        "openDescription": "Esto detendrá TODAS las operaciones del bridge. Esta acción es reversible pero debe usarse solo en emergencias.",
+        "reasonLabel": "Razón (requerido):",
+        "reasonPlaceholder": "Ej: Ataque detectado, vulnerabilidad crítica, etc.",
+        "blacklistTitle": "Añadir a Lista Negra"
+      },
+      "form": {
+        "addressType": "Dirección (Address)",
+        "address": "Dirección",
+        "reason": "Razón:"
+      },
+      "buttons": {
+        "openCircuitBreaker": "🚨 Abrir Circuit Breaker (Emergency Stop)",
+        "normalOperations": "✅ Circuit Breaker está cerrado - Operaciones normales"
+      }
+    }
+  },
+  "federation": {
+    "semilla": {
+      "title": "Wallet SEMILLA",
+      "subtitle": "Tu moneda federada para transacciones entre comunidades",
+      "faqs": {
+        "whatIs": {
+          "title": "¿Qué es SEMILLA?",
+          "content": "SEMILLA es la moneda federada que conecta todas las comunidades de Truk. Permite transacciones transparentes y trazables entre diferentes grupos."
+        },
+        "howToEarn": {
+          "title": "Cómo ganar SEMILLA"
+        },
+        "uses": {
+          "title": "Usos de SEMILLA"
+        }
+      },
+      "modals": {
+        "sendTitle": "Enviar SEMILLA"
+      },
+      "buttons": {
+        "claim": "Reclamar 100 SEMILLA"
+      }
+    }
+  },
+  "flow": {
+    "poolRequests": {
+      "title": "Solicitudes de Pool",
+      "subtitle": "Solicita fondos de los pools comunitarios",
+      "format": {
+        "request": "{poolType} - {amount} créditos",
+        "by": "Por {name} • {date}"
+      },
+      "modals": {
+        "title": "Nueva Solicitud de Pool"
+      },
+      "form": {
+        "amount": "Cantidad de Créditos",
+        "reasonPlaceholder": "Describe por qué necesitas estos fondos..."
+      }
+    }
+  },
+  "web3Modal": {
+    "title": "¿Qué es una Wallet Web3?",
+    "subtitle": "Tu cartera digital descentralizada",
+    "sections": {
+      "simple": "Explicación simple",
+      "faq": "Preguntas frecuentes"
+    },
+    "content": {
+      "walletExplanation": "Una wallet es como tu cartera digital, pero tú tienes el control total. No depende de ningún banco o empresa.",
+      "benefit1": "Conectarte sin contraseña - Autenticación segura con tu wallet",
+      "benefit2": "Ser dueño de tus tokens - Tú controlas tus activos digitales",
+      "benefit3": "Transacciones directas - Sin intermediarios ni comisiones ocultas"
+    },
+    "faqs": {
+      "question1": "¿Necesito comprar criptomonedas?",
+      "answer1": "No, puedes usar toda la plataforma Truk sin comprar criptomonedas. La wallet solo te da funcionalidades extra opcionales.",
+      "question2": "¿Es seguro?",
+      "answer2": "Sí, tu wallet es controlada solo por ti. Nadie más puede acceder a tus fondos o hacer transacciones sin tu aprobación.",
+      "question3": "¿Qué wallets son compatibles?",
+      "wallet1": "MetaMask - Ethereum y compatibles",
+      "wallet2": "Phantom - Solana y compatibles",
+      "walletsComingSoon": "Más wallets próximamente: WalletConnect, Coinbase, Trust Wallet"
+    }
   }
 }

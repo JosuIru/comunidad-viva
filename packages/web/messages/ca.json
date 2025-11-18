@@ -1824,6 +1824,34 @@
       "title": "Vols gestionar comunitats?",
       "description": "Crea i administra comunitats locals d'economia col·laborativa. Connecta veïns, organitza esdeveniments i construeix xarxes de suport mutu.",
       "action": "Anar al Panell de Gestió"
+    },
+    "setup": {
+      "pageTitle": "Configurar {name}",
+      "step": "Pas {current} de {total}",
+      "benefits": {
+        "dashboard": "Accedir al teu dashboard personalitzat",
+        "inviteMore": "Convidar mes membres",
+        "allFeatures": "Comenar a utilitzar totes les funcionalitats",
+        "metrics": "Veure les teves metriques d'impacte en temps real"
+      },
+      "hints": {
+        "skipInvite": "💡 Tambe pots saltar aquest pas i enviar invitacions mes tard des del teu dashboard"
+      }
+    },
+    "packSetup": {
+      "steps": {
+        "selectType": "Selecciona el teu tipus de comunitat",
+        "confirm": "Confirma la teva seleccio"
+      },
+      "hints": {
+        "selectHint": "Tria el pack que millor s'adapti a les necessitats de la teva comunitat",
+        "confirmHint": "Revisa la configuracio abans d'activar",
+        "completeHint": "La teva comunitat ja te acces a totes les funcionalitats"
+      },
+      "labels": {
+        "whatYouGet": "✅ Que obtens:",
+        "nextSteps": "📝 Propers passos:"
+      }
     }
   },
   "communityDetail": {
@@ -3583,5 +3611,283 @@
     "noMembers": "Encara no hi ha membres en aquesta comunitat.",
     "level": "Nivell",
     "credits": "crèdits"
+  },
+  "toasts": {
+    "success": {
+      "offerDeleted": "Oferta eliminada correctament",
+      "offerUpdated": "Oferta actualitzada correctament",
+      "eventDeleted": "Esdeveniment eliminat correctament",
+      "eventCreated": "Esdeveniment creat correctament",
+      "profileUpdated": "Perfil actualitzat correctament",
+      "communityLeft": "Has abandonat la comunitat correctament",
+      "communityCreated": "Comunitat creada amb exit!",
+      "joinedSuccessfully": "T'has unit correctament!",
+      "solutionDeleted": "Solucio eliminada correctament",
+      "housingCreated": "Solucio d'habitatge creada correctament",
+      "timebankCreated": "Servei de temps creat correctament! 🎉",
+      "creditsSent": "Credits enviats amb exit! 🎉",
+      "walletConnected": "Wallet connectada correctament",
+      "walletDisconnected": "Wallet desconnectada correctament",
+      "transferSuccess": "Transferencia correcta!",
+      "semillaReceived": "100 SEMILLA rebuts! Benvingut a la federacio",
+      "requestCreated": "Sollicitud creada correctament!",
+      "voteRecorded": "Vot registrat!",
+      "packConfigured": "Pack configurat correctament",
+      "reactionSent": "Reaccio enviada!",
+      "bridgeStarted": "Bridge iniciat! Els tokens arribaran en uns minuts",
+      "returnBridgeComplete": "Bridge de retorn completat!"
+    },
+    "error": {
+      "generic": "S'ha produit un error",
+      "deleteOffer": "Error en eliminar l'oferta",
+      "updateOffer": "Error en actualitzar l'oferta",
+      "uploadImage": "Error en pujar la imatge",
+      "deleteEvent": "Error en eliminar l'esdeveniment",
+      "createEvent": "Error en crear l'esdeveniment",
+      "updateProfile": "Error en actualitzar el perfil",
+      "leaveCommunity": "Error en abandonar la comunitat",
+      "createCommunity": "Error en crear la comunitat",
+      "joinFailed": "Error en unir-se",
+      "deleteSolution": "Error en eliminar",
+      "createHousing": "Error en crear la solucio",
+      "createTimebank": "Error en crear el servei",
+      "sendCredits": "Error en enviar credits",
+      "connectWallet": "Error en connectar la wallet",
+      "disconnectWallet": "Error en desconnectar la wallet",
+      "sendSemilla": "Error en enviar SEMILLA",
+      "loadBridge": "Error en carregar les dades del bridge",
+      "createBridge": "Error en crear el bridge",
+      "unlockFailed": "Error en desbloquejar",
+      "createPost": "Error en crear la publicacio",
+      "verifyPermissions": "Error en verificar els permisos",
+      "invalidImageType": "Nomes es permeten imatges (JPG, PNG, GIF, WEBP)",
+      "imageTooLarge": "Les imatges han de ser inferiors a 5MB",
+      "metamaskNotInstalled": "MetaMask no esta installat",
+      "phantomNotInstalled": "Phantom no esta installat",
+      "walletNotConnected": "Connecta la teva wallet primer",
+      "chainNotSupported": "Cadena no suportada",
+      "insufficientBalance": "Saldo insuficient",
+      "invalidAmount": "Introdueix una quantitat valida",
+      "txHashRequired": "Introdueix el hash de la transaccio",
+      "minimumAmount": "Minim: {min} SEMILLA",
+      "allFieldsRequired": "Si us plau, completa tots els camps obligatoris",
+      "selectRecipient": "Selecciona un destinatari",
+      "titleRequired": "El titol es obligatori",
+      "descriptionRequired": "La descripcio es obligatoria",
+      "categoryRequired": "Selecciona una categoria",
+      "dateTimeRequired": "Si us plau, selecciona una data i hora",
+      "minimumQuantity": "La quantitat ha de ser com a minim 1",
+      "groupBuyFull": "La compra collectiva esta plena",
+      "reasonRequired": "Has de proporcionar una rao",
+      "invalidCommunityType": "Tipus de comunitat no valid",
+      "loginRequired": "Has d'iniciar sessio",
+      "adminOnly": "Nomes els administradors poden configurar packs",
+      "locationNotFound": "No s'ha trobat la ubicacio",
+      "searchFailed": "Error en cercar la ubicacio"
+    },
+    "info": {
+      "walletConnectComingSoon": "WalletConnect disponible properament",
+      "coinbaseComingSoon": "Coinbase Wallet disponible properament",
+      "trustComingSoon": "Trust Wallet disponible properament"
+    }
+  },
+  "confirmations": {
+    "deleteOffer": "Estas segur que vols eliminar aquesta oferta?",
+    "deleteEvent": "Estas segur que vols eliminar aquest esdeveniment?"
+  },
+  "buttons": {
+    "confirm": "Confirmar",
+    "cancel": "Cancellar",
+    "add": "Afegir",
+    "remove": "Eliminar",
+    "back": "Enrere",
+    "next": "Seguent",
+    "previous": "Anterior",
+    "finish": "Finalitzar",
+    "creating": "Creant...",
+    "configuring": "Configurant...",
+    "send": "Enviar",
+    "sending": "Enviant...",
+    "login": "Iniciar sessio",
+    "backToAdmin": "Tornar a l'admin",
+    "backToCommunity": "Tornar a la comunitat",
+    "newRequest": "Nova sollicitud",
+    "approve": "A favor",
+    "reject": "En contra",
+    "createRequest": "Crear sollicitud",
+    "confirmActivate": "Confirmar i activar",
+    "addEmail": "+ Afegir un altre email",
+    "addToBlacklist": "+ Afegir a la llista negra"
+  },
+  "labels": {
+    "authRequired": "Autenticacio requerida",
+    "verifying": "Verificant permisos...",
+    "loading": "Carregant...",
+    "availableBalance": "Saldo disponible",
+    "transactionHistory": "Historial de transaccions",
+    "received": "Rebut",
+    "sent": "Enviat",
+    "recipientDid": "DID del destinatari",
+    "amount": "Quantitat",
+    "reason": "Motiu",
+    "poolType": "Tipus de Pool",
+    "groupName": "Nom del grup",
+    "description": "Descripcio",
+    "location": "Ubicacio",
+    "pickupDay": "Dia de recollida preferit",
+    "pickupLocation": "Lloc de recollida",
+    "pickupInstructions": "Instruccions de recollida",
+    "orderFrequency": "Frequencia de comandes",
+    "inviteMembers": "Convida les primeres persones del teu grup...",
+    "ready": "Tot llest! 🎉"
+  },
+  "placeholders": {
+    "groupName": "ex. Grup Consum Barceloneta",
+    "description": "Descriu breument el teu grup...",
+    "location": "ex. Barcelona, Catalunya",
+    "email": "email@exemple.com",
+    "select": "Selecciona...",
+    "pickupDay": "ex. Divendres",
+    "pickupLocation": "ex. Bar Komun, Carrer Major 45",
+    "pickupInstructions": "Horari, punt exacte, contacte...",
+    "reasonPlaceholder": "Per que estas enviant SEMILLA?",
+    "skills": "ex: fusteria, disseny, comptabilitat"
+  },
+  "orderFrequencies": {
+    "weekly": "Setmanal",
+    "biweekly": "Quinzenal",
+    "monthly": "Mensual"
+  },
+  "poolTypes": {
+    "emergency": "🚨 Emergencies",
+    "community": "🏘️ Comunitat",
+    "rewards": "🎁 Recompenses"
+  },
+  "messages": {
+    "loginRequired": "Has d'iniciar sessio per accedir",
+    "noTransactions": "Encara no hi ha transaccions",
+    "startTransacting": "Comenca enviant o rebent SEMILLA",
+    "noRequests": "Encara no hi ha sollicituds",
+    "readyDescription": "Has completat la configuracio basica de la teva comunitat",
+    "circuitBreakerOpened": "Circuit Breaker OBERT - Totes les operacions del bridge estan aturades",
+    "circuitBreakerClosed": "Circuit Breaker TANCAT - Operacions del bridge represes",
+    "entryAdded": "{type} afegit a la llista negra",
+    "entryRemoved": "Entrada eliminada de la llista negra",
+    "packComplete": "Pack configurat correctament!"
+  },
+  "admin": {
+    "bridge": {
+      "title": "Dashboard de Seguretat del Bridge",
+      "subtitle": "Monitoratge en temps real de la seguretat del bridge blockchain",
+      "loading": "Carregant dashboard de seguretat...",
+      "tabs": {
+        "overview": "📊 Resum",
+        "events": "🔔 Esdeveniments",
+        "blacklist": "🚫 Llista negra"
+      },
+      "metrics": {
+        "totalEvents": "Total d'esdeveniments",
+        "last24h": "Ultimes 24h",
+        "lastHour": "Ultima hora",
+        "critical": "Critics"
+      },
+      "labels": {
+        "eventsBySeverity": "Esdeveniments per gravetat (24h)",
+        "topEventTypes": "Principals tipus d'esdeveniments (24h)",
+        "blockedDids": "DIDs bloquejats",
+        "blockedAddresses": "Adreces bloquejades",
+        "emergencyControl": "Control d'emergencia",
+        "recentEvents": "Esdeveniments de seguretat recents"
+      },
+      "alerts": {
+        "active": "⚠️ CIRCUIT BREAKER ACTIU",
+        "allOperationsStopped": "Totes les operacions del bridge estan aturades"
+      },
+      "statuses": {
+        "resolved": "✓ Resolt",
+        "pending": "⏳ Pendent"
+      },
+      "modals": {
+        "openTitle": "⚠️ Obrir Circuit Breaker",
+        "openDescription": "Aixo aturara TOTES les operacions del bridge. Aquesta accio es reversible pero nomes s'ha d'utilitzar en emergencies.",
+        "reasonLabel": "Rao (obligatori):",
+        "reasonPlaceholder": "Ex.: Atac detectat, vulnerabilitat critica, etc.",
+        "blacklistTitle": "Afegir a la llista negra"
+      },
+      "form": {
+        "addressType": "Adreca (Address)",
+        "address": "Adreca",
+        "reason": "Rao:"
+      },
+      "buttons": {
+        "openCircuitBreaker": "🚨 Obrir Circuit Breaker (Aturada d'emergencia)",
+        "normalOperations": "✅ Circuit Breaker esta tancat - Operacions normals"
+      }
+    }
+  },
+  "federation": {
+    "semilla": {
+      "title": "Wallet SEMILLA",
+      "subtitle": "La teva moneda federada per a transaccions entre comunitats",
+      "faqs": {
+        "whatIs": {
+          "title": "Que es SEMILLA?",
+          "content": "SEMILLA es la moneda federada que connecta totes les comunitats de Truk. Permet transaccions transparents i tracables entre diferents grups."
+        },
+        "howToEarn": {
+          "title": "Com guanyar SEMILLA"
+        },
+        "uses": {
+          "title": "Usos de SEMILLA"
+        }
+      },
+      "modals": {
+        "sendTitle": "Enviar SEMILLA"
+      },
+      "buttons": {
+        "claim": "Reclamar 100 SEMILLA"
+      }
+    }
+  },
+  "flow": {
+    "poolRequests": {
+      "title": "Sollicituds de Pool",
+      "subtitle": "Sollicita fons dels pools comunitaris",
+      "format": {
+        "request": "{poolType} - {amount} credits",
+        "by": "Per {name} • {date}"
+      },
+      "modals": {
+        "title": "Nova sollicitud de Pool"
+      },
+      "form": {
+        "amount": "Quantitat de credits",
+        "reasonPlaceholder": "Descriu per que necessites aquests fons..."
+      }
+    }
+  },
+  "web3Modal": {
+    "title": "Que es una Wallet Web3?",
+    "subtitle": "La teva cartera digital descentralitzada",
+    "sections": {
+      "simple": "Explicacio simple",
+      "faq": "Preguntes frequents"
+    },
+    "content": {
+      "walletExplanation": "Una wallet es com la teva cartera digital, pero tu tens el control total. No depen de cap banc o empresa.",
+      "benefit1": "Connectar-te sense contrasenya - Autenticacio segura amb la teva wallet",
+      "benefit2": "Ser propietari dels teus tokens - Tu controles els teus actius digitals",
+      "benefit3": "Transaccions directes - Sense intermediaris ni comissions ocultes"
+    },
+    "faqs": {
+      "question1": "Necessito comprar criptomonedes?",
+      "answer1": "No, pots utilitzar tota la plataforma Truk sense comprar criptomonedes. La wallet nomes et dona funcionalitats extra opcionals.",
+      "question2": "Es segur?",
+      "answer2": "Si, la teva wallet es controlada nomes per tu. Ningu mes pot accedir als teus fons o fer transaccions sense la teva aprovacio.",
+      "question3": "Quines wallets son compatibles?",
+      "wallet1": "MetaMask - Ethereum i xarxes compatibles",
+      "wallet2": "Phantom - Solana i xarxes compatibles",
+      "walletsComingSoon": "Mes wallets properament: WalletConnect, Coinbase, Trust Wallet"
+    }
   }
 }
