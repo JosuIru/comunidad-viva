@@ -155,6 +155,64 @@
     "amount": "Cantidad",
     "recipient": "Destinatario"
   },
+  "circles": {
+    "title": "Circulos de Conciencia",
+    "subtitle": "Espacios federados de aprendizaje, transformacion y accion colectiva",
+    "createCircle": "Crear Circulo",
+    "createNewCircle": "Crear Nuevo Circulo",
+    "myActiveCircles": "Mis Circulos Activos",
+    "members": "miembros",
+    "facilitator": "Facilitador",
+    "flexibleSchedule": "Horario flexible",
+    "noCirclesYet": "No hay circulos todavia",
+    "beFirstToCreate": "Se el primero en crear un circulo de conciencia",
+    "createSuccess": "Circulo creado exitosamente!",
+    "joinSuccess": "Te has unido al circulo!",
+    "leaveSuccess": "Has salido del circulo",
+    "joinCircle": "Unirse al Circulo",
+    "leaveCircle": "Salir del Circulo",
+    "circleFull": "Circulo Lleno",
+    "joining": "Uniendose...",
+    "leaving": "Saliendo...",
+    "creating": "Creando...",
+    "loginToJoin": "Iniciar Sesion para Unirse",
+    "whatAreCircles": "Que son los Circulos de Conciencia?",
+    "infoDescription": "Los Circulos de Conciencia son espacios federados de encuentro, aprendizaje y transformacion personal y colectiva. Funcionan a traves de toda la red Gailu Labs, permitiendo conexiones mas alla de las fronteras de un solo nodo.",
+    "circleTypesTitle": "Tipos de Circulos",
+    "featuresTitle": "Caracteristicas",
+    "types": {
+      "all": "Todos",
+      "learning": "Aprendizaje",
+      "transformation": "Transformacion",
+      "mutualSupport": "Apoyo Mutuo",
+      "creativity": "Creatividad",
+      "socialAction": "Accion Social"
+    },
+    "typeDescriptions": {
+      "learning": "Compartir conocimientos y habilidades",
+      "transformation": "Crecimiento personal y espiritual",
+      "mutualSupport": "Acompanamiento emocional y solidario",
+      "creativity": "Expresion artistica colectiva",
+      "socialAction": "Organizarse para el cambio"
+    },
+    "features": {
+      "horizontalFacilitation": "Facilitacion horizontal",
+      "voluntaryParticipation": "Participacion voluntaria",
+      "federatedConnection": "Conexion federada entre nodos",
+      "reflectionRecords": "Registro de reflexiones",
+      "attendanceCommitment": "Asistencia y compromiso"
+    },
+    "form": {
+      "circleName": "Nombre del Circulo",
+      "description": "Descripcion",
+      "circleType": "Tipo de Circulo",
+      "maxParticipants": "Max. Participantes (opcional)",
+      "schedule": "Horario",
+      "schedulePlaceholder": "Ej: Lunes 18:00",
+      "location": "Ubicacion (Online/Presencial)",
+      "locationPlaceholder": "Ej: Zoom / Barcelona"
+    }
+  },
   "profile": {
     "myProfile": "Mi perfil",
     "editProfile": "Editar perfil",
@@ -1448,7 +1506,103 @@
     "beneficiariesPlaceholder": "Número de personas",
     "goalsPlaceholder": "Un objetivo por línea...",
     "skillsPlaceholder": "Una habilidad por línea...",
-    "supportMessagePlaceholder": "Escribe un mensaje de apoyo..."
+    "supportMessagePlaceholder": "Escribe un mensaje de apoyo...",
+    "newNeed": {
+      "title": "Publicar Necesidad",
+      "labels": {
+        "scope": "Alcance",
+        "type": "Tipo de Necesidad",
+        "needTitle": "Titulo",
+        "description": "Descripcion",
+        "location": "Ubicacion",
+        "urgencyLevel": "Nivel de Urgencia",
+        "euros": "Euros",
+        "credits": "Creditos",
+        "hours": "Horas",
+        "neededSkills": "Habilidades Necesarias"
+      },
+      "scopes": {
+        "INTERCOMMUNITY": "Intercomunitaria"
+      },
+      "scopeDescriptions": {
+        "PERSONAL": "Necesidad individual",
+        "COMMUNITY": "Para tu comunidad local",
+        "INTERCOMMUNITY": "Entre varias comunidades",
+        "GLOBAL": "Impacto global o internacional"
+      },
+      "types": {
+        "INFRASTRUCTURE": "Infraestructura",
+        "WATER_SANITATION": "Agua y Saneamiento",
+        "ENVIRONMENT": "Medio Ambiente",
+        "AUZOLAN": "Auzolan"
+      },
+      "urgency": {
+        "low": "Baja",
+        "medium": "Media",
+        "high": "Alta"
+      },
+      "sections": {
+        "resourcesNeeded": "Recursos Necesarios"
+      },
+      "resourcesDescription": "Especifica al menos un tipo de recurso que necesitas",
+      "placeholders": {
+        "location": "Ej: Madrid, Espana",
+        "skills": "Una habilidad por linea\nEj: carpinteria\nfontaneria\nelectricidad"
+      },
+      "buttons": {
+        "publish": "Publicar Necesidad",
+        "publishing": "Publicando..."
+      },
+      "toasts": {
+        "success": "Necesidad publicada exitosamente",
+        "error": "Error al publicar la necesidad"
+      }
+    },
+    "newProject": {
+      "title": "Crear Proyecto Comunitario",
+      "labels": {
+        "projectType": "Tipo de Proyecto",
+        "projectTitle": "Titulo del Proyecto",
+        "description": "Descripcion",
+        "vision": "Vision",
+        "location": "Ubicacion",
+        "country": "Pais",
+        "region": "Region",
+        "beneficiaries": "Beneficiarios",
+        "estimatedDuration": "Duracion Estimada (meses)",
+        "targetEur": "Meta en Euros",
+        "targetCredits": "Meta en Creditos",
+        "volunteerHours": "Horas de Voluntariado",
+        "volunteersNeeded": "Voluntarios Necesarios",
+        "impactGoals": "Objetivos de Impacto",
+        "tags": "Etiquetas"
+      },
+      "types": {
+        "INFRASTRUCTURE": "Infraestructura",
+        "WATER_SANITATION": "Agua y Saneamiento",
+        "AGRICULTURE": "Agricultura",
+        "ENERGY": "Energia",
+        "AUZOLAN": "Auzolan",
+        "TECHNOLOGY": "Tecnologia",
+        "EMERGENCY_RELIEF": "Ayuda de Emergencia"
+      },
+      "sections": {
+        "resourcesNeeded": "Recursos Necesarios"
+      },
+      "placeholders": {
+        "months": "Meses",
+        "impactGoals": "Un objetivo por linea\nEj: Proveer educacion a 200 ninos\nConstruir 4 aulas equipadas\nFormar 10 profesores locales",
+        "tags": "educacion, infantil, Africa (separadas por comas)"
+      },
+      "buttons": {
+        "create": "Crear Proyecto",
+        "creating": "Creando..."
+      },
+      "toasts": {
+        "success": "Proyecto creado exitosamente",
+        "error": "Error al crear el proyecto"
+      }
+    }
   },
   "eventCreate": {
     "layout": {
@@ -2006,11 +2160,79 @@
     "descPlaceholder": "Describe los detalles de esta solución de vivienda...",
     "locationPlaceholder": "Ej: Madrid, España",
     "capacityPlaceholder": "Personas",
-    "amenitiesPlaceholder": "Una comodidad por línea...",
-    "requirementsPlaceholder": "Un requisito por línea...",
-    "rulesPlaceholder": "Una norma por línea...",
+    "amenitiesPlaceholder": "Una comodidad por línea\nEj: WiFi\nCocina equipada\nLavadora",
+    "requirementsPlaceholder": "Un requisito por línea\nEj: No fumadores\nRespetar horarios de descanso",
+    "rulesPlaceholder": "Una norma por línea\nEj: Limpieza de espacios comunes\nNo ruido después de las 22h",
     "whyJoinPlaceholder": "Cuéntanos por qué quieres unirte...",
-    "skillsPlaceholder": "ej: carpintería, diseño, contabilidad"
+    "skillsPlaceholder": "ej: carpintería, diseño, contabilidad",
+    "newSolution": {
+      "pageTitle": "Nueva Solución de Vivienda",
+      "solutionTypeLabel": "Tipo de Solución *",
+      "titleLabel": "Título *",
+      "descriptionLabel": "Descripción *",
+      "locationLabel": "Ubicación *",
+      "capacityLabel": "Capacidad *",
+      "minStayLabel": "Estancia Mínima (días)",
+      "maxStayLabel": "Estancia Máxima (días)",
+      "amenitiesLabel": "Comodidades",
+      "targetMembersLabel": "Miembros Objetivo *",
+      "initialContributionLabel": "Aportación Inicial (€)",
+      "monthlyContributionLabel": "Contribución Mensual (€)",
+      "guaranteeAmountLabel": "Monto del Aval (€)",
+      "requirementsLabel": "Requisitos",
+      "rulesLabel": "Normas",
+      "cancelButton": "Cancelar",
+      "creating": "Creando...",
+      "createButton": "Crear Solución"
+    },
+    "solutionTypeDescriptions": {
+      "SPACE_BANK": "Intercambio temporal de espacios habitables",
+      "TEMPORARY_HOUSING": "Alojamiento temporal para personas en transición",
+      "HOUSING_COOP": "Propiedad colectiva de vivienda",
+      "COMMUNITY_GUARANTEE": "Garantía colectiva para alquiler"
+    },
+    "detail": {
+      "notFound": "Solución no encontrada",
+      "initialContribution": "Aportación Inicial",
+      "guaranteeAmount": "Monto del Aval",
+      "editButton": "Editar",
+      "deleting": "Eliminando...",
+      "deleteButton": "Eliminar",
+      "joinButton": "Unirse a esta Solución",
+      "membersTitle": "Miembros",
+      "user": "Usuario",
+      "roles": {
+        "ORGANIZER": "Organizador",
+        "MEMBER": "Miembro",
+        "PARTICIPANT": "Participante"
+      }
+    },
+    "joinModal": {
+      "title": "Unirse a {type}",
+      "startDateTime": "Fecha y Hora de Inicio",
+      "endDateTime": "Fecha y Hora de Fin",
+      "checkInDate": "Fecha de Entrada",
+      "checkOutDate": "Fecha de Salida",
+      "guestsCount": "Número de Huéspedes",
+      "introMessage": "Mensaje de Presentación",
+      "skillsLabel": "Habilidades (separadas por comas)",
+      "commitmentLabel": "Nivel de Compromiso",
+      "availabilityLabel": "Disponibilidad",
+      "commitmentLevels": {
+        "LOW": "Bajo",
+        "MEDIUM": "Medio",
+        "HIGH": "Alto"
+      },
+      "availabilityOptions": {
+        "WEEKDAYS": "Entre semana",
+        "WEEKENDS": "Fines de semana",
+        "FLEXIBLE": "Flexible"
+      },
+      "confirmQuestion": "¿Estás seguro de que quieres participar en \"{title}\"?",
+      "cancelButton": "Cancelar",
+      "processing": "Procesando...",
+      "confirmButton": "Confirmar"
+    }
   },
   "hybrid": {
     "dashboard": {
@@ -4089,7 +4311,115 @@
     "createGroupBuy": "Crear Compra Grupal",
     "productNamePlaceholder": "Ej: Pack de productos orgánicos",
     "productDescPlaceholder": "Describe qué incluye la compra grupal",
-    "specificProductPlaceholder": "Nombre específico del producto"
+    "specificProductPlaceholder": "Nombre específico del producto",
+    "groupBuys": {
+      "title": "Compras Grupales",
+      "subtitle": "Únete con otros y obtén mejores descuentos",
+      "joinedSuccess": "Te has unido a la compra grupal!",
+      "joinError": "Error al unirse a la compra grupal",
+      "leftSuccess": "Has salido de la compra grupal",
+      "leaveError": "Error al salir de la compra grupal",
+      "createdSuccess": "Compra grupal creada exitosamente!",
+      "createError": "Error al crear compra grupal",
+      "expired": "Expirado",
+      "morePeople": "Más Gente",
+      "biggerDiscount": "Mayor descuento",
+      "upTo50Off": "Hasta 50% OFF",
+      "progressiveDiscounts": "Descuentos progresivos",
+      "winWin": "Win-Win",
+      "everyoneSaves": "Todos ahorran",
+      "filterAll": "Todas",
+      "filterActive": "Activas",
+      "filterCompleted": "Completadas",
+      "product": "Producto",
+      "youSave": "Ahorras",
+      "participants": "Participantes",
+      "minimumRequired": "Mínimo {count} participantes requeridos",
+      "nextLevel": "Próximo nivel: {discount}% OFF",
+      "peopleMissing": "Faltan {count} personas",
+      "merchant": "Comerciante",
+      "leaveBuy": "Salir de la Compra",
+      "buyFull": "Compra Llena",
+      "joinNow": "Unirme Ahora",
+      "buyCompleted": "Compra Completada",
+      "noGroupBuys": "No hay compras grupales {status}",
+      "createFirstOrWait": "Crea la primera o espera a que alguien más lo haga",
+      "changeFilter": "Cambia el filtro para ver otras compras",
+      "howItWorks": "¿Cómo funcionan las Compras Grupales?",
+      "step1Title": "Encuentra o Crea",
+      "step1Desc": "Busca una compra grupal activa o crea una nueva",
+      "step2Title": "Únete",
+      "step2Desc": "Haz clic en \"Unirme\" para participar",
+      "step3Title": "Espera",
+      "step3Desc": "Más personas = mayor descuento para todos",
+      "step4Title": "Compra",
+      "step4Desc": "Contacta al vendedor con el descuento final",
+      "progressiveDiscountsTitle": "Descuentos Progresivos",
+      "progressiveDiscountsDesc": "El descuento aumenta automáticamente según el número de participantes:",
+      "people": "{count} personas",
+      "peopleOrMore": "{count}+ personas",
+      "joinGroupBuy": "Unirse a Compra Grupal",
+      "currentDiscount": "Descuento actual: {discount}% OFF",
+      "important": "Importante",
+      "importantNote1": "El descuento puede mejorar si se unen más personas",
+      "importantNote2": "La compra expira en {time}",
+      "importantNote3": "Mínimo {count} participantes requeridos",
+      "importantNote4": "Recibirás un código cuando se complete la compra",
+      "joining": "Uniéndome...",
+      "confirm": "Confirmar",
+      "formTitle": "Título",
+      "formDescription": "Descripción",
+      "basePrice": "Precio Base (€)",
+      "duration": "Duración (horas)",
+      "minParticipants": "Min. Participantes",
+      "maxParticipants": "Max. Participantes",
+      "discountLevels": "Niveles de Descuento",
+      "peopleEquals": "personas =",
+      "creating": "Creando...",
+      "createButton": "Crear Compra Grupal"
+    },
+    "flashDeals": {
+      "title": "Flash Deals",
+      "subtitle": "Ofertas relámpago por tiempo limitado - ¡No te las pierdas!",
+      "claimedSuccess": "Flash deal reclamado! Código: {code}",
+      "claimError": "Error al reclamar flash deal",
+      "expired": "Expirado",
+      "happyHourActive": "Happy Hour Activo!",
+      "multiplier": "Multiplicador: x{multiplier}",
+      "endsIn": "Termina en:",
+      "limitedTime": "Tiempo Limitado",
+      "hoursPerDeal": "2-4 horas por deal",
+      "upTo70Off": "Hasta 70% OFF",
+      "incredibleDiscounts": "Descuentos increíbles",
+      "limitedStock": "Stock Limitado",
+      "firstComeFirstServe": "Primero llegar, primero servir",
+      "youSave": "Ahorras",
+      "availableStock": "Stock disponible",
+      "merchant": "Comerciante",
+      "soldOut": "Agotado",
+      "claimNow": "Reclamar Ahora",
+      "onlyLeft": "Solo quedan {count}!",
+      "noActiveDeals": "No hay Flash Deals activos",
+      "dealsRotateDaily": "Los flash deals rotan automáticamente 3 veces al día",
+      "comeBackSoon": "Vuelve pronto para no perderte las ofertas",
+      "howItWorks": "¿Cómo funcionan los Flash Deals?",
+      "step1Title": "Encuentra un Deal",
+      "step1Desc": "Explora las ofertas activas y elige la que más te interese",
+      "step2Title": "Reclama Rápido",
+      "step2Desc": "Haz clic en \"Reclamar\" antes de que se agote el stock",
+      "step3Title": "Obtén tu Código",
+      "step3Desc": "Recibirás un código único para usar el descuento",
+      "step4Title": "Contacta al Vendedor",
+      "step4Desc": "Usa el código cuando contactes al comerciante",
+      "confirmDeal": "Confirmar Flash Deal",
+      "discount": "Descuento: {discount}% OFF",
+      "important": "Importante",
+      "importantNote1": "El código expira en {time}",
+      "importantNote2": "Solo puedes reclamar este deal una vez",
+      "importantNote3": "Contacta al vendedor para usar tu código",
+      "claiming": "Reclamando...",
+      "claim": "Reclamar"
+    }
   },
   "circles": {
     "myActiveCircles": "Mis Círculos Activos",

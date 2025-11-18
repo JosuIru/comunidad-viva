@@ -9,16 +9,13 @@ import { useFormValidation } from '@/hooks/useFormValidation';
 import { createHousingSchema, type CreateHousingFormData } from '@/lib/validations';
 import { useTranslations } from 'next-intl';
 
-const SOLUTION_TYPES = [
-  { value: 'SPACE_BANK', label: 'Banco de Espacios', description: 'Intercambio temporal de espacios habitables' },
-  { value: 'TEMPORARY_HOUSING', label: 'Vivienda Temporal', description: 'Alojamiento temporal para personas en transición' },
-  { value: 'HOUSING_COOP', label: 'Cooperativa de Vivienda', description: 'Propiedad colectiva de vivienda' },
-  { value: 'COMMUNITY_GUARANTEE', label: 'Aval Comunitario', description: 'Garantía colectiva para alquiler' },
-];
+const SOLUTION_TYPE_VALUES = ['SPACE_BANK', 'TEMPORARY_HOUSING', 'HOUSING_COOP', 'COMMUNITY_GUARANTEE'] as const;
 
 export default function NewHousingSolutionPage() {
   const router = useRouter();
   const tToasts = useTranslations('toasts');
+  const t = useTranslations('housing');
+  const tCommon = useTranslations('common');
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [solutionType, setSolutionType] = useState<string>('SPACE_BANK');
 
@@ -109,29 +106,29 @@ export default function NewHousingSolutionPage() {
           <div className="max-w-3xl mx-auto">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8">
               <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-                Nueva Solución de Vivienda
+                {t('newSolution.pageTitle')}
               </h1>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Solution Type */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Tipo de Solución *
+                    {t('newSolution.solutionTypeLabel')}
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {SOLUTION_TYPES.map((type) => (
+                    {SOLUTION_TYPE_VALUES.map((typeValue) => (
                       <button
-                        key={type.value}
+                        key={typeValue}
                         type="button"
-                        onClick={() => handleSolutionTypeChange(type.value)}
+                        onClick={() => handleSolutionTypeChange(typeValue)}
                         className={`p-4 border-2 rounded-lg text-left transition ${
-                          solutionType === type.value
+                          solutionType === typeValue
                             ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
                             : 'border-gray-200 hover:border-gray-300 dark:border-gray-600 dark:hover:border-gray-500'
                         }`}
                       >
-                        <div className="font-semibold text-gray-900 dark:text-gray-100">{type.label}</div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">{type.description}</div>
+                        <div className="font-semibold text-gray-900 dark:text-gray-100">{t(`solutionTypes.${typeValue}`)}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">{t(`solutionTypeDescriptions.${typeValue}`)}</div>
                       </button>
                     ))}
                   </div>
@@ -140,7 +137,7 @@ export default function NewHousingSolutionPage() {
                 {/* Title */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Título *
+                    {t('newSolution.titleLabel')}
                   </label>
                   <input
                     type="text"
@@ -149,14 +146,14 @@ export default function NewHousingSolutionPage() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                    placeholder="Ej: Piso compartido en el centro"
+                    placeholder={t('titlePlaceholder')}
                   />
                 </div>
 
                 {/* Description */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Descripción *
+                    {t('newSolution.descriptionLabel')}
                   </label>
                   <textarea
                     name="description"
@@ -165,14 +162,14 @@ export default function NewHousingSolutionPage() {
                     required
                     rows={4}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                    placeholder="Describe los detalles de esta solución de vivienda..."
+                    placeholder={t('descPlaceholder')}
                   />
                 </div>
 
                 {/* Location */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Ubicación *
+                    {t('newSolution.locationLabel')}
                   </label>
                   <input
                     type="text"
@@ -181,7 +178,7 @@ export default function NewHousingSolutionPage() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                    placeholder="Ej: Madrid, España"
+                    placeholder={t('locationPlaceholder')}
                   />
                 </div>
 
@@ -191,7 +188,7 @@ export default function NewHousingSolutionPage() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                          Capacidad *
+                          {t('newSolution.capacityLabel')}
                         </label>
                         <input
                           type="number"
@@ -201,12 +198,12 @@ export default function NewHousingSolutionPage() {
                           required
                           min="1"
                           className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                          placeholder="Personas"
+                          placeholder={t('capacityPlaceholder')}
                         />
                       </div>
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                          Estancia Mínima (días)
+                          {t('newSolution.minStayLabel')}
                         </label>
                         <input
                           type="number"
@@ -219,7 +216,7 @@ export default function NewHousingSolutionPage() {
                       </div>
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                          Estancia Máxima (días)
+                          {t('newSolution.maxStayLabel')}
                         </label>
                         <input
                           type="number"
@@ -234,7 +231,7 @@ export default function NewHousingSolutionPage() {
 
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Comodidades
+                        {t('newSolution.amenitiesLabel')}
                       </label>
                       <textarea
                         name="amenities"
@@ -242,7 +239,7 @@ export default function NewHousingSolutionPage() {
                         onChange={handleChange}
                         rows={3}
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                        placeholder="Una comodidad por línea&#10;Ej: WiFi&#10;Cocina equipada&#10;Lavadora"
+                        placeholder={t('amenitiesPlaceholder')}
                       />
                     </div>
                   </>
@@ -253,7 +250,7 @@ export default function NewHousingSolutionPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                          Miembros Objetivo *
+                          {t('newSolution.targetMembersLabel')}
                         </label>
                         <input
                           type="number"
@@ -267,7 +264,7 @@ export default function NewHousingSolutionPage() {
                       </div>
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                          Aportación Inicial (€)
+                          {t('newSolution.initialContributionLabel')}
                         </label>
                         <input
                           type="number"
@@ -282,7 +279,7 @@ export default function NewHousingSolutionPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Contribución Mensual (€)
+                        {t('newSolution.monthlyContributionLabel')}
                       </label>
                       <input
                         type="number"
@@ -301,7 +298,7 @@ export default function NewHousingSolutionPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Monto del Aval (€)
+                        {t('newSolution.guaranteeAmountLabel')}
                       </label>
                       <input
                         type="number"
@@ -315,7 +312,7 @@ export default function NewHousingSolutionPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Contribución Mensual (€)
+                        {t('newSolution.monthlyContributionLabel')}
                       </label>
                       <input
                         type="number"
@@ -333,7 +330,7 @@ export default function NewHousingSolutionPage() {
                 {/* Requirements */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Requisitos
+                    {t('newSolution.requirementsLabel')}
                   </label>
                   <textarea
                     name="requirements"
@@ -341,14 +338,14 @@ export default function NewHousingSolutionPage() {
                     onChange={handleChange}
                     rows={4}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                    placeholder="Un requisito por línea&#10;Ej: No fumadores&#10;Respetar horarios de descanso"
+                    placeholder={t('requirementsPlaceholder')}
                   />
                 </div>
 
                 {/* Rules */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Normas
+                    {t('newSolution.rulesLabel')}
                   </label>
                   <textarea
                     name="rules"
@@ -356,7 +353,7 @@ export default function NewHousingSolutionPage() {
                     onChange={handleChange}
                     rows={4}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                    placeholder="Una norma por línea&#10;Ej: Limpieza de espacios comunes&#10;No ruido después de las 22h"
+                    placeholder={t('rulesPlaceholder')}
                   />
                 </div>
 
@@ -367,14 +364,14 @@ export default function NewHousingSolutionPage() {
                     onClick={() => router.back()}
                     className="flex-1 px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 transition font-semibold"
                   >
-                    Cancelar
+                    {t('newSolution.cancelButton')}
                   </button>
                   <button
                     type="submit"
                     disabled={createMutation.isPending}
                     className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold disabled:opacity-50"
                   >
-                    {createMutation.isPending ? 'Creando...' : 'Crear Solución'}
+                    {createMutation.isPending ? t('newSolution.creating') : t('newSolution.createButton')}
                   </button>
                 </div>
               </form>

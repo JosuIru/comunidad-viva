@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 
 interface FlashDeal {
   id: string;
@@ -30,6 +31,8 @@ interface HappyHourStatus {
 }
 
 export default function FlashDealsPage() {
+  const t = useTranslations('gamification');
+  const tCommon = useTranslations('common');
   const queryClient = useQueryClient();
   const [selectedDeal, setSelectedDeal] = useState<FlashDeal | null>(null);
 
@@ -60,12 +63,12 @@ export default function FlashDealsPage() {
       return response.data;
     },
     onSuccess: (data) => {
-      toast.success(`¡Flash deal reclamado! Código: ${data.code}`);
+      toast.success(t('flashDeals.claimedSuccess', { code: data.code }));
       queryClient.invalidateQueries({ queryKey: ['flash-deals'] });
       setSelectedDeal(null);
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al reclamar flash deal');
+      toast.error(error.response?.data?.message || t('flashDeals.claimError'));
     },
   });
 
@@ -74,7 +77,7 @@ export default function FlashDealsPage() {
     const now = new Date();
     const diff = end.getTime() - now.getTime();
 
-    if (diff < 0) return 'Expirado';
+    if (diff < 0) return t('flashDeals.expired');
 
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -102,9 +105,9 @@ export default function FlashDealsPage() {
         {/* Header */}
         <div className="bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 text-white">
           <div className="container mx-auto px-4 py-12">
-            <h1 className="text-4xl font-bold mb-4">⚡ Flash Deals</h1>
+            <h1 className="text-4xl font-bold mb-4">{t('flashDeals.title')}</h1>
             <p className="text-xl opacity-90">
-              Ofertas relámpago por tiempo limitado - ¡No te las pierdas!
+              {t('flashDeals.subtitle')}
             </p>
           </div>
         </div>
@@ -116,10 +119,10 @@ export default function FlashDealsPage() {
               <div className="flex items-center gap-4">
                 <div className="text-6xl">🎉</div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold mb-2">¡Happy Hour Activo!</h3>
+                  <h3 className="text-2xl font-bold mb-2">{t('flashDeals.happyHourActive')}</h3>
                   <p className="text-lg opacity-90">{happyHour.message}</p>
                   <p className="text-sm opacity-80">
-                    Multiplier: ×{happyHour.multiplier} • Termina en:{' '}
+                    {t('flashDeals.multiplier', { multiplier: happyHour.multiplier })} • {t('flashDeals.endsIn')}{' '}
                     {happyHour.endsAt && getTimeRemaining(happyHour.endsAt)}
                   </p>
                 </div>
@@ -133,8 +136,8 @@ export default function FlashDealsPage() {
               <div className="flex items-center gap-3 mb-3">
                 <div className="text-4xl">⏰</div>
                 <div>
-                  <h3 className="font-bold text-gray-900 dark:text-gray-100">Tiempo Limitado</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">2-4 horas por deal</p>
+                  <h3 className="font-bold text-gray-900 dark:text-gray-100">{t('flashDeals.limitedTime')}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('flashDeals.hoursPerDeal')}</p>
                 </div>
               </div>
             </div>
@@ -142,8 +145,8 @@ export default function FlashDealsPage() {
               <div className="flex items-center gap-3 mb-3">
                 <div className="text-4xl">💰</div>
                 <div>
-                  <h3 className="font-bold text-gray-900 dark:text-gray-100">Hasta 70% OFF</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Descuentos increíbles</p>
+                  <h3 className="font-bold text-gray-900 dark:text-gray-100">{t('flashDeals.upTo70Off')}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('flashDeals.incredibleDiscounts')}</p>
                 </div>
               </div>
             </div>
@@ -151,8 +154,8 @@ export default function FlashDealsPage() {
               <div className="flex items-center gap-3 mb-3">
                 <div className="text-4xl">🔥</div>
                 <div>
-                  <h3 className="font-bold text-gray-900 dark:text-gray-100">Stock Limitado</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Primero llegar, primero servir</p>
+                  <h3 className="font-bold text-gray-900 dark:text-gray-100">{t('flashDeals.limitedStock')}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('flashDeals.firstComeFirstServe')}</p>
                 </div>
               </div>
             </div>
@@ -194,7 +197,7 @@ export default function FlashDealsPage() {
                           </span>
                         </div>
                         <div className="text-sm text-green-600 dark:text-green-400 font-semibold">
-                          Ahorras €
+                          {t('flashDeals.youSave')} €
                           {(
                             deal.originalPrice - parseFloat(getDiscountedPrice(deal.originalPrice, deal.discount))
                           ).toFixed(2)}
@@ -204,7 +207,7 @@ export default function FlashDealsPage() {
                       {/* Stock */}
                       <div className="mb-4">
                         <div className="flex justify-between text-sm mb-1">
-                          <span className="text-gray-600 dark:text-gray-400">Stock disponible</span>
+                          <span className="text-gray-600 dark:text-gray-400">{t('flashDeals.availableStock')}</span>
                           <span className={`font-bold ${urgencyColor}`}>
                             {deal.remainingQuantity} / {deal.quantity}
                           </span>
@@ -228,7 +231,7 @@ export default function FlashDealsPage() {
                       {/* Merchant */}
                       <div className="flex items-center gap-2 mb-4 text-sm text-gray-600 dark:text-gray-400">
                         <div className="w-6 h-6 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
-                        <span>{deal.merchant?.name || 'Comerciante'}</span>
+                        <span>{deal.merchant?.name || t('flashDeals.merchant')}</span>
                       </div>
 
                       {/* Actions */}
@@ -237,12 +240,12 @@ export default function FlashDealsPage() {
                         disabled={deal.remainingQuantity === 0}
                         className="w-full py-3 px-4 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-lg font-bold hover:from-red-700 hover:to-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        {deal.remainingQuantity === 0 ? 'Agotado' : '⚡ Reclamar Ahora'}
+                        {deal.remainingQuantity === 0 ? t('flashDeals.soldOut') : t('flashDeals.claimNow')}
                       </button>
 
                       {deal.remainingQuantity < deal.quantity * 0.2 && deal.remainingQuantity > 0 && (
                         <div className="mt-2 text-center text-sm text-red-600 font-semibold animate-pulse">
-                          🔥 ¡Solo quedan {deal.remainingQuantity}!
+                          {t('flashDeals.onlyLeft', { count: deal.remainingQuantity })}
                         </div>
                       )}
                     </div>
@@ -253,44 +256,44 @@ export default function FlashDealsPage() {
           ) : (
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-12 text-center">
               <div className="text-6xl mb-4">⚡</div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">No hay Flash Deals activos</h3>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">{t('flashDeals.noActiveDeals')}</h3>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Los flash deals rotan automáticamente 3 veces al día
+                {t('flashDeals.dealsRotateDaily')}
               </p>
-              <p className="text-sm text-gray-500 dark:text-gray-500">Vuelve pronto para no perderte las ofertas</p>
+              <p className="text-sm text-gray-500 dark:text-gray-500">{t('flashDeals.comeBackSoon')}</p>
             </div>
           )}
 
           {/* How it Works */}
           <div className="mt-12 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">¿Cómo funcionan los Flash Deals?</h3>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">{t('flashDeals.howItWorks')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div className="text-center">
                 <div className="text-4xl mb-3">1️⃣</div>
-                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">Encuentra un Deal</h4>
+                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">{t('flashDeals.step1Title')}</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Explora las ofertas activas y elige la que más te interese
+                  {t('flashDeals.step1Desc')}
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">2️⃣</div>
-                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">Reclama Rápido</h4>
+                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">{t('flashDeals.step2Title')}</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Haz clic en "Reclamar" antes de que se agote el stock
+                  {t('flashDeals.step2Desc')}
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">3️⃣</div>
-                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">Obtén tu Código</h4>
+                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">{t('flashDeals.step3Title')}</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Recibirás un código único para usar el descuento
+                  {t('flashDeals.step3Desc')}
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">4️⃣</div>
-                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">Contacta al Vendedor</h4>
+                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-2">{t('flashDeals.step4Title')}</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Usa el código cuando contactes al comerciante
+                  {t('flashDeals.step4Desc')}
                 </p>
               </div>
             </div>
@@ -301,7 +304,7 @@ export default function FlashDealsPage() {
         {selectedDeal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-8">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Confirmar Flash Deal</h3>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">{t('flashDeals.confirmDeal')}</h3>
 
               <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 border-2 border-red-200 dark:border-red-700 rounded-lg p-4 mb-6">
                 <h4 className="font-bold text-lg mb-2 text-gray-900 dark:text-gray-100">{selectedDeal.title}</h4>
@@ -315,16 +318,16 @@ export default function FlashDealsPage() {
                   </span>
                 </div>
                 <div className="text-sm text-green-600 dark:text-green-400 font-semibold">
-                  Descuento: {selectedDeal.discount}% OFF
+                  {t('flashDeals.discount', { discount: selectedDeal.discount })}
                 </div>
               </div>
 
               <div className="bg-yellow-50 dark:bg-yellow-900/20 border-2 border-yellow-200 dark:border-yellow-700 rounded-lg p-4 mb-6">
-                <h4 className="font-semibold text-yellow-900 dark:text-yellow-300 mb-2">⚠️ Importante</h4>
+                <h4 className="font-semibold text-yellow-900 dark:text-yellow-300 mb-2">{t('flashDeals.important')}</h4>
                 <ul className="text-sm text-yellow-800 dark:text-yellow-400 space-y-1">
-                  <li>• El código expira en {getTimeRemaining(selectedDeal.expiresAt)}</li>
-                  <li>• Solo puedes reclamar este deal una vez</li>
-                  <li>• Contacta al vendedor para usar tu código</li>
+                  <li>• {t('flashDeals.importantNote1', { time: getTimeRemaining(selectedDeal.expiresAt) })}</li>
+                  <li>• {t('flashDeals.importantNote2')}</li>
+                  <li>• {t('flashDeals.importantNote3')}</li>
                 </ul>
               </div>
 
@@ -333,14 +336,14 @@ export default function FlashDealsPage() {
                   onClick={() => setSelectedDeal(null)}
                   className="flex-1 py-3 px-4 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-semibold"
                 >
-                  Cancelar
+                  {tCommon('cancel')}
                 </button>
                 <button
                   onClick={() => claimMutation.mutate(selectedDeal.id)}
                   disabled={claimMutation.isPending}
                   className="flex-1 py-3 px-4 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-lg hover:from-red-700 hover:to-orange-700 transition-colors font-semibold disabled:opacity-50"
                 >
-                  {claimMutation.isPending ? 'Reclamando...' : '⚡ Reclamar'}
+                  {claimMutation.isPending ? t('flashDeals.claiming') : t('flashDeals.claim')}
                 </button>
               </div>
             </div>

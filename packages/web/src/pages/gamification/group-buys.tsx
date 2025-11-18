@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 
 interface GroupBuy {
   id: string;
@@ -44,6 +45,8 @@ interface CreateGroupBuyData {
 }
 
 export default function GroupBuysPage() {
+  const t = useTranslations('gamification');
+  const tCommon = useTranslations('common');
   const queryClient = useQueryClient();
   const [selectedBuy, setSelectedBuy] = useState<GroupBuy | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -86,12 +89,12 @@ export default function GroupBuysPage() {
       return response.data;
     },
     onSuccess: () => {
-      toast.success('¡Te has unido a la compra grupal!');
+      toast.success(t('groupBuys.joinedSuccess'));
       queryClient.invalidateQueries({ queryKey: ['group-buys'] });
       setSelectedBuy(null);
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al unirse a la compra grupal');
+      toast.error(error.response?.data?.message || t('groupBuys.joinError'));
     },
   });
 
@@ -102,12 +105,12 @@ export default function GroupBuysPage() {
       return response.data;
     },
     onSuccess: () => {
-      toast.success('Has salido de la compra grupal');
+      toast.success(t('groupBuys.leftSuccess'));
       queryClient.invalidateQueries({ queryKey: ['group-buys'] });
       setSelectedBuy(null);
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al salir de la compra grupal');
+      toast.error(error.response?.data?.message || t('groupBuys.leaveError'));
     },
   });
 
@@ -118,13 +121,13 @@ export default function GroupBuysPage() {
       return response.data;
     },
     onSuccess: () => {
-      toast.success('¡Compra grupal creada exitosamente!');
+      toast.success(t('groupBuys.createdSuccess'));
       queryClient.invalidateQueries({ queryKey: ['group-buys'] });
       setShowCreateModal(false);
       resetForm();
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al crear compra grupal');
+      toast.error(error.response?.data?.message || t('groupBuys.createError'));
     },
   });
 
@@ -151,7 +154,7 @@ export default function GroupBuysPage() {
     const now = new Date();
     const diff = end.getTime() - now.getTime();
 
-    if (diff < 0) return 'Expirado';
+    if (diff < 0) return t('groupBuys.expired');
 
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -197,16 +200,16 @@ export default function GroupBuysPage() {
           <div className="container mx-auto px-4 py-12">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-4xl font-bold mb-4">🛒 Compras Grupales</h1>
+                <h1 className="text-4xl font-bold mb-4">{t('groupBuys.title')}</h1>
                 <p className="text-xl opacity-90">
-                  Únete con otros y obtén mejores descuentos
+                  {t('groupBuys.subtitle')}
                 </p>
               </div>
               <button
                 onClick={() => setShowCreateModal(true)}
                 className="px-6 py-3 bg-white text-blue-600 dark:text-blue-400 rounded-lg font-bold hover:bg-blue-50 transition-colors"
               >
-                + Crear Compra Grupal
+                + {t('createGroupBuy')}
               </button>
             </div>
           </div>
@@ -219,8 +222,8 @@ export default function GroupBuysPage() {
               <div className="flex items-center gap-3 mb-3">
                 <div className="text-4xl">👥</div>
                 <div>
-                  <h3 className="font-bold text-gray-900 dark:text-gray-100">Más Gente</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Mayor descuento</p>
+                  <h3 className="font-bold text-gray-900 dark:text-gray-100">{t('groupBuys.morePeople')}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('groupBuys.biggerDiscount')}</p>
                 </div>
               </div>
             </div>
@@ -228,8 +231,8 @@ export default function GroupBuysPage() {
               <div className="flex items-center gap-3 mb-3">
                 <div className="text-4xl">💰</div>
                 <div>
-                  <h3 className="font-bold text-gray-900 dark:text-gray-100">Hasta 50% OFF</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Descuentos progresivos</p>
+                  <h3 className="font-bold text-gray-900 dark:text-gray-100">{t('groupBuys.upTo50Off')}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('groupBuys.progressiveDiscounts')}</p>
                 </div>
               </div>
             </div>
@@ -237,8 +240,8 @@ export default function GroupBuysPage() {
               <div className="flex items-center gap-3 mb-3">
                 <div className="text-4xl">🎯</div>
                 <div>
-                  <h3 className="font-bold text-gray-900 dark:text-gray-100">Win-Win</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Todos ahorran</p>
+                  <h3 className="font-bold text-gray-900 dark:text-gray-100">{t('groupBuys.winWin')}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('groupBuys.everyoneSaves')}</p>
                 </div>
               </div>
             </div>
@@ -256,7 +259,7 @@ export default function GroupBuysPage() {
                     : 'bg-white text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:bg-gray-800'
                 }`}
               >
-                {status === 'ALL' ? 'Todas' : status === 'ACTIVE' ? 'Activas' : 'Completadas'}
+                {status === 'ALL' ? t('groupBuys.filterAll') : status === 'ACTIVE' ? t('groupBuys.filterActive') : t('groupBuys.filterCompleted')}
               </button>
             ))}
           </div>
@@ -292,7 +295,7 @@ export default function GroupBuysPage() {
 
                       {/* Product */}
                       <div className="bg-blue-50 rounded-lg p-3 mb-4">
-                        <div className="text-sm text-blue-900 dark:text-blue-300 font-semibold mb-1">Producto</div>
+                        <div className="text-sm text-blue-900 dark:text-blue-300 font-semibold mb-1">{t('groupBuys.product')}</div>
                         <div className="text-blue-700">{groupBuy.product}</div>
                       </div>
 
@@ -307,14 +310,14 @@ export default function GroupBuysPage() {
                           </span>
                         </div>
                         <div className="text-sm text-green-600 font-semibold">
-                          Ahorras €{(groupBuy.basePrice - getCurrentPrice(groupBuy)).toFixed(2)}
+                          {t('groupBuys.youSave')} €{(groupBuy.basePrice - getCurrentPrice(groupBuy)).toFixed(2)}
                         </div>
                       </div>
 
                       {/* Participants Progress */}
                       <div className="mb-4">
                         <div className="flex justify-between text-sm mb-2">
-                          <span className="text-gray-600 dark:text-gray-400">Participantes</span>
+                          <span className="text-gray-600 dark:text-gray-400">{t('groupBuys.participants')}</span>
                           <span className="font-bold text-gray-900 dark:text-gray-100">
                             {groupBuy.currentParticipants} / {groupBuy.maxParticipants}
                           </span>
@@ -327,7 +330,7 @@ export default function GroupBuysPage() {
                         </div>
                         {groupBuy.currentParticipants < groupBuy.minParticipants && (
                           <div className="text-xs text-orange-600 mt-1">
-                            Mínimo {groupBuy.minParticipants} participantes requeridos
+                            {t('groupBuys.minimumRequired', { count: groupBuy.minParticipants })}
                           </div>
                         )}
                       </div>
@@ -337,11 +340,11 @@ export default function GroupBuysPage() {
                         <div className="bg-purple-50 border-2 border-purple-200 rounded-lg p-3 mb-4">
                           <div className="flex items-center gap-2">
                             <span className="text-purple-700 text-sm font-semibold">
-                              🎯 Próximo nivel: {nextTier.discount}% OFF
+                              {t('groupBuys.nextLevel', { discount: nextTier.discount })}
                             </span>
                           </div>
                           <div className="text-xs text-purple-600 dark:text-purple-400 mt-1">
-                            Faltan {nextTier.participants - groupBuy.currentParticipants} personas
+                            {t('groupBuys.peopleMissing', { count: nextTier.participants - groupBuy.currentParticipants })}
                           </div>
                         </div>
                       )}
@@ -350,7 +353,7 @@ export default function GroupBuysPage() {
                       <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-4">
                         <div className="flex items-center gap-2">
                           <div className="w-6 h-6 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
-                          <span>{groupBuy.merchant?.name || 'Comerciante'}</span>
+                          <span>{groupBuy.merchant?.name || t('groupBuys.merchant')}</span>
                         </div>
                         <div>⏰ {getTimeRemaining(groupBuy.expiresAt)}</div>
                       </div>
@@ -364,7 +367,7 @@ export default function GroupBuysPage() {
                               disabled={leaveMutation.isPending}
                               className="w-full py-3 px-4 bg-red-100 text-red-700 rounded-lg font-bold hover:bg-red-200 transition-colors disabled:opacity-50"
                             >
-                              Salir de la Compra
+                              {t('groupBuys.leaveBuy')}
                             </button>
                           ) : (
                             <button
@@ -373,8 +376,8 @@ export default function GroupBuysPage() {
                               className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-bold hover:from-blue-700 hover:to-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               {groupBuy.currentParticipants >= groupBuy.maxParticipants
-                                ? 'Compra Llena'
-                                : '🛒 Unirme Ahora'}
+                                ? t('groupBuys.buyFull')
+                                : t('groupBuys.joinNow')}
                             </button>
                           )}
                         </>
@@ -382,7 +385,7 @@ export default function GroupBuysPage() {
 
                       {groupBuy.status === 'COMPLETED' && (
                         <div className="w-full py-3 px-4 bg-blue-100 text-blue-700 rounded-lg font-bold text-center">
-                          ✅ Compra Completada
+                          {t('groupBuys.buyCompleted')}
                         </div>
                       )}
                     </div>
@@ -394,19 +397,19 @@ export default function GroupBuysPage() {
             <div className="bg-white rounded dark:bg-gray-800-lg shadow-lg p-12 text-center">
               <div className="text-6xl mb-4">🛒</div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                No hay compras grupales {filterStatus.toLowerCase()}
+                {t('groupBuys.noGroupBuys', { status: filterStatus.toLowerCase() })}
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
                 {filterStatus === 'ACTIVE'
-                  ? 'Crea la primera o espera a que alguien más lo haga'
-                  : 'Cambia el filtro para ver otras compras'}
+                  ? t('groupBuys.createFirstOrWait')
+                  : t('groupBuys.changeFilter')}
               </p>
               {filterStatus === 'ACTIVE' && (
                 <button
                   onClick={() => setShowCreateModal(true)}
                   className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold"
                 >
-                  + Crear Compra Grupal
+                  + {t('createGroupBuy')}
                 </button>
               )}
             </div>
@@ -414,58 +417,58 @@ export default function GroupBuysPage() {
 
           {/* How it Works */}
           <div className="mt-12 bg-white rounded-lg shadow-lg p-8">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">¿Cómo funcionan las Compras Grupales?</h3>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">{t('groupBuys.howItWorks')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div className="text-center">
                 <div className="text-4xl mb-3">1️⃣</div>
-                <h4 className="font-bold mb-2">Encuentra o Crea</h4>
+                <h4 className="font-bold mb-2">{t('groupBuys.step1Title')}</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Busca una compra grupal activa o crea una nueva
+                  {t('groupBuys.step1Desc')}
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">2️⃣</div>
-                <h4 className="font-bold mb-2">Únete</h4>
+                <h4 className="font-bold mb-2">{t('groupBuys.step2Title')}</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Haz clic en "Unirme" para participar
+                  {t('groupBuys.step2Desc')}
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">3️⃣</div>
-                <h4 className="font-bold mb-2">Espera</h4>
+                <h4 className="font-bold mb-2">{t('groupBuys.step3Title')}</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Más personas = mayor descuento para todos
+                  {t('groupBuys.step3Desc')}
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-4xl mb-3">4️⃣</div>
-                <h4 className="font-bold mb-2">Compra</h4>
+                <h4 className="font-bold mb-2">{t('groupBuys.step4Title')}</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Contacta al vendedor con el descuento final
+                  {t('groupBuys.step4Desc')}
                 </p>
               </div>
             </div>
 
             <div className="mt-8 bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
-              <h4 className="font-bold text-blue-900 dark:text-blue-300 mb-3">💡 Descuentos Progresivos</h4>
+              <h4 className="font-bold text-blue-900 dark:text-blue-300 mb-3">{t('groupBuys.progressiveDiscountsTitle')}</h4>
               <p className="text-sm text-blue-800 dark:text-blue-400 mb-3">
-                El descuento aumenta automáticamente según el número de participantes:
+                {t('groupBuys.progressiveDiscountsDesc')}
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <div className="bg-white rounded dark:bg-gray-800 p-3 text-center">
-                  <div className="font-bold text-blue-600 dark:text-blue-400">5 personas</div>
+                  <div className="font-bold text-blue-600 dark:text-blue-400">{t('groupBuys.people', { count: 5 })}</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">10% OFF</div>
                 </div>
                 <div className="bg-white rounded dark:bg-gray-800 p-3 text-center">
-                  <div className="font-bold text-blue-600 dark:text-blue-400">10 personas</div>
+                  <div className="font-bold text-blue-600 dark:text-blue-400">{t('groupBuys.people', { count: 10 })}</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">20% OFF</div>
                 </div>
                 <div className="bg-white rounded dark:bg-gray-800 p-3 text-center">
-                  <div className="font-bold text-blue-600 dark:text-blue-400">25 personas</div>
+                  <div className="font-bold text-blue-600 dark:text-blue-400">{t('groupBuys.people', { count: 25 })}</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">30% OFF</div>
                 </div>
                 <div className="bg-white rounded dark:bg-gray-800 p-3 text-center">
-                  <div className="font-bold text-blue-600 dark:text-blue-400">50+ personas</div>
+                  <div className="font-bold text-blue-600 dark:text-blue-400">{t('groupBuys.peopleOrMore', { count: 50 })}</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">40% OFF</div>
                 </div>
               </div>
@@ -477,7 +480,7 @@ export default function GroupBuysPage() {
         {selectedBuy && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded dark:bg-gray-800-lg max-w-md w-full p-8">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Unirse a Compra Grupal</h3>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">{t('groupBuys.joinGroupBuy')}</h3>
 
               <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-lg p-4 mb-6">
                 <h4 className="font-bold text-lg mb-2">{selectedBuy.title}</h4>
@@ -491,17 +494,17 @@ export default function GroupBuysPage() {
                   </span>
                 </div>
                 <div className="text-sm text-green-600 font-semibold">
-                  Descuento actual: {selectedBuy.currentDiscount}% OFF
+                  {t('groupBuys.currentDiscount', { discount: selectedBuy.currentDiscount })}
                 </div>
               </div>
 
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-6">
-                <h4 className="font-semibold text-yellow-900 dark:text-yellow-300 mb-2">⚠️ Importante</h4>
+                <h4 className="font-semibold text-yellow-900 dark:text-yellow-300 mb-2">{t('groupBuys.important')}</h4>
                 <ul className="text-sm text-yellow-800 dark:text-yellow-400 space-y-1">
-                  <li>• El descuento puede mejorar si se unen más personas</li>
-                  <li>• La compra expira en {getTimeRemaining(selectedBuy.expiresAt)}</li>
-                  <li>• Mínimo {selectedBuy.minParticipants} participantes requeridos</li>
-                  <li>• Recibirás un código cuando se complete la compra</li>
+                  <li>• {t('groupBuys.importantNote1')}</li>
+                  <li>• {t('groupBuys.importantNote2', { time: getTimeRemaining(selectedBuy.expiresAt) })}</li>
+                  <li>• {t('groupBuys.importantNote3', { count: selectedBuy.minParticipants })}</li>
+                  <li>• {t('groupBuys.importantNote4')}</li>
                 </ul>
               </div>
 
@@ -510,14 +513,14 @@ export default function GroupBuysPage() {
                   onClick={() => setSelectedBuy(null)}
                   className="flex-1 py-3 px-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:bg-gray-600 transition-colors font-semibold"
                 >
-                  Cancelar
+                  {tCommon('cancel')}
                 </button>
                 <button
                   onClick={() => joinMutation.mutate(selectedBuy.id)}
                   disabled={joinMutation.isPending}
                   className="flex-1 py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-colors font-semibold disabled:opacity-50"
                 >
-                  {joinMutation.isPending ? 'Uniéndome...' : '🛒 Confirmar'}
+                  {joinMutation.isPending ? t('groupBuys.joining') : t('groupBuys.confirm')}
                 </button>
               </div>
             </div>
@@ -528,45 +531,45 @@ export default function GroupBuysPage() {
         {showCreateModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
             <div className="bg-white rounded dark:bg-gray-800-lg max-w-2xl w-full p-8 my-8">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Crear Compra Grupal</h3>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">{t('createGroupBuy')}</h3>
 
               <div className="space-y-4 mb-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Título</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('groupBuys.formTitle')}</label>
                   <input
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Ej: Pack de productos orgánicos"
+                    placeholder={t('productNamePlaceholder')}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Descripción</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('groupBuys.formDescription')}</label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     rows={3}
-                    placeholder="Describe qué incluye la compra grupal"
+                    placeholder={t('productDescPlaceholder')}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Producto</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('groupBuys.product')}</label>
                   <input
                     type="text"
                     value={formData.product}
                     onChange={(e) => setFormData({ ...formData, product: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Nombre específico del producto"
+                    placeholder={t('specificProductPlaceholder')}
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Precio Base (€)</label>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('groupBuys.basePrice')}</label>
                     <input
                       type="number"
                       value={formData.basePrice}
@@ -578,7 +581,7 @@ export default function GroupBuysPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Duración (horas)</label>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('groupBuys.duration')}</label>
                     <input
                       type="number"
                       value={formData.duration}
@@ -591,7 +594,7 @@ export default function GroupBuysPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Min. Participantes</label>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('groupBuys.minParticipants')}</label>
                     <input
                       type="number"
                       value={formData.minParticipants}
@@ -602,7 +605,7 @@ export default function GroupBuysPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Max. Participantes</label>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('groupBuys.maxParticipants')}</label>
                     <input
                       type="number"
                       value={formData.maxParticipants}
@@ -614,7 +617,7 @@ export default function GroupBuysPage() {
                 </div>
 
                 <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
-                  <h4 className="font-semibold text-blue-900 dark:text-blue-300 mb-3">Niveles de Descuento</h4>
+                  <h4 className="font-semibold text-blue-900 dark:text-blue-300 mb-3">{t('groupBuys.discountLevels')}</h4>
                   <div className="space-y-2">
                     {formData.discountTiers.map((tier, index) => (
                       <div key={index} className="flex items-center gap-3">
@@ -629,7 +632,7 @@ export default function GroupBuysPage() {
                           className="w-24 px-3 py-2 border border-blue-300 rounded-lg"
                           min="1"
                         />
-                        <span className="text-sm text-gray-600 dark:text-gray-400">personas =</span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400">{t('groupBuys.peopleEquals')}</span>
                         <input
                           type="number"
                           value={tier.discount}
@@ -657,14 +660,14 @@ export default function GroupBuysPage() {
                   }}
                   className="flex-1 py-3 px-4 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:bg-gray-600 transition-colors font-semibold"
                 >
-                  Cancelar
+                  {tCommon('cancel')}
                 </button>
                 <button
                   onClick={() => createMutation.mutate(formData)}
                   disabled={createMutation.isPending || !formData.title || !formData.product || formData.basePrice <= 0}
                   className="flex-1 py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-colors font-semibold disabled:opacity-50"
                 >
-                  {createMutation.isPending ? 'Creando...' : '🛒 Crear Compra Grupal'}
+                  {createMutation.isPending ? t('groupBuys.creating') : t('groupBuys.createButton')}
                 </button>
               </div>
             </div>

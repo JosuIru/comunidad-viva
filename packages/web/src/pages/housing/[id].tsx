@@ -7,24 +7,13 @@ import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
 
-const SOLUTION_TYPE_LABELS = {
-  SPACE_BANK: 'Banco de Espacios',
-  TEMPORARY_HOUSING: 'Vivienda Temporal',
-  HOUSING_COOP: 'Cooperativa de Vivienda',
-  COMMUNITY_GUARANTEE: 'Aval Comunitario',
-};
-
-const STATUS_LABELS = {
-  ACTIVE: 'Activo',
-  FILLED: 'Completo',
-  CLOSED: 'Cerrado',
-};
-
 export default function HousingSolutionDetailPage() {
   const router = useRouter();
   const { id } = router.query;
   const queryClient = useQueryClient();
   const tToasts = useTranslations('toasts');
+  const t = useTranslations('housing');
+  const tCommon = useTranslations('common');
   const [showJoinModal, setShowJoinModal] = useState(false);
 
   // Form data for different solution types
@@ -156,7 +145,7 @@ export default function HousingSolutionDetailPage() {
       <Layout>
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Solución no encontrada</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t('detail.notFound')}</h1>
           </div>
         </div>
       </Layout>
@@ -184,7 +173,7 @@ export default function HousingSolutionDetailPage() {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <span className="text-sm font-medium px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300 rounded">
-                    {SOLUTION_TYPE_LABELS[solution.solutionType as keyof typeof SOLUTION_TYPE_LABELS]}
+                    {t(`solutionTypes.${solution.solutionType}`)}
                   </span>
                   <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-4">{solution.title}</h1>
                 </div>
@@ -193,7 +182,7 @@ export default function HousingSolutionDetailPage() {
                   solution.status === 'FILLED' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300' :
                   'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
                 }`}>
-                  {STATUS_LABELS[solution.status as keyof typeof STATUS_LABELS]}
+                  {t(`status.${solution.status}`)}
                 </span>
               </div>
 
@@ -214,27 +203,27 @@ export default function HousingSolutionDetailPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 {solution.capacity && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">Capacidad</h3>
-                    <p className="text-lg text-gray-900 dark:text-gray-100">{solution.capacity} personas</p>
+                    <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">{t('capacity')}</h3>
+                    <p className="text-lg text-gray-900 dark:text-gray-100">{solution.capacity} {t('capacityPeople')}</p>
                   </div>
                 )}
 
                 {solution.monthlyContribution && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">Contribución Mensual</h3>
-                    <p className="text-lg text-gray-900 dark:text-gray-100">{solution.monthlyContribution}€/mes</p>
+                    <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">{t('newSolution.monthlyContributionLabel')}</h3>
+                    <p className="text-lg text-gray-900 dark:text-gray-100">{solution.monthlyContribution}{t('monthlyContribution')}</p>
                   </div>
                 )}
 
                 {solution.solutionType === 'HOUSING_COOP' && (
                   <>
                     <div>
-                      <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">Miembros</h3>
+                      <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">{t('detail.membersTitle')}</h3>
                       <p className="text-lg text-gray-900 dark:text-gray-100">{solution.currentMembers}/{solution.targetMembers}</p>
                     </div>
                     {solution.initialContribution && (
                       <div>
-                        <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">Aportación Inicial</h3>
+                        <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">{t('detail.initialContribution')}</h3>
                         <p className="text-lg text-gray-900 dark:text-gray-100">{solution.initialContribution}€</p>
                       </div>
                     )}
@@ -243,7 +232,7 @@ export default function HousingSolutionDetailPage() {
 
                 {solution.solutionType === 'COMMUNITY_GUARANTEE' && solution.guaranteeAmount && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">Monto del Aval</h3>
+                    <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">{t('detail.guaranteeAmount')}</h3>
                     <p className="text-lg text-gray-900 dark:text-gray-100">{solution.guaranteeAmount}€</p>
                   </div>
                 )}
@@ -252,7 +241,7 @@ export default function HousingSolutionDetailPage() {
               {/* Requirements */}
               {solution.requirements && solution.requirements.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">Requisitos</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">{t('newSolution.requirementsLabel')}</h3>
                   <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
                     {solution.requirements.map((req: string, idx: number) => (
                       <li key={idx}>{req}</li>
@@ -264,7 +253,7 @@ export default function HousingSolutionDetailPage() {
               {/* Rules */}
               {solution.rules && solution.rules.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">Normas</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">{t('newSolution.rulesLabel')}</h3>
                   <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
                     {solution.rules.map((rule: string, idx: number) => (
                       <li key={idx}>{rule}</li>
@@ -280,14 +269,14 @@ export default function HousingSolutionDetailPage() {
                     onClick={handleEdit}
                     className="flex-1 px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition font-semibold"
                   >
-                    ✏️ Editar
+                    {t('detail.editButton')}
                   </button>
                   <button
                     onClick={handleDelete}
                     disabled={deleteMutation.isPending}
                     className="flex-1 px-4 py-2 bg-white dark:bg-gray-700 text-red-600 dark:text-red-400 border border-red-300 dark:border-red-600 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition font-semibold disabled:opacity-50"
                   >
-                    {deleteMutation.isPending ? 'Eliminando...' : '🗑️ Eliminar'}
+                    {deleteMutation.isPending ? t('detail.deleting') : t('detail.deleteButton')}
                   </button>
                 </div>
               )}
@@ -298,7 +287,7 @@ export default function HousingSolutionDetailPage() {
                   onClick={() => setShowJoinModal(true)}
                   className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold"
                 >
-                  Unirse a esta Solución
+                  {t('detail.joinButton')}
                 </button>
               )}
             </div>
@@ -307,7 +296,7 @@ export default function HousingSolutionDetailPage() {
             {solution.members && solution.members.length > 0 && (
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-                  Miembros ({solution.members.length})
+                  {t('detail.membersTitle')} ({solution.members.length})
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {solution.members.map((member: any) => (
@@ -326,10 +315,9 @@ export default function HousingSolutionDetailPage() {
                         </div>
                       )}
                       <div>
-                        <p className="font-semibold text-gray-900 dark:text-gray-100">{member.user?.name || 'Usuario'}</p>
+                        <p className="font-semibold text-gray-900 dark:text-gray-100">{member.user?.name || t('detail.user')}</p>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                          {member.role === 'ORGANIZER' ? 'Organizador' :
-                           member.role === 'MEMBER' ? 'Miembro' : 'Participante'}
+                          {t(`detail.roles.${member.role}`)}
                         </p>
                       </div>
                     </div>
@@ -346,7 +334,7 @@ export default function HousingSolutionDetailPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
           <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6 my-8">
             <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-              Unirse a {SOLUTION_TYPE_LABELS[solution.solutionType as keyof typeof SOLUTION_TYPE_LABELS]}
+              {t('joinModal.title', { type: t(`solutionTypes.${solution.solutionType}`) })}
             </h3>
 
             {/* SPACE_BANK Form */}
@@ -354,7 +342,7 @@ export default function HousingSolutionDetailPage() {
               <div className="space-y-4 mb-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Fecha y Hora de Inicio
+                    {t('joinModal.startDateTime')}
                   </label>
                   <input
                     type="datetime-local"
@@ -366,7 +354,7 @@ export default function HousingSolutionDetailPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Fecha y Hora de Fin
+                    {t('joinModal.endDateTime')}
                   </label>
                   <input
                     type="datetime-local"
@@ -384,7 +372,7 @@ export default function HousingSolutionDetailPage() {
               <div className="space-y-4 mb-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Fecha de Entrada
+                    {t('joinModal.checkInDate')}
                   </label>
                   <input
                     type="date"
@@ -396,7 +384,7 @@ export default function HousingSolutionDetailPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Fecha de Salida
+                    {t('joinModal.checkOutDate')}
                   </label>
                   <input
                     type="date"
@@ -408,7 +396,7 @@ export default function HousingSolutionDetailPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Número de Huéspedes
+                    {t('joinModal.guestsCount')}
                   </label>
                   <input
                     type="number"
@@ -427,54 +415,54 @@ export default function HousingSolutionDetailPage() {
               <div className="space-y-4 mb-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Mensaje de Presentación
+                    {t('joinModal.introMessage')}
                   </label>
                   <textarea
                     value={joinData.message}
                     onChange={(e) => setJoinData({ ...joinData, message: e.target.value })}
                     rows={3}
-                    placeholder="Cuéntanos por qué quieres unirte..."
+                    placeholder={t('whyJoinPlaceholder')}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Habilidades (separadas por comas)
+                    {t('joinModal.skillsLabel')}
                   </label>
                   <input
                     type="text"
                     value={joinData.skills}
                     onChange={(e) => setJoinData({ ...joinData, skills: e.target.value })}
-                    placeholder="ej: carpintería, diseño, contabilidad"
+                    placeholder={t('skillsPlaceholder')}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Nivel de Compromiso
+                    {t('joinModal.commitmentLabel')}
                   </label>
                   <select
                     value={joinData.commitmentLevel}
                     onChange={(e) => setJoinData({ ...joinData, commitmentLevel: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                   >
-                    <option value="LOW">Bajo</option>
-                    <option value="MEDIUM">Medio</option>
-                    <option value="HIGH">Alto</option>
+                    <option value="LOW">{t('joinModal.commitmentLevels.LOW')}</option>
+                    <option value="MEDIUM">{t('joinModal.commitmentLevels.MEDIUM')}</option>
+                    <option value="HIGH">{t('joinModal.commitmentLevels.HIGH')}</option>
                   </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Disponibilidad
+                    {t('joinModal.availabilityLabel')}
                   </label>
                   <select
                     value={joinData.availability}
                     onChange={(e) => setJoinData({ ...joinData, availability: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                   >
-                    <option value="WEEKDAYS">Entre semana</option>
-                    <option value="WEEKENDS">Fines de semana</option>
-                    <option value="FLEXIBLE">Flexible</option>
+                    <option value="WEEKDAYS">{t('joinModal.availabilityOptions.WEEKDAYS')}</option>
+                    <option value="WEEKENDS">{t('joinModal.availabilityOptions.WEEKENDS')}</option>
+                    <option value="FLEXIBLE">{t('joinModal.availabilityOptions.FLEXIBLE')}</option>
                   </select>
                 </div>
               </div>
@@ -485,7 +473,7 @@ export default function HousingSolutionDetailPage() {
              solution.solutionType !== 'TEMPORARY_HOUSING' &&
              solution.solutionType !== 'HOUSING_COOP' && (
               <p className="text-gray-700 dark:text-gray-300 mb-6">
-                ¿Estás seguro de que quieres participar en "{solution.title}"?
+                {t('joinModal.confirmQuestion', { title: solution.title })}
               </p>
             )}
 
@@ -494,14 +482,14 @@ export default function HousingSolutionDetailPage() {
                 onClick={() => setShowJoinModal(false)}
                 className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 transition"
               >
-                Cancelar
+                {t('joinModal.cancelButton')}
               </button>
               <button
                 onClick={() => joinMutation.mutate()}
                 disabled={joinMutation.isPending}
                 className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
               >
-                {joinMutation.isPending ? 'Procesando...' : 'Confirmar'}
+                {joinMutation.isPending ? t('joinModal.processing') : t('joinModal.confirmButton')}
               </button>
             </div>
           </div>

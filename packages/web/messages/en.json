@@ -155,6 +155,64 @@
     "amount": "Amount",
     "recipient": "Recipient"
   },
+  "circles": {
+    "title": "Consciousness Circles",
+    "subtitle": "Federated spaces for learning, transformation and collective action",
+    "createCircle": "Create Circle",
+    "createNewCircle": "Create New Circle",
+    "myActiveCircles": "My Active Circles",
+    "members": "members",
+    "facilitator": "Facilitator",
+    "flexibleSchedule": "Flexible schedule",
+    "noCirclesYet": "No circles yet",
+    "beFirstToCreate": "Be the first to create a consciousness circle",
+    "createSuccess": "Circle created successfully!",
+    "joinSuccess": "You have joined the circle!",
+    "leaveSuccess": "You have left the circle",
+    "joinCircle": "Join Circle",
+    "leaveCircle": "Leave Circle",
+    "circleFull": "Circle Full",
+    "joining": "Joining...",
+    "leaving": "Leaving...",
+    "creating": "Creating...",
+    "loginToJoin": "Log In to Join",
+    "whatAreCircles": "What are Consciousness Circles?",
+    "infoDescription": "Consciousness Circles are federated spaces for meeting, learning, and personal and collective transformation. They operate throughout the Gailu Labs network, enabling connections beyond the borders of a single node.",
+    "circleTypesTitle": "Circle Types",
+    "featuresTitle": "Features",
+    "types": {
+      "all": "All",
+      "learning": "Learning",
+      "transformation": "Transformation",
+      "mutualSupport": "Mutual Support",
+      "creativity": "Creativity",
+      "socialAction": "Social Action"
+    },
+    "typeDescriptions": {
+      "learning": "Share knowledge and skills",
+      "transformation": "Personal and spiritual growth",
+      "mutualSupport": "Emotional and solidarity support",
+      "creativity": "Collective artistic expression",
+      "socialAction": "Organize for change"
+    },
+    "features": {
+      "horizontalFacilitation": "Horizontal facilitation",
+      "voluntaryParticipation": "Voluntary participation",
+      "federatedConnection": "Federated connection between nodes",
+      "reflectionRecords": "Reflection records",
+      "attendanceCommitment": "Attendance and commitment"
+    },
+    "form": {
+      "circleName": "Circle Name",
+      "description": "Description",
+      "circleType": "Circle Type",
+      "maxParticipants": "Max. Participants (optional)",
+      "schedule": "Schedule",
+      "schedulePlaceholder": "E.g.: Monday 6:00 PM",
+      "location": "Location (Online/In-person)",
+      "locationPlaceholder": "E.g.: Zoom / Barcelona"
+    }
+  },
   "profile": {
     "myProfile": "My profile",
     "editProfile": "Edit profile",
@@ -1434,7 +1492,103 @@
     "beneficiariesPlaceholder": "Number of people",
     "goalsPlaceholder": "One goal per line...",
     "skillsPlaceholder": "One skill per line...",
-    "supportMessagePlaceholder": "Write a support message..."
+    "supportMessagePlaceholder": "Write a support message...",
+    "newNeed": {
+      "title": "Post Need",
+      "labels": {
+        "scope": "Scope",
+        "type": "Need Type",
+        "needTitle": "Title",
+        "description": "Description",
+        "location": "Location",
+        "urgencyLevel": "Urgency Level",
+        "euros": "Euros",
+        "credits": "Credits",
+        "hours": "Hours",
+        "neededSkills": "Needed Skills"
+      },
+      "scopes": {
+        "INTERCOMMUNITY": "Intercommunity"
+      },
+      "scopeDescriptions": {
+        "PERSONAL": "Individual need",
+        "COMMUNITY": "For your local community",
+        "INTERCOMMUNITY": "Between multiple communities",
+        "GLOBAL": "Global or international impact"
+      },
+      "types": {
+        "INFRASTRUCTURE": "Infrastructure",
+        "WATER_SANITATION": "Water and Sanitation",
+        "ENVIRONMENT": "Environment",
+        "AUZOLAN": "Auzolan"
+      },
+      "urgency": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "sections": {
+        "resourcesNeeded": "Resources Needed"
+      },
+      "resourcesDescription": "Specify at least one type of resource you need",
+      "placeholders": {
+        "location": "E.g.: Madrid, Spain",
+        "skills": "One skill per line\nE.g.: carpentry\nplumbing\nelectricity"
+      },
+      "buttons": {
+        "publish": "Post Need",
+        "publishing": "Posting..."
+      },
+      "toasts": {
+        "success": "Need posted successfully",
+        "error": "Error posting the need"
+      }
+    },
+    "newProject": {
+      "title": "Create Community Project",
+      "labels": {
+        "projectType": "Project Type",
+        "projectTitle": "Project Title",
+        "description": "Description",
+        "vision": "Vision",
+        "location": "Location",
+        "country": "Country",
+        "region": "Region",
+        "beneficiaries": "Beneficiaries",
+        "estimatedDuration": "Estimated Duration (months)",
+        "targetEur": "Euro Goal",
+        "targetCredits": "Credits Goal",
+        "volunteerHours": "Volunteer Hours",
+        "volunteersNeeded": "Volunteers Needed",
+        "impactGoals": "Impact Goals",
+        "tags": "Tags"
+      },
+      "types": {
+        "INFRASTRUCTURE": "Infrastructure",
+        "WATER_SANITATION": "Water and Sanitation",
+        "AGRICULTURE": "Agriculture",
+        "ENERGY": "Energy",
+        "AUZOLAN": "Auzolan",
+        "TECHNOLOGY": "Technology",
+        "EMERGENCY_RELIEF": "Emergency Relief"
+      },
+      "sections": {
+        "resourcesNeeded": "Resources Needed"
+      },
+      "placeholders": {
+        "months": "Months",
+        "impactGoals": "One goal per line\nE.g.: Provide education to 200 children\nBuild 4 equipped classrooms\nTrain 10 local teachers",
+        "tags": "education, children, Africa (separated by commas)"
+      },
+      "buttons": {
+        "create": "Create Project",
+        "creating": "Creating..."
+      },
+      "toasts": {
+        "success": "Project created successfully",
+        "error": "Error creating the project"
+      }
+    }
   },
   "eventCreate": {
     "layout": {
@@ -1992,11 +2146,79 @@
     "descPlaceholder": "Describe the details of this housing solution...",
     "locationPlaceholder": "E.g.: London, UK",
     "capacityPlaceholder": "People",
-    "amenitiesPlaceholder": "One amenity per line...",
-    "requirementsPlaceholder": "One requirement per line...",
-    "rulesPlaceholder": "One rule per line...",
+    "amenitiesPlaceholder": "One amenity per line\nE.g.: WiFi\nEquipped kitchen\nWashing machine",
+    "requirementsPlaceholder": "One requirement per line\nE.g.: Non-smokers\nRespect rest hours",
+    "rulesPlaceholder": "One rule per line\nE.g.: Clean common areas\nNo noise after 10pm",
     "whyJoinPlaceholder": "Tell us why you want to join...",
-    "skillsPlaceholder": "e.g.: carpentry, design, accounting"
+    "skillsPlaceholder": "e.g.: carpentry, design, accounting",
+    "newSolution": {
+      "pageTitle": "New Housing Solution",
+      "solutionTypeLabel": "Solution Type *",
+      "titleLabel": "Title *",
+      "descriptionLabel": "Description *",
+      "locationLabel": "Location *",
+      "capacityLabel": "Capacity *",
+      "minStayLabel": "Minimum Stay (days)",
+      "maxStayLabel": "Maximum Stay (days)",
+      "amenitiesLabel": "Amenities",
+      "targetMembersLabel": "Target Members *",
+      "initialContributionLabel": "Initial Contribution (€)",
+      "monthlyContributionLabel": "Monthly Contribution (€)",
+      "guaranteeAmountLabel": "Guarantee Amount (€)",
+      "requirementsLabel": "Requirements",
+      "rulesLabel": "Rules",
+      "cancelButton": "Cancel",
+      "creating": "Creating...",
+      "createButton": "Create Solution"
+    },
+    "solutionTypeDescriptions": {
+      "SPACE_BANK": "Temporary exchange of living spaces",
+      "TEMPORARY_HOUSING": "Temporary accommodation for people in transition",
+      "HOUSING_COOP": "Collective housing ownership",
+      "COMMUNITY_GUARANTEE": "Collective guarantee for rent"
+    },
+    "detail": {
+      "notFound": "Solution not found",
+      "initialContribution": "Initial Contribution",
+      "guaranteeAmount": "Guarantee Amount",
+      "editButton": "Edit",
+      "deleting": "Deleting...",
+      "deleteButton": "Delete",
+      "joinButton": "Join this Solution",
+      "membersTitle": "Members",
+      "user": "User",
+      "roles": {
+        "ORGANIZER": "Organizer",
+        "MEMBER": "Member",
+        "PARTICIPANT": "Participant"
+      }
+    },
+    "joinModal": {
+      "title": "Join {type}",
+      "startDateTime": "Start Date and Time",
+      "endDateTime": "End Date and Time",
+      "checkInDate": "Check-in Date",
+      "checkOutDate": "Check-out Date",
+      "guestsCount": "Number of Guests",
+      "introMessage": "Introduction Message",
+      "skillsLabel": "Skills (comma separated)",
+      "commitmentLabel": "Commitment Level",
+      "availabilityLabel": "Availability",
+      "commitmentLevels": {
+        "LOW": "Low",
+        "MEDIUM": "Medium",
+        "HIGH": "High"
+      },
+      "availabilityOptions": {
+        "WEEKDAYS": "Weekdays",
+        "WEEKENDS": "Weekends",
+        "FLEXIBLE": "Flexible"
+      },
+      "confirmQuestion": "Are you sure you want to participate in \"{title}\"?",
+      "cancelButton": "Cancel",
+      "processing": "Processing...",
+      "confirmButton": "Confirm"
+    }
   },
   "docs": {
     "title": "Documentation - Living Community",
@@ -4146,7 +4368,115 @@
     "createGroupBuy": "Create Group Buy",
     "productNamePlaceholder": "E.g.: Organic products pack",
     "productDescPlaceholder": "Describe what the group buy includes",
-    "specificProductPlaceholder": "Specific product name"
+    "specificProductPlaceholder": "Specific product name",
+    "groupBuys": {
+      "title": "Group Buys",
+      "subtitle": "Join others and get better discounts",
+      "joinedSuccess": "You have joined the group buy!",
+      "joinError": "Error joining group buy",
+      "leftSuccess": "You have left the group buy",
+      "leaveError": "Error leaving group buy",
+      "createdSuccess": "Group buy created successfully!",
+      "createError": "Error creating group buy",
+      "expired": "Expired",
+      "morePeople": "More People",
+      "biggerDiscount": "Bigger discount",
+      "upTo50Off": "Up to 50% OFF",
+      "progressiveDiscounts": "Progressive discounts",
+      "winWin": "Win-Win",
+      "everyoneSaves": "Everyone saves",
+      "filterAll": "All",
+      "filterActive": "Active",
+      "filterCompleted": "Completed",
+      "product": "Product",
+      "youSave": "You save",
+      "participants": "Participants",
+      "minimumRequired": "Minimum {count} participants required",
+      "nextLevel": "Next level: {discount}% OFF",
+      "peopleMissing": "{count} people missing",
+      "merchant": "Merchant",
+      "leaveBuy": "Leave Buy",
+      "buyFull": "Buy Full",
+      "joinNow": "Join Now",
+      "buyCompleted": "Buy Completed",
+      "noGroupBuys": "No group buys {status}",
+      "createFirstOrWait": "Create the first one or wait for someone else to do it",
+      "changeFilter": "Change filter to see other buys",
+      "howItWorks": "How do Group Buys work?",
+      "step1Title": "Find or Create",
+      "step1Desc": "Find an active group buy or create a new one",
+      "step2Title": "Join",
+      "step2Desc": "Click \"Join\" to participate",
+      "step3Title": "Wait",
+      "step3Desc": "More people = bigger discount for everyone",
+      "step4Title": "Buy",
+      "step4Desc": "Contact the seller with the final discount",
+      "progressiveDiscountsTitle": "Progressive Discounts",
+      "progressiveDiscountsDesc": "The discount increases automatically based on the number of participants:",
+      "people": "{count} people",
+      "peopleOrMore": "{count}+ people",
+      "joinGroupBuy": "Join Group Buy",
+      "currentDiscount": "Current discount: {discount}% OFF",
+      "important": "Important",
+      "importantNote1": "The discount can improve if more people join",
+      "importantNote2": "The buy expires in {time}",
+      "importantNote3": "Minimum {count} participants required",
+      "importantNote4": "You will receive a code when the buy is completed",
+      "joining": "Joining...",
+      "confirm": "Confirm",
+      "formTitle": "Title",
+      "formDescription": "Description",
+      "basePrice": "Base Price (€)",
+      "duration": "Duration (hours)",
+      "minParticipants": "Min. Participants",
+      "maxParticipants": "Max. Participants",
+      "discountLevels": "Discount Levels",
+      "peopleEquals": "people =",
+      "creating": "Creating...",
+      "createButton": "Create Group Buy"
+    },
+    "flashDeals": {
+      "title": "Flash Deals",
+      "subtitle": "Limited time lightning offers - Don't miss them!",
+      "claimedSuccess": "Flash deal claimed! Code: {code}",
+      "claimError": "Error claiming flash deal",
+      "expired": "Expired",
+      "happyHourActive": "Happy Hour Active!",
+      "multiplier": "Multiplier: x{multiplier}",
+      "endsIn": "Ends in:",
+      "limitedTime": "Limited Time",
+      "hoursPerDeal": "2-4 hours per deal",
+      "upTo70Off": "Up to 70% OFF",
+      "incredibleDiscounts": "Incredible discounts",
+      "limitedStock": "Limited Stock",
+      "firstComeFirstServe": "First come, first served",
+      "youSave": "You save",
+      "availableStock": "Available stock",
+      "merchant": "Merchant",
+      "soldOut": "Sold Out",
+      "claimNow": "Claim Now",
+      "onlyLeft": "Only {count} left!",
+      "noActiveDeals": "No active Flash Deals",
+      "dealsRotateDaily": "Flash deals rotate automatically 3 times a day",
+      "comeBackSoon": "Come back soon so you don't miss the offers",
+      "howItWorks": "How do Flash Deals work?",
+      "step1Title": "Find a Deal",
+      "step1Desc": "Explore active offers and choose the one that interests you most",
+      "step2Title": "Claim Fast",
+      "step2Desc": "Click \"Claim\" before stock runs out",
+      "step3Title": "Get your Code",
+      "step3Desc": "You will receive a unique code to use the discount",
+      "step4Title": "Contact Seller",
+      "step4Desc": "Use the code when you contact the merchant",
+      "confirmDeal": "Confirm Flash Deal",
+      "discount": "Discount: {discount}% OFF",
+      "important": "Important",
+      "importantNote1": "The code expires in {time}",
+      "importantNote2": "You can only claim this deal once",
+      "importantNote3": "Contact the seller to use your code",
+      "claiming": "Claiming...",
+      "claim": "Claim"
+    }
   },
   "circles": {
     "myActiveCircles": "My Active Circles",

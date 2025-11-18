@@ -155,6 +155,64 @@
     "amount": "Quantitat",
     "recipient": "Destinatari"
   },
+  "circles": {
+    "title": "Cercles de Consciencia",
+    "subtitle": "Espais federats d'aprenentatge, transformacio i accio col.lectiva",
+    "createCircle": "Crear Cercle",
+    "createNewCircle": "Crear Nou Cercle",
+    "myActiveCircles": "Els meus Cercles Actius",
+    "members": "membres",
+    "facilitator": "Facilitador",
+    "flexibleSchedule": "Horari flexible",
+    "noCirclesYet": "Encara no hi ha cercles",
+    "beFirstToCreate": "Sigues el primer en crear un cercle de consciencia",
+    "createSuccess": "Cercle creat correctament!",
+    "joinSuccess": "T'has unit al cercle!",
+    "leaveSuccess": "Has sortit del cercle",
+    "joinCircle": "Unir-se al Cercle",
+    "leaveCircle": "Sortir del Cercle",
+    "circleFull": "Cercle Ple",
+    "joining": "Unint-se...",
+    "leaving": "Sortint...",
+    "creating": "Creant...",
+    "loginToJoin": "Iniciar Sessio per Unir-se",
+    "whatAreCircles": "Que son els Cercles de Consciencia?",
+    "infoDescription": "Els Cercles de Consciencia son espais federats de trobada, aprenentatge i transformacio personal i col.lectiva. Funcionen a traves de tota la xarxa Gailu Labs, permetent connexions mes enlla de les fronteres d'un sol node.",
+    "circleTypesTitle": "Tipus de Cercles",
+    "featuresTitle": "Caracteristiques",
+    "types": {
+      "all": "Tots",
+      "learning": "Aprenentatge",
+      "transformation": "Transformacio",
+      "mutualSupport": "Suport Mutu",
+      "creativity": "Creativitat",
+      "socialAction": "Accio Social"
+    },
+    "typeDescriptions": {
+      "learning": "Compartir coneixements i habilitats",
+      "transformation": "Creixement personal i espiritual",
+      "mutualSupport": "Acompanyament emocional i solidari",
+      "creativity": "Expressio artistica col.lectiva",
+      "socialAction": "Organitzar-se per al canvi"
+    },
+    "features": {
+      "horizontalFacilitation": "Facilitacio horitzontal",
+      "voluntaryParticipation": "Participacio voluntaria",
+      "federatedConnection": "Connexio federada entre nodes",
+      "reflectionRecords": "Registre de reflexions",
+      "attendanceCommitment": "Assistencia i compromis"
+    },
+    "form": {
+      "circleName": "Nom del Cercle",
+      "description": "Descripcio",
+      "circleType": "Tipus de Cercle",
+      "maxParticipants": "Max. Participants (opcional)",
+      "schedule": "Horari",
+      "schedulePlaceholder": "Ex: Dilluns 18:00",
+      "location": "Ubicacio (Online/Presencial)",
+      "locationPlaceholder": "Ex: Zoom / Barcelona"
+    }
+  },
   "profile": {
     "myProfile": "El meu perfil",
     "editProfile": "Editar perfil",
@@ -1434,7 +1492,103 @@
     "beneficiariesPlaceholder": "Nombre de persones",
     "goalsPlaceholder": "Un objectiu per línia...",
     "skillsPlaceholder": "Una habilitat per línia...",
-    "supportMessagePlaceholder": "Escriu un missatge de suport..."
+    "supportMessagePlaceholder": "Escriu un missatge de suport...",
+    "newNeed": {
+      "title": "Publicar Necessitat",
+      "labels": {
+        "scope": "Abast",
+        "type": "Tipus de Necessitat",
+        "needTitle": "Titol",
+        "description": "Descripcio",
+        "location": "Ubicacio",
+        "urgencyLevel": "Nivell d'Urgencia",
+        "euros": "Euros",
+        "credits": "Credits",
+        "hours": "Hores",
+        "neededSkills": "Habilitats Necessaries"
+      },
+      "scopes": {
+        "INTERCOMMUNITY": "Intercomunitaria"
+      },
+      "scopeDescriptions": {
+        "PERSONAL": "Necessitat individual",
+        "COMMUNITY": "Per a la teva comunitat local",
+        "INTERCOMMUNITY": "Entre diverses comunitats",
+        "GLOBAL": "Impacte global o internacional"
+      },
+      "types": {
+        "INFRASTRUCTURE": "Infraestructura",
+        "WATER_SANITATION": "Aigua i Sanejament",
+        "ENVIRONMENT": "Medi Ambient",
+        "AUZOLAN": "Auzolan"
+      },
+      "urgency": {
+        "low": "Baixa",
+        "medium": "Mitjana",
+        "high": "Alta"
+      },
+      "sections": {
+        "resourcesNeeded": "Recursos Necessaris"
+      },
+      "resourcesDescription": "Especifica almenys un tipus de recurs que necessites",
+      "placeholders": {
+        "location": "Ex: Barcelona, Espanya",
+        "skills": "Una habilitat per linia\nEx: fusteria\nlampisteria\nelectricitat"
+      },
+      "buttons": {
+        "publish": "Publicar Necessitat",
+        "publishing": "Publicant..."
+      },
+      "toasts": {
+        "success": "Necessitat publicada correctament",
+        "error": "Error en publicar la necessitat"
+      }
+    },
+    "newProject": {
+      "title": "Crear Projecte Comunitari",
+      "labels": {
+        "projectType": "Tipus de Projecte",
+        "projectTitle": "Titol del Projecte",
+        "description": "Descripcio",
+        "vision": "Visio",
+        "location": "Ubicacio",
+        "country": "Pais",
+        "region": "Regio",
+        "beneficiaries": "Beneficiaris",
+        "estimatedDuration": "Durada Estimada (mesos)",
+        "targetEur": "Objectiu en Euros",
+        "targetCredits": "Objectiu en Credits",
+        "volunteerHours": "Hores de Voluntariat",
+        "volunteersNeeded": "Voluntaris Necessaris",
+        "impactGoals": "Objectius d'Impacte",
+        "tags": "Etiquetes"
+      },
+      "types": {
+        "INFRASTRUCTURE": "Infraestructura",
+        "WATER_SANITATION": "Aigua i Sanejament",
+        "AGRICULTURE": "Agricultura",
+        "ENERGY": "Energia",
+        "AUZOLAN": "Auzolan",
+        "TECHNOLOGY": "Tecnologia",
+        "EMERGENCY_RELIEF": "Ajuda d'Emergencia"
+      },
+      "sections": {
+        "resourcesNeeded": "Recursos Necessaris"
+      },
+      "placeholders": {
+        "months": "Mesos",
+        "impactGoals": "Un objectiu per linia\nEx: Proporcionar educacio a 200 nens\nConstruir 4 aules equipades\nFormar 10 professors locals",
+        "tags": "educacio, infantil, Africa (separades per comes)"
+      },
+      "buttons": {
+        "create": "Crear Projecte",
+        "creating": "Creant..."
+      },
+      "toasts": {
+        "success": "Projecte creat correctament",
+        "error": "Error en crear el projecte"
+      }
+    }
   },
   "eventCreate": {
     "layout": {
@@ -1992,11 +2146,79 @@
     "descPlaceholder": "Descriu els detalls d'aquesta solució d'habitatge...",
     "locationPlaceholder": "Ex: Barcelona, Espanya",
     "capacityPlaceholder": "Persones",
-    "amenitiesPlaceholder": "Una comoditat per línia...",
-    "requirementsPlaceholder": "Un requisit per línia...",
-    "rulesPlaceholder": "Una norma per línia...",
+    "amenitiesPlaceholder": "Una comoditat per línia\nEx: WiFi\nCuina equipada\nRentadora",
+    "requirementsPlaceholder": "Un requisit per línia\nEx: No fumadors\nRespectar horaris de descans",
+    "rulesPlaceholder": "Una norma per línia\nEx: Neteja d'espais comuns\nNo soroll després de les 22h",
     "whyJoinPlaceholder": "Explica'ns per què vols unir-te...",
-    "skillsPlaceholder": "ex: fusteria, disseny, comptabilitat"
+    "skillsPlaceholder": "ex: fusteria, disseny, comptabilitat",
+    "newSolution": {
+      "pageTitle": "Nova Solució d'Habitatge",
+      "solutionTypeLabel": "Tipus de Solució *",
+      "titleLabel": "Títol *",
+      "descriptionLabel": "Descripció *",
+      "locationLabel": "Ubicació *",
+      "capacityLabel": "Capacitat *",
+      "minStayLabel": "Estada Mínima (dies)",
+      "maxStayLabel": "Estada Màxima (dies)",
+      "amenitiesLabel": "Comoditats",
+      "targetMembersLabel": "Membres Objectiu *",
+      "initialContributionLabel": "Aportació Inicial (€)",
+      "monthlyContributionLabel": "Contribució Mensual (€)",
+      "guaranteeAmountLabel": "Import de l'Aval (€)",
+      "requirementsLabel": "Requisits",
+      "rulesLabel": "Normes",
+      "cancelButton": "Cancel·lar",
+      "creating": "Creant...",
+      "createButton": "Crear Solució"
+    },
+    "solutionTypeDescriptions": {
+      "SPACE_BANK": "Intercanvi temporal d'espais habitables",
+      "TEMPORARY_HOUSING": "Allotjament temporal per a persones en transició",
+      "HOUSING_COOP": "Propietat col·lectiva d'habitatge",
+      "COMMUNITY_GUARANTEE": "Garantia col·lectiva per a lloguer"
+    },
+    "detail": {
+      "notFound": "Solució no trobada",
+      "initialContribution": "Aportació Inicial",
+      "guaranteeAmount": "Import de l'Aval",
+      "editButton": "Editar",
+      "deleting": "Eliminant...",
+      "deleteButton": "Eliminar",
+      "joinButton": "Unir-se a aquesta Solució",
+      "membersTitle": "Membres",
+      "user": "Usuari",
+      "roles": {
+        "ORGANIZER": "Organitzador",
+        "MEMBER": "Membre",
+        "PARTICIPANT": "Participant"
+      }
+    },
+    "joinModal": {
+      "title": "Unir-se a {type}",
+      "startDateTime": "Data i Hora d'Inici",
+      "endDateTime": "Data i Hora de Fi",
+      "checkInDate": "Data d'Entrada",
+      "checkOutDate": "Data de Sortida",
+      "guestsCount": "Nombre d'Hostes",
+      "introMessage": "Missatge de Presentació",
+      "skillsLabel": "Habilitats (separades per comes)",
+      "commitmentLabel": "Nivell de Compromís",
+      "availabilityLabel": "Disponibilitat",
+      "commitmentLevels": {
+        "LOW": "Baix",
+        "MEDIUM": "Mitjà",
+        "HIGH": "Alt"
+      },
+      "availabilityOptions": {
+        "WEEKDAYS": "Entre setmana",
+        "WEEKENDS": "Caps de setmana",
+        "FLEXIBLE": "Flexible"
+      },
+      "confirmQuestion": "Estàs segur que vols participar a \"{title}\"?",
+      "cancelButton": "Cancel·lar",
+      "processing": "Processant...",
+      "confirmButton": "Confirmar"
+    }
   },
   "docs": {
     "title": "Documentació - Comunitat Viva",
@@ -4146,7 +4368,115 @@
     "createGroupBuy": "Crear Compra Grupal",
     "productNamePlaceholder": "Ex: Pack de productes orgànics",
     "productDescPlaceholder": "Descriu què inclou la compra grupal",
-    "specificProductPlaceholder": "Nom específic del producte"
+    "specificProductPlaceholder": "Nom específic del producte",
+    "groupBuys": {
+      "title": "Compres Grupals",
+      "subtitle": "Uneix-te amb altres i obtingues millors descomptes",
+      "joinedSuccess": "T'has unit a la compra grupal!",
+      "joinError": "Error en unir-se a la compra grupal",
+      "leftSuccess": "Has sortit de la compra grupal",
+      "leaveError": "Error en sortir de la compra grupal",
+      "createdSuccess": "Compra grupal creada amb exit!",
+      "createError": "Error en crear compra grupal",
+      "expired": "Expirat",
+      "morePeople": "Més Gent",
+      "biggerDiscount": "Major descompte",
+      "upTo50Off": "Fins al 50% OFF",
+      "progressiveDiscounts": "Descomptes progressius",
+      "winWin": "Win-Win",
+      "everyoneSaves": "Tothom estalvia",
+      "filterAll": "Totes",
+      "filterActive": "Actives",
+      "filterCompleted": "Completades",
+      "product": "Producte",
+      "youSave": "Estalvies",
+      "participants": "Participants",
+      "minimumRequired": "Mínim {count} participants requerits",
+      "nextLevel": "Pròxim nivell: {discount}% OFF",
+      "peopleMissing": "Falten {count} persones",
+      "merchant": "Comerciant",
+      "leaveBuy": "Sortir de la Compra",
+      "buyFull": "Compra Plena",
+      "joinNow": "Unir-me Ara",
+      "buyCompleted": "Compra Completada",
+      "noGroupBuys": "No hi ha compres grupals {status}",
+      "createFirstOrWait": "Crea la primera o espera que algu altre ho faci",
+      "changeFilter": "Canvia el filtre per veure altres compres",
+      "howItWorks": "Com funcionen les Compres Grupals?",
+      "step1Title": "Troba o Crea",
+      "step1Desc": "Busca una compra grupal activa o crea'n una de nova",
+      "step2Title": "Uneix-te",
+      "step2Desc": "Fes clic a \"Unir-me\" per participar",
+      "step3Title": "Espera",
+      "step3Desc": "Més persones = major descompte per a tots",
+      "step4Title": "Compra",
+      "step4Desc": "Contacta el venedor amb el descompte final",
+      "progressiveDiscountsTitle": "Descomptes Progressius",
+      "progressiveDiscountsDesc": "El descompte augmenta automaticament segons el nombre de participants:",
+      "people": "{count} persones",
+      "peopleOrMore": "{count}+ persones",
+      "joinGroupBuy": "Unir-se a Compra Grupal",
+      "currentDiscount": "Descompte actual: {discount}% OFF",
+      "important": "Important",
+      "importantNote1": "El descompte pot millorar si s'uneixen més persones",
+      "importantNote2": "La compra expira en {time}",
+      "importantNote3": "Mínim {count} participants requerits",
+      "importantNote4": "Rebràs un codi quan es completi la compra",
+      "joining": "Unint-me...",
+      "confirm": "Confirmar",
+      "formTitle": "Títol",
+      "formDescription": "Descripció",
+      "basePrice": "Preu Base (€)",
+      "duration": "Durada (hores)",
+      "minParticipants": "Min. Participants",
+      "maxParticipants": "Max. Participants",
+      "discountLevels": "Nivells de Descompte",
+      "peopleEquals": "persones =",
+      "creating": "Creant...",
+      "createButton": "Crear Compra Grupal"
+    },
+    "flashDeals": {
+      "title": "Flash Deals",
+      "subtitle": "Ofertes llampec per temps limitat - No te les perdis!",
+      "claimedSuccess": "Flash deal reclamat! Codi: {code}",
+      "claimError": "Error en reclamar flash deal",
+      "expired": "Expirat",
+      "happyHourActive": "Happy Hour Actiu!",
+      "multiplier": "Multiplicador: x{multiplier}",
+      "endsIn": "Acaba en:",
+      "limitedTime": "Temps Limitat",
+      "hoursPerDeal": "2-4 hores per deal",
+      "upTo70Off": "Fins al 70% OFF",
+      "incredibleDiscounts": "Descomptes increibles",
+      "limitedStock": "Stock Limitat",
+      "firstComeFirstServe": "Primer arribar, primer servir",
+      "youSave": "Estalvies",
+      "availableStock": "Stock disponible",
+      "merchant": "Comerciant",
+      "soldOut": "Esgotat",
+      "claimNow": "Reclamar Ara",
+      "onlyLeft": "Només en queden {count}!",
+      "noActiveDeals": "No hi ha Flash Deals actius",
+      "dealsRotateDaily": "Els flash deals roten automaticament 3 vegades al dia",
+      "comeBackSoon": "Torna aviat per no perdre't les ofertes",
+      "howItWorks": "Com funcionen els Flash Deals?",
+      "step1Title": "Troba un Deal",
+      "step1Desc": "Explora les ofertes actives i tria la que més t'interessi",
+      "step2Title": "Reclama Rapid",
+      "step2Desc": "Fes clic a \"Reclamar\" abans que s'esgoti l'stock",
+      "step3Title": "Obtingues el teu Codi",
+      "step3Desc": "Rebràs un codi únic per utilitzar el descompte",
+      "step4Title": "Contacta el Venedor",
+      "step4Desc": "Utilitza el codi quan contactis el comerciant",
+      "confirmDeal": "Confirmar Flash Deal",
+      "discount": "Descompte: {discount}% OFF",
+      "important": "Important",
+      "importantNote1": "El codi expira en {time}",
+      "importantNote2": "Només pots reclamar aquest deal una vegada",
+      "importantNote3": "Contacta el venedor per utilitzar el teu codi",
+      "claiming": "Reclamant...",
+      "claim": "Reclamar"
+    }
   },
   "circles": {
     "myActiveCircles": "Els meus Cercles Actius",

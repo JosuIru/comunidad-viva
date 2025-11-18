@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
@@ -28,6 +29,8 @@ interface Circulo {
 }
 
 export default function Circulos() {
+  const t = useTranslations('circles');
+  const tCommon = useTranslations('common');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedType, setSelectedType] = useState<string>('all');
@@ -85,7 +88,7 @@ export default function Circulos() {
         schedule: '',
         location: '',
       });
-      alert('¡Círculo creado exitosamente!');
+      alert(t('createSuccess'));
     },
   });
 
@@ -98,7 +101,7 @@ export default function Circulos() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['circulos'] });
       queryClient.invalidateQueries({ queryKey: ['my-circulos'] });
-      alert('¡Te has unido al círculo!');
+      alert(t('joinSuccess'));
     },
   });
 
@@ -111,7 +114,7 @@ export default function Circulos() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['circulos'] });
       queryClient.invalidateQueries({ queryKey: ['my-circulos'] });
-      alert('Has salido del círculo');
+      alert(t('leaveSuccess'));
     },
   });
 
@@ -124,12 +127,12 @@ export default function Circulos() {
   };
 
   const circuloTypes = [
-    { value: 'all', label: 'Todos', icon: '🌟', color: 'bg-gray-500' },
-    { value: 'APRENDIZAJE', label: 'Aprendizaje', icon: '📚', color: 'bg-blue-500' },
-    { value: 'TRANSFORMACION', label: 'Transformación', icon: '✨', color: 'bg-purple-500' },
-    { value: 'APOYO', label: 'Apoyo Mutuo', icon: '🤝', color: 'bg-green-500' },
-    { value: 'CREATIVIDAD', label: 'Creatividad', icon: '🎨', color: 'bg-pink-500' },
-    { value: 'ACCION', label: 'Acción Social', icon: '🌍', color: 'bg-orange-500' },
+    { value: 'all', label: t('types.all'), icon: '🌟', color: 'bg-gray-500' },
+    { value: 'APRENDIZAJE', label: t('types.learning'), icon: '📚', color: 'bg-blue-500' },
+    { value: 'TRANSFORMACION', label: t('types.transformation'), icon: '✨', color: 'bg-purple-500' },
+    { value: 'APOYO', label: t('types.mutualSupport'), icon: '🤝', color: 'bg-green-500' },
+    { value: 'CREATIVIDAD', label: t('types.creativity'), icon: '🎨', color: 'bg-pink-500' },
+    { value: 'ACCION', label: t('types.socialAction'), icon: '🌍', color: 'bg-orange-500' },
   ];
 
   const getCirculoTypeInfo = (type: string) => {
@@ -145,7 +148,7 @@ export default function Circulos() {
             <div className="flex items-center gap-3">
               <UserGroupIcon className="h-8 w-8 text-indigo-600" />
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Círculos de Conciencia
+                {t('title')}
               </h1>
             </div>
             {isAuthenticated && (
@@ -154,19 +157,19 @@ export default function Circulos() {
                 className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
               >
                 <PlusIcon className="h-5 w-5" />
-                Crear Círculo
+                {t('createCircle')}
               </button>
             )}
           </div>
           <p className="text-gray-600 dark:text-gray-400">
-            Espacios federados de aprendizaje, transformación y acción colectiva
+            {t('subtitle')}
           </p>
         </div>
 
         {/* My Círculos (if authenticated) */}
         {isAuthenticated && myCirculos && myCirculos.length > 0 && (
           <div className="mb-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg shadow-lg p-6 text-white">
-            <h2 className="text-xl font-bold mb-4">Mis Círculos Activos</h2>
+            <h2 className="text-xl font-bold mb-4">{t('myActiveCircles')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {myCirculos.slice(0, 3).map((circulo) => {
                 const typeInfo = getCirculoTypeInfo(circulo.type);
@@ -176,7 +179,7 @@ export default function Circulos() {
                       <span className="text-2xl">{typeInfo.icon}</span>
                       <h3 className="font-semibold">{circulo.name}</h3>
                     </div>
-                    <p className="text-sm text-indigo-100">{circulo.memberCount} miembros</p>
+                    <p className="text-sm text-indigo-100">{circulo.memberCount} {t('members')}</p>
                   </div>
                 );
               })}
@@ -240,13 +243,13 @@ export default function Circulos() {
                       <div className="flex items-center gap-2">
                         <UsersIcon className="h-4 w-4" />
                         <span>
-                          {circulo.memberCount} miembros
+                          {circulo.memberCount} {t('members')}
                           {circulo.maxParticipants && ` / ${circulo.maxParticipants} max`}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <CalendarIcon className="h-4 w-4" />
-                        <span>{circulo.schedule || 'Horario flexible'}</span>
+                        <span>{circulo.schedule || t('flexibleSchedule')}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <BookOpenIcon className="h-4 w-4" />
@@ -256,7 +259,7 @@ export default function Circulos() {
 
                     <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                       <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-                        Facilitador: {circulo.facilitatorName}
+                        {t('facilitator')}: {circulo.facilitatorName}
                       </p>
 
                       {isAuthenticated ? (
@@ -266,7 +269,7 @@ export default function Circulos() {
                             disabled={leaveMutation.isPending}
                             className="w-full px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
                           >
-                            {leaveMutation.isPending ? 'Saliendo...' : 'Salir del Círculo'}
+                            {leaveMutation.isPending ? t('leaving') : t('leaveCircle')}
                           </button>
                         ) : (
                           <button
@@ -274,7 +277,7 @@ export default function Circulos() {
                             disabled={joinMutation.isPending || Boolean(isFull)}
                             className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
                           >
-                            {isFull ? 'Círculo Lleno' : joinMutation.isPending ? 'Uniéndose...' : 'Unirse al Círculo'}
+                            {isFull ? t('circleFull') : joinMutation.isPending ? t('joining') : t('joinCircle')}
                           </button>
                         )
                       ) : (
@@ -282,7 +285,7 @@ export default function Circulos() {
                           href="/auth/login"
                           className="block w-full px-4 py-2 bg-indigo-600 text-white text-center rounded-lg hover:bg-indigo-700 transition-colors"
                         >
-                          Iniciar Sesión para Unirse
+                          {t('loginToJoin')}
                         </a>
                       )}
                     </div>
@@ -295,10 +298,10 @@ export default function Circulos() {
           <div className="text-center py-16">
             <UserGroupIcon className="mx-auto h-16 w-16 text-gray-400" />
             <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
-              No hay círculos todavía
+              {t('noCirclesYet')}
             </h3>
             <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-              Sé el primero en crear un círculo de conciencia
+              {t('beFirstToCreate')}
             </p>
             {isAuthenticated && (
               <div className="mt-6">
@@ -307,7 +310,7 @@ export default function Circulos() {
                   className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
                 >
                   <PlusIcon className="h-5 w-5 mr-2" />
-                  Crear Círculo
+                  {t('createCircle')}
                 </button>
               </div>
             )}
@@ -318,33 +321,31 @@ export default function Circulos() {
         <div className="mt-12 bg-purple-50 dark:bg-purple-900 dark:bg-opacity-20 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <SparklesIcon className="h-6 w-6 text-purple-600" />
-            ¿Qué son los Círculos de Conciencia?
+            {t('whatAreCircles')}
           </h3>
           <div className="prose dark:prose-invert max-w-none">
             <p className="text-gray-700 dark:text-gray-300 mb-4">
-              Los Círculos de Conciencia son espacios federados de encuentro, aprendizaje y transformación
-              personal y colectiva. Funcionan a través de toda la red Gailu Labs, permitiendo conexiones
-              más allá de las fronteras de un solo nodo.
+              {t('infoDescription')}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <div>
-                <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Tipos de Círculos:</h4>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{t('circleTypesTitle')}:</h4>
                 <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300">
-                  <li>📚 <strong>Aprendizaje:</strong> Compartir conocimientos y habilidades</li>
-                  <li>✨ <strong>Transformación:</strong> Crecimiento personal y espiritual</li>
-                  <li>🤝 <strong>Apoyo Mutuo:</strong> Acompañamiento emocional y solidario</li>
-                  <li>🎨 <strong>Creatividad:</strong> Expresión artística colectiva</li>
-                  <li>🌍 <strong>Acción Social:</strong> Organizarse para el cambio</li>
+                  <li>📚 <strong>{t('types.learning')}:</strong> {t('typeDescriptions.learning')}</li>
+                  <li>✨ <strong>{t('types.transformation')}:</strong> {t('typeDescriptions.transformation')}</li>
+                  <li>🤝 <strong>{t('types.mutualSupport')}:</strong> {t('typeDescriptions.mutualSupport')}</li>
+                  <li>🎨 <strong>{t('types.creativity')}:</strong> {t('typeDescriptions.creativity')}</li>
+                  <li>🌍 <strong>{t('types.socialAction')}:</strong> {t('typeDescriptions.socialAction')}</li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Características:</h4>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{t('featuresTitle')}:</h4>
                 <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300">
-                  <li>✓ Facilitación horizontal</li>
-                  <li>✓ Participación voluntaria</li>
-                  <li>✓ Conexión federada entre nodos</li>
-                  <li>✓ Registro de reflexiones</li>
-                  <li>✓ Asistencia y compromiso</li>
+                  <li>{t('features.horizontalFacilitation')}</li>
+                  <li>{t('features.voluntaryParticipation')}</li>
+                  <li>{t('features.federatedConnection')}</li>
+                  <li>{t('features.reflectionRecords')}</li>
+                  <li>{t('features.attendanceCommitment')}</li>
                 </ul>
               </div>
             </div>
@@ -356,12 +357,12 @@ export default function Circulos() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Crear Nuevo Círculo
+                {t('createNewCircle')}
               </h3>
               <form onSubmit={handleCreate} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Nombre del Círculo
+                    {t('form.circleName')}
                   </label>
                   <input
                     type="text"
@@ -374,7 +375,7 @@ export default function Circulos() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Descripción
+                    {t('form.description')}
                   </label>
                   <textarea
                     value={createForm.description}
@@ -387,7 +388,7 @@ export default function Circulos() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Tipo de Círculo
+                    {t('form.circleType')}
                   </label>
                   <select
                     value={createForm.type}
@@ -405,7 +406,7 @@ export default function Circulos() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Máx. Participantes (opcional)
+                      {t('form.maxParticipants')}
                     </label>
                     <input
                       type="number"
@@ -418,28 +419,28 @@ export default function Circulos() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Horario
+                      {t('form.schedule')}
                     </label>
                     <input
                       type="text"
                       value={createForm.schedule}
                       onChange={(e) => setCreateForm({ ...createForm, schedule: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
-                      placeholder="Ej: Lunes 18:00"
+                      placeholder={t('form.schedulePlaceholder')}
                     />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Ubicación (Online/Presencial)
+                    {t('form.location')}
                   </label>
                   <input
                     type="text"
                     value={createForm.location}
                     onChange={(e) => setCreateForm({ ...createForm, location: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
-                    placeholder="Ej: Zoom / Barcelona"
+                    placeholder={t('form.locationPlaceholder')}
                     required
                   />
                 </div>
@@ -450,14 +451,14 @@ export default function Circulos() {
                     onClick={() => setShowCreateModal(false)}
                     className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700"
                   >
-                    Cancelar
+                    {tCommon('cancel')}
                   </button>
                   <button
                     type="submit"
                     disabled={createMutation.isPending}
                     className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50"
                   >
-                    {createMutation.isPending ? 'Creando...' : 'Crear Círculo'}
+                    {createMutation.isPending ? t('creating') : t('createCircle')}
                   </button>
                 </div>
               </form>

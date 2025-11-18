@@ -2,51 +2,54 @@ import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import { createProjectSchema, type CreateProjectFormData } from '@/lib/validations';
 
-const PROJECT_TYPES = [
-  { value: 'INFRASTRUCTURE', label: 'Infraestructura' },
-  { value: 'WATER_SANITATION', label: 'Agua y Saneamiento' },
-  { value: 'EDUCATION', label: 'Educación' },
-  { value: 'HEALTH', label: 'Salud' },
-  { value: 'ENVIRONMENT', label: 'Medio Ambiente' },
-  { value: 'AGRICULTURE', label: 'Agricultura' },
-  { value: 'ENERGY', label: 'Energía' },
-  { value: 'HOUSING', label: 'Vivienda' },
-  { value: 'AUZOLAN', label: 'Auzolan' },
-  { value: 'CULTURAL', label: 'Cultural' },
-  { value: 'TECHNOLOGY', label: 'Tecnología' },
-  { value: 'EMERGENCY_RELIEF', label: 'Ayuda de Emergencia' },
-];
-
-const SDG_GOALS = [
-  { value: 1, label: '1. Fin de la Pobreza' },
-  { value: 2, label: '2. Hambre Cero' },
-  { value: 3, label: '3. Salud y Bienestar' },
-  { value: 4, label: '4. Educación de Calidad' },
-  { value: 5, label: '5. Igualdad de Género' },
-  { value: 6, label: '6. Agua Limpia y Saneamiento' },
-  { value: 7, label: '7. Energía Asequible y No Contaminante' },
-  { value: 8, label: '8. Trabajo Decente y Crecimiento Económico' },
-  { value: 9, label: '9. Industria, Innovación e Infraestructura' },
-  { value: 10, label: '10. Reducción de Desigualdades' },
-  { value: 11, label: '11. Ciudades y Comunidades Sostenibles' },
-  { value: 12, label: '12. Producción y Consumo Responsables' },
-  { value: 13, label: '13. Acción por el Clima' },
-  { value: 14, label: '14. Vida Submarina' },
-  { value: 15, label: '15. Vida de Ecosistemas Terrestres' },
-  { value: 16, label: '16. Paz, Justicia e Instituciones Sólidas' },
-  { value: 17, label: '17. Alianzas para Lograr los Objetivos' },
-];
-
 export default function NewProjectPage() {
   const router = useRouter();
+  const t = useTranslations('mutualAid');
+  const tCommon = useTranslations('common');
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [selectedSDGs, setSelectedSDGs] = useState<number[]>([]);
+
+  const PROJECT_TYPES = [
+    { value: 'INFRASTRUCTURE', label: t('newProject.types.INFRASTRUCTURE') },
+    { value: 'WATER_SANITATION', label: t('newProject.types.WATER_SANITATION') },
+    { value: 'EDUCATION', label: t('projectType.EDUCATION') },
+    { value: 'HEALTH', label: t('projectType.HEALTH') },
+    { value: 'ENVIRONMENT', label: t('projectType.ENVIRONMENT') },
+    { value: 'AGRICULTURE', label: t('newProject.types.AGRICULTURE') },
+    { value: 'ENERGY', label: t('newProject.types.ENERGY') },
+    { value: 'HOUSING', label: t('needType.HOUSING') },
+    { value: 'AUZOLAN', label: t('newProject.types.AUZOLAN') },
+    { value: 'CULTURAL', label: t('projectType.CULTURAL') },
+    { value: 'TECHNOLOGY', label: t('newProject.types.TECHNOLOGY') },
+    { value: 'EMERGENCY_RELIEF', label: t('newProject.types.EMERGENCY_RELIEF') },
+  ];
+
+  const SDG_GOALS = [
+    { value: 1, label: t('sdg.1') },
+    { value: 2, label: t('sdg.2') },
+    { value: 3, label: t('sdg.3') },
+    { value: 4, label: t('sdg.4') },
+    { value: 5, label: t('sdg.5') },
+    { value: 6, label: t('sdg.6') },
+    { value: 7, label: t('sdg.7') },
+    { value: 8, label: t('sdg.8') },
+    { value: 9, label: t('sdg.9') },
+    { value: 10, label: t('sdg.10') },
+    { value: 11, label: t('sdg.11') },
+    { value: 12, label: t('sdg.12') },
+    { value: 13, label: t('sdg.13') },
+    { value: 14, label: t('sdg.14') },
+    { value: 15, label: t('sdg.15') },
+    { value: 16, label: t('sdg.16') },
+    { value: 17, label: t('sdg.17') },
+  ];
 
   // Initialize form validation
   const {
@@ -77,7 +80,7 @@ export default function NewProjectPage() {
   const toggleSDG = (sdgValue: number) => {
     setSelectedSDGs((prev) => {
       const newSDGs = prev.includes(sdgValue)
-        ? prev.filter((v) => v !== sdgValue)
+        ? prev.filter((value) => value !== sdgValue)
         : [...prev, sdgValue];
 
       // Sync with formData
@@ -92,11 +95,11 @@ export default function NewProjectPage() {
       return response.data;
     },
     onSuccess: (data) => {
-      toast.success('Proyecto creado exitosamente');
+      toast.success(t('newProject.toasts.success'));
       router.push(`/mutual-aid/projects/${data.id}`);
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al crear el proyecto');
+      toast.error(error.response?.data?.message || t('newProject.toasts.error'));
     },
   });
 
@@ -143,14 +146,14 @@ export default function NewProjectPage() {
           <div className="max-w-4xl mx-auto">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8">
               <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-                Crear Proyecto Comunitario
+                {t('newProject.title')}
               </h1>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Type */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Tipo de Proyecto *
+                    {t('newProject.labels.projectType')} *
                   </label>
                   <select
                     name="type"
@@ -170,7 +173,7 @@ export default function NewProjectPage() {
                 {/* Title */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Título del Proyecto *
+                    {t('newProject.labels.projectTitle')} *
                   </label>
                   <input
                     type="text"
@@ -179,14 +182,14 @@ export default function NewProjectPage() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                    placeholder="Ej: Escuela en Ghana"
+                    placeholder={t('projectTitlePlaceholder')}
                   />
                 </div>
 
                 {/* Description */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Descripción *
+                    {t('newProject.labels.description')} *
                   </label>
                   <textarea
                     name="description"
@@ -195,14 +198,14 @@ export default function NewProjectPage() {
                     required
                     rows={4}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                    placeholder="Describe el proyecto en detalle..."
+                    placeholder={t('projectDescPlaceholder')}
                   />
                 </div>
 
                 {/* Vision */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Visión *
+                    {t('newProject.labels.vision')} *
                   </label>
                   <textarea
                     name="vision"
@@ -211,7 +214,7 @@ export default function NewProjectPage() {
                     required
                     rows={3}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                    placeholder="¿Qué impacto quieres lograr con este proyecto?"
+                    placeholder={t('impactPlaceholder')}
                   />
                 </div>
 
@@ -219,7 +222,7 @@ export default function NewProjectPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                      Ubicación *
+                      {t('newProject.labels.location')} *
                     </label>
                     <input
                       type="text"
@@ -228,12 +231,12 @@ export default function NewProjectPage() {
                       onChange={handleChange}
                       required
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                      placeholder="Ciudad"
+                      placeholder={t('cityPlaceholder')}
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                      País *
+                      {t('newProject.labels.country')} *
                     </label>
                     <input
                       type="text"
@@ -242,12 +245,12 @@ export default function NewProjectPage() {
                       onChange={handleChange}
                       required
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                      placeholder="País"
+                      placeholder={t('countryPlaceholder')}
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                      Región
+                      {t('newProject.labels.region')}
                     </label>
                     <input
                       type="text"
@@ -255,7 +258,7 @@ export default function NewProjectPage() {
                       value={formData.region}
                       onChange={handleChange}
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                      placeholder="Región/Estado"
+                      placeholder={t('regionPlaceholder')}
                     />
                   </div>
                 </div>
@@ -264,7 +267,7 @@ export default function NewProjectPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                      Beneficiarios
+                      {t('newProject.labels.beneficiaries')}
                     </label>
                     <input
                       type="number"
@@ -273,12 +276,12 @@ export default function NewProjectPage() {
                       onChange={handleChange}
                       min="1"
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                      placeholder="Número de personas"
+                      placeholder={t('beneficiariesPlaceholder')}
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                      Duración Estimada (meses)
+                      {t('newProject.labels.estimatedDuration')}
                     </label>
                     <input
                       type="number"
@@ -287,7 +290,7 @@ export default function NewProjectPage() {
                       onChange={handleChange}
                       min="1"
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                      placeholder="Meses"
+                      placeholder={t('newProject.placeholders.months')}
                     />
                   </div>
                 </div>
@@ -295,13 +298,13 @@ export default function NewProjectPage() {
                 {/* Resources Needed */}
                 <div className="border-t dark:border-gray-700 pt-6">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                    Recursos Necesarios
+                    {t('newProject.sections.resourcesNeeded')}
                   </h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Meta en Euros (€)
+                        {t('newProject.labels.targetEur')}
                       </label>
                       <input
                         type="number"
@@ -317,7 +320,7 @@ export default function NewProjectPage() {
 
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Meta en Créditos
+                        {t('newProject.labels.targetCredits')}
                       </label>
                       <input
                         type="number"
@@ -332,7 +335,7 @@ export default function NewProjectPage() {
 
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Horas de Voluntariado
+                        {t('newProject.labels.volunteerHours')}
                       </label>
                       <input
                         type="number"
@@ -348,7 +351,7 @@ export default function NewProjectPage() {
 
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Voluntarios Necesarios
+                        {t('newProject.labels.volunteersNeeded')}
                       </label>
                       <input
                         type="number"
@@ -366,7 +369,7 @@ export default function NewProjectPage() {
                 {/* Impact Goals */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Objetivos de Impacto *
+                    {t('newProject.labels.impactGoals')} *
                   </label>
                   <textarea
                     name="impactGoals"
@@ -375,14 +378,14 @@ export default function NewProjectPage() {
                     required
                     rows={4}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                    placeholder="Un objetivo por línea&#10;Ej: Proveer educación a 200 niños&#10;Construir 4 aulas equipadas&#10;Formar 10 profesores locales"
+                    placeholder={t('newProject.placeholders.impactGoals')}
                   />
                 </div>
 
                 {/* SDG Goals */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Objetivos de Desarrollo Sostenible (ODS)
+                    {t('sdg.title')}
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-64 overflow-y-auto border border-gray-200 dark:border-gray-600 rounded-lg p-3">
                     {SDG_GOALS.map((sdg) => (
@@ -393,7 +396,7 @@ export default function NewProjectPage() {
                           onChange={() => toggleSDG(sdg.value)}
                           className="rounded text-blue-600"
                         />
-                        <span className="text-sm dark:text-gray-300">{sdg.label}</span>
+                        <span className="text-sm dark:text-gray-300">{sdg.value}. {sdg.label}</span>
                       </label>
                     ))}
                   </div>
@@ -402,7 +405,7 @@ export default function NewProjectPage() {
                 {/* Tags */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Etiquetas
+                    {t('newProject.labels.tags')}
                   </label>
                   <input
                     type="text"
@@ -410,7 +413,7 @@ export default function NewProjectPage() {
                     value={formData.tags}
                     onChange={handleChange}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                    placeholder="educación, infantil, África (separadas por comas)"
+                    placeholder={t('newProject.placeholders.tags')}
                   />
                 </div>
 
@@ -421,14 +424,14 @@ export default function NewProjectPage() {
                     onClick={() => router.back()}
                     className="flex-1 px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition font-semibold"
                   >
-                    Cancelar
+                    {tCommon('cancel')}
                   </button>
                   <button
                     type="submit"
                     disabled={createMutation.isPending}
                     className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold disabled:opacity-50"
                   >
-                    {createMutation.isPending ? 'Creando...' : 'Crear Proyecto'}
+                    {createMutation.isPending ? t('newProject.buttons.creating') : t('newProject.buttons.create')}
                   </button>
                 </div>
               </form>

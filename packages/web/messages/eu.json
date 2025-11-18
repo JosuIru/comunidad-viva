@@ -155,6 +155,64 @@
     "amount": "Kopurua",
     "recipient": "Hartzailea"
   },
+  "circles": {
+    "title": "Kontzientzia Zirkuluak",
+    "subtitle": "Ikaskuntza, eraldaketa eta ekintza kolektiborako espazio federatuak",
+    "createCircle": "Zirkulua Sortu",
+    "createNewCircle": "Zirkulu Berria Sortu",
+    "myActiveCircles": "Nire Zirkulu Aktiboak",
+    "members": "kide",
+    "facilitator": "Bideratzailea",
+    "flexibleSchedule": "Ordutegi malgua",
+    "noCirclesYet": "Oraindik ez dago zirkulurik",
+    "beFirstToCreate": "Izan zaitez lehenengoa kontzientzia zirkulu bat sortzen",
+    "createSuccess": "Zirkulua ondo sortu da!",
+    "joinSuccess": "Zirkulura sartu zara!",
+    "leaveSuccess": "Zirkulutik irten zara",
+    "joinCircle": "Zirkulura Sartu",
+    "leaveCircle": "Zirkulutik Irten",
+    "circleFull": "Zirkulua Beteta",
+    "joining": "Sartzen...",
+    "leaving": "Irteten...",
+    "creating": "Sortzen...",
+    "loginToJoin": "Hasi saioa Sartzeko",
+    "whatAreCircles": "Zer dira Kontzientzia Zirkuluak?",
+    "infoDescription": "Kontzientzia Zirkuluak topaketa, ikaskuntza eta eraldaketa pertsonal eta kolektiborako espazio federatuak dira. Gailu Labs sare osoan zehar funtzionatzen dute, nodo bakarraren mugetatik haratago konexioak ahalbidetuz.",
+    "circleTypesTitle": "Zirkulu Motak",
+    "featuresTitle": "Ezaugarriak",
+    "types": {
+      "all": "Denak",
+      "learning": "Ikaskuntza",
+      "transformation": "Eraldaketa",
+      "mutualSupport": "Laguntza Mutuala",
+      "creativity": "Sormena",
+      "socialAction": "Gizarte Ekintza"
+    },
+    "typeDescriptions": {
+      "learning": "Ezagutzak eta gaitasunak partekatu",
+      "transformation": "Hazkunde pertsonal eta espirituala",
+      "mutualSupport": "Laguntza emozional eta solidarioa",
+      "creativity": "Adierazpen artistiko kolektiboa",
+      "socialAction": "Aldaketarako antolatu"
+    },
+    "features": {
+      "horizontalFacilitation": "Bideratze horizontala",
+      "voluntaryParticipation": "Partehartze borondatezkoa",
+      "federatedConnection": "Konexio federatua nodoen artean",
+      "reflectionRecords": "Gogoeten erregistroa",
+      "attendanceCommitment": "Bertaratzea eta konpromisoa"
+    },
+    "form": {
+      "circleName": "Zirkuluaren Izena",
+      "description": "Deskribapena",
+      "circleType": "Zirkulu Mota",
+      "maxParticipants": "Geh. Parte-hartzaileak (aukerakoa)",
+      "schedule": "Ordutegia",
+      "schedulePlaceholder": "Adib.: Astelehena 18:00",
+      "location": "Kokapena (Online/Aurrez aurre)",
+      "locationPlaceholder": "Adib.: Zoom / Bartzelona"
+    }
+  },
   "profile": {
     "myProfile": "Nire profila",
     "editProfile": "Editatu profila",
@@ -1448,7 +1506,103 @@
     "beneficiariesPlaceholder": "Pertsona kopurua",
     "goalsPlaceholder": "Helburu bat lerro bakoitzeko...",
     "skillsPlaceholder": "Gaitasun bat lerro bakoitzeko...",
-    "supportMessagePlaceholder": "Idatzi laguntza mezu bat..."
+    "supportMessagePlaceholder": "Idatzi laguntza mezu bat...",
+    "newNeed": {
+      "title": "Beharra Argitaratu",
+      "labels": {
+        "scope": "Irismena",
+        "type": "Behar Mota",
+        "needTitle": "Izenburua",
+        "description": "Deskribapena",
+        "location": "Kokapena",
+        "urgencyLevel": "Urgentzia Maila",
+        "euros": "Euroak",
+        "credits": "Kredituak",
+        "hours": "Orduak",
+        "neededSkills": "Beharrezko Gaitasunak"
+      },
+      "scopes": {
+        "INTERCOMMUNITY": "Komunitateen artekoa"
+      },
+      "scopeDescriptions": {
+        "PERSONAL": "Banakako beharra",
+        "COMMUNITY": "Zure komunitate lokalerako",
+        "INTERCOMMUNITY": "Hainbat komunitateren artean",
+        "GLOBAL": "Eragin globala edo nazioartekoa"
+      },
+      "types": {
+        "INFRASTRUCTURE": "Azpiegitura",
+        "WATER_SANITATION": "Ura eta Saneamendua",
+        "ENVIRONMENT": "Ingurumena",
+        "AUZOLAN": "Auzolan"
+      },
+      "urgency": {
+        "low": "Baxua",
+        "medium": "Ertaina",
+        "high": "Altua"
+      },
+      "sections": {
+        "resourcesNeeded": "Beharrezko Baliabideak"
+      },
+      "resourcesDescription": "Zehaztu behar duzun baliabide mota gutxienez bat",
+      "placeholders": {
+        "location": "Adib: Donostia, Espainia",
+        "skills": "Gaitasun bat lerro bakoitzeko\nAdib: arotza\niturgintza\nargindarra"
+      },
+      "buttons": {
+        "publish": "Beharra Argitaratu",
+        "publishing": "Argitaratzen..."
+      },
+      "toasts": {
+        "success": "Beharra ongi argitaratu da",
+        "error": "Errorea beharra argitaratzean"
+      }
+    },
+    "newProject": {
+      "title": "Komunitate Proiektua Sortu",
+      "labels": {
+        "projectType": "Proiektu Mota",
+        "projectTitle": "Proiektuaren Izenburua",
+        "description": "Deskribapena",
+        "vision": "Ikuspegia",
+        "location": "Kokapena",
+        "country": "Herrialdea",
+        "region": "Eskualdea",
+        "beneficiaries": "Onuradunak",
+        "estimatedDuration": "Estimatutako Iraupena (hilabeteak)",
+        "targetEur": "Euroen Helburua",
+        "targetCredits": "Kredituen Helburua",
+        "volunteerHours": "Boluntariotza Orduak",
+        "volunteersNeeded": "Beharrezko Boluntarioak",
+        "impactGoals": "Eraginen Helburuak",
+        "tags": "Etiketak"
+      },
+      "types": {
+        "INFRASTRUCTURE": "Azpiegitura",
+        "WATER_SANITATION": "Ura eta Saneamendua",
+        "AGRICULTURE": "Nekazaritza",
+        "ENERGY": "Energia",
+        "AUZOLAN": "Auzolan",
+        "TECHNOLOGY": "Teknologia",
+        "EMERGENCY_RELIEF": "Larrialdi Laguntza"
+      },
+      "sections": {
+        "resourcesNeeded": "Beharrezko Baliabideak"
+      },
+      "placeholders": {
+        "months": "Hilabeteak",
+        "impactGoals": "Helburu bat lerro bakoitzeko\nAdib: 200 haurri hezkuntza eman\n4 gela hornituta eraiki\n10 bertako irakasle prestatu",
+        "tags": "hezkuntza, haurrak, Afrika (komaz bereizita)"
+      },
+      "buttons": {
+        "create": "Proiektua Sortu",
+        "creating": "Sortzen..."
+      },
+      "toasts": {
+        "success": "Proiektua ongi sortu da",
+        "error": "Errorea proiektua sortzean"
+      }
+    }
   },
   "eventCreate": {
     "layout": {
@@ -2062,11 +2216,79 @@
     "descPlaceholder": "Deskribatu etxebizitza irtenbide honen xehetasunak...",
     "locationPlaceholder": "Adib: Madril, Espainia",
     "capacityPlaceholder": "Pertsonak",
-    "amenitiesPlaceholder": "Erosotasun bat lerro bakoitzeko...",
-    "requirementsPlaceholder": "Baldintza bat lerro bakoitzeko...",
-    "rulesPlaceholder": "Arau bat lerro bakoitzeko...",
+    "amenitiesPlaceholder": "Erosotasun bat lerro bakoitzeko\nAdib: WiFi\nSukalde osatua\nGarbigailua",
+    "requirementsPlaceholder": "Baldintza bat lerro bakoitzeko\nAdib: Ez erretzaileak\nAtseden-orduak errespetatu",
+    "rulesPlaceholder": "Arau bat lerro bakoitzeko\nAdib: Gune komunak garbitu\nEz zarata 22:00 ostean",
     "whyJoinPlaceholder": "Kontaiguzu zergatik nahi duzun batu...",
-    "skillsPlaceholder": "adib: arozteria, diseinua, kontabilitatea"
+    "skillsPlaceholder": "adib: arozteria, diseinua, kontabilitatea",
+    "newSolution": {
+      "pageTitle": "Etxebizitza Soluzio Berria",
+      "solutionTypeLabel": "Soluzio Mota *",
+      "titleLabel": "Izenburua *",
+      "descriptionLabel": "Deskribapena *",
+      "locationLabel": "Kokapena *",
+      "capacityLabel": "Ahalmena *",
+      "minStayLabel": "Gutxieneko Egonaldia (egunak)",
+      "maxStayLabel": "Gehieneko Egonaldia (egunak)",
+      "amenitiesLabel": "Erosotasunak",
+      "targetMembersLabel": "Helburu Kideak *",
+      "initialContributionLabel": "Hasierako Ekarpena (€)",
+      "monthlyContributionLabel": "Hilabeteko Ekarpena (€)",
+      "guaranteeAmountLabel": "Abalaren Zenbatekoa (€)",
+      "requirementsLabel": "Baldintzak",
+      "rulesLabel": "Arauak",
+      "cancelButton": "Utzi",
+      "creating": "Sortzen...",
+      "createButton": "Sortu Soluzioa"
+    },
+    "solutionTypeDescriptions": {
+      "SPACE_BANK": "Bizitegi-espazioen aldi baterako trukea",
+      "TEMPORARY_HOUSING": "Trantsizio-aldian dauden pertsonentzako aldi baterako ostatua",
+      "HOUSING_COOP": "Etxebizitzaren jabetza kolektiboa",
+      "COMMUNITY_GUARANTEE": "Alokairuaren abal kolektiboa"
+    },
+    "detail": {
+      "notFound": "Ez da irtenbidea aurkitu",
+      "initialContribution": "Hasierako Ekarpena",
+      "guaranteeAmount": "Abalaren Zenbatekoa",
+      "editButton": "Editatu",
+      "deleting": "Ezabatzen...",
+      "deleteButton": "Ezabatu",
+      "joinButton": "Soluzio honetara batu",
+      "membersTitle": "Kideak",
+      "user": "Erabiltzailea",
+      "roles": {
+        "ORGANIZER": "Antolatzailea",
+        "MEMBER": "Kidea",
+        "PARTICIPANT": "Parte-hartzailea"
+      }
+    },
+    "joinModal": {
+      "title": "{type}-(e)ra batu",
+      "startDateTime": "Hasiera Data eta Ordua",
+      "endDateTime": "Amaiera Data eta Ordua",
+      "checkInDate": "Sarrera Data",
+      "checkOutDate": "Irteera Data",
+      "guestsCount": "Gonbidatu Kopurua",
+      "introMessage": "Aurkezpen Mezua",
+      "skillsLabel": "Trebetasunak (komaz bereizita)",
+      "commitmentLabel": "Konpromiso Maila",
+      "availabilityLabel": "Erabilgarritasuna",
+      "commitmentLevels": {
+        "LOW": "Baxua",
+        "MEDIUM": "Ertaina",
+        "HIGH": "Altua"
+      },
+      "availabilityOptions": {
+        "WEEKDAYS": "Astean zehar",
+        "WEEKENDS": "Asteburuetan",
+        "FLEXIBLE": "Malgua"
+      },
+      "confirmQuestion": "Ziur zaude \"{title}\" ekimenean parte hartu nahi duzula?",
+      "cancelButton": "Utzi",
+      "processing": "Prozesatzen...",
+      "confirmButton": "Berretsi"
+    }
   },
   "hybrid": {
     "dashboard": {
@@ -4089,7 +4311,115 @@
     "createGroupBuy": "Sortu Talde Erosketa",
     "productNamePlaceholder": "Adib: Produktu organikoen paketea",
     "productDescPlaceholder": "Deskribatu zer biltzen duen talde erosketak",
-    "specificProductPlaceholder": "Produktuaren izen zehatza"
+    "specificProductPlaceholder": "Produktuaren izen zehatza",
+    "groupBuys": {
+      "title": "Talde Erosketak",
+      "subtitle": "Elkartu besteekin eta lortu deskontu hobeak",
+      "joinedSuccess": "Talde erosketara batu zara!",
+      "joinError": "Errorea talde erosketara batzean",
+      "leftSuccess": "Talde erosketatik irten zara",
+      "leaveError": "Errorea talde erosketatik irtetean",
+      "createdSuccess": "Talde erosketa arrakastaz sortu da!",
+      "createError": "Errorea talde erosketa sortzean",
+      "expired": "Iraungita",
+      "morePeople": "Jende gehiago",
+      "biggerDiscount": "Deskontu handiagoa",
+      "upTo50Off": "%50 arte OFF",
+      "progressiveDiscounts": "Deskontu progresiboak",
+      "winWin": "Win-Win",
+      "everyoneSaves": "Denek aurrezten dute",
+      "filterAll": "Denak",
+      "filterActive": "Aktiboak",
+      "filterCompleted": "Osatuak",
+      "product": "Produktua",
+      "youSave": "Aurrezten duzu",
+      "participants": "Parte-hartzaileak",
+      "minimumRequired": "Gutxienez {count} parte-hartzaile behar dira",
+      "nextLevel": "Hurrengo maila: {discount}% OFF",
+      "peopleMissing": "{count} pertsona falta dira",
+      "merchant": "Merkataria",
+      "leaveBuy": "Irten Erosketatik",
+      "buyFull": "Erosketa Beteta",
+      "joinNow": "Batu Orain",
+      "buyCompleted": "Erosketa Osatua",
+      "noGroupBuys": "Ez dago talde erosketarik {status}",
+      "createFirstOrWait": "Sortu lehenengoa edo itxaron beste norbaitek egiteko",
+      "changeFilter": "Aldatu iragazkia beste erosketak ikusteko",
+      "howItWorks": "Nola funtzionatzen dute Talde Erosketak?",
+      "step1Title": "Aurkitu edo Sortu",
+      "step1Desc": "Aurkitu talde erosketa aktiboa edo sortu berri bat",
+      "step2Title": "Batu",
+      "step2Desc": "Egin klik \"Batu\" botoian parte hartzeko",
+      "step3Title": "Itxaron",
+      "step3Desc": "Jende gehiago = deskontu handiagoa guztientzat",
+      "step4Title": "Erosi",
+      "step4Desc": "Kontaktatu saltzailea azken deskontuekin",
+      "progressiveDiscountsTitle": "Deskontu Progresiboak",
+      "progressiveDiscountsDesc": "Deskontua automatikoki handitzen da parte-hartzaile kopuruaren arabera:",
+      "people": "{count} pertsona",
+      "peopleOrMore": "{count}+ pertsona",
+      "joinGroupBuy": "Batu Talde Erosketara",
+      "currentDiscount": "Oraingo deskontua: {discount}% OFF",
+      "important": "Garrantzitsua",
+      "importantNote1": "Deskontua hobetu daiteke jende gehiago batzen bada",
+      "importantNote2": "Erosketa {time}-n iraungitzen da",
+      "importantNote3": "Gutxienez {count} parte-hartzaile behar dira",
+      "importantNote4": "Kode bat jasoko duzu erosketa osatzean",
+      "joining": "Batzen...",
+      "confirm": "Berretsi",
+      "formTitle": "Izenburua",
+      "formDescription": "Deskribapena",
+      "basePrice": "Oinarrizko Prezioa (€)",
+      "duration": "Iraupena (orduak)",
+      "minParticipants": "Min. Parte-hartzaileak",
+      "maxParticipants": "Max. Parte-hartzaileak",
+      "discountLevels": "Deskontu Mailak",
+      "peopleEquals": "pertsona =",
+      "creating": "Sortzen...",
+      "createButton": "Sortu Talde Erosketa"
+    },
+    "flashDeals": {
+      "title": "Flash Eskaintzak",
+      "subtitle": "Denbora mugatuko tximista eskaintzak - Ez galdu!",
+      "claimedSuccess": "Flash eskaintza erreklamatuta! Kodea: {code}",
+      "claimError": "Errorea flash eskaintza erreklamatzerakoan",
+      "expired": "Iraungita",
+      "happyHourActive": "Happy Hour Aktibo!",
+      "multiplier": "Biderkatzailea: x{multiplier}",
+      "endsIn": "Bukatzen da:",
+      "limitedTime": "Denbora Mugatua",
+      "hoursPerDeal": "2-4 ordu eskaintza bakoitzeko",
+      "upTo70Off": "%70 arte OFF",
+      "incredibleDiscounts": "Deskontu harrigarriak",
+      "limitedStock": "Stock Mugatua",
+      "firstComeFirstServe": "Lehenik heldu, lehenik zerbitzatua",
+      "youSave": "Aurrezten duzu",
+      "availableStock": "Stock erabilgarria",
+      "merchant": "Merkataria",
+      "soldOut": "Agortuta",
+      "claimNow": "Erreklamatu Orain",
+      "onlyLeft": "{count} bakarrik geratzen dira!",
+      "noActiveDeals": "Ez dago Flash Eskaintza aktiborik",
+      "dealsRotateDaily": "Flash eskaintzak automatikoki txandakatzen dira egunean 3 aldiz",
+      "comeBackSoon": "Itzuli laster eskaintzak ez galtzeko",
+      "howItWorks": "Nola funtzionatzen dute Flash Eskaintzek?",
+      "step1Title": "Aurkitu Eskaintza",
+      "step1Desc": "Arakatu eskaintza aktiboak eta aukeratu interesgarriena",
+      "step2Title": "Erreklamatu Azkar",
+      "step2Desc": "Egin klik \"Erreklamatu\" stock agortu aurretik",
+      "step3Title": "Lortu Kodea",
+      "step3Desc": "Kode bakarra jasoko duzu deskontua erabiltzeko",
+      "step4Title": "Kontaktatu Saltzailea",
+      "step4Desc": "Erabili kodea merkatariarekin kontaktatzerakoan",
+      "confirmDeal": "Berretsi Flash Eskaintza",
+      "discount": "Deskontua: {discount}% OFF",
+      "important": "Garrantzitsua",
+      "importantNote1": "Kodea {time}-n iraungitzen da",
+      "importantNote2": "Eskaintza hau behin bakarrik erreklamatu dezakezu",
+      "importantNote3": "Kontaktatu saltzailea kodea erabiltzeko",
+      "claiming": "Erreklamatzen...",
+      "claim": "Erreklamatu"
+    }
   },
   "circles": {
     "myActiveCircles": "Nire Zirkulu Aktiboak",

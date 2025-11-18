@@ -2,33 +2,36 @@ import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import { createNeedSchema, type CreateNeedFormData } from '@/lib/validations';
 
-const SCOPE_OPTIONS = [
-  { value: 'PERSONAL', label: 'Personal', description: 'Necesidad individual' },
-  { value: 'COMMUNITY', label: 'Comunitaria', description: 'Para tu comunidad local' },
-  { value: 'INTERCOMMUNITY', label: 'Intercomunitaria', description: 'Entre varias comunidades' },
-  { value: 'GLOBAL', label: 'Global', description: 'Impacto global o internacional' },
-];
-
-const TYPE_OPTIONS = [
-  { value: 'FOOD', label: 'Alimentos' },
-  { value: 'HOUSING', label: 'Vivienda' },
-  { value: 'HEALTH', label: 'Salud' },
-  { value: 'EDUCATION', label: 'Educación' },
-  { value: 'INFRASTRUCTURE', label: 'Infraestructura' },
-  { value: 'WATER_SANITATION', label: 'Agua y Saneamiento' },
-  { value: 'ENVIRONMENT', label: 'Medio Ambiente' },
-  { value: 'AUZOLAN', label: 'Auzolan' },
-];
-
 export default function NewNeedPage() {
   const router = useRouter();
+  const t = useTranslations('mutualAid');
+  const tCommon = useTranslations('common');
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+
+  const SCOPE_OPTIONS = [
+    { value: 'PERSONAL', label: t('scope.PERSONAL'), description: t('newNeed.scopeDescriptions.PERSONAL') },
+    { value: 'COMMUNITY', label: t('scope.COMMUNITY'), description: t('newNeed.scopeDescriptions.COMMUNITY') },
+    { value: 'INTERCOMMUNITY', label: t('newNeed.scopes.INTERCOMMUNITY'), description: t('newNeed.scopeDescriptions.INTERCOMMUNITY') },
+    { value: 'GLOBAL', label: t('scope.GLOBAL'), description: t('newNeed.scopeDescriptions.GLOBAL') },
+  ];
+
+  const TYPE_OPTIONS = [
+    { value: 'FOOD', label: t('needType.FOOD') },
+    { value: 'HOUSING', label: t('needType.HOUSING') },
+    { value: 'HEALTH', label: t('needType.HEALTH') },
+    { value: 'EDUCATION', label: t('needType.EDUCATION') },
+    { value: 'INFRASTRUCTURE', label: t('newNeed.types.INFRASTRUCTURE') },
+    { value: 'WATER_SANITATION', label: t('newNeed.types.WATER_SANITATION') },
+    { value: 'ENVIRONMENT', label: t('newNeed.types.ENVIRONMENT') },
+    { value: 'AUZOLAN', label: t('newNeed.types.AUZOLAN') },
+  ];
 
   // Initialize form validation
   const {
@@ -38,6 +41,7 @@ export default function NewNeedPage() {
     handleChange,
     handleBlur,
     validateForm,
+    setFormData,
   } = useFormValidation<CreateNeedFormData>({
     schema: createNeedSchema,
     initialData: {
@@ -58,11 +62,11 @@ export default function NewNeedPage() {
       return response.data;
     },
     onSuccess: (data) => {
-      toast.success('Necesidad publicada exitosamente');
+      toast.success(t('newNeed.toasts.success'));
       router.push(`/mutual-aid/needs/${data.id}`);
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al publicar la necesidad');
+      toast.error(error.response?.data?.message || t('newNeed.toasts.error'));
     },
   });
 
@@ -106,14 +110,14 @@ export default function NewNeedPage() {
           <div className="max-w-3xl mx-auto">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8">
               <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-                Publicar Necesidad
+                {t('newNeed.title')}
               </h1>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Scope */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Alcance *
+                    {t('newNeed.labels.scope')} *
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {SCOPE_OPTIONS.map((option) => (
@@ -137,7 +141,7 @@ export default function NewNeedPage() {
                 {/* Type */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Tipo de Necesidad *
+                    {t('newNeed.labels.type')} *
                   </label>
                   <select
                     name="type"
@@ -157,7 +161,7 @@ export default function NewNeedPage() {
                 {/* Title */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Título *
+                    {t('newNeed.labels.needTitle')} *
                   </label>
                   <input
                     type="text"
@@ -166,14 +170,14 @@ export default function NewNeedPage() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                    placeholder="Ej: Necesito ayuda con..."
+                    placeholder={t('needTitlePlaceholder')}
                   />
                 </div>
 
                 {/* Description */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Descripción *
+                    {t('newNeed.labels.description')} *
                   </label>
                   <textarea
                     name="description"
@@ -182,14 +186,14 @@ export default function NewNeedPage() {
                     required
                     rows={4}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                    placeholder="Describe tu necesidad con el mayor detalle posible..."
+                    placeholder={t('needDescPlaceholder')}
                   />
                 </div>
 
                 {/* Location */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Ubicación *
+                    {t('newNeed.labels.location')} *
                   </label>
                   <input
                     type="text"
@@ -198,14 +202,14 @@ export default function NewNeedPage() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                    placeholder="Ej: Madrid, España"
+                    placeholder={t('newNeed.placeholders.location')}
                   />
                 </div>
 
                 {/* Urgency Level */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Nivel de Urgencia: {formData.urgencyLevel}/10
+                    {t('newNeed.labels.urgencyLevel')}: {formData.urgencyLevel}/10
                   </label>
                   <input
                     type="range"
@@ -217,25 +221,25 @@ export default function NewNeedPage() {
                     className="w-full"
                   />
                   <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400">
-                    <span>Baja</span>
-                    <span>Media</span>
-                    <span>Alta</span>
+                    <span>{t('newNeed.urgency.low')}</span>
+                    <span>{t('newNeed.urgency.medium')}</span>
+                    <span>{t('newNeed.urgency.high')}</span>
                   </div>
                 </div>
 
                 {/* Resources Needed */}
                 <div className="border-t dark:border-gray-700 pt-6">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                    Recursos Necesarios
+                    {t('newNeed.sections.resourcesNeeded')}
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                    Especifica al menos un tipo de recurso que necesitas
+                    {t('newNeed.resourcesDescription')}
                   </p>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Euros (€)
+                        {t('newNeed.labels.euros')}
                       </label>
                       <input
                         type="number"
@@ -251,7 +255,7 @@ export default function NewNeedPage() {
 
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Créditos
+                        {t('newNeed.labels.credits')}
                       </label>
                       <input
                         type="number"
@@ -266,7 +270,7 @@ export default function NewNeedPage() {
 
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        Horas
+                        {t('newNeed.labels.hours')}
                       </label>
                       <input
                         type="number"
@@ -285,7 +289,7 @@ export default function NewNeedPage() {
                 {/* Needed Skills */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Habilidades Necesarias
+                    {t('newNeed.labels.neededSkills')}
                   </label>
                   <textarea
                     name="neededSkills"
@@ -293,7 +297,7 @@ export default function NewNeedPage() {
                     onChange={handleChange}
                     rows={3}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                    placeholder="Una habilidad por línea&#10;Ej: carpintería&#10;fontanería&#10;electricidad"
+                    placeholder={t('newNeed.placeholders.skills')}
                   />
                 </div>
 
@@ -304,14 +308,14 @@ export default function NewNeedPage() {
                     onClick={() => router.back()}
                     className="flex-1 px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition font-semibold"
                   >
-                    Cancelar
+                    {tCommon('cancel')}
                   </button>
                   <button
                     type="submit"
                     disabled={createMutation.isPending}
                     className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold disabled:opacity-50"
                   >
-                    {createMutation.isPending ? 'Publicando...' : 'Publicar Necesidad'}
+                    {createMutation.isPending ? t('newNeed.buttons.publishing') : t('newNeed.buttons.publish')}
                   </button>
                 </div>
               </form>
