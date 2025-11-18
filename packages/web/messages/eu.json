@@ -2650,7 +2650,116 @@
     "eventDescPlaceholder": "Deskribatu ekitaldiaren helburua eta jarduerak",
     "dateTime": "Data eta Ordua",
     "venuePlaceholder": "Adib: Komunitate Zentroa, Kale Nagusia 123",
-    "locationOptional": "Kokapena (aukerakoa)"
+    "locationOptional": "Kokapena (aukerakoa)",
+    "events": {
+      "title": "Ospakizunak eta Ekitaldiak - Truk",
+      "header": {
+        "title": "Ospakizunak eta Zubi Ekitaldiak",
+        "subtitle": "Ospatu migrazioak eta konektatu geruza ekonomiko ezberdinetako pertsonekin"
+      },
+      "createEvent": "+ Sortu Ekitaldia",
+      "tabs": {
+        "celebrations": "Ospakizunak",
+        "events": "Zubi Ekitaldiak"
+      },
+      "layers": {
+        "traditional": "Tradizionala",
+        "transitional": "Trantsiziokoa",
+        "giftPure": "Opari Hutsa",
+        "chameleon": "Kameleoia"
+      },
+      "time": {
+        "daysAgo": "Duela {days}e",
+        "hoursAgo": "Duela {hours}o",
+        "minutesAgo": "Duela {minutes}m",
+        "now": "Orain"
+      },
+      "celebration": {
+        "migratedFrom": "Migratu zuen {from}-(e)tik {to}-(e)ra",
+        "migrationReason": "Migrazioaren arrazoia:",
+        "congratulations": "{count} zorionak",
+        "congratulate": "Zoriondu",
+        "alreadyCongratulated": "Dagoeneko zoriondu duzu"
+      },
+      "noCelebrations": {
+        "title": "Ez dago azken ospakizunik",
+        "description": "Norbaitek geruza ekonomikoa aldatzen duenean, hemen agertuko da zoriondu dezazun"
+      },
+      "celebrationsInfo": {
+        "title": "Zer dira Ospakizunak?",
+        "description": "Komunitateko kide batek geruza ekonomiko batetik bestera migratzen duenean, ospatzea merezi duen une esanguratsua da. Ospakizunek komunitateari pauso ebolutibo hauek babestu eta aitortzeko aukera ematen diote.",
+        "traditionalToTransitional": {
+          "title": "Tradizionaletik Trantsiziokora",
+          "description": "Lehen urratsak ekonomia lankidetsuago baterantz"
+        },
+        "transitionalToGift": {
+          "title": "Trantsiziokotik Opari Hutsera",
+          "description": "Oparitzaren ekonomia guztiz hartzen"
+        }
+      },
+      "event": {
+        "status": {
+          "upcoming": "Hurbila",
+          "inProgress": "Martxan",
+          "completed": "Amaituta",
+          "cancelled": "Bertan behera"
+        },
+        "targetLayers": "Helburu geruzak:",
+        "attendees": "Partaideak",
+        "organizer": "Antolatzen du:",
+        "cancelAttendance": "Bertan behera utzi",
+        "eventFull": "Ekitaldia Beteta",
+        "willAttend": "Joango naiz"
+      },
+      "noEvents": {
+        "title": "Ez dago hurrengo ekitaldirik",
+        "description": "Zubi ekitaldiek geruza ekonomiko ezberdinetako pertsonak konektatzen dituzte",
+        "createFirst": "+ Sortu Lehen Ekitaldia"
+      },
+      "eventsInfo": {
+        "title": "Zer dira Zubi Ekitaldiak?",
+        "description": "Zubi Ekitaldiak geruza ekonomiko ezberdinetako pertsonak konektatzeko diseinatutako topaketak dira, elkarrizketa, elkarrekiko ulermena eta paradigma ekonomikoen arteko kultura arteko ikaskuntza erraztuz.",
+        "connection": {
+          "title": "Konexioa",
+          "description": "Ezagutu ikuspegi ekonomiko ezberdinak dituzten pertsonak"
+        },
+        "learning": {
+          "title": "Ikaskuntza",
+          "description": "Ulertu beste geruza ekonomikoek nola funtzionatzen duten"
+        },
+        "evolution": {
+          "title": "Bilakaera",
+          "description": "Erraztu paradigmen arteko trantsizioa"
+        }
+      },
+      "createModal": {
+        "title": "Sortu Zubi Ekitaldia",
+        "eventName": "Ekitaldiaren Izena",
+        "eventNamePlaceholder": "Adib: Geruza Ekonomikoen arteko Elkarrizketa",
+        "description": "Deskribapena",
+        "descriptionPlaceholder": "Deskribatu ekitaldiaren helburua eta jarduerak",
+        "dateTime": "Data eta Ordua",
+        "maxAttendees": "Gehienezko Partaideak (aukerakoa)",
+        "maxAttendeesPlaceholder": "Mugarik gabe",
+        "location": "Kokapena (aukerakoa)",
+        "locationPlaceholder": "Adib: Komunitate Zentroa, Kale Nagusia 123",
+        "targetLayers": "Helburu Geruza Ekonomikoak",
+        "targetLayersHint": "Aukeratu konektatu nahi dituzun geruzak (gutxienez 2)",
+        "cancel": "Utzi",
+        "create": "Sortu Ekitaldia",
+        "creating": "Sortzen..."
+      },
+      "toasts": {
+        "congratulationSent": "Zorionak bidalita!",
+        "congratulationError": "Errorea zorionak bidaltzean",
+        "eventRegistered": "Ekitaldian izena eman duzu!",
+        "eventRegistrationError": "Errorea ekitaldian izena ematean",
+        "attendanceCancelled": "Zure asistentzia bertan behera utzi duzu",
+        "attendanceCancelError": "Errorea asistentzia bertan behera uztean",
+        "eventCreated": "Ekitaldia ongi sortu da!",
+        "eventCreationError": "Errorea ekitaldia sortzean"
+      }
+    }
   },
   "challenges": {
     "title": "Erronkak eta Gamifikazioa",
@@ -4536,12 +4645,35 @@
   "social": {
     "loadingPost": "Argitalpena kargatzen...",
     "postNotFound": "Ez da argitalpena aurkitu",
+    "postNotFoundTitle": "Argitalpena ez da aurkitu",
+    "postNotFoundDescription": "Bilatzen duzun argitalpena ez da existitzen edo ezabatu egin da",
+    "backToHome": "Itzuli hasierara",
+    "backToFeed": "← Itzuli feed-era",
     "writeComment": "Idatzi iruzkin bat...",
     "deletePost": "Ezabatu argitalpena",
     "deleteReview": "Ezabatu kritika",
     "whatAreYouThinking": "Zertan ari zara pentsatzen?",
     "shareExperience": "Partekatu zure esperientzia...",
-    "inspireOthers": "Honek beste batzuk inspiratzen lagunduko du..."
+    "inspireOthers": "Honek beste batzuk inspiratzen lagunduko du...",
+    "commentAdded": "Iruzkina gehituta",
+    "commentDeleted": "Iruzkina ezabatuta",
+    "errorAddingComment": "Errorea iruzkina gehitzean",
+    "emptyCommentError": "Idatzi iruzkin bat",
+    "comments": "Iruzkinak",
+    "comment": "Iruzkindu",
+    "posting": "Argitaratzen...",
+    "noCommentsYet": "Oraindik ez dago iruzkinik. Izan zaitez lehenengoa iruzkintzen.",
+    "mentions": "Aipamenak",
+    "helped": "lagundutakoak",
+    "postTypes": {
+      "STORY": "Istoria",
+      "NEED": "Beharra",
+      "OFFER": "Eskaintza",
+      "THANKS": "Eskerrak",
+      "ACHIEVEMENT": "Lorpena",
+      "MILESTONE": "Mugarria",
+      "TIP": "Aholkua"
+    }
   },
   "gamification": {
     "achievements": "Lorpenak eta Badges",

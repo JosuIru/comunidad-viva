@@ -2600,7 +2600,116 @@
     "eventDescPlaceholder": "Describe el propósito y actividades del evento",
     "dateTime": "Fecha y Hora",
     "venuePlaceholder": "Ej: Centro Comunitario, Calle Principal 123",
-    "locationOptional": "Ubicación (opcional)"
+    "locationOptional": "Ubicación (opcional)",
+    "events": {
+      "title": "Celebraciones y Eventos - Truk",
+      "header": {
+        "title": "Celebraciones y Eventos Puente",
+        "subtitle": "Celebra las migraciones y conecta con personas de diferentes capas económicas"
+      },
+      "createEvent": "+ Crear Evento",
+      "tabs": {
+        "celebrations": "Celebraciones",
+        "events": "Eventos Puente"
+      },
+      "layers": {
+        "traditional": "Tradicional",
+        "transitional": "Transicional",
+        "giftPure": "Don Puro",
+        "chameleon": "Camaleón"
+      },
+      "time": {
+        "daysAgo": "Hace {days}d",
+        "hoursAgo": "Hace {hours}h",
+        "minutesAgo": "Hace {minutes}m",
+        "now": "Ahora"
+      },
+      "celebration": {
+        "migratedFrom": "Migró de {from} a {to}",
+        "migrationReason": "Razón de la migración:",
+        "congratulations": "{count} felicitaciones",
+        "congratulate": "Felicitar",
+        "alreadyCongratulated": "Ya felicitaste"
+      },
+      "noCelebrations": {
+        "title": "No hay celebraciones recientes",
+        "description": "Cuando alguien migre de capa económica, aparecerá aquí para que puedas felicitarlo"
+      },
+      "celebrationsInfo": {
+        "title": "¿Qué son las Celebraciones?",
+        "description": "Cuando un miembro de la comunidad migra de una capa económica a otra, es un momento significativo que merece ser celebrado. Las celebraciones permiten que la comunidad apoye y reconozca estos pasos evolutivos.",
+        "traditionalToTransitional": {
+          "title": "Tradicional a Transicional",
+          "description": "Primeros pasos hacia una economía más colaborativa"
+        },
+        "transitionalToGift": {
+          "title": "Transicional a Don Puro",
+          "description": "Adoptando completamente la economía del don"
+        }
+      },
+      "event": {
+        "status": {
+          "upcoming": "Próximo",
+          "inProgress": "En Curso",
+          "completed": "Finalizado",
+          "cancelled": "Cancelado"
+        },
+        "targetLayers": "Capas objetivo:",
+        "attendees": "Asistentes",
+        "organizer": "Organiza:",
+        "cancelAttendance": "Cancelar Asistencia",
+        "eventFull": "Evento Lleno",
+        "willAttend": "Asistiré"
+      },
+      "noEvents": {
+        "title": "No hay eventos próximos",
+        "description": "Los eventos puente conectan personas de diferentes capas económicas",
+        "createFirst": "+ Crear Primer Evento"
+      },
+      "eventsInfo": {
+        "title": "¿Qué son los Eventos Puente?",
+        "description": "Los Eventos Puente son encuentros diseñados para conectar personas de diferentes capas económicas, facilitando el diálogo, la comprensión mutua y el aprendizaje intercultural entre paradigmas económicos.",
+        "connection": {
+          "title": "Conexión",
+          "description": "Conoce personas con perspectivas económicas diferentes"
+        },
+        "learning": {
+          "title": "Aprendizaje",
+          "description": "Comprende cómo funcionan otras capas económicas"
+        },
+        "evolution": {
+          "title": "Evolución",
+          "description": "Facilita transiciones suaves entre paradigmas"
+        }
+      },
+      "createModal": {
+        "title": "Crear Evento Puente",
+        "eventName": "Nombre del Evento",
+        "eventNamePlaceholder": "Ej: Diálogo entre Capas Económicas",
+        "description": "Descripción",
+        "descriptionPlaceholder": "Describe el propósito y actividades del evento",
+        "dateTime": "Fecha y Hora",
+        "maxAttendees": "Máx. Asistentes (opcional)",
+        "maxAttendeesPlaceholder": "Sin límite",
+        "location": "Ubicación (opcional)",
+        "locationPlaceholder": "Ej: Centro Comunitario, Calle Principal 123",
+        "targetLayers": "Capas Económicas Objetivo",
+        "targetLayersHint": "Selecciona las capas que quieres conectar (al menos 2)",
+        "cancel": "Cancelar",
+        "create": "Crear Evento",
+        "creating": "Creando..."
+      },
+      "toasts": {
+        "congratulationSent": "¡Felicitación enviada!",
+        "congratulationError": "Error al enviar felicitación",
+        "eventRegistered": "¡Te has registrado al evento!",
+        "eventRegistrationError": "Error al registrarse al evento",
+        "attendanceCancelled": "Has cancelado tu asistencia",
+        "attendanceCancelError": "Error al cancelar asistencia",
+        "eventCreated": "¡Evento creado exitosamente!",
+        "eventCreationError": "Error al crear evento"
+      }
+    }
   },
   "economy": {
     "dashboard": {
@@ -4542,12 +4651,35 @@
   "social": {
     "loadingPost": "Cargando publicación...",
     "postNotFound": "Post no encontrado",
+    "postNotFoundTitle": "Publicación no encontrada",
+    "postNotFoundDescription": "La publicación que buscas no existe o fue eliminada",
+    "backToHome": "Volver al inicio",
+    "backToFeed": "← Volver al feed",
     "writeComment": "Escribe un comentario...",
     "deletePost": "Eliminar publicación",
     "deleteReview": "Eliminar reseña",
     "whatAreYouThinking": "¿Qué estás pensando?",
     "shareExperience": "Comparte tu experiencia...",
-    "inspireOthers": "Esto ayudará a inspirar a otros..."
+    "inspireOthers": "Esto ayudará a inspirar a otros...",
+    "commentAdded": "Comentario agregado",
+    "commentDeleted": "Comentario eliminado",
+    "errorAddingComment": "Error al agregar comentario",
+    "emptyCommentError": "Escribe un comentario",
+    "comments": "Comentarios",
+    "comment": "Comentar",
+    "posting": "Publicando...",
+    "noCommentsYet": "No hay comentarios aún. Sé el primero en comentar.",
+    "mentions": "Menciones",
+    "helped": "ayudados",
+    "postTypes": {
+      "STORY": "Historia",
+      "NEED": "Necesidad",
+      "OFFER": "Oferta",
+      "THANKS": "Agradecimiento",
+      "ACHIEVEMENT": "Logro",
+      "MILESTONE": "Hito",
+      "TIP": "Consejo"
+    }
   },
   "gamification": {
     "achievements": "Logros y Badges",

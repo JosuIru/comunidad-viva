@@ -6,6 +6,7 @@ import { getI18nProps } from '@/lib/i18n';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 type PostType = 'STORY' | 'NEED' | 'OFFER' | 'THANKS' | 'ACHIEVEMENT' | 'MILESTONE' | 'TIP';
 
@@ -52,14 +53,14 @@ interface Post {
   }>;
 }
 
-const POST_TYPES = {
-  STORY: { label: 'Historia', icon: '📖', color: 'blue' },
-  NEED: { label: 'Necesidad', icon: '🙏', color: 'orange' },
-  OFFER: { label: 'Oferta', icon: '🎁', color: 'green' },
-  THANKS: { label: 'Agradecimiento', icon: '💚', color: 'pink' },
-  ACHIEVEMENT: { label: 'Logro', icon: '🏆', color: 'yellow' },
-  MILESTONE: { label: 'Hito', icon: '🎯', color: 'purple' },
-  TIP: { label: 'Consejo', icon: '💡', color: 'indigo' },
+const POST_TYPE_CONFIG = {
+  STORY: { icon: '📖', color: 'blue' },
+  NEED: { icon: '🙏', color: 'orange' },
+  OFFER: { icon: '🎁', color: 'green' },
+  THANKS: { icon: '💚', color: 'pink' },
+  ACHIEVEMENT: { icon: '🏆', color: 'yellow' },
+  MILESTONE: { icon: '🎯', color: 'purple' },
+  TIP: { icon: '💡', color: 'indigo' },
 };
 
 export default function PostDetailPage() {
@@ -67,6 +68,8 @@ export default function PostDetailPage() {
   const { id } = router.query;
   const queryClient = useQueryClient();
   const [newComment, setNewComment] = useState('');
+  const t = useTranslations('social');
+  const tCommon = useTranslations('common');
 
   // Fetch post
   const { data: post, isLoading } = useQuery<Post>({
@@ -96,12 +99,12 @@ export default function PostDetailPage() {
       return response.data;
     },
     onSuccess: () => {
-      toast.success('Comentario agregado');
+      toast.success(t('commentAdded'));
       setNewComment('');
       queryClient.invalidateQueries({ queryKey: ['post', id] });
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al agregar comentario');
+      toast.error(error.response?.data?.message || t('errorAddingComment'));
     },
   });
 
@@ -111,14 +114,14 @@ export default function PostDetailPage() {
       await api.delete(`/social/comments/${commentId}`);
     },
     onSuccess: () => {
-      toast.success('Comentario eliminado');
+      toast.success(t('commentDeleted'));
       queryClient.invalidateQueries({ queryKey: ['post', id] });
     },
   });
 
   const handleAddComment = () => {
     if (!newComment.trim()) {
-      toast.error('Escribe un comentario');
+      toast.error(t('emptyCommentError'));
       return;
     }
     addCommentMutation.mutate(newComment);
@@ -126,11 +129,11 @@ export default function PostDetailPage() {
 
   if (isLoading) {
     return (
-      <Layout title="Cargando...">
+      <Layout title={tCommon('loading')}>
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent mb-4"></div>
-            <p className="text-gray-600">Cargando publicación...</p>
+            <p className="text-gray-600">{t('loadingPost')}</p>
           </div>
         </div>
       </Layout>
@@ -139,17 +142,17 @@ export default function PostDetailPage() {
 
   if (!post) {
     return (
-      <Layout title="Post no encontrado">
+      <Layout title={t('postNotFound')}>
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
           <div className="text-center">
             <div className="text-6xl mb-4">📭</div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Publicación no encontrada</h1>
-            <p className="text-gray-600 mb-6">La publicación que buscas no existe o fue eliminada</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('postNotFoundTitle')}</h1>
+            <p className="text-gray-600 mb-6">{t('postNotFoundDescription')}</p>
             <Link
               href="/"
               className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
-              Volver al inicio
+              {t('backToHome')}
             </Link>
           </div>
         </div>
@@ -157,10 +160,11 @@ export default function PostDetailPage() {
     );
   }
 
-  const typeConfig = POST_TYPES[post.type];
+  const typeConfig = POST_TYPE_CONFIG[post.type];
+  const postTypeLabel = t(`postTypes.${post.type}`);
 
   return (
-    <Layout title={`${typeConfig.label} - ${post.author.name}`}>
+    <Layout title={`${postTypeLabel} - ${post.author.name}`}>
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
         <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
@@ -169,7 +173,7 @@ export default function PostDetailPage() {
               href="/"
               className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors"
             >
-              ← Volver al feed
+              {t('backToFeed')}
             </Link>
           </div>
         </div>
@@ -219,7 +223,7 @@ export default function PostDetailPage() {
                   className={`px-3 py-1 rounded-full text-xs font-bold bg-${typeConfig.color}-100 text-${typeConfig.color}-800 flex items-center gap-1`}
                 >
                   <span>{typeConfig.icon}</span>
-                  <span>{typeConfig.label}</span>
+                  <span>{postTypeLabel}</span>
                 </span>
               </div>
             </div>
@@ -260,7 +264,7 @@ export default function PostDetailPage() {
               {/* Mentions */}
               {post.mentions && post.mentions.length > 0 && (
                 <div className="flex flex-wrap gap-2 mb-4 text-sm text-gray-600">
-                  Menciones: {post.mentions.map((mention, idx) => (
+                  {t('mentions')}: {post.mentions.map((mention, idx) => (
                     <span key={idx} className="text-blue-600">
                       @{mention}{idx < post.mentions!.length - 1 ? ', ' : ''}
                     </span>
@@ -309,7 +313,7 @@ export default function PostDetailPage() {
                 {post.helpedCount > 0 && (
                   <div className="flex items-center gap-2 text-orange-600">
                     <span className="text-xl">🙌</span>
-                    <span className="text-sm font-medium">{post.helpedCount} ayudados</span>
+                    <span className="text-sm font-medium">{post.helpedCount} {t('helped')}</span>
                   </div>
                 )}
               </div>
@@ -318,14 +322,14 @@ export default function PostDetailPage() {
 
           {/* Comments Section */}
           <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Comentarios ({post.commentsCount})</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('comments')} ({post.commentsCount})</h2>
 
             {/* Add Comment */}
             <div className="mb-6">
               <textarea
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Escribe un comentario..."
+                placeholder={t('writeComment')}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 rows={3}
               />
@@ -335,7 +339,7 @@ export default function PostDetailPage() {
                   disabled={addCommentMutation.isPending || !newComment.trim()}
                   className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
                 >
-                  {addCommentMutation.isPending ? 'Publicando...' : 'Comentar'}
+                  {addCommentMutation.isPending ? t('posting') : t('comment')}
                 </button>
               </div>
             </div>
@@ -380,7 +384,7 @@ export default function PostDetailPage() {
                 ))
               ) : (
                 <div className="text-center py-8 text-gray-500">
-                  No hay comentarios aún. Sé el primero en comentar.
+                  {t('noCommentsYet')}
                 </div>
               )}
             </div>

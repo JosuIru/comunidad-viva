@@ -3694,7 +3694,116 @@
     "eventDescPlaceholder": "Describe the purpose and activities of the event",
     "dateTime": "Date and Time",
     "venuePlaceholder": "E.g.: Community Center, Main Street 123",
-    "locationOptional": "Location (optional)"
+    "locationOptional": "Location (optional)",
+    "events": {
+      "title": "Celebrations and Events - Truk",
+      "header": {
+        "title": "Celebrations and Bridge Events",
+        "subtitle": "Celebrate migrations and connect with people from different economic layers"
+      },
+      "createEvent": "+ Create Event",
+      "tabs": {
+        "celebrations": "Celebrations",
+        "events": "Bridge Events"
+      },
+      "layers": {
+        "traditional": "Traditional",
+        "transitional": "Transitional",
+        "giftPure": "Pure Gift",
+        "chameleon": "Chameleon"
+      },
+      "time": {
+        "daysAgo": "{days}d ago",
+        "hoursAgo": "{hours}h ago",
+        "minutesAgo": "{minutes}m ago",
+        "now": "Now"
+      },
+      "celebration": {
+        "migratedFrom": "Migrated from {from} to {to}",
+        "migrationReason": "Migration reason:",
+        "congratulations": "{count} congratulations",
+        "congratulate": "Congratulate",
+        "alreadyCongratulated": "Already congratulated"
+      },
+      "noCelebrations": {
+        "title": "No recent celebrations",
+        "description": "When someone migrates to a new economic layer, it will appear here for you to congratulate them"
+      },
+      "celebrationsInfo": {
+        "title": "What are Celebrations?",
+        "description": "When a community member migrates from one economic layer to another, it's a significant moment that deserves to be celebrated. Celebrations allow the community to support and recognize these evolutionary steps.",
+        "traditionalToTransitional": {
+          "title": "Traditional to Transitional",
+          "description": "First steps towards a more collaborative economy"
+        },
+        "transitionalToGift": {
+          "title": "Transitional to Pure Gift",
+          "description": "Fully adopting the gift economy"
+        }
+      },
+      "event": {
+        "status": {
+          "upcoming": "Upcoming",
+          "inProgress": "In Progress",
+          "completed": "Completed",
+          "cancelled": "Cancelled"
+        },
+        "targetLayers": "Target layers:",
+        "attendees": "Attendees",
+        "organizer": "Organized by:",
+        "cancelAttendance": "Cancel Attendance",
+        "eventFull": "Event Full",
+        "willAttend": "I'll Attend"
+      },
+      "noEvents": {
+        "title": "No upcoming events",
+        "description": "Bridge events connect people from different economic layers",
+        "createFirst": "+ Create First Event"
+      },
+      "eventsInfo": {
+        "title": "What are Bridge Events?",
+        "description": "Bridge Events are gatherings designed to connect people from different economic layers, facilitating dialogue, mutual understanding, and intercultural learning between economic paradigms.",
+        "connection": {
+          "title": "Connection",
+          "description": "Meet people with different economic perspectives"
+        },
+        "learning": {
+          "title": "Learning",
+          "description": "Understand how other economic layers work"
+        },
+        "evolution": {
+          "title": "Evolution",
+          "description": "Facilitate smooth transitions between paradigms"
+        }
+      },
+      "createModal": {
+        "title": "Create Bridge Event",
+        "eventName": "Event Name",
+        "eventNamePlaceholder": "E.g.: Dialogue between Economic Layers",
+        "description": "Description",
+        "descriptionPlaceholder": "Describe the purpose and activities of the event",
+        "dateTime": "Date and Time",
+        "maxAttendees": "Max. Attendees (optional)",
+        "maxAttendeesPlaceholder": "No limit",
+        "location": "Location (optional)",
+        "locationPlaceholder": "E.g.: Community Center, Main Street 123",
+        "targetLayers": "Target Economic Layers",
+        "targetLayersHint": "Select the layers you want to connect (at least 2)",
+        "cancel": "Cancel",
+        "create": "Create Event",
+        "creating": "Creating..."
+      },
+      "toasts": {
+        "congratulationSent": "Congratulation sent!",
+        "congratulationError": "Error sending congratulation",
+        "eventRegistered": "You have registered for the event!",
+        "eventRegistrationError": "Error registering for the event",
+        "attendanceCancelled": "You have cancelled your attendance",
+        "attendanceCancelError": "Error cancelling attendance",
+        "eventCreated": "Event created successfully!",
+        "eventCreationError": "Error creating event"
+      }
+    }
   },
   "economy": {
     "dashboard": {
@@ -4593,12 +4702,35 @@
   "social": {
     "loadingPost": "Loading post...",
     "postNotFound": "Post not found",
+    "postNotFoundTitle": "Post not found",
+    "postNotFoundDescription": "The post you are looking for does not exist or was deleted",
+    "backToHome": "Back to home",
+    "backToFeed": "← Back to feed",
     "writeComment": "Write a comment...",
     "deletePost": "Delete post",
     "deleteReview": "Delete review",
     "whatAreYouThinking": "What are you thinking?",
     "shareExperience": "Share your experience...",
-    "inspireOthers": "This will help inspire others..."
+    "inspireOthers": "This will help inspire others...",
+    "commentAdded": "Comment added",
+    "commentDeleted": "Comment deleted",
+    "errorAddingComment": "Error adding comment",
+    "emptyCommentError": "Write a comment",
+    "comments": "Comments",
+    "comment": "Comment",
+    "posting": "Posting...",
+    "noCommentsYet": "No comments yet. Be the first to comment.",
+    "mentions": "Mentions",
+    "helped": "helped",
+    "postTypes": {
+      "STORY": "Story",
+      "NEED": "Need",
+      "OFFER": "Offer",
+      "THANKS": "Thanks",
+      "ACHIEVEMENT": "Achievement",
+      "MILESTONE": "Milestone",
+      "TIP": "Tip"
+    }
   },
   "gamification": {
     "achievements": "Achievements and Badges",

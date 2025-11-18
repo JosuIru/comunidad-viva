@@ -3694,7 +3694,116 @@
     "eventDescPlaceholder": "Descriu el propòsit i activitats de l'esdeveniment",
     "dateTime": "Data i Hora",
     "venuePlaceholder": "Ex: Centre Comunitari, Carrer Principal 123",
-    "locationOptional": "Ubicació (opcional)"
+    "locationOptional": "Ubicació (opcional)",
+    "events": {
+      "title": "Celebracions i Esdeveniments - Truk",
+      "header": {
+        "title": "Celebracions i Esdeveniments Pont",
+        "subtitle": "Celebra les migracions i connecta amb persones de diferents capes econòmiques"
+      },
+      "createEvent": "+ Crear Esdeveniment",
+      "tabs": {
+        "celebrations": "Celebracions",
+        "events": "Esdeveniments Pont"
+      },
+      "layers": {
+        "traditional": "Tradicional",
+        "transitional": "Transicional",
+        "giftPure": "Do Pur",
+        "chameleon": "Camaleó"
+      },
+      "time": {
+        "daysAgo": "Fa {days}d",
+        "hoursAgo": "Fa {hours}h",
+        "minutesAgo": "Fa {minutes}m",
+        "now": "Ara"
+      },
+      "celebration": {
+        "migratedFrom": "Va migrar de {from} a {to}",
+        "migrationReason": "Raó de la migració:",
+        "congratulations": "{count} felicitacions",
+        "congratulate": "Felicitar",
+        "alreadyCongratulated": "Ja has felicitat"
+      },
+      "noCelebrations": {
+        "title": "No hi ha celebracions recents",
+        "description": "Quan algú migri de capa econòmica, apareixerà aquí perquè puguis felicitar-lo"
+      },
+      "celebrationsInfo": {
+        "title": "Què són les Celebracions?",
+        "description": "Quan un membre de la comunitat migra d'una capa econòmica a una altra, és un moment significatiu que mereix ser celebrat. Les celebracions permeten que la comunitat doni suport i reconegui aquests passos evolutius.",
+        "traditionalToTransitional": {
+          "title": "Tradicional a Transicional",
+          "description": "Primers passos cap a una economia més col·laborativa"
+        },
+        "transitionalToGift": {
+          "title": "Transicional a Do Pur",
+          "description": "Adoptant completament l'economia del do"
+        }
+      },
+      "event": {
+        "status": {
+          "upcoming": "Proper",
+          "inProgress": "En Curs",
+          "completed": "Finalitzat",
+          "cancelled": "Cancel·lat"
+        },
+        "targetLayers": "Capes objectiu:",
+        "attendees": "Assistents",
+        "organizer": "Organitza:",
+        "cancelAttendance": "Cancel·lar Assistència",
+        "eventFull": "Esdeveniment Ple",
+        "willAttend": "Assistiré"
+      },
+      "noEvents": {
+        "title": "No hi ha esdeveniments propers",
+        "description": "Els esdeveniments pont connecten persones de diferents capes econòmiques",
+        "createFirst": "+ Crear Primer Esdeveniment"
+      },
+      "eventsInfo": {
+        "title": "Què són els Esdeveniments Pont?",
+        "description": "Els Esdeveniments Pont són trobades dissenyades per connectar persones de diferents capes econòmiques, facilitant el diàleg, la comprensió mútua i l'aprenentatge intercultural entre paradigmes econòmics.",
+        "connection": {
+          "title": "Connexió",
+          "description": "Coneix persones amb perspectives econòmiques diferents"
+        },
+        "learning": {
+          "title": "Aprenentatge",
+          "description": "Comprèn com funcionen altres capes econòmiques"
+        },
+        "evolution": {
+          "title": "Evolució",
+          "description": "Facilita transicions suaus entre paradigmes"
+        }
+      },
+      "createModal": {
+        "title": "Crear Esdeveniment Pont",
+        "eventName": "Nom de l'Esdeveniment",
+        "eventNamePlaceholder": "Ex: Diàleg entre Capes Econòmiques",
+        "description": "Descripció",
+        "descriptionPlaceholder": "Descriu el propòsit i activitats de l'esdeveniment",
+        "dateTime": "Data i Hora",
+        "maxAttendees": "Màx. Assistents (opcional)",
+        "maxAttendeesPlaceholder": "Sense límit",
+        "location": "Ubicació (opcional)",
+        "locationPlaceholder": "Ex: Centre Comunitari, Carrer Principal 123",
+        "targetLayers": "Capes Econòmiques Objectiu",
+        "targetLayersHint": "Selecciona les capes que vols connectar (almenys 2)",
+        "cancel": "Cancel·lar",
+        "create": "Crear Esdeveniment",
+        "creating": "Creant..."
+      },
+      "toasts": {
+        "congratulationSent": "Felicitació enviada!",
+        "congratulationError": "Error en enviar felicitació",
+        "eventRegistered": "T'has registrat a l'esdeveniment!",
+        "eventRegistrationError": "Error en registrar-se a l'esdeveniment",
+        "attendanceCancelled": "Has cancel·lat la teva assistència",
+        "attendanceCancelError": "Error en cancel·lar assistència",
+        "eventCreated": "Esdeveniment creat correctament!",
+        "eventCreationError": "Error en crear esdeveniment"
+      }
+    }
   },
   "economy": {
     "dashboard": {
@@ -4593,12 +4702,35 @@
   "social": {
     "loadingPost": "Carregant publicació...",
     "postNotFound": "Publicació no trobada",
+    "postNotFoundTitle": "Publicació no trobada",
+    "postNotFoundDescription": "La publicació que busques no existeix o va ser eliminada",
+    "backToHome": "Tornar a l'inici",
+    "backToFeed": "← Tornar al feed",
     "writeComment": "Escriu un comentari...",
     "deletePost": "Eliminar publicació",
     "deleteReview": "Eliminar ressenya",
     "whatAreYouThinking": "Què estàs pensant?",
     "shareExperience": "Comparteix la teva experiència...",
-    "inspireOthers": "Això ajudarà a inspirar altres..."
+    "inspireOthers": "Això ajudarà a inspirar altres...",
+    "commentAdded": "Comentari afegit",
+    "commentDeleted": "Comentari eliminat",
+    "errorAddingComment": "Error en afegir comentari",
+    "emptyCommentError": "Escriu un comentari",
+    "comments": "Comentaris",
+    "comment": "Comentar",
+    "posting": "Publicant...",
+    "noCommentsYet": "Encara no hi ha comentaris. Sigues el primer a comentar.",
+    "mentions": "Mencions",
+    "helped": "ajudats",
+    "postTypes": {
+      "STORY": "Història",
+      "NEED": "Necessitat",
+      "OFFER": "Oferta",
+      "THANKS": "Agraïment",
+      "ACHIEVEMENT": "Assoliment",
+      "MILESTONE": "Fita",
+      "TIP": "Consell"
+    }
   },
   "gamification": {
     "achievements": "Assoliments i Badges",
