@@ -44,19 +44,36 @@
         "housing": "Housing",
         "mutualAid": "Mutual Aid",
         "allFeatures": "All features",
-        "features": "✨ Features"
+        "features": "✨ Features",
+        "timebank": "Time Bank",
+        "impact": "Impact",
+        "communityNetwork": "Community Network"
       },
+      "livingEconomy": "Living Economy",
+      "livingEconomyTitle": "Hybrid Living Economy System - The TRUK revolution",
       "main": "Main",
       "gamification": "Gamification",
       "economy": "Economy & Governance",
       "economyGovernance": "Economy & Governance",
-      "hybrid": "Hybrid"
+      "hybrid": "Hybrid",
+      "more": "More",
+      "level": "Level"
     },
     "userMenu": {
       "defaultName": "User",
       "profile": "My Profile",
       "manage": "Manage Content",
       "viewProfile": "View profile"
+    },
+    "wallet": {
+      "connected": "Wallet connected",
+      "disconnect": "Disconnect Wallet",
+      "connect": "Connect Web3 Wallet",
+      "linkTitle": "Link Web3 Wallet",
+      "linkSubtitle": "Link your Web3 wallet to your existing account",
+      "metamaskDesc": "The most popular wallet for Ethereum and EVM chains",
+      "phantomDesc": "Leading wallet for Solana and multi-chain",
+      "walletConnectDesc": "Connect with 300+ mobile wallets"
     }
   },
   "auth": {
@@ -1234,6 +1251,8 @@
   },
   "quickActions": {
     "title": "Quick Actions",
+    "showMore": "Show more +",
+    "showLess": "Show less −",
     "createOffer": "+ Create Offer",
     "createEvent": "+ Create Event",
     "timeBank": "Time Bank",
@@ -1241,6 +1260,54 @@
     "createProject": "+ Create Project",
     "housingCommunity": "🏡 Community Housing",
     "viewMutualAid": "🤝 View Mutual Aid"
+  },
+  "impact": {
+    "pageTitle": "Global Impact - Truk | Living Community",
+    "pageDescription": "View the collective impact of all organized communities on Truk: savings generated, active members, and much more.",
+    "hero": {
+      "badge": "Global Impact Dashboard",
+      "title": "Proving that another world is possible",
+      "subtitle": "Real metrics from the collective impact of organized communities building economic and social alternatives from the local level."
+    },
+    "stats": {
+      "activeCommunities": "Active Communities",
+      "participatingPeople": "Participating People",
+      "eventsHeld": "Events Held"
+    },
+    "sections": {
+      "impactByType": "Impact by Community Type"
+    },
+    "packTypes": {
+      "consumerGroup": "Consumer Groups",
+      "housingCoop": "Housing Cooperatives",
+      "communityBar": "Community Bars"
+    },
+    "metrics": {
+      "monthlySavings": "Total Savings",
+      "activeMembers": "Active Members",
+      "ordersCompleted": "Orders Completed",
+      "localProducers": "Local Producers",
+      "kgLocalFood": "Local Food (kg)",
+      "co2Avoided": "CO2 Avoided (kg)",
+      "toolUses": "Tool Uses",
+      "spaceBookings": "Space Bookings",
+      "eventsHosted": "Events Hosted",
+      "localSuppliers": "Local Suppliers"
+    },
+    "community": "community",
+    "communities": "communities",
+    "members": "members",
+    "viewMore": "View more",
+    "cta": {
+      "title": "Be part of the change",
+      "subtitle": "Every community that organizes, every person that participates, is proving that we can build real alternatives to extractive economic systems.",
+      "createCommunity": "Create My Community",
+      "exploreCommunities": "Explore Communities"
+    },
+    "methodology": {
+      "title": "About these metrics",
+      "description": "Data is updated daily and reflects the real activity of communities on the platform. All metrics are calculated transparently and verifiably. This dashboard is open source and anyone can audit its operation."
+    }
   },
   "home": {
     "viewToggle": {
@@ -1443,6 +1510,24 @@
     },
     "credits": "{credits} credits",
     "hours": "{hours}h"
+  },
+  "timebankOffers": {
+    "title": "Time Bank Offers",
+    "loadError": "Error loading offers",
+    "noOffers": "No offers available",
+    "beFirst": "Be the first to offer your time to the community",
+    "offerAvailable": "offer available",
+    "offersAvailable": "offers available",
+    "hoursEstimated": "h estimated",
+    "canTeach": "Can teach",
+    "tools": "Tools",
+    "request": "Request",
+    "viewMore": "View more offers",
+    "experience": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "expert": "Expert"
+    }
   },
   "managePage": {
     "description": "Manage your offers, events and profile in one place"

@@ -49,14 +49,31 @@
         "housing": "Etxebizitza",
         "mutualAid": "Laguntza Mutuala",
         "allFeatures": "Funtzionalitate guztiak",
-        "features": "✨ Funtzionalitateak"
-      }
+        "features": "✨ Funtzionalitateak",
+        "timebank": "Denbora Bankua",
+        "impact": "Inpaktua",
+        "communityNetwork": "Komunitate Sarea"
+      },
+      "livingEconomy": "Ekonomia Bizia",
+      "livingEconomyTitle": "Ekonomia Bizi Hibrido Sistema - TRUK iraultza",
+      "more": "Gehiago",
+      "level": "Maila"
     },
     "userMenu": {
       "defaultName": "Erabiltzailea",
       "profile": "Nire Profila",
       "manage": "Edukia Kudeatu",
       "viewProfile": "Profila ikusi"
+    },
+    "wallet": {
+      "connected": "Wallet konektatuta",
+      "disconnect": "Deskonektatu Wallet",
+      "connect": "Konektatu Web3 Wallet",
+      "linkTitle": "Lotu Web3 Wallet",
+      "linkSubtitle": "Lotu zure Web3 wallet zure kontu existentearekin",
+      "metamaskDesc": "Wallet ezagunena Ethereum eta EVM kateetarako",
+      "phantomDesc": "Wallet liderra Solana eta multi-chain-erako",
+      "walletConnectDesc": "Konektatu 300+ wallet mugikorrekin"
     }
   },
   "auth": {
@@ -1248,6 +1265,8 @@
   },
   "quickActions": {
     "title": "Ekintza Azkarrak",
+    "showMore": "Gehiago ikusi +",
+    "showLess": "Gutxiago ikusi −",
     "createOffer": "+ Eskaintza Sortu",
     "createEvent": "+ Ekitaldia Sortu",
     "timeBank": "Denbora Bankua",
@@ -1255,6 +1274,54 @@
     "createProject": "+ Proiektua Sortu",
     "housingCommunity": "🏡 Komunitateko Etxebizitza",
     "viewMutualAid": "🤝 Ikusi Elkar-laguntza"
+  },
+  "impact": {
+    "pageTitle": "Inpaktu Globala - Truk | Komunitate Bizia",
+    "pageDescription": "Ikusi Truk-en antolatutako komunitate guztien inpaktu kolektiboa: sortutako aurrezkiak, kide aktiboak, eta askoz gehiago.",
+    "hero": {
+      "badge": "Inpaktu Globalaren Dashboard-a",
+      "title": "Beste mundu bat posible dela frogatzen",
+      "subtitle": "Tokiko mailatik alternatiba ekonomiko eta sozialak eraikitzen ari diren komunitate antolatuen inpaktu kolektiboaren benetako metrikak."
+    },
+    "stats": {
+      "activeCommunities": "Komunitate Aktiboak",
+      "participatingPeople": "Parte Hartzen Duten Pertsonak",
+      "eventsHeld": "Egindako Ekitaldiak"
+    },
+    "sections": {
+      "impactByType": "Inpaktua Komunitate Motaren arabera"
+    },
+    "packTypes": {
+      "consumerGroup": "Kontsumo Taldeak",
+      "housingCoop": "Etxebizitza Kooperatibak",
+      "communityBar": "Komunitate Tabernak"
+    },
+    "metrics": {
+      "monthlySavings": "Aurrezki Totala",
+      "activeMembers": "Kide Aktiboak",
+      "ordersCompleted": "Eskaera Osatuak",
+      "localProducers": "Tokiko Ekoizleak",
+      "kgLocalFood": "Tokiko Janaria (kg)",
+      "co2Avoided": "Saihestutako CO2 (kg)",
+      "toolUses": "Tresna Erabilerak",
+      "spaceBookings": "Espazio Erreserbak",
+      "eventsHosted": "Egindako Ekitaldiak",
+      "localSuppliers": "Tokiko Hornitzaileak"
+    },
+    "community": "komunitatea",
+    "communities": "komunitateak",
+    "members": "kideak",
+    "viewMore": "Ikusi gehiago",
+    "cta": {
+      "title": "Izan aldaketaren parte",
+      "subtitle": "Antolatzen den komunitate bakoitza, parte hartzen duen pertsona bakoitza, sistema ekonomiko erauzleei benetako alternatibak eraiki ditzakegula frogatzen ari da.",
+      "createCommunity": "Nire Komunitatea Sortu",
+      "exploreCommunities": "Komunitateak Arakatu"
+    },
+    "methodology": {
+      "title": "Metrika hauen inguruan",
+      "description": "Datuak egunero eguneratzen dira eta plataformako komunitateen benetako jarduera islatzen dute. Metrika guztiak modu gardenean eta egiaztagarrian kalkulatzen dira. Dashboard hau kode irekikoa da eta edonork auditatu dezake bere funtzionamendua."
+    }
   },
   "home": {
     "viewToggle": {
@@ -1457,6 +1524,24 @@
     },
     "credits": "{credits} kreditu",
     "hours": "{hours}h"
+  },
+  "timebankOffers": {
+    "title": "Denbora Bankuko Eskaintzak",
+    "loadError": "Errorea eskaintzak kargatzean",
+    "noOffers": "Ez dago eskaintzarik eskuragarri",
+    "beFirst": "Izan lehena zure denbora komunitateari eskaintzeko",
+    "offerAvailable": "eskaintza eskuragarri",
+    "offersAvailable": "eskaintza eskuragarri",
+    "hoursEstimated": "h gutxi gorabehera",
+    "canTeach": "Irakasten dezake",
+    "tools": "Tresnak",
+    "request": "Eskatu",
+    "viewMore": "Ikusi eskaintza gehiago",
+    "experience": {
+      "beginner": "Hasiberria",
+      "intermediate": "Ertaina",
+      "expert": "Aditua"
+    }
   },
   "managePage": {
     "description": "Kudeatu zure eskaintzak, ekitaldiak eta profila leku bakarrean"

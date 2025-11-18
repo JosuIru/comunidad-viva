@@ -49,14 +49,31 @@
         "housing": "Vivienda",
         "mutualAid": "Ayuda Mutua",
         "allFeatures": "Todas las funcionalidades",
-        "features": "✨ Funcionalidades"
-      }
+        "features": "✨ Funcionalidades",
+        "timebank": "Banco de Tiempo",
+        "impact": "Impacto",
+        "communityNetwork": "Red de Comunidades"
+      },
+      "livingEconomy": "Economía Viva",
+      "livingEconomyTitle": "Sistema Híbrido de Economía Viva - La revolución TRUK"
     },
+    "more": "Más",
+    "level": "Nivel",
     "userMenu": {
       "defaultName": "Usuario",
       "profile": "Mi Perfil",
       "manage": "Gestionar Contenido",
       "viewProfile": "Ver perfil"
+    },
+    "wallet": {
+      "connected": "Wallet conectada",
+      "disconnect": "Desconectar Wallet",
+      "connect": "Conectar Wallet Web3",
+      "linkTitle": "Vincular Billetera Web3",
+      "linkSubtitle": "Vincula tu billetera Web3 a tu cuenta existente",
+      "metamaskDesc": "La billetera más popular para Ethereum y EVM chains",
+      "phantomDesc": "Billetera líder para Solana y multi-chain",
+      "walletConnectDesc": "Conecta con 300+ billeteras móviles"
     }
   },
   "auth": {
@@ -1248,6 +1265,8 @@
   },
   "quickActions": {
     "title": "Acciones Rápidas",
+    "showMore": "Ver más +",
+    "showLess": "Ver menos −",
     "createOffer": "+ Crear Oferta",
     "createEvent": "+ Crear Evento",
     "timeBank": "Banco de Tiempo",
@@ -1255,6 +1274,54 @@
     "createProject": "+ Crear Proyecto",
     "housingCommunity": "🏡 Vivienda Comunitaria",
     "viewMutualAid": "🤝 Ver Ayuda Mutua"
+  },
+  "impact": {
+    "pageTitle": "Impacto Global - Truk | Comunidad Viva",
+    "pageDescription": "Visualiza el impacto colectivo de todas las comunidades organizadas en Truk: ahorro generado, miembros activos, y mucho más.",
+    "hero": {
+      "badge": "Dashboard de Impacto Global",
+      "title": "Demostrando que otro mundo es posible",
+      "subtitle": "Métricas reales del impacto colectivo de comunidades organizadas que están construyendo alternativas económicas y sociales desde lo local."
+    },
+    "stats": {
+      "activeCommunities": "Comunidades Activas",
+      "participatingPeople": "Personas Participando",
+      "eventsHeld": "Eventos Realizados"
+    },
+    "sections": {
+      "impactByType": "Impacto por Tipo de Comunidad"
+    },
+    "packTypes": {
+      "consumerGroup": "Grupos de Consumo",
+      "housingCoop": "Cooperativas de Vivienda",
+      "communityBar": "Bares Comunitarios"
+    },
+    "metrics": {
+      "monthlySavings": "Ahorro Total",
+      "activeMembers": "Miembros Activos",
+      "ordersCompleted": "Pedidos Completados",
+      "localProducers": "Productores Locales",
+      "kgLocalFood": "Comida Local (kg)",
+      "co2Avoided": "CO2 Evitado (kg)",
+      "toolUses": "Usos de Herramientas",
+      "spaceBookings": "Reservas de Espacios",
+      "eventsHosted": "Eventos Realizados",
+      "localSuppliers": "Proveedores Locales"
+    },
+    "community": "comunidad",
+    "communities": "comunidades",
+    "members": "miembros",
+    "viewMore": "Ver más",
+    "cta": {
+      "title": "Forma parte del cambio",
+      "subtitle": "Cada comunidad que se organiza, cada persona que participa, está demostrando que podemos construir alternativas reales a los sistemas económicos extractivos.",
+      "createCommunity": "Crear Mi Comunidad",
+      "exploreCommunities": "Explorar Comunidades"
+    },
+    "methodology": {
+      "title": "Sobre estas métricas",
+      "description": "Los datos se actualizan diariamente y reflejan la actividad real de las comunidades en la plataforma. Todas las métricas son calculadas de forma transparente y verificable. Este dashboard es de código abierto y cualquiera puede auditar su funcionamiento."
+    }
   },
   "home": {
     "viewToggle": {
@@ -1457,6 +1524,24 @@
     },
     "credits": "{credits} creditos",
     "hours": "{hours}h"
+  },
+  "timebankOffers": {
+    "title": "Ofertas de Banco de Tiempo",
+    "loadError": "Error al cargar ofertas",
+    "noOffers": "No hay ofertas disponibles",
+    "beFirst": "Sé el primero en ofrecer tu tiempo a la comunidad",
+    "offerAvailable": "oferta disponible",
+    "offersAvailable": "ofertas disponibles",
+    "hoursEstimated": "h estimadas",
+    "canTeach": "Puede enseñar",
+    "tools": "Herramientas",
+    "request": "Solicitar",
+    "viewMore": "Ver más ofertas",
+    "experience": {
+      "beginner": "Principiante",
+      "intermediate": "Intermedio",
+      "expert": "Experto"
+    }
   },
   "managePage": {
     "description": "Administra tus ofertas, eventos y perfil en un solo lugar"

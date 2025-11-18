@@ -44,19 +44,36 @@
         "housing": "Habitatge",
         "mutualAid": "Ajuda Mútua",
         "allFeatures": "Totes les funcionalitats",
-        "features": "✨ Funcionalitats"
+        "features": "✨ Funcionalitats",
+        "timebank": "Banc del Temps",
+        "impact": "Impacte",
+        "communityNetwork": "Xarxa de Comunitats"
       },
+      "livingEconomy": "Economia Viva",
+      "livingEconomyTitle": "Sistema Híbrid d'Economia Viva - La revolució TRUK",
       "main": "Principal",
       "gamification": "Gamificació",
       "economy": "Economia i Governança",
       "economyGovernance": "Economia i Governança",
-      "hybrid": "Híbrid"
+      "hybrid": "Híbrid",
+      "more": "Més",
+      "level": "Nivell"
     },
     "userMenu": {
       "defaultName": "Usuari",
       "profile": "El meu Perfil",
       "manage": "Gestionar Contingut",
       "viewProfile": "Veure perfil"
+    },
+    "wallet": {
+      "connected": "Wallet connectada",
+      "disconnect": "Desconnectar Wallet",
+      "connect": "Connectar Wallet Web3",
+      "linkTitle": "Vincular Wallet Web3",
+      "linkSubtitle": "Vincula el teu wallet Web3 al teu compte existent",
+      "metamaskDesc": "La wallet més popular per a Ethereum i cadenes EVM",
+      "phantomDesc": "Wallet líder per a Solana i multi-chain",
+      "walletConnectDesc": "Connecta amb 300+ wallets mòbils"
     }
   },
   "auth": {
@@ -1234,6 +1251,8 @@
   },
   "quickActions": {
     "title": "Accions Ràpides",
+    "showMore": "Veure més +",
+    "showLess": "Veure menys −",
     "createOffer": "+ Crear Oferta",
     "createEvent": "+ Crear Esdeveniment",
     "timeBank": "Banc del Temps",
@@ -1241,6 +1260,54 @@
     "createProject": "+ Crear Projecte",
     "housingCommunity": "🏡 Habitatge Comunitari",
     "viewMutualAid": "🤝 Veure Ajuda Mútua"
+  },
+  "impact": {
+    "pageTitle": "Impacte Global - Truk | Comunitat Viva",
+    "pageDescription": "Visualitza l'impacte col·lectiu de totes les comunitats organitzades a Truk: estalvi generat, membres actius, i molt més.",
+    "hero": {
+      "badge": "Dashboard d'Impacte Global",
+      "title": "Demostrant que un altre món és possible",
+      "subtitle": "Mètriques reals de l'impacte col·lectiu de comunitats organitzades que estan construint alternatives econòmiques i socials des del local."
+    },
+    "stats": {
+      "activeCommunities": "Comunitats Actives",
+      "participatingPeople": "Persones Participant",
+      "eventsHeld": "Esdeveniments Realitzats"
+    },
+    "sections": {
+      "impactByType": "Impacte per Tipus de Comunitat"
+    },
+    "packTypes": {
+      "consumerGroup": "Grups de Consum",
+      "housingCoop": "Cooperatives d'Habitatge",
+      "communityBar": "Bars Comunitaris"
+    },
+    "metrics": {
+      "monthlySavings": "Estalvi Total",
+      "activeMembers": "Membres Actius",
+      "ordersCompleted": "Comandes Completades",
+      "localProducers": "Productors Locals",
+      "kgLocalFood": "Menjar Local (kg)",
+      "co2Avoided": "CO2 Evitat (kg)",
+      "toolUses": "Usos d'Eines",
+      "spaceBookings": "Reserves d'Espais",
+      "eventsHosted": "Esdeveniments Realitzats",
+      "localSuppliers": "Proveïdors Locals"
+    },
+    "community": "comunitat",
+    "communities": "comunitats",
+    "members": "membres",
+    "viewMore": "Veure més",
+    "cta": {
+      "title": "Forma part del canvi",
+      "subtitle": "Cada comunitat que s'organitza, cada persona que participa, està demostrant que podem construir alternatives reals als sistemes econòmics extractius.",
+      "createCommunity": "Crear La Meva Comunitat",
+      "exploreCommunities": "Explorar Comunitats"
+    },
+    "methodology": {
+      "title": "Sobre aquestes mètriques",
+      "description": "Les dades s'actualitzen diàriament i reflecteixen l'activitat real de les comunitats a la plataforma. Totes les mètriques es calculen de forma transparent i verificable. Aquest dashboard és de codi obert i qualsevol pot auditar el seu funcionament."
+    }
   },
   "home": {
     "viewToggle": {
@@ -1443,6 +1510,24 @@
     },
     "credits": "{credits} credits",
     "hours": "{hours}h"
+  },
+  "timebankOffers": {
+    "title": "Ofertes del Banc del Temps",
+    "loadError": "Error en carregar ofertes",
+    "noOffers": "No hi ha ofertes disponibles",
+    "beFirst": "Sigues el primer en oferir el teu temps a la comunitat",
+    "offerAvailable": "oferta disponible",
+    "offersAvailable": "ofertes disponibles",
+    "hoursEstimated": "h estimades",
+    "canTeach": "Pot ensenyar",
+    "tools": "Eines",
+    "request": "Sol·licitar",
+    "viewMore": "Veure més ofertes",
+    "experience": {
+      "beginner": "Principiant",
+      "intermediate": "Intermedi",
+      "expert": "Expert"
+    }
   },
   "managePage": {
     "description": "Administra les teves ofertes, esdeveniments i perfil en un sol lloc"

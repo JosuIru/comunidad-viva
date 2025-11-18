@@ -81,7 +81,7 @@ export default function QuickActions() {
         <div className="flex items-center gap-2">
           <BoltIcon className="h-6 w-6 text-yellow-500" />
           <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-            Acciones Rápidas
+            {t('title')}
           </h3>
         </div>
         {!showAll && secondaryActions.length > 0 && (
@@ -92,7 +92,7 @@ export default function QuickActions() {
             }}
             className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors"
           >
-            Ver más +
+            {t('showMore')}
           </button>
         )}
         {showAll && (
@@ -103,7 +103,7 @@ export default function QuickActions() {
             }}
             className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 font-medium transition-colors"
           >
-            Ver menos −
+            {t('showLess')}
           </button>
         )}
       </div>

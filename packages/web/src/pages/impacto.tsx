@@ -3,6 +3,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '@/components/Layout';
 import { TrendingUp, Users, Activity, Target, ArrowRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { getI18nProps } from '@/lib/i18n';
 
 interface GlobalSummary {
   totalCommunities: number;
@@ -19,6 +21,7 @@ interface GlobalSummary {
 }
 
 export default function ImpactoDashboard() {
+  const t = useTranslations('impact');
   const [summary, setSummary] = useState<GlobalSummary | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -41,9 +44,9 @@ export default function ImpactoDashboard() {
 
   const getPackName = (type: string): string => {
     const names: Record<string, string> = {
-      CONSUMER_GROUP: 'Grupos de Consumo',
-      HOUSING_COOP: 'Cooperativas de Vivienda',
-      COMMUNITY_BAR: 'Bares Comunitarios',
+      CONSUMER_GROUP: t('packTypes.consumerGroup'),
+      HOUSING_COOP: t('packTypes.housingCoop'),
+      COMMUNITY_BAR: t('packTypes.communityBar'),
     };
     return names[type] || type;
   };
@@ -59,16 +62,16 @@ export default function ImpactoDashboard() {
 
   const formatMetricName = (key: string): string => {
     const names: Record<string, string> = {
-      monthly_savings: 'Ahorro Total',
-      active_members: 'Miembros Activos',
-      orders_completed: 'Pedidos Completados',
-      local_producers: 'Productores Locales',
-      kg_local_food: 'Comida Local (kg)',
-      co2_avoided: 'CO2 Evitado (kg)',
-      tool_uses: 'Usos de Herramientas',
-      space_bookings: 'Reservas de Espacios',
-      events_hosted: 'Eventos Realizados',
-      local_suppliers: 'Proveedores Locales',
+      monthly_savings: t('metrics.monthlySavings'),
+      active_members: t('metrics.activeMembers'),
+      orders_completed: t('metrics.ordersCompleted'),
+      local_producers: t('metrics.localProducers'),
+      kg_local_food: t('metrics.kgLocalFood'),
+      co2_avoided: t('metrics.co2Avoided'),
+      tool_uses: t('metrics.toolUses'),
+      space_bookings: t('metrics.spaceBookings'),
+      events_hosted: t('metrics.eventsHosted'),
+      local_suppliers: t('metrics.localSuppliers'),
     };
     return names[key] || key;
   };
@@ -104,10 +107,10 @@ export default function ImpactoDashboard() {
   return (
     <>
       <Head>
-        <title>Impacto Global - Truk | Comunidad Viva</title>
+        <title>{t('pageTitle')}</title>
         <meta
           name="description"
-          content="Visualiza el impacto colectivo de todas las comunidades organizadas en Truk: ahorro generado, miembros activos, y mucho más."
+          content={t('pageDescription')}
         />
       </Head>
 
@@ -119,31 +122,30 @@ export default function ImpactoDashboard() {
               <div className="max-w-4xl mx-auto text-center">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full text-white font-medium mb-6">
                   <TrendingUp className="h-5 w-5" />
-                  <span>Dashboard de Impacto Global</span>
+                  <span>{t('hero.badge')}</span>
                 </div>
 
                 <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                  Demostrando que otro mundo es posible
+                  {t('hero.title')}
                 </h1>
 
                 <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
-                  Métricas reales del impacto colectivo de comunidades organizadas que están construyendo
-                  alternativas económicas y sociales desde lo local.
+                  {t('hero.subtitle')}
                 </p>
 
                 {summary && (
                   <div className="grid md:grid-cols-3 gap-6 mt-12">
                     <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
                       <div className="text-4xl font-bold mb-2">{summary.totalCommunities}</div>
-                      <div className="text-green-100">Comunidades Activas</div>
+                      <div className="text-green-100">{t('stats.activeCommunities')}</div>
                     </div>
                     <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
                       <div className="text-4xl font-bold mb-2">{summary.totalMembers}</div>
-                      <div className="text-green-100">Personas Participando</div>
+                      <div className="text-green-100">{t('stats.participatingPeople')}</div>
                     </div>
                     <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
                       <div className="text-4xl font-bold mb-2">{summary.totalEvents}</div>
-                      <div className="text-green-100">Eventos Realizados</div>
+                      <div className="text-green-100">{t('stats.eventsHeld')}</div>
                     </div>
                   </div>
                 )}
@@ -157,7 +159,7 @@ export default function ImpactoDashboard() {
               <div className="container mx-auto px-4">
                 <div className="max-w-6xl mx-auto">
                   <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-12 text-center">
-                    Impacto por Tipo de Comunidad
+                    {t('sections.impactByType')}
                   </h2>
 
                   <div className="space-y-12">
@@ -176,8 +178,8 @@ export default function ImpactoDashboard() {
                                   {getPackName(type)}
                                 </h3>
                                 <p className="text-gray-600 dark:text-gray-400 mt-1">
-                                  {data.count} {data.count === 1 ? 'comunidad' : 'comunidades'} ·{' '}
-                                  {data.totalMembers} miembros
+                                  {data.count} {data.count === 1 ? t('community') : t('communities')} ·{' '}
+                                  {data.totalMembers} {t('members')}
                                 </p>
                               </div>
                             </div>
@@ -185,7 +187,7 @@ export default function ImpactoDashboard() {
                               href="/comunidades"
                               className="text-green-600 dark:text-green-400 hover:underline flex items-center gap-2"
                             >
-                              <span>Ver más</span>
+                              <span>{t('viewMore')}</span>
                               <ArrowRight className="h-4 w-4" />
                             </Link>
                           </div>
@@ -228,11 +230,10 @@ export default function ImpactoDashboard() {
               <div className="max-w-4xl mx-auto text-center">
                 <div className="text-5xl mb-6">🌱</div>
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
-                  Forma parte del cambio
+                  {t('cta.title')}
                 </h2>
                 <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-                  Cada comunidad que se organiza, cada persona que participa, está demostrando que
-                  podemos construir alternativas reales a los sistemas económicos extractivos.
+                  {t('cta.subtitle')}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link
@@ -240,7 +241,7 @@ export default function ImpactoDashboard() {
                     className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200"
                   >
                     <Users className="h-5 w-5" />
-                    Crear Mi Comunidad
+                    {t('cta.createCommunity')}
                     <ArrowRight className="h-5 w-5" />
                   </Link>
                   <Link
@@ -248,7 +249,7 @@ export default function ImpactoDashboard() {
                     className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-xl font-semibold text-lg shadow-md hover:shadow-lg transition-all duration-200 border-2 border-gray-200 dark:border-gray-700"
                   >
                     <Activity className="h-5 w-5" />
-                    Explorar Comunidades
+                    {t('cta.exploreCommunities')}
                   </Link>
                 </div>
               </div>
@@ -260,12 +261,10 @@ export default function ImpactoDashboard() {
             <div className="container mx-auto px-4">
               <div className="max-w-4xl mx-auto text-center">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Sobre estas métricas
+                  {t('methodology.title')}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Los datos se actualizan diariamente y reflejan la actividad real de las comunidades en
-                  la plataforma. Todas las métricas son calculadas de forma transparente y verificable.
-                  Este dashboard es de código abierto y cualquiera puede auditar su funcionamiento.
+                  {t('methodology.description')}
                 </p>
               </div>
             </div>
@@ -274,4 +273,12 @@ export default function ImpactoDashboard() {
       </Layout>
     </>
   );
+}
+
+export async function getStaticProps({ locale }: { locale: string }) {
+  return {
+    props: {
+      ...(await getI18nProps(locale)),
+    },
+  };
 }

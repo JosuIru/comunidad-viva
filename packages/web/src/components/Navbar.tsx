@@ -293,7 +293,7 @@ export default function Navbar() {
     {
       name: 'MetaMask',
       icon: '🦊',
-      description: 'La billetera más popular para Ethereum y EVM chains',
+      description: t('wallet.metamaskDesc'),
       isInstalled: typeof window !== 'undefined' && typeof window.ethereum !== 'undefined',
       installUrl: 'https://metamask.io/download/',
       onConnect: connectMetaMask,
@@ -301,7 +301,7 @@ export default function Navbar() {
     {
       name: 'Phantom',
       icon: '👻',
-      description: 'Billetera líder para Solana y multi-chain',
+      description: t('wallet.phantomDesc'),
       isInstalled: typeof window !== 'undefined' && typeof window.solana !== 'undefined' && window.solana.isPhantom,
       installUrl: 'https://phantom.app/',
       onConnect: connectPhantom,
@@ -309,14 +309,14 @@ export default function Navbar() {
     {
       name: 'WalletConnect',
       icon: '🔗',
-      description: 'Conecta con 300+ billeteras móviles',
+      description: t('wallet.walletConnectDesc'),
       isInstalled: false,
       installUrl: 'https://walletconnect.com/',
       onConnect: async () => {
         toast.info(tToasts('info.walletConnectComingSoon'));
       },
     },
-  ], [connectMetaMask, connectPhantom, tToasts]);
+  ], [connectMetaMask, connectPhantom, tToasts, t]);
 
   return (
     <>
@@ -352,7 +352,7 @@ export default function Navbar() {
                 {showWalletMenu && (
                   <div className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2 z-50 wallet-dropdown">
                     <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Wallet conectada</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">{t('wallet.connected')}</p>
                       <p className="text-sm font-mono text-gray-900 dark:text-gray-100 break-all">
                         {walletAddress}
                       </p>
@@ -362,7 +362,7 @@ export default function Navbar() {
                       className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
                     >
                       <LockOpenIcon className="h-5 w-5" />
-                      <span>Desconectar Wallet</span>
+                      <span>{t('wallet.disconnect')}</span>
                     </button>
                   </div>
                 )}
@@ -411,7 +411,7 @@ export default function Navbar() {
                         <div className="mt-2">
                           <div className="flex items-center justify-between text-xs mb-1">
                             <span className="text-gray-600 dark:text-gray-400 font-medium">
-                              Nivel {balanceData.level.level}
+                              {t('level')} {balanceData.level.level}
                             </span>
                             {balanceData.nextLevel && (
                               <span className="text-green-600 dark:text-green-400">
@@ -452,7 +452,7 @@ export default function Navbar() {
                     {walletAddress ? (
                       <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">
                         <div className="mb-2">
-                          <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Wallet conectada</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">{t('wallet.connected')}</p>
                           <p className="text-xs font-mono text-gray-900 dark:text-gray-100 break-all">
                             {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
                           </p>
@@ -465,7 +465,7 @@ export default function Navbar() {
                           className="w-full flex items-center gap-3 px-3 py-1.5 text-xs text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
                         >
                           <LockOpenIcon className="h-4 w-4" />
-                          <span>Desconectar Wallet</span>
+                          <span>{t('wallet.disconnect')}</span>
                         </button>
                       </div>
                     ) : (
@@ -479,7 +479,7 @@ export default function Navbar() {
                         <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                         </svg>
-                        <span>Conectar Wallet Web3</span>
+                        <span>{t('wallet.connect')}</span>
                       </button>
                     )}
 
@@ -586,9 +586,9 @@ export default function Navbar() {
               <Link
                 href="/hybrid/dashboard"
                 className="px-3 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 rounded-md transition whitespace-nowrap font-semibold shadow-sm"
-                title="Sistema Híbrido de Economía Viva - La revolución TRUK"
+                title={t('platform.livingEconomyTitle')}
               >
-                💚 Economía Viva
+                💚 {t('platform.livingEconomy')}
               </Link>
 
               {/* Más - Dropdown con todo organizado */}
@@ -597,7 +597,7 @@ export default function Navbar() {
                   onClick={() => setShowPlatformMenu(!showPlatformMenu)}
                   className="flex items-center gap-1 px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition font-medium"
                 >
-                  Más
+                  {t('more')}
                   <svg
                     className={`w-4 h-4 transition-transform ${showPlatformMenu ? 'rotate-180' : ''}`}
                     fill="none"
@@ -629,7 +629,7 @@ export default function Navbar() {
                         <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        Banco de Tiempo
+                        {t('platform.items.timebank')}
                       </Link>
                     </div>
 
@@ -730,7 +730,7 @@ export default function Navbar() {
                         onClick={() => setShowPlatformMenu(false)}
                       >
                         <ChartBarIcon className="h-5 w-5" />
-                        Impacto
+                        {t('platform.items.impact')}
                       </Link>
                       <Link
                         href="/red-comunidades"
@@ -740,7 +740,7 @@ export default function Navbar() {
                         <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        Red de Comunidades
+                        {t('platform.items.communityNetwork')}
                       </Link>
                       <Link
                         href="/hybrid/celebrations"
@@ -777,7 +777,7 @@ export default function Navbar() {
               <div className="flex flex-col space-y-1">
                 {/* Main Navigation */}
                 <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Principal
+                  {t('platform.main')}
                 </div>
                 <Link
                   href="/"
@@ -831,7 +831,7 @@ export default function Navbar() {
                   <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                   </svg>
-                  <span>💚 Economía Viva</span>
+                  <span>💚 {t('platform.livingEconomy')}</span>
                   <svg className="h-4 w-4 ml-auto" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
                   </svg>
@@ -858,7 +858,7 @@ export default function Navbar() {
                     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span>Banco de Tiempo</span>
+                    <span>{t('platform.items.timebank')}</span>
                   </Link>
                 </div>
 
@@ -997,7 +997,7 @@ export default function Navbar() {
                     onClick={() => setShowMobileMenu(false)}
                   >
                     <ChartBarIcon className="h-5 w-5" />
-                    <span>Impacto</span>
+                    <span>{t('platform.items.impact')}</span>
                   </Link>
                   <Link
                     href="/red-comunidades"
@@ -1007,7 +1007,7 @@ export default function Navbar() {
                     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span>Red de Comunidades</span>
+                    <span>{t('platform.items.communityNetwork')}</span>
                   </Link>
                   <Link
                     href="/hybrid/celebrations"
@@ -1041,8 +1041,8 @@ export default function Navbar() {
         isOpen={showWalletConnectModal}
         onClose={() => setShowWalletConnectModal(false)}
         wallets={walletOptions}
-        title="Vincular Billetera Web3"
-        subtitle="Vincula tu billetera Web3 a tu cuenta existente"
+        title={t('wallet.linkTitle')}
+        subtitle={t('wallet.linkSubtitle')}
       />
     </>
   );
