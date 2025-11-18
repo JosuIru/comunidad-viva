@@ -3,10 +3,6 @@ const nextConfig = {
   reactStrictMode: true,
   // Disable standalone for now - causes SSR errors
   // output: 'standalone',
-  // Skip static optimization for problematic pages
-  experimental: {
-    skipMiddlewareUrlNormalize: true,
-  },
   // i18n configuration for multi-language support
   i18n: {
     locales: ['es', 'eu', 'en', 'ca'],
@@ -86,10 +82,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
 
-const withNextIntl = require('next-intl/plugin')(
-  // Path to i18n config
-  './i18n.ts'
-);
-
 // Compose all plugins
-module.exports = withBundleAnalyzer(withNextIntl(nextConfig));
+// Note: next-intl is configured via getI18nProps in src/lib/i18n.ts for Pages Router
+module.exports = withBundleAnalyzer(nextConfig);
