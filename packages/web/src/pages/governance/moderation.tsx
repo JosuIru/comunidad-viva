@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
@@ -30,6 +31,8 @@ interface ModerationCase {
 }
 
 export default function ModerationPage() {
+  const t = useTranslations('moderation');
+  const tCommon = useTranslations('common');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState<string>('');
   const [selectedCase, setSelectedCase] = useState<ModerationCase | null>(null);
@@ -68,10 +71,10 @@ export default function ModerationPage() {
       queryClient.invalidateQueries({ queryKey: ['moderation-pending'] });
       setShowVoteModal(false);
       setSelectedCase(null);
-      alert('¡Voto registrado exitosamente!');
+      alert(t('voteSuccess'));
     },
     onError: (error: any) => {
-      alert(error.response?.data?.message || 'Error al votar');
+      alert(error.response?.data?.message || t('voteError'));
     },
   });
 
