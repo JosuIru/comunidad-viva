@@ -4,6 +4,7 @@ import Layout from '@/components/Layout';
 import Link from 'next/link';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
+import { useTranslations } from 'next-intl';
 
 interface Offer {
   id: string;
@@ -32,6 +33,7 @@ interface Community {
 export default function CommunityOffersPage() {
   const router = useRouter();
   const { slug } = router.query;
+  const t = useTranslations('communityOffers');
 
   const { data: community, isLoading: communityLoading } = useQuery<Community>({
     queryKey: ['community', slug],
@@ -55,11 +57,11 @@ export default function CommunityOffersPage() {
 
   if (isLoading) {
     return (
-      <Layout title="Cargando...">
+      <Layout title={t('loading')}>
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent mb-4"></div>
-            <p className="text-gray-600 dark:text-gray-400">Cargando ofertas...</p>
+            <p className="text-gray-600 dark:text-gray-400">{t('loadingOffers')}</p>
           </div>
         </div>
       </Layout>
@@ -68,17 +70,17 @@ export default function CommunityOffersPage() {
 
   if (!community) {
     return (
-      <Layout title="Comunidad no encontrada">
+      <Layout title={t('notFound')}>
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
           <div className="text-center">
             <div className="text-6xl mb-4">🏘️</div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Comunidad no encontrada</h1>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">La comunidad que buscas no existe</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">{t('notFound')}</h1>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">{t('communityNotExist')}</p>
             <Link
               href="/communities"
               className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
-              Ver todas las comunidades
+              {t('viewAllCommunities')}
             </Link>
           </div>
         </div>
@@ -87,7 +89,7 @@ export default function CommunityOffersPage() {
   }
 
   return (
-    <Layout title={`Ofertas - ${community.name}`}>
+    <Layout title={`${t('title')} - ${community.name}`}>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-500 to-green-500 text-white">
@@ -97,12 +99,12 @@ export default function CommunityOffersPage() {
                 href={`/communities/${slug}`}
                 className="inline-flex items-center text-white/80 hover:text-white transition-colors"
               >
-                ← Volver a {community.name}
+                {t('backTo')} {community.name}
               </Link>
             </div>
-            <h1 className="text-4xl font-bold mb-4">Ofertas de {community.name}</h1>
+            <h1 className="text-4xl font-bold mb-4">{t('offersOf', { name: community.name })}</h1>
             <p className="text-xl opacity-90">
-              Explora todas las ofertas disponibles en esta comunidad
+              {t('exploreOffers')}
             </p>
           </div>
         </div>
@@ -113,16 +115,16 @@ export default function CommunityOffersPage() {
             <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
               <div className="text-6xl mb-4">📦</div>
               <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                No hay ofertas disponibles
+                {t('noOffersAvailable')}
               </h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Sé el primero en crear una oferta en esta comunidad
+                {t('beFirstToCreate')}
               </p>
               <Link
                 href="/offers/new"
                 className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
-                Crear oferta
+                {t('createOffer')}
               </Link>
             </div>
           ) : (
@@ -155,7 +157,7 @@ export default function CommunityOffersPage() {
                         {offer.category}
                       </span>
                       <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
-                        {offer.type === 'EXCHANGE' ? 'Intercambio' : offer.type === 'TIME_BANK' ? 'Banco de Tiempo' : 'Venta'}
+                        {offer.type === 'EXCHANGE' ? t('types.exchange') : offer.type === 'TIME_BANK' ? t('types.timeBank') : t('types.sale')}
                       </span>
                     </div>
 

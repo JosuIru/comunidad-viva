@@ -6,6 +6,7 @@ import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 type ProposalType = 'FEATURE' | 'RULE_CHANGE' | 'FUND_ALLOCATION' | 'PARTNERSHIP' | 'COMMUNITY_UPDATE' | 'COMMUNITY_DISSOLUTION';
 type ProposalStatus = 'DRAFT' | 'VOTING' | 'APPROVED' | 'REJECTED' | 'IMPLEMENTED';
@@ -42,14 +43,14 @@ interface Community {
   location?: string;
 }
 
-const TYPE_LABELS: Record<ProposalType, string> = {
-  FEATURE: 'Nueva Funcionalidad',
-  RULE_CHANGE: 'Cambio de Reglas',
-  FUND_ALLOCATION: 'Asignación de Fondos',
-  PARTNERSHIP: 'Alianza',
-  COMMUNITY_UPDATE: 'Actualización Comunitaria',
-  COMMUNITY_DISSOLUTION: 'Disolución de Comunidad',
-};
+const getTypeLabels = (t: any): Record<ProposalType, string> => ({
+  FEATURE: t('types.feature'),
+  RULE_CHANGE: t('types.ruleChange'),
+  FUND_ALLOCATION: t('types.fundAllocation'),
+  PARTNERSHIP: t('types.partnership'),
+  COMMUNITY_UPDATE: t('types.communityUpdate'),
+  COMMUNITY_DISSOLUTION: t('types.communityDissolution'),
+});
 
 const TYPE_ICONS: Record<ProposalType, string> = {
   FEATURE: '✨',
@@ -72,6 +73,8 @@ export default function CommunityGovernancePage() {
   const router = useRouter();
   const { slug } = router.query;
   const queryClient = useQueryClient();
+  const t = useTranslations('communityGovernance');
+  const TYPE_LABELS = getTypeLabels(t);
   const [selectedFilter, setSelectedFilter] = useState<'all' | ProposalStatus>('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -119,11 +122,11 @@ export default function CommunityGovernancePage() {
       return response.data;
     },
     onSuccess: () => {
-      toast.success('Voto registrado');
+      toast.success(t('toasts.voteRegistered'));
       queryClient.invalidateQueries({ queryKey: ['community-proposals'] });
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al votar');
+      toast.error(error.response?.data?.message || t('toasts.voteError'));
     },
   });
 
@@ -155,7 +158,7 @@ export default function CommunityGovernancePage() {
       return response.data;
     },
     onSuccess: () => {
-      toast.success('Propuesta creada exitosamente');
+      toast.success(t('toasts.proposalCreated'));
       queryClient.invalidateQueries({ queryKey: ['community-proposals'] });
       setShowCreateModal(false);
       setFormData({
@@ -172,13 +175,13 @@ export default function CommunityGovernancePage() {
       });
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al crear la propuesta');
+      toast.error(error.response?.data?.message || t('toasts.proposalError'));
     },
   });
 
   const handleVote = (proposalId: string, points: number) => {
     if (!localStorage.getItem('access_token')) {
-      toast.error('Debes iniciar sesión para votar');
+      toast.error(t('toasts.loginToVote'));
       router.push('/auth/login');
       return;
     }
@@ -188,12 +191,12 @@ export default function CommunityGovernancePage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!localStorage.getItem('access_token')) {
-      toast.error('Debes iniciar sesión para crear propuestas');
+      toast.error(t('toasts.loginToCreate'));
       router.push('/auth/login');
       return;
     }
     if (!formData.title || !formData.description) {
-      toast.error('Título y descripción son obligatorios');
+      toast.error(t('toasts.titleDescriptionRequired'));
       return;
     }
     createMutation.mutate(formData);
@@ -201,7 +204,7 @@ export default function CommunityGovernancePage() {
 
   const geocodeLocation = async () => {
     if (!formData.newLocation) {
-      toast.error('Por favor ingresa una dirección primero');
+      toast.error(t('toasts.enterAddressFirst'));
       return;
     }
 
@@ -218,22 +221,22 @@ export default function CommunityGovernancePage() {
           newLat: lat,
           newLng: lon,
         }));
-        toast.success('Coordenadas obtenidas correctamente');
+        toast.success(t('toasts.coordinatesObtained'));
       } else {
-        toast.error('No se encontraron coordenadas para esta dirección');
+        toast.error(t('toasts.coordinatesNotFound'));
       }
     } catch (error) {
-      toast.error('Error al obtener coordenadas');
+      toast.error(t('toasts.coordinatesError'));
     }
   };
 
   if (communityLoading) {
     return (
-      <Layout title="Cargando...">
+      <Layout title={t('loading')}>
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent mb-4"></div>
-            <p className="text-gray-600 dark:text-gray-400">Cargando comunidad...</p>
+            <p className="text-gray-600 dark:text-gray-400">{t('loadingCommunity')}</p>
           </div>
         </div>
       </Layout>
@@ -242,17 +245,17 @@ export default function CommunityGovernancePage() {
 
   if (!community) {
     return (
-      <Layout title="Comunidad no encontrada">
+      <Layout title={t('notFound')}>
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
           <div className="text-center">
             <div className="text-6xl mb-4">🏘️</div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Comunidad no encontrada</h1>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">La comunidad que buscas no existe</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">{t('notFound')}</h1>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">{t('communityNotExist')}</p>
             <Link
               href="/communities"
               className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
-              Ver todas las comunidades
+              {t('viewAllCommunities')}
             </Link>
           </div>
         </div>
@@ -261,7 +264,7 @@ export default function CommunityGovernancePage() {
   }
 
   return (
-    <Layout title={`Gobernanza - ${community.name}`}>
+    <Layout title={`${t('title')} - ${community.name}`}>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white">
@@ -271,12 +274,12 @@ export default function CommunityGovernancePage() {
                 href={`/communities/${slug}`}
                 className="text-white hover:text-gray-200 transition"
               >
-                ← Volver a {community.name}
+                {t('backTo')} {community.name}
               </Link>
             </div>
-            <h1 className="text-4xl font-bold mb-2">🗳️ Gobernanza Comunitaria</h1>
+            <h1 className="text-4xl font-bold mb-2">{t('pageTitle')}</h1>
             <p className="text-xl opacity-90">
-              Propuestas y decisiones de {community.name}
+              {t('proposalsAndDecisions', { name: community.name })}
             </p>
           </div>
         </div>
@@ -285,12 +288,12 @@ export default function CommunityGovernancePage() {
           {/* Filters and Actions */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Propuestas</h2>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t('proposals')}</h2>
               <button
                 onClick={() => setShowCreateModal(true)}
                 className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
               >
-                + Nueva Propuesta
+                + {t('newProposal')}
               </button>
             </div>
 
@@ -303,7 +306,7 @@ export default function CommunityGovernancePage() {
                     : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
-                Todas
+                {t('filters.all')}
               </button>
               {(['VOTING', 'APPROVED', 'IMPLEMENTED'] as ProposalStatus[]).map((status) => (
                 <button
@@ -315,9 +318,9 @@ export default function CommunityGovernancePage() {
                       : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                   }`}
                 >
-                  {status === 'VOTING' && 'En votación'}
-                  {status === 'APPROVED' && 'Aprobadas'}
-                  {status === 'IMPLEMENTED' && 'Implementadas'}
+                  {status === 'VOTING' && t('filters.voting')}
+                  {status === 'APPROVED' && t('filters.approved')}
+                  {status === 'IMPLEMENTED' && t('filters.implemented')}
                 </button>
               ))}
             </div>
@@ -327,22 +330,22 @@ export default function CommunityGovernancePage() {
           {proposalsLoading ? (
             <div className="text-center py-12">
               <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent"></div>
-              <p className="mt-4 text-gray-600 dark:text-gray-400">Cargando propuestas...</p>
+              <p className="mt-4 text-gray-600 dark:text-gray-400">{t('loadingProposals')}</p>
             </div>
           ) : proposals.length === 0 ? (
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-12 text-center">
               <div className="text-6xl mb-4">📋</div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                No hay propuestas aún
+                {t('noProposalsYet')}
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Sé el primero en crear una propuesta para la comunidad
+                {t('beFirstToCreate')}
               </p>
               <button
                 onClick={() => setShowCreateModal(true)}
                 className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               >
-                Crear Propuesta
+                {t('createProposal')}
               </button>
             </div>
           ) : (
@@ -384,7 +387,7 @@ export default function CommunityGovernancePage() {
                         </div>
                         <div className="flex items-center gap-1">
                           <span>🗳️</span>
-                          <span>{proposal.voteCount} votos</span>
+                          <span>{proposal.voteCount} {t('votes')}</span>
                         </div>
                       </div>
                     </div>
@@ -395,10 +398,10 @@ export default function CommunityGovernancePage() {
                     <div className="mb-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                          A favor: {proposal.votesFor}
+                          {t('inFavor')}: {proposal.votesFor}
                         </span>
                         <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                          En contra: {proposal.votesAgainst}
+                          {t('against')}: {proposal.votesAgainst}
                         </span>
                       </div>
                       <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -428,7 +431,7 @@ export default function CommunityGovernancePage() {
                             : 'bg-green-50 text-green-700 hover:bg-green-100'
                         } disabled:opacity-50 disabled:cursor-not-allowed`}
                       >
-                        👍 A favor
+                        {t('voteInFavor')}
                       </button>
                       <button
                         onClick={() => handleVote(proposal.id, -1)}
@@ -439,13 +442,13 @@ export default function CommunityGovernancePage() {
                             : 'bg-red-50 text-red-700 hover:bg-red-100'
                         } disabled:opacity-50 disabled:cursor-not-allowed`}
                       >
-                        👎 En contra
+                        {t('voteAgainst')}
                       </button>
                       <Link
                         href={`/governance/proposals/${proposal.id}`}
                         className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-medium"
                       >
-                        Ver detalles
+                        {t('viewDetails')}
                       </Link>
                     </div>
                   )}
@@ -455,7 +458,7 @@ export default function CommunityGovernancePage() {
                       href={`/governance/proposals/${proposal.id}`}
                       className="inline-block px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-medium"
                     >
-                      Ver detalles →
+                      {t('viewDetails')} →
                     </Link>
                   )}
                 </div>
@@ -469,7 +472,7 @@ export default function CommunityGovernancePage() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Nueva Propuesta</h3>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t('newProposal')}</h3>
                 <button
                   onClick={() => setShowCreateModal(false)}
                   className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
@@ -484,7 +487,7 @@ export default function CommunityGovernancePage() {
                 {/* Type */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Tipo de propuesta *
+                    {t('form.proposalType')} *
                   </label>
                   <select
                     value={formData.type}
@@ -492,26 +495,26 @@ export default function CommunityGovernancePage() {
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     required
                   >
-                    <option value="FEATURE">Nueva Funcionalidad</option>
-                    <option value="RULE_CHANGE">Cambio de Reglas</option>
-                    <option value="FUND_ALLOCATION">Asignación de Fondos</option>
-                    <option value="PARTNERSHIP">Alianza</option>
-                    <option value="COMMUNITY_UPDATE">Actualización Comunitaria</option>
-                    <option value="COMMUNITY_DISSOLUTION">Disolución de Comunidad</option>
+                    <option value="FEATURE">{t('types.feature')}</option>
+                    <option value="RULE_CHANGE">{t('types.ruleChange')}</option>
+                    <option value="FUND_ALLOCATION">{t('types.fundAllocation')}</option>
+                    <option value="PARTNERSHIP">{t('types.partnership')}</option>
+                    <option value="COMMUNITY_UPDATE">{t('types.communityUpdate')}</option>
+                    <option value="COMMUNITY_DISSOLUTION">{t('types.communityDissolution')}</option>
                   </select>
                 </div>
 
                 {/* Title */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Título *
+                    {t('form.titleLabel')} *
                   </label>
                   <input
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Ej: Crear un huerto comunitario"
+                    placeholder={t('form.titlePlaceholder')}
                     required
                   />
                 </div>
@@ -519,56 +522,56 @@ export default function CommunityGovernancePage() {
                 {/* Description */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Descripción *
+                    {t('form.descriptionLabel')} *
                   </label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     rows={4}
-                    placeholder="Describe detalladamente tu propuesta..."
+                    placeholder={t('form.descriptionPlaceholder')}
                     required
                   />
                 </div>
 
-                {/* Campos específicos para COMMUNITY_UPDATE */}
+                {/* Campos especificos para COMMUNITY_UPDATE */}
                 {formData.type === 'COMMUNITY_UPDATE' && (
                   <>
                     <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
                       <p className="text-sm text-indigo-800 font-medium mb-3">
-                        📝 Campos a actualizar (deja vacío lo que no quieras cambiar)
+                        {t('form.fieldsToUpdate')}
                       </p>
 
                       <div className="space-y-3">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Nuevo nombre
+                            {t('form.newName')}
                           </label>
                           <input
                             type="text"
                             value={formData.newName}
                             onChange={(e) => setFormData({ ...formData, newName: e.target.value })}
                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-                            placeholder={`Actual: ${community?.name || ''}`}
+                            placeholder={`${t('form.current')}: ${community?.name || ''}`}
                           />
                         </div>
 
                         <div>
                           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Nueva descripción
+                            {t('form.newDescription')}
                           </label>
                           <textarea
                             value={formData.newDescription}
                             onChange={(e) => setFormData({ ...formData, newDescription: e.target.value })}
                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
                             rows={2}
-                            placeholder={`Actual: ${community?.description || ''}`}
+                            placeholder={`${t('form.current')}: ${community?.description || ''}`}
                           />
                         </div>
 
                         <div>
                           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Nueva ubicación
+                            {t('form.newLocation')}
                           </label>
                           <div className="flex gap-2">
                             <input
@@ -576,14 +579,14 @@ export default function CommunityGovernancePage() {
                               value={formData.newLocation}
                               onChange={(e) => setFormData({ ...formData, newLocation: e.target.value })}
                               className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-                              placeholder={`Actual: ${community?.location || ''}`}
+                              placeholder={`${t('form.current')}: ${community?.location || ''}`}
                             />
                             <button
                               type="button"
                               onClick={geocodeLocation}
                               className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm font-medium whitespace-nowrap"
                             >
-                              📍 Obtener coordenadas
+                              {t('form.getCoordinates')}
                             </button>
                           </div>
                         </div>
@@ -593,7 +596,7 @@ export default function CommunityGovernancePage() {
                           <div className="grid grid-cols-2 gap-3">
                             <div>
                               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Latitud
+                                {t('form.latitude')}
                               </label>
                               <input
                                 type="text"
@@ -604,7 +607,7 @@ export default function CommunityGovernancePage() {
                             </div>
                             <div>
                               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Longitud
+                                {t('form.longitude')}
                               </label>
                               <input
                                 type="text"
@@ -624,14 +627,14 @@ export default function CommunityGovernancePage() {
                 {formData.type !== 'COMMUNITY_UPDATE' && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Presupuesto requerido (opcional)
+                      {t('form.budgetLabel')}
                     </label>
                     <input
                       type="number"
                       value={formData.requiredBudget}
                       onChange={(e) => setFormData({ ...formData, requiredBudget: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Ej: 500"
+                      placeholder={t('form.budgetPlaceholder')}
                       min="0"
                       step="0.01"
                     />
@@ -641,27 +644,25 @@ export default function CommunityGovernancePage() {
                 {/* Implementation Plan (optional) */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Plan de implementación (opcional)
+                    {t('form.implementationLabel')}
                   </label>
                   <textarea
                     value={formData.implementationPlan}
                     onChange={(e) => setFormData({ ...formData, implementationPlan: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     rows={3}
-                    placeholder="Describe cómo se implementará esta propuesta..."
+                    placeholder={t('form.implementationPlaceholder')}
                   />
                 </div>
 
                 {/* Info */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <p className="text-sm text-blue-800 mb-2">
-                    <strong>ℹ️ Información:</strong> Una vez creada, la propuesta entrará en período de votación.
-                    La comunidad decidirá mediante votación cuadrática si se aprueba o rechaza.
+                    <strong>{t('form.infoTitle')}</strong> {t('form.infoDescription')}
                   </p>
                   {formData.type === 'COMMUNITY_UPDATE' && (
                     <p className="text-sm text-indigo-800 font-medium">
-                      <strong>⚙️ Aplicación automática:</strong> Si la propuesta es aprobada, los cambios se aplicarán
-                      automáticamente a la comunidad. No requiere intervención manual.
+                      <strong>{t('form.autoApplyTitle')}</strong> {t('form.autoApplyDescription')}
                     </p>
                   )}
                 </div>
@@ -674,14 +675,14 @@ export default function CommunityGovernancePage() {
                     className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 font-medium"
                     disabled={createMutation.isPending}
                   >
-                    Cancelar
+                    {t('form.cancel')}
                   </button>
                   <button
                     type="submit"
                     disabled={createMutation.isPending}
                     className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 font-medium"
                   >
-                    {createMutation.isPending ? 'Creando...' : 'Crear Propuesta'}
+                    {createMutation.isPending ? t('form.creating') : t('createProposal')}
                   </button>
                 </div>
               </form>
