@@ -3750,7 +3750,12 @@
     "noMessagesDesc": "Envía el primer mensaje para comenzar la conversación",
     "placeholder": "Escribe un mensaje...",
     "sendMessage": "Enviar Mensaje",
-    "loginToView": "Debes iniciar sesión para ver tus mensajes"
+    "loginToView": "Debes iniciar sesión para ver tus mensajes",
+    "chat": "Chat",
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "sendFirstMessage": "Envía el primer mensaje para comenzar la conversación",
+    "sendError": "Error al enviar mensaje"
   },
   "admin": {
     "bridge": {

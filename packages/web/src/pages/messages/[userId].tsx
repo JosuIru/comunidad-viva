@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { getI18nProps } from '@/lib/i18n';
 import { useRouter } from 'next/router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '@/components/Layout';
@@ -30,6 +31,8 @@ export default function ChatPage() {
   const router = useRouter();
   const { userId } = router.query;
   const queryClient = useQueryClient();
+  const t = useTranslations('messages');
+  const tCommon = useTranslations('common');
   const [message, setMessage] = useState('');
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -106,7 +109,7 @@ export default function ChatPage() {
       queryClient.invalidateQueries({ queryKey: ['conversations'] });
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al enviar mensaje');
+      toast.error(error.response?.data?.message || t('sendError'));
     },
   });
 
@@ -123,7 +126,7 @@ export default function ChatPage() {
 
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString(router.locale || 'es-ES', { hour: '2-digit', minute: '2-digit' });
   };
 
   const formatDate = (dateString: string) => {
@@ -133,11 +136,11 @@ export default function ChatPage() {
     yesterday.setDate(yesterday.getDate() - 1);
 
     if (date.toDateString() === today.toDateString()) {
-      return 'Hoy';
+      return t('today');
     } else if (date.toDateString() === yesterday.toDateString()) {
-      return 'Ayer';
+      return t('yesterday');
     } else {
-      return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+      return date.toLocaleDateString(router.locale || 'es-ES', { day: 'numeric', month: 'long' });
     }
   };
 
@@ -156,9 +159,9 @@ export default function ChatPage() {
       <Layout>
         <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
-            <p className="text-yellow-800">Debes iniciar sesión para ver tus mensajes</p>
+            <p className="text-yellow-800">{t('loginToView')}</p>
             <Link href="/auth/login" className="text-green-600 hover:underline mt-2 inline-block">
-              Ir a login
+              {tCommon('goToLogin')}
             </Link>
           </div>
         </div>
@@ -169,7 +172,7 @@ export default function ChatPage() {
   return (
     <>
       <Head>
-        <title>Chat - Truk</title>
+        <title>{t('chat')} - Truk</title>
       </Head>
 
       <Layout>
@@ -212,12 +215,12 @@ export default function ChatPage() {
               {isLoading ? (
                 <div className="text-center py-12">
                   <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-green-600"></div>
-                  <p className="mt-4 text-gray-600">Cargando mensajes...</p>
+                  <p className="mt-4 text-gray-600">{t('loadingMessages')}</p>
                 </div>
               ) : Object.keys(groupedMessages).length === 0 ? (
                 <div className="text-center py-12">
-                  <p className="text-gray-600">No hay mensajes todavía</p>
-                  <p className="text-sm text-gray-500 mt-2">Envía el primer mensaje para comenzar la conversación</p>
+                  <p className="text-gray-600">{t('noMessages')}</p>
+                  <p className="text-sm text-gray-500 mt-2">{t('sendFirstMessage')}</p>
                 </div>
               ) : (
                 Object.keys(groupedMessages).map((dateKey) => (
@@ -269,7 +272,7 @@ export default function ChatPage() {
                   type="text"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Escribe un mensaje..."
+                  placeholder={t('placeholder')}
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                   disabled={sendMessageMutation.isPending}
                 />

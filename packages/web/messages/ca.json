@@ -3807,7 +3807,12 @@
     "noMessagesDesc": "Envia el primer missatge per començar la conversa",
     "placeholder": "Escriu un missatge...",
     "sendMessage": "Enviar Missatge",
-    "loginToView": "Has d'iniciar sessió per veure els teus missatges"
+    "loginToView": "Has d'iniciar sessió per veure els teus missatges",
+    "chat": "Xat",
+    "today": "Avui",
+    "yesterday": "Ahir",
+    "sendFirstMessage": "Envia el primer missatge per començar la conversa",
+    "sendError": "Error en enviar el missatge"
   },
   "admin": {
     "bridge": {

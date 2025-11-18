@@ -3750,7 +3750,12 @@
     "noMessagesDesc": "Bidali lehen mezua elkarrizketa hasteko",
     "placeholder": "Idatzi mezu bat...",
     "sendMessage": "Bidali Mezua",
-    "loginToView": "Saioa hasi behar duzu zure mezuak ikusteko"
+    "loginToView": "Saioa hasi behar duzu zure mezuak ikusteko",
+    "chat": "Txata",
+    "today": "Gaur",
+    "yesterday": "Atzo",
+    "sendFirstMessage": "Bidali lehen mezua elkarrizketa hasteko",
+    "sendError": "Errorea mezua bidaltzean"
   },
   "admin": {
     "bridge": {

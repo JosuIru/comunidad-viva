@@ -3807,7 +3807,12 @@
     "noMessagesDesc": "Send the first message to start the conversation",
     "placeholder": "Write a message...",
     "sendMessage": "Send Message",
-    "loginToView": "You must log in to view your messages"
+    "loginToView": "You must log in to view your messages",
+    "chat": "Chat",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "sendFirstMessage": "Send the first message to start the conversation",
+    "sendError": "Error sending message"
   },
   "admin": {
     "bridge": {
