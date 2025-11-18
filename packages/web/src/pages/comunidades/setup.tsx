@@ -6,6 +6,7 @@ import { getCommunityPack, type OrganizedCommunityType, type SetupStep } from '@
 import { Check, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import api from '@/lib/api';
+import { useTranslations } from 'next-intl';
 
 interface SetupFormData {
   // Step 1: Basic Info
@@ -29,6 +30,8 @@ interface SetupFormData {
 
 export default function CommunitySetupWizard() {
   const router = useRouter();
+  const tSetup = useTranslations('communities');
+  const tToasts = useTranslations('toasts');
   const { type } = router.query;
   const pack = type ? getCommunityPack(type as OrganizedCommunityType) : null;
 
@@ -43,10 +46,10 @@ export default function CommunitySetupWizard() {
 
   useEffect(() => {
     if (!type || !pack) {
-      toast.error('Tipo de comunidad no válido');
+      toast.error(tToasts('error.invalidCommunityType'));
       router.push('/');
     }
-  }, [type, pack, router]);
+  }, [type, pack, router, tToasts]);
 
   if (!pack) {
     return (
@@ -63,7 +66,7 @@ export default function CommunitySetupWizard() {
     // Validate current step
     if (currentStepIndex === 0) {
       if (!formData.name || !formData.location) {
-        toast.error('Por favor completa todos los campos obligatorios');
+        toast.error(tToasts('error.completeRequiredFields'));
         return;
       }
     }
@@ -99,14 +102,14 @@ export default function CommunitySetupWizard() {
         },
       });
 
-      toast.success('¡Comunidad creada con éxito!');
+      toast.success(tToasts('success.communityCreated'));
 
       // Redirect to community page
       const communitySlug = response.data.slug;
       router.push(`/communities/${communitySlug}?welcome=true`);
     } catch (error: any) {
       console.error('Error creating community:', error);
-      toast.error(error.response?.data?.message || 'Error al crear la comunidad');
+      toast.error(error.response?.data?.message || tToasts('error.creatingCommunity'));
     } finally {
       setIsSubmitting(false);
     }
@@ -149,10 +152,10 @@ export default function CommunitySetupWizard() {
             <div className="text-center mb-8">
               <div className="text-4xl mb-4">{pack.icon}</div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                Configurar {pack.name}
+                {tSetup('setup.configure')} {pack.name}
               </h1>
               <p className="text-gray-600 dark:text-gray-400">
-                Paso {currentStepIndex + 1} de {pack.setupSteps.length}
+                {tSetup('setup.step')} {currentStepIndex + 1} {tSetup('setup.of')} {pack.setupSteps.length}
               </p>
             </div>
 
@@ -206,13 +209,13 @@ export default function CommunitySetupWizard() {
                 <div className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Nombre del Grupo *
+                      {tSetup('setup.form.groupName')} *
                     </label>
                     <input
                       type="text"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="ej. Grupo Consumo Zurriola"
+                      placeholder={tSetup('setup.form.groupNamePlaceholder')}
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
                       required
                     />
@@ -220,12 +223,12 @@ export default function CommunitySetupWizard() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Descripción
+                      {tSetup('setup.form.description')}
                     </label>
                     <textarea
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      placeholder="Describe brevemente tu grupo..."
+                      placeholder={tSetup('setup.form.descriptionPlaceholder')}
                       rows={4}
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
                     />
@@ -233,13 +236,13 @@ export default function CommunitySetupWizard() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Ubicación *
+                      {tSetup('setup.form.location')} *
                     </label>
                     <input
                       type="text"
                       value={formData.location}
                       onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                      placeholder="ej. Donostia, Gipuzkoa"
+                      placeholder={tSetup('setup.form.locationPlaceholder')}
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
                       required
                     />
@@ -250,7 +253,7 @@ export default function CommunitySetupWizard() {
               {currentStepIndex === 1 && (
                 <div className="space-y-6">
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Invita a las primeras personas de tu grupo. Podrás añadir más después.
+                    {tSetup('setup.invite.description')}
                   </p>
 
                   {formData.memberEmails.map((email, index) => (
@@ -259,7 +262,7 @@ export default function CommunitySetupWizard() {
                         type="email"
                         value={email}
                         onChange={(e) => handleEmailChange(index, e.target.value)}
-                        placeholder="email@ejemplo.com"
+                        placeholder={tSetup('setup.invite.emailPlaceholder')}
                         className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
                       />
                       {formData.memberEmails.length > 1 && (
@@ -267,7 +270,7 @@ export default function CommunitySetupWizard() {
                           onClick={() => handleRemoveEmail(index)}
                           className="px-4 py-3 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                         >
-                          Eliminar
+                          {tSetup('setup.buttons.remove')}
                         </button>
                       )}
                     </div>
@@ -277,12 +280,12 @@ export default function CommunitySetupWizard() {
                     onClick={handleAddEmail}
                     className="text-green-600 hover:text-green-700 font-medium"
                   >
-                    + Añadir otro email
+                    {tSetup('setup.invite.addAnotherEmail')}
                   </button>
 
                   <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
                     <p className="text-sm text-blue-800 dark:text-blue-300">
-                      💡 También puedes saltarte este paso y compartir el enlace de invitación después.
+                      {tSetup('setup.invite.skipHint')}
                     </p>
                   </div>
                 </div>
@@ -292,7 +295,7 @@ export default function CommunitySetupWizard() {
                 <div className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Frecuencia de pedidos
+                      {tSetup('setup.orders.frequency')}
                     </label>
                     <select
                       value={formData.orderFrequency || ''}
@@ -304,22 +307,22 @@ export default function CommunitySetupWizard() {
                       }
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
                     >
-                      <option value="">Selecciona...</option>
-                      <option value="WEEKLY">Semanal</option>
-                      <option value="BIWEEKLY">Quincenal</option>
-                      <option value="MONTHLY">Mensual</option>
+                      <option value="">{tSetup('setup.orders.select')}</option>
+                      <option value="WEEKLY">{tSetup('setup.orders.weekly')}</option>
+                      <option value="BIWEEKLY">{tSetup('setup.orders.biweekly')}</option>
+                      <option value="MONTHLY">{tSetup('setup.orders.monthly')}</option>
                     </select>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Día de recogida preferido
+                      {tSetup('setup.orders.pickupDay')}
                     </label>
                     <input
                       type="text"
                       value={formData.pickupDay || ''}
                       onChange={(e) => setFormData({ ...formData, pickupDay: e.target.value })}
-                      placeholder="ej. Viernes"
+                      placeholder={tSetup('setup.orders.pickupDayPlaceholder')}
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
                     />
                   </div>
@@ -330,7 +333,7 @@ export default function CommunitySetupWizard() {
                 <div className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Lugar de recogida
+                      {tSetup('setup.pickup.location')}
                     </label>
                     <input
                       type="text"
@@ -338,21 +341,21 @@ export default function CommunitySetupWizard() {
                       onChange={(e) =>
                         setFormData({ ...formData, pickupLocation: e.target.value })
                       }
-                      placeholder="ej. Bar Komún, Calle Mayor 45"
+                      placeholder={tSetup('setup.pickup.locationPlaceholder')}
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Instrucciones de recogida
+                      {tSetup('setup.pickup.instructions')}
                     </label>
                     <textarea
                       value={formData.pickupInstructions || ''}
                       onChange={(e) =>
                         setFormData({ ...formData, pickupInstructions: e.target.value })
                       }
-                      placeholder="Horario, punto exacto, contacto..."
+                      placeholder={tSetup('setup.pickup.instructionsPlaceholder')}
                       rows={3}
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
                     />
@@ -364,27 +367,27 @@ export default function CommunitySetupWizard() {
                 <div className="space-y-6">
                   <div className="bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-800 rounded-xl p-6">
                     <h3 className="font-bold text-green-900 dark:text-green-100 mb-4 text-lg">
-                      ¡Todo listo! 🎉
+                      {tSetup('setup.complete.title')}
                     </h3>
                     <p className="text-green-800 dark:text-green-200 mb-4">
-                      Has completado la configuración básica. Cuando pulses "Finalizar", crearemos tu comunidad y podrás:
+                      {tSetup('setup.complete.description')}
                     </p>
                     <ul className="space-y-2 text-green-700 dark:text-green-300">
                       <li className="flex items-start gap-2">
                         <Check className="h-5 w-5 flex-shrink-0 mt-0.5" />
-                        <span>Acceder a tu dashboard personalizado</span>
+                        <span>{tSetup('setup.complete.feature1')}</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <Check className="h-5 w-5 flex-shrink-0 mt-0.5" />
-                        <span>Invitar a más miembros</span>
+                        <span>{tSetup('setup.complete.feature2')}</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <Check className="h-5 w-5 flex-shrink-0 mt-0.5" />
-                        <span>Empezar a usar todas las funcionalidades</span>
+                        <span>{tSetup('setup.complete.feature3')}</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <Check className="h-5 w-5 flex-shrink-0 mt-0.5" />
-                        <span>Ver tus métricas de impacto en tiempo real</span>
+                        <span>{tSetup('setup.complete.feature4')}</span>
                       </li>
                     </ul>
                   </div>
@@ -400,7 +403,7 @@ export default function CommunitySetupWizard() {
                 className="px-6 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 <ArrowLeft className="h-5 w-5" />
-                Anterior
+                {tSetup('setup.buttons.previous')}
               </button>
 
               {currentStepIndex < pack.setupSteps.length - 1 ? (
@@ -408,7 +411,7 @@ export default function CommunitySetupWizard() {
                   onClick={handleNext}
                   className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
                 >
-                  Siguiente
+                  {tSetup('setup.buttons.next')}
                   <ArrowRight className="h-5 w-5" />
                 </button>
               ) : (
@@ -420,11 +423,11 @@ export default function CommunitySetupWizard() {
                   {isSubmitting ? (
                     <>
                       <Loader2 className="h-5 w-5 animate-spin" />
-                      Creando...
+                      {tSetup('setup.buttons.creating')}
                     </>
                   ) : (
                     <>
-                      Finalizar
+                      {tSetup('setup.buttons.finish')}
                       <Check className="h-5 w-5" />
                     </>
                   )}

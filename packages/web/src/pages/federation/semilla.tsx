@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
+import { useTranslations } from 'next-intl';
 import {
   CurrencyDollarIcon,
   ArrowUpIcon,
@@ -28,6 +29,8 @@ interface SemillaBalance {
 }
 
 export default function SemillaWallet() {
+  const tFed = useTranslations('federation');
+  const tToasts = useTranslations('toasts');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [showSendModal, setShowSendModal] = useState(false);
@@ -76,7 +79,7 @@ export default function SemillaWallet() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['semilla-balance'] });
       queryClient.invalidateQueries({ queryKey: ['semilla-transactions'] });
-      alert('¡100 SEMILLA recibidos! Bienvenido a la federación');
+      alert(tToasts('success.semillaReceived'));
     },
   });
 
@@ -91,17 +94,17 @@ export default function SemillaWallet() {
       queryClient.invalidateQueries({ queryKey: ['semilla-transactions'] });
       setShowSendModal(false);
       setSendForm({ toDID: '', amount: '', reason: '' });
-      alert('¡Transferencia exitosa!');
+      alert(tToasts('success.transferComplete'));
     },
     onError: (error: any) => {
-      alert(error.response?.data?.message || 'Error al enviar SEMILLA');
+      alert(error.response?.data?.message || tToasts('error.sendingSemilla'));
     },
   });
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     if (!sendForm.toDID || !sendForm.amount || !sendForm.reason) {
-      alert('Por favor completa todos los campos');
+      alert(tToasts('error.completeAllFields'));
       return;
     }
     sendMutation.mutate({
@@ -118,17 +121,17 @@ export default function SemillaWallet() {
           <div className="text-center">
             <CurrencyDollarIcon className="mx-auto h-12 w-12 text-gray-400" />
             <h3 className="mt-2 text-lg font-medium text-gray-900 dark:text-white">
-              Autenticación requerida
+              {tFed('semilla.authRequired')}
             </h3>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              Necesitas iniciar sesión para acceder a tu wallet SEMILLA
+              {tFed('semilla.authRequiredDescription')}
             </p>
             <div className="mt-6">
               <a
                 href="/auth/login"
                 className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700"
               >
-                Iniciar Sesión
+                {tFed('semilla.buttons.login')}
               </a>
             </div>
           </div>
@@ -145,11 +148,11 @@ export default function SemillaWallet() {
           <div className="flex items-center gap-3 mb-4">
             <CurrencyDollarIcon className="h-8 w-8 text-green-600" />
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Wallet SEMILLA
+              {tFed('semilla.title')}
             </h1>
           </div>
           <p className="text-gray-600 dark:text-gray-400">
-            Tu moneda federada para transacciones en la red Gailu Labs
+            {tFed('semilla.subtitle')}
           </p>
         </div>
 
@@ -161,7 +164,7 @@ export default function SemillaWallet() {
           <>
             {/* Balance Card */}
             <div className="bg-gradient-to-br from-green-600 to-emerald-600 rounded-lg shadow-xl p-8 mb-8 text-white">
-              <p className="text-green-100 text-sm mb-2">Balance Disponible</p>
+              <p className="text-green-100 text-sm mb-2">{tFed('semilla.availableBalance')}</p>
               <div className="flex items-end gap-2 mb-6">
                 <h2 className="text-5xl font-bold">{balanceData?.balance.toFixed(2)}</h2>
                 <span className="text-2xl font-semibold mb-1">SEMILLA</span>
@@ -173,7 +176,7 @@ export default function SemillaWallet() {
                   className="flex-1 bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition-colors flex items-center justify-center gap-2"
                 >
                   <ArrowUpIcon className="h-5 w-5" />
-                  Enviar
+                  {tFed('semilla.buttons.send')}
                 </button>
                 {balanceData && balanceData.balance === 0 && (
                   <button
@@ -182,7 +185,7 @@ export default function SemillaWallet() {
                     className="flex-1 bg-yellow-400 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     <GiftIcon className="h-5 w-5" />
-                    {grantInitialMutation.isPending ? 'Procesando...' : 'Reclamar 100 SEMILLA'}
+                    {grantInitialMutation.isPending ? tFed('semilla.buttons.processing') : tFed('semilla.buttons.claim')}
                   </button>
                 )}
               </div>
@@ -192,33 +195,32 @@ export default function SemillaWallet() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                 <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
-                  ¿Qué es SEMILLA?
+                  {tFed('semilla.info.whatIs.title')}
                 </h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Moneda federada que recompensa la contribución y el Proof of Help.
-                  Circula en toda la red Gailu Labs.
+                  {tFed('semilla.info.whatIs.description')}
                 </p>
               </div>
 
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                 <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
-                  Cómo ganar SEMILLA
+                  {tFed('semilla.info.howToEarn.title')}
                 </h4>
                 <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                  <li>✓ Contribuir a la comunidad</li>
-                  <li>✓ Participar en círculos</li>
-                  <li>✓ Ayuda mutua federada</li>
+                  <li>{tFed('semilla.info.howToEarn.item1')}</li>
+                  <li>{tFed('semilla.info.howToEarn.item2')}</li>
+                  <li>{tFed('semilla.info.howToEarn.item3')}</li>
                 </ul>
               </div>
 
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                 <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
-                  Usos de SEMILLA
+                  {tFed('semilla.info.uses.title')}
                 </h4>
                 <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                  <li>• Transferencias federadas</li>
-                  <li>• Acceso a recursos</li>
-                  <li>• Votación en círculos</li>
+                  <li>{tFed('semilla.info.uses.item1')}</li>
+                  <li>{tFed('semilla.info.uses.item2')}</li>
+                  <li>{tFed('semilla.info.uses.item3')}</li>
                 </ul>
               </div>
             </div>
@@ -226,7 +228,7 @@ export default function SemillaWallet() {
             {/* Transactions History */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Historial de Transacciones
+                {tFed('semilla.transactions.title')}
               </h3>
 
               {transactions && transactions.length > 0 ? (
@@ -248,7 +250,7 @@ export default function SemillaWallet() {
                           </div>
                           <div>
                             <p className="font-medium text-gray-900 dark:text-white">
-                              {isReceived ? 'Recibido' : 'Enviado'}
+                              {isReceived ? tFed('semilla.transactions.received') : tFed('semilla.transactions.sent')}
                             </p>
                             <p className="text-sm text-gray-500 dark:text-gray-400">{tx.reason}</p>
                             <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
@@ -274,10 +276,10 @@ export default function SemillaWallet() {
                 <div className="text-center py-8">
                   <CurrencyDollarIcon className="mx-auto h-12 w-12 text-gray-400" />
                   <p className="mt-2 text-gray-500 dark:text-gray-400">
-                    No hay transacciones todavía
+                    {tFed('semilla.transactions.empty')}
                   </p>
                   <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
-                    Comienza enviando o recibiendo SEMILLA
+                    {tFed('semilla.transactions.emptyHint')}
                   </p>
                 </div>
               )}
@@ -290,12 +292,12 @@ export default function SemillaWallet() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Enviar SEMILLA
+                {tFed('semilla.modal.title')}
               </h3>
               <form onSubmit={handleSend} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    DID del destinatario
+                    {tFed('semilla.modal.recipientDID')}
                   </label>
                   <input
                     type="text"
@@ -307,7 +309,7 @@ export default function SemillaWallet() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Cantidad
+                    {tFed('semilla.modal.amount')}
                   </label>
                   <input
                     type="number"
@@ -321,14 +323,14 @@ export default function SemillaWallet() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Motivo
+                    {tFed('semilla.modal.reason')}
                   </label>
                   <textarea
                     value={sendForm.reason}
                     onChange={(e) => setSendForm({ ...sendForm, reason: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
                     rows={3}
-                    placeholder="¿Por qué estás enviando SEMILLA?"
+                    placeholder={tFed('semilla.modal.reasonPlaceholder')}
                   />
                 </div>
                 <div className="flex gap-3">
@@ -337,14 +339,14 @@ export default function SemillaWallet() {
                     onClick={() => setShowSendModal(false)}
                     className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700"
                   >
-                    Cancelar
+                    {tFed('semilla.buttons.cancel')}
                   </button>
                   <button
                     type="submit"
                     disabled={sendMutation.isPending}
                     className="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50"
                   >
-                    {sendMutation.isPending ? 'Enviando...' : 'Enviar'}
+                    {sendMutation.isPending ? tFed('semilla.buttons.sending') : tFed('semilla.buttons.send')}
                   </button>
                 </div>
               </form>

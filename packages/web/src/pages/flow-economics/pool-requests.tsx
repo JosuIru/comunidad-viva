@@ -4,6 +4,7 @@ import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { CircleStackIcon, PlusIcon, HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/react/24/outline';
 import { getI18nProps } from '@/lib/i18n';
+import { useTranslations } from 'next-intl';
 
 interface PoolRequest {
   id: string;
@@ -18,6 +19,8 @@ interface PoolRequest {
 }
 
 export default function PoolRequestsPage() {
+  const tFlow = useTranslations('flow');
+  const tToasts = useTranslations('toasts');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [poolType, setPoolType] = useState('EMERGENCY');
@@ -47,7 +50,7 @@ export default function PoolRequestsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['pool-requests'] });
       setShowCreateModal(false);
-      alert('¡Solicitud creada exitosamente!');
+      alert(tToasts('success.requestCreated'));
     },
   });
 
@@ -58,13 +61,13 @@ export default function PoolRequestsPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['pool-requests'] });
-      alert('¡Voto registrado!');
+      alert(tToasts('success.voteRegistered'));
     },
   });
 
   const handleCreate = () => {
     if (!amount || !reason) {
-      alert('Por favor completa todos los campos');
+      alert(tToasts('error.completeAllFields'));
       return;
     }
 
@@ -103,11 +106,11 @@ export default function PoolRequestsPage() {
               <div className="flex items-center gap-3 mb-4">
                 <CircleStackIcon className="h-8 w-8 text-green-600" />
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                  Solicitudes de Pool
+                  {tFlow('poolRequests.title')}
                 </h1>
               </div>
               <p className="text-gray-600 dark:text-gray-400">
-                Solicita fondos de los pools comunitarios
+                {tFlow('poolRequests.subtitle')}
               </p>
             </div>
             {isAuthenticated && (
@@ -116,7 +119,7 @@ export default function PoolRequestsPage() {
                 className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold shadow-md"
               >
                 <PlusIcon className="inline h-5 w-5 mr-2" />
-                Nueva Solicitud
+                {tFlow('poolRequests.buttons.newRequest')}
               </button>
             )}
           </div>
@@ -126,7 +129,7 @@ export default function PoolRequestsPage() {
           <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-lg shadow-md">
             <CircleStackIcon className="mx-auto h-16 w-16 text-gray-400" />
             <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
-              Inicia sesión para ver solicitudes
+              {tFlow('poolRequests.loginToView')}
             </h3>
           </div>
         ) : isLoading ? (
@@ -142,10 +145,10 @@ export default function PoolRequestsPage() {
                     <span className="text-3xl">{getPoolIcon(request.poolType)}</span>
                     <div>
                       <h3 className="font-semibold text-gray-900 dark:text-white">
-                        {request.poolType} - {request.amount} créditos
+                        {request.poolType} - {request.amount} {tFlow('poolRequests.credits')}
                       </h3>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Por {request.user.name} • {new Date(request.createdAt).toLocaleDateString('es-ES')}
+                        {tFlow('poolRequests.by')} {request.user.name} • {new Date(request.createdAt).toLocaleDateString('es-ES')}
                       </p>
                     </div>
                   </div>
@@ -174,13 +177,13 @@ export default function PoolRequestsPage() {
                         onClick={() => voteMutation.mutate({ id: request.id, vote: true })}
                         className="px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200"
                       >
-                        A Favor
+                        {tFlow('poolRequests.buttons.voteFor')}
                       </button>
                       <button
                         onClick={() => voteMutation.mutate({ id: request.id, vote: false })}
                         className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200"
                       >
-                        En Contra
+                        {tFlow('poolRequests.buttons.voteAgainst')}
                       </button>
                     </div>
                   )}
@@ -192,7 +195,7 @@ export default function PoolRequestsPage() {
           <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-lg shadow-md">
             <CircleStackIcon className="mx-auto h-16 w-16 text-gray-400" />
             <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
-              No hay solicitudes todavía
+              {tFlow('poolRequests.noRequests')}
             </h3>
           </div>
         )}
@@ -202,28 +205,28 @@ export default function PoolRequestsPage() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full p-6">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                Nueva Solicitud de Pool
+                {tFlow('poolRequests.modal.title')}
               </h2>
 
               <div className="space-y-4 mb-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Tipo de Pool
+                    {tFlow('poolRequests.modal.poolType')}
                   </label>
                   <select
                     value={poolType}
                     onChange={(e) => setPoolType(e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   >
-                    <option value="EMERGENCY">🚨 Emergencias</option>
-                    <option value="COMMUNITY">🏘️ Comunidad</option>
-                    <option value="REWARDS">🎁 Recompensas</option>
+                    <option value="EMERGENCY">{tFlow('poolRequests.poolTypes.emergency')}</option>
+                    <option value="COMMUNITY">{tFlow('poolRequests.poolTypes.community')}</option>
+                    <option value="REWARDS">{tFlow('poolRequests.poolTypes.rewards')}</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Cantidad de Créditos
+                    {tFlow('poolRequests.modal.creditAmount')}
                   </label>
                   <input
                     type="number"
@@ -236,14 +239,14 @@ export default function PoolRequestsPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Motivo
+                    {tFlow('poolRequests.modal.reason')}
                   </label>
                   <textarea
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     rows={4}
-                    placeholder="Describe por qué necesitas estos fondos..."
+                    placeholder={tFlow('poolRequests.modal.reasonPlaceholder')}
                   />
                 </div>
               </div>
@@ -254,13 +257,13 @@ export default function PoolRequestsPage() {
                   disabled={createMutation.isPending}
                   className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
                 >
-                  {createMutation.isPending ? 'Creando...' : 'Crear Solicitud'}
+                  {createMutation.isPending ? tFlow('poolRequests.buttons.creating') : tFlow('poolRequests.buttons.createRequest')}
                 </button>
                 <button
                   onClick={() => setShowCreateModal(false)}
                   className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
-                  Cancelar
+                  {tFlow('poolRequests.buttons.cancel')}
                 </button>
               </div>
             </div>

@@ -3637,7 +3637,15 @@
       "deleteOffer": "Ziur zaude eskaintza hau ezabatu nahi duzula?",
       "deleteEvent": "Ziur zaude ekitaldi hau ezabatu nahi duzula?",
       "deleteSolution": "Ziur zaude etxebizitza-irtenbide hau ezabatu nahi duzula? Ekintza hau ezin da desegin."
-    }
+    },
+    "walletComingSoon": "{wallet} laster erabilgarri",
+    "locationNotFound": "Ez da kokapena aurkitu. Saiatu beste izen batekin edo idatzi xehetasun gehiago.",
+    "locationSearchError": "Errorea kokapena bilatzean. Saiatu berriro.",
+    "quantityMinimum": "Kopurua gutxienez 1 izan behar da",
+    "profileUpdated": "Profila ondo eguneratu da",
+    "profileUpdateError": "Errorea profila eguneratzean",
+    "dateTimeRequired": "Mesedez, hautatu data eta ordua",
+    "groupBuyFull": "Taldeko erosketa beteta dago"
   },
   "confirmations": {
     "deleteOffer": "Ziur zaude eskaintza hau ezabatu nahi duzula?",

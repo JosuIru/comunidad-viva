@@ -3637,7 +3637,15 @@
       "deleteOffer": "¿Estás seguro de que deseas eliminar esta oferta?",
       "deleteEvent": "¿Estás seguro de que deseas eliminar este evento?",
       "deleteSolution": "¿Estás seguro de que quieres eliminar esta solución de vivienda? Esta acción no se puede deshacer."
-    }
+    },
+    "walletComingSoon": "{wallet} próximamente disponible",
+    "locationNotFound": "No se encontró la ubicación. Intenta con otro nombre o escribe más detalles.",
+    "locationSearchError": "Error al buscar la ubicación. Intenta de nuevo.",
+    "quantityMinimum": "La cantidad debe ser al menos 1",
+    "profileUpdated": "Perfil actualizado correctamente",
+    "profileUpdateError": "Error al actualizar el perfil",
+    "dateTimeRequired": "Por favor selecciona una fecha y hora",
+    "groupBuyFull": "La compra colectiva está llena"
   },
   "confirmations": {
     "deleteOffer": "¿Estás seguro de que deseas eliminar esta oferta?",

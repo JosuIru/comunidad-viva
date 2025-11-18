@@ -3694,7 +3694,15 @@
       "deleteOffer": "Estas segur que vols eliminar aquesta oferta?",
       "deleteEvent": "Estas segur que vols eliminar aquest esdeveniment?",
       "deleteSolution": "Estàs segur que vols eliminar aquesta solució d'habitatge? Aquesta acció no es pot desfer."
-    }
+    },
+    "walletComingSoon": "{wallet} properament disponible",
+    "locationNotFound": "No s'ha trobat la ubicació. Prova amb un altre nom o escriu més detalls.",
+    "locationSearchError": "Error en cercar la ubicació. Torna-ho a provar.",
+    "quantityMinimum": "La quantitat ha de ser com a mínim 1",
+    "profileUpdated": "Perfil actualitzat correctament",
+    "profileUpdateError": "Error en actualitzar el perfil",
+    "dateTimeRequired": "Si us plau, selecciona una data i hora",
+    "groupBuyFull": "La compra collectiva esta plena"
   },
   "confirmations": {
     "deleteOffer": "Estas segur que vols eliminar aquesta oferta?",

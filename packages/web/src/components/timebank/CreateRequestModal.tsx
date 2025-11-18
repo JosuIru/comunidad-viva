@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -15,6 +16,7 @@ export default function CreateRequestModal({ offer, onClose }: CreateRequestModa
   const [hours, setHours] = useState(offer?.estimatedHours || 1);
   const [scheduledFor, setScheduledFor] = useState('');
   const queryClient = useQueryClient();
+  const tToasts = useTranslations('toasts');
 
   const createMutation = useMutation({
     mutationFn: async (data: any) => {
@@ -43,7 +45,7 @@ export default function CreateRequestModal({ offer, onClose }: CreateRequestModa
     e.preventDefault();
 
     if (!scheduledFor) {
-      alert('Por favor selecciona una fecha y hora');
+      alert(tToasts('dateTimeRequired'));
       return;
     }
 

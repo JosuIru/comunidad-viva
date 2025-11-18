@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import Button from './Button';
 import {
   MagnifyingGlassIcon,
@@ -66,6 +67,7 @@ export default function MapFilterPanel({
   customLocation,
   onCustomLocationChange,
 }: MapFilterPanelProps) {
+  const tToasts = useTranslations('toasts');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -228,11 +230,11 @@ export default function MapFilterPanel({
           onProximityChange(5);
         }
       } else {
-        alert('No se encontró la ubicación. Intenta con otro nombre o escribe más detalles.');
+        alert(tToasts('locationNotFound'));
       }
     } catch (error) {
       console.error('Error geocoding:', error);
-      alert('Error al buscar la ubicación. Intenta de nuevo.');
+      alert(tToasts('locationSearchError'));
     } finally {
       setIsSearchingLocation(false);
     }

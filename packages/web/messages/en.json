@@ -3694,7 +3694,15 @@
       "deleteOffer": "Are you sure you want to delete this offer?",
       "deleteEvent": "Are you sure you want to delete this event?",
       "deleteSolution": "Are you sure you want to delete this housing solution? This action cannot be undone."
-    }
+    },
+    "walletComingSoon": "{wallet} coming soon",
+    "locationNotFound": "Location not found. Try another name or add more details.",
+    "locationSearchError": "Error searching location. Please try again.",
+    "quantityMinimum": "Quantity must be at least 1",
+    "profileUpdated": "Profile updated successfully",
+    "profileUpdateError": "Error updating profile",
+    "dateTimeRequired": "Please select a date and time",
+    "groupBuyFull": "The group buy is full"
   },
   "confirmations": {
     "deleteOffer": "Are you sure you want to delete this offer?",

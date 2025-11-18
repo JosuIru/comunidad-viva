@@ -55,6 +55,7 @@ interface Web3WalletButtonProps {
 export default function Web3WalletButton({ mode, onSuccess, onError }: Web3WalletButtonProps) {
   const router = useRouter();
   const t = useTranslations('web3Wallet');
+  const tToasts = useTranslations('toasts');
   const [isConnecting, setIsConnecting] = useState(false);
   const [hasMetaMask, setHasMetaMask] = useState(false);
   const [hasPhantom, setHasPhantom] = useState(false);
@@ -243,7 +244,7 @@ export default function Web3WalletButton({ mode, onSuccess, onError }: Web3Walle
       isInstalled: false,
       installUrl: 'https://walletconnect.com/',
       onConnect: async () => {
-        alert('WalletConnect próximamente disponible');
+        alert(tToasts('walletComingSoon', { wallet: 'WalletConnect' }));
       },
     },
     {
@@ -253,7 +254,7 @@ export default function Web3WalletButton({ mode, onSuccess, onError }: Web3Walle
       isInstalled: false,
       installUrl: 'https://www.coinbase.com/wallet',
       onConnect: async () => {
-        alert('Coinbase Wallet próximamente disponible');
+        alert(tToasts('walletComingSoon', { wallet: 'Coinbase Wallet' }));
       },
     },
     {
@@ -263,7 +264,7 @@ export default function Web3WalletButton({ mode, onSuccess, onError }: Web3Walle
       isInstalled: false,
       installUrl: 'https://trustwallet.com/',
       onConnect: async () => {
-        alert('Trust Wallet próximamente disponible');
+        alert(tToasts('walletComingSoon', { wallet: 'Trust Wallet' }));
       },
     },
   ];

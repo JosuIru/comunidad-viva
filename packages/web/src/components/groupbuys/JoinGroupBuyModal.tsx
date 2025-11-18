@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -13,6 +14,7 @@ interface JoinGroupBuyModalProps {
 export default function JoinGroupBuyModal({ groupBuy, onClose }: JoinGroupBuyModalProps) {
   const [quantity, setQuantity] = useState(1);
   const queryClient = useQueryClient();
+  const tToasts = useTranslations('toasts');
 
   // Calculate pricing based on quantity
   const calculateTotal = (qty: number) => {
@@ -57,13 +59,13 @@ export default function JoinGroupBuyModal({ groupBuy, onClose }: JoinGroupBuyMod
 
   const handleJoin = () => {
     if (quantity < 1) {
-      alert('La cantidad debe ser al menos 1');
+      alert(tToasts('quantityMinimum'));
       return;
     }
 
     const spotsLeft = groupBuy.maxParticipants - groupBuy.currentParticipants;
     if (spotsLeft <= 0) {
-      alert('La compra colectiva está llena');
+      alert(tToasts('groupBuyFull'));
       return;
     }
 

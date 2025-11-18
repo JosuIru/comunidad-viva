@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 
@@ -21,6 +22,7 @@ interface User {
 
 export default function EditProfile() {
   const queryClient = useQueryClient();
+  const tToasts = useTranslations('toasts');
   const [userId, setUserId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
@@ -65,11 +67,11 @@ export default function EditProfile() {
       return response.data;
     },
     onSuccess: () => {
-      toast.success('Perfil actualizado correctamente');
+      toast.success(tToasts('profileUpdated'));
       queryClient.invalidateQueries({ queryKey: ['profile', userId] });
     },
     onError: () => {
-      toast.error('Error al actualizar el perfil');
+      toast.error(tToasts('profileUpdateError'));
     },
   });
 
