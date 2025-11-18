@@ -7,7 +7,6 @@ export default function LanguageSelector() {
   const router = useRouter();
   const t = useTranslations('languageSelector');
   const [isOpen, setIsOpen] = useState(false);
-  const [currentLocale, setCurrentLocale] = useState('es');
   const [mounted, setMounted] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -18,17 +17,13 @@ export default function LanguageSelector() {
     { code: 'ca', name: t('languages.ca') },
   ];
 
-  // Detectar locale en el cliente
+  // Usar el locale de Next.js router
+  const currentLocale = router.locale || 'es';
+
+  // Marcar como montado para evitar errores de hidratación
   useEffect(() => {
     setMounted(true);
-    const path = router.asPath;
-    const localeMatch = path.match(/^\/(es|eu|en|ca)(\/|$)/);
-    if (localeMatch) {
-      setCurrentLocale(localeMatch[1]);
-    } else if (typeof window !== 'undefined') {
-      setCurrentLocale(localStorage.getItem('locale') || 'es');
-    }
-  }, [router.asPath]);
+  }, []);
 
   const currentLanguage = languages.find((lang) => lang.code === currentLocale) || languages[0];
 
@@ -48,20 +43,14 @@ export default function LanguageSelector() {
     };
   }, [isOpen]);
 
-  const changeLanguage = (locale: string) => {
-    // Guardar en localStorage
+  const changeLanguage = (newLocale: string) => {
+    // Guardar en localStorage para persistencia
     if (typeof window !== 'undefined') {
-      localStorage.setItem('locale', locale);
+      localStorage.setItem('NEXT_LOCALE', newLocale);
     }
 
-    // Construir la nueva ruta con el locale
-    const currentPath = router.asPath;
-    // Remover el locale actual si existe
-    const pathWithoutLocale = currentPath.replace(/^\/(es|eu|en|ca)(\/|$)/, '/');
-    // Agregar el nuevo locale (excepto si es 'es' que es el default)
-    const newPath = locale === 'es' ? pathWithoutLocale : `/${locale}${pathWithoutLocale}`;
-
-    router.push(newPath);
+    // Usar el sistema de routing de Next.js para cambiar el locale
+    router.push(router.pathname, router.asPath, { locale: newLocale });
     setIsOpen(false);
   };
 

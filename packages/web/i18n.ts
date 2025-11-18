@@ -1,5 +1,4 @@
 import { getRequestConfig } from 'next-intl/server';
-import { notFound } from 'next/navigation';
 
 // Lista de idiomas soportados
 export const locales = ['es', 'eu', 'en', 'ca'] as const;
@@ -9,12 +8,10 @@ export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = 'es';
 
 export default getRequestConfig(async ({ locale }) => {
-  // Validar que el locale es uno de los soportados
-  if (!locales.includes(locale as Locale)) {
-    notFound();
-  }
-
-  const validLocale = locale as Locale;
+  // Usar locale por defecto si no es válido
+  const validLocale = locales.includes(locale as Locale)
+    ? (locale as Locale)
+    : defaultLocale;
 
   return {
     locale: validLocale,
