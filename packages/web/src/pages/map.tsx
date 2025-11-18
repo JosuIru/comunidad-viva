@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
+import { useTranslations } from 'next-intl';
 import { api } from '../lib/api';
 import toast from 'react-hot-toast';
 import { getI18nProps } from '@/lib/i18n';
@@ -11,7 +12,7 @@ const Map = dynamic(() => import('../components/Map'), {
   ssr: false,
   loading: () => (
     <div className="h-[600px] bg-gray-200 rounded-lg flex items-center justify-center">
-      <div className="text-gray-600">Cargando mapa...</div>
+      <div className="text-gray-600">...</div>
     </div>
   ),
 });
@@ -46,6 +47,7 @@ interface MapPin {
 }
 
 export default function MapPage() {
+  const t = useTranslations('mapPage');
   const [activeFilters, setActiveFilters] = useState({
     offers: true,
     services: true,
@@ -129,13 +131,13 @@ export default function MapPage() {
         id: 'user-location',
         type: 'user',
         position: userLocation,
-        title: 'Tu ubicación',
-        description: 'Estás aquí',
+        title: t('yourLocation'),
+        description: t('youAreHere'),
       });
     }
 
     return result;
-  }, [offers, events, activeFilters, userLocation]);
+  }, [offers, events, activeFilters, userLocation, t]);
 
   const toggleFilter = (filter: keyof typeof activeFilters) => {
     setActiveFilters((prev) => ({ ...prev, [filter]: !prev[filter] }));
@@ -153,21 +155,21 @@ export default function MapPage() {
   return (
     <>
       <Head>
-        <title>Mapa de la Comunidad - Truk</title>
+        <title>{t('title')} - Truk</title>
       </Head>
 
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Mapa de la Comunidad</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('title')}</h1>
             <p className="text-gray-600">
-              Explora ofertas, servicios, eventos y comercios cerca de ti
+              {t('subtitle')}
             </p>
           </div>
 
           {/* Filters */}
           <div className="bg-white rounded-lg shadow p-4 mb-6">
-            <h2 className="font-semibold text-gray-900 mb-3">Filtros</h2>
+            <h2 className="font-semibold text-gray-900 mb-3">{t('filters')}</h2>
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => toggleFilter('offers')}
@@ -177,7 +179,7 @@ export default function MapPage() {
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                🛍️ Ofertas ({stats.offers})
+                🛍️ {t('offers')} ({stats.offers})
               </button>
 
               <button
@@ -188,7 +190,7 @@ export default function MapPage() {
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                🔧 Servicios ({stats.services})
+                🔧 {t('services')} ({stats.services})
               </button>
 
               <button
@@ -199,7 +201,7 @@ export default function MapPage() {
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                📅 Eventos ({stats.events})
+                📅 {t('events')} ({stats.events})
               </button>
 
               <button
@@ -210,7 +212,7 @@ export default function MapPage() {
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                🏪 Comercios ({stats.merchants})
+                🏪 {t('merchants')} ({stats.merchants})
               </button>
             </div>
           </div>
@@ -232,23 +234,23 @@ export default function MapPage() {
 
           {/* Legend */}
           <div className="bg-white rounded-lg shadow p-4 mt-6">
-            <h3 className="font-semibold text-gray-900 mb-3">Leyenda</h3>
+            <h3 className="font-semibold text-gray-900 mb-3">{t('legend')}</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-full bg-blue-600"></div>
-                <span className="text-sm text-gray-700">Ofertas / Productos</span>
+                <span className="text-sm text-gray-700">{t('offersProducts')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-full bg-green-600"></div>
-                <span className="text-sm text-gray-700">Servicios</span>
+                <span className="text-sm text-gray-700">{t('services')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-full bg-orange-600"></div>
-                <span className="text-sm text-gray-700">Eventos</span>
+                <span className="text-sm text-gray-700">{t('events')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-full bg-violet-600"></div>
-                <span className="text-sm text-gray-700">Tu ubicación</span>
+                <span className="text-sm text-gray-700">{t('yourLocation')}</span>
               </div>
             </div>
           </div>
@@ -257,19 +259,19 @@ export default function MapPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
             <div className="bg-white rounded-lg shadow p-4 text-center">
               <div className="text-3xl font-bold text-blue-600">{stats.offers}</div>
-              <div className="text-sm text-gray-600 mt-1">Ofertas activas</div>
+              <div className="text-sm text-gray-600 mt-1">{t('activeOffers')}</div>
             </div>
             <div className="bg-white rounded-lg shadow p-4 text-center">
               <div className="text-3xl font-bold text-green-600">{stats.services}</div>
-              <div className="text-sm text-gray-600 mt-1">Servicios disponibles</div>
+              <div className="text-sm text-gray-600 mt-1">{t('availableServices')}</div>
             </div>
             <div className="bg-white rounded-lg shadow p-4 text-center">
               <div className="text-3xl font-bold text-orange-600">{stats.events}</div>
-              <div className="text-sm text-gray-600 mt-1">Eventos próximos</div>
+              <div className="text-sm text-gray-600 mt-1">{t('upcomingEvents')}</div>
             </div>
             <div className="bg-white rounded-lg shadow p-4 text-center">
               <div className="text-3xl font-bold text-red-600">{stats.merchants}</div>
-              <div className="text-sm text-gray-600 mt-1">Comercios locales</div>
+              <div className="text-sm text-gray-600 mt-1">{t('localMerchants')}</div>
             </div>
           </div>
         </div>

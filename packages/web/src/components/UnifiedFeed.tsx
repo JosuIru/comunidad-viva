@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, memo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { api } from '@/lib/api';
 import { logger } from '@/lib/logger';
 import {
@@ -63,7 +64,7 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
 
 const typeConfig = {
   event: {
-    label: 'Evento',
+    labelKey: 'event',
     icon: CalendarIcon,
     color: 'blue',
     bgColor: 'bg-blue-50 dark:bg-blue-900/20',
@@ -71,7 +72,7 @@ const typeConfig = {
     borderColor: 'border-blue-200 dark:border-blue-700',
   },
   offer: {
-    label: 'Oferta',
+    labelKey: 'offer',
     icon: ShoppingBagIcon,
     color: 'green',
     bgColor: 'bg-green-50 dark:bg-green-900/20',
@@ -79,7 +80,7 @@ const typeConfig = {
     borderColor: 'border-green-200 dark:border-green-700',
   },
   timebank: {
-    label: 'Banco de Tiempo',
+    labelKey: 'timebank',
     icon: ClockIcon,
     color: 'purple',
     bgColor: 'bg-purple-50 dark:bg-purple-900/20',
@@ -87,7 +88,7 @@ const typeConfig = {
     borderColor: 'border-purple-200 dark:border-purple-700',
   },
   need: {
-    label: 'Necesidad',
+    labelKey: 'need',
     icon: HeartIcon,
     color: 'red',
     bgColor: 'bg-red-50 dark:bg-red-900/20',
@@ -95,7 +96,7 @@ const typeConfig = {
     borderColor: 'border-red-200 dark:border-red-700',
   },
   project: {
-    label: 'Proyecto',
+    labelKey: 'project',
     icon: LightBulbIcon,
     color: 'yellow',
     bgColor: 'bg-yellow-50 dark:bg-yellow-900/20',
@@ -103,7 +104,7 @@ const typeConfig = {
     borderColor: 'border-yellow-200 dark:border-yellow-700',
   },
   housing: {
-    label: 'Vivienda',
+    labelKey: 'housing',
     icon: HomeIcon,
     color: 'indigo',
     bgColor: 'bg-indigo-50 dark:bg-indigo-900/20',
@@ -111,7 +112,7 @@ const typeConfig = {
     borderColor: 'border-indigo-200 dark:border-indigo-700',
   },
   groupbuy: {
-    label: 'Compra Grupal',
+    labelKey: 'groupbuy',
     icon: UserGroupIcon,
     color: 'pink',
     bgColor: 'bg-pink-50 dark:bg-pink-900/20',
@@ -128,6 +129,7 @@ export default function UnifiedFeed({
   userLocation: externalUserLocation,
   onTypesChange,
 }: UnifiedFeedProps = {}) {
+  const t = useTranslations('unifiedFeed');
   const [internalUserLocation, setInternalUserLocation] = useState<[number, number] | null>(null);
 
   // Use external location if provided, otherwise get user's location
@@ -521,7 +523,7 @@ export default function UnifiedFeed({
                 </h3>
                 <span className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${config.bgColor} ${config.textColor} flex-shrink-0`}>
                   <Icon className="w-4 h-4" />
-                  {config.label}
+                  {t(config.labelKey)}
                 </span>
               </div>
 
@@ -571,7 +573,7 @@ export default function UnifiedFeed({
               {/* Type-specific metadata */}
               {resource.type === 'event' && resource.metadata?.attendees !== undefined && (
                 <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
-                  {resource.metadata.attendees} asistentes
+                  {resource.metadata.attendees} {t('attendees')}
                   {resource.metadata.maxAttendees && ` / ${resource.metadata.maxAttendees}`}
                 </div>
               )}
@@ -579,7 +581,7 @@ export default function UnifiedFeed({
               {(resource.type === 'need' || resource.type === 'project') && resource.metadata?.goal > 0 && (
                 <div className="mt-2">
                   <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
-                    <span>Recaudado</span>
+                    <span>{t('raised')}</span>
                     <span>{resource.metadata.raised}€ / {resource.metadata.goal}€</span>
                   </div>
                   <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
@@ -603,7 +605,7 @@ export default function UnifiedFeed({
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-          Red Unificada
+          {t('title')}
         </h2>
 
         {/* Filter tabs */}
@@ -620,7 +622,7 @@ export default function UnifiedFeed({
                 : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >
-            Todos ({unifiedResources.length})
+            {t('all')} ({unifiedResources.length})
           </button>
           {Object.entries(typeConfig).map(([type, config]) => {
             const count = unifiedResources.filter(r => r.type === type).length;
@@ -650,7 +652,7 @@ export default function UnifiedFeed({
                 }`}
               >
                 <Icon className="w-4 h-4" />
-                {config.label} ({count})
+                {t(config.labelKey)} ({count})
               </button>
             );
           })}
@@ -662,11 +664,11 @@ export default function UnifiedFeed({
         {filteredResources.length === 0 ? (
           <EmptyState
             icon={<MagnifyingGlassIcon className="h-12 w-12" />}
-            title="No hay recursos disponibles"
-            description="No encontramos contenido cerca de ti. Intenta ampliar tu búsqueda, ajustar los filtros o crear el primero."
+            title={t('noResources')}
+            description={t('noResourcesDesc')}
             actions={[
               {
-                label: 'Crear oferta',
+                label: t('createOffer'),
                 href: '/offers/new',
                 variant: 'secondary',
               },

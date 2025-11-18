@@ -39,12 +39,12 @@ interface MapFilterPanelProps {
 }
 
 const contentTypes = [
-  { id: 'offer', label: 'Ofertas', icon: ShoppingBagIcon, color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' },
-  { id: 'service', label: 'Servicios', icon: Cog6ToothIcon, color: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' },
-  { id: 'event', label: 'Eventos', icon: CalendarDaysIcon, color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' },
-  { id: 'need', label: 'Necesidades', icon: ExclamationTriangleIcon, color: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' },
-  { id: 'project', label: 'Proyectos', icon: RocketLaunchIcon, color: 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300' },
-  { id: 'housing', label: 'Vivienda', icon: HomeIcon, color: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300' },
+  { id: 'offer', labelKey: 'offers', icon: ShoppingBagIcon, color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' },
+  { id: 'service', labelKey: 'services', icon: Cog6ToothIcon, color: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' },
+  { id: 'event', labelKey: 'events', icon: CalendarDaysIcon, color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' },
+  { id: 'need', labelKey: 'needs', icon: ExclamationTriangleIcon, color: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' },
+  { id: 'project', labelKey: 'projects', icon: RocketLaunchIcon, color: 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300' },
+  { id: 'housing', labelKey: 'housing', icon: HomeIcon, color: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300' },
 ];
 
 export default function MapFilterPanel({
@@ -68,6 +68,7 @@ export default function MapFilterPanel({
   onCustomLocationChange,
 }: MapFilterPanelProps) {
   const tToasts = useTranslations('toasts');
+  const t = useTranslations('mapFilters');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -253,14 +254,14 @@ export default function MapFilterPanel({
         <div className="hidden desktop:flex items-center justify-between mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
           <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
             <FunnelIcon className="h-5 w-5" />
-            <span>Filtros</span>
+            <span>{t('title')}</span>
           </h2>
           {hasActiveFilters && (
             <button
               onClick={clearAllFilters}
               className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-medium"
             >
-              Limpiar todo
+              {t('clearAll')}
             </button>
           )}
         </div>
@@ -272,7 +273,7 @@ export default function MapFilterPanel({
               onClick={clearAllFilters}
               className="w-full text-sm text-blue-600 dark:text-blue-400 hover:underline font-medium text-center py-2"
             >
-              Limpiar todos los filtros
+              {t('clearAllFilters')}
             </button>
           </div>
         )}
@@ -281,7 +282,7 @@ export default function MapFilterPanel({
         <div className="mb-6">
           <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide flex items-center gap-1">
             <MagnifyingGlassIcon className="h-4 w-4" />
-            <span>Buscar</span>
+            <span>{t('search')}</span>
           </label>
           <div className="relative">
             <input
@@ -291,7 +292,7 @@ export default function MapFilterPanel({
               onChange={(e) => handleSearchChange(e.target.value)}
               onKeyDown={handleKeyDown}
               onFocus={() => searchText.trim().length > 0 && setShowSuggestions(true)}
-              placeholder="Buscar por título..."
+              placeholder={t('searchPlaceholder')}
               className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100 transition-all"
               autoComplete="off"
             />
@@ -302,7 +303,7 @@ export default function MapFilterPanel({
                   setShowSuggestions(false);
                 }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 bg-gray-100 dark:bg-gray-600 rounded-full p-1"
-                aria-label="Limpiar búsqueda"
+                aria-label={t('clearSearch')}
               >
                 ✕
               </button>
@@ -341,7 +342,7 @@ export default function MapFilterPanel({
                         </p>
                         {typeConfig && (
                           <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {typeConfig.label}
+                            {t(typeConfig.labelKey)}
                           </p>
                         )}
                       </div>
@@ -355,7 +356,7 @@ export default function MapFilterPanel({
           {/* No results message */}
           {showSuggestions && searchText.trim().length > 0 && suggestions.length === 0 && (
             <div className="absolute z-50 w-full mt-2 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl shadow-lg p-4 text-center text-sm text-gray-500 dark:text-gray-400">
-              No se encontraron resultados
+              {t('noResults')}
             </div>
           )}
         </div>
@@ -364,7 +365,7 @@ export default function MapFilterPanel({
         <div className="mb-6">
           <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-3 uppercase tracking-wide flex items-center gap-1">
             <FolderIcon className="h-4 w-4" />
-            <span>Tipos de contenido</span>
+            <span>{t('contentTypes')}</span>
           </label>
           <div className="grid grid-cols-2 gap-2">
             {contentTypes.map((type) => {
@@ -381,7 +382,7 @@ export default function MapFilterPanel({
                 >
                   <IconComponent className="h-5 w-5" />
                   <span className="text-xs font-medium truncate">
-                    {type.label}
+                    {t(type.labelKey)}
                   </span>
                 </button>
               );
@@ -393,22 +394,22 @@ export default function MapFilterPanel({
         <div className="mb-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-4 border-2 border-blue-200 dark:border-blue-800">
           <label className="block text-xs font-semibold text-blue-900 dark:text-blue-100 mb-3 uppercase tracking-wide flex items-center gap-1">
             <MapPinIcon className="h-4 w-4" />
-            <span>Distancia</span>
+            <span>{t('distance')}</span>
           </label>
 
           {!(userLocation || userCommunity || customLocation) && proximityCenter !== 'custom' ? (
             <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border-2 border-yellow-300 dark:border-yellow-700">
               <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200 mb-2">
-                ⚠️ No disponible
+                ⚠️ {t('notAvailable')}
               </p>
               <p className="text-xs text-yellow-700 dark:text-yellow-300 mb-3">
-                Activa la geolocalización, únete a una comunidad o busca una ubicación personalizada.
+                {t('enableGeolocation')}
               </p>
               <button
                 onClick={() => onProximityCenterChange('custom')}
                 className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
               >
-                🔍 Buscar ubicación personalizada
+                🔍 {t('searchCustomLocation')}
               </button>
             </div>
           ) : (
@@ -425,7 +426,7 @@ export default function MapFilterPanel({
                     }`}
                   >
                     <MapPinIcon className="h-4 w-4" />
-                    <span>Mi ubicación</span>
+                    <span>{t('myLocation')}</span>
                   </button>
                 )}
                 {userCommunity && (
@@ -438,7 +439,7 @@ export default function MapFilterPanel({
                     }`}
                   >
                     <BuildingOfficeIcon className="h-4 w-4" />
-                    <span>Comunidad</span>
+                    <span>{t('community')}</span>
                   </button>
                 )}
                 <button
@@ -450,7 +451,7 @@ export default function MapFilterPanel({
                   }`}
                 >
                   <GlobeAltIcon className="h-4 w-4" />
-                  <span>Ubicación personalizada</span>
+                  <span>{t('customLocation')}</span>
                 </button>
               </div>
 
@@ -458,14 +459,14 @@ export default function MapFilterPanel({
               {proximityCenter === 'custom' && (
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-3 space-y-2">
                   <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
-                    Buscar ubicación
+                    {t('searchLocation')}
                   </label>
                   <input
                     type="text"
                     value={locationSearch}
                     onChange={(e) => setLocationSearch(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleLocationSearch()}
-                    placeholder="Ej: Pamplona, Plaza del Castillo..."
+                    placeholder={t('locationPlaceholder')}
                     className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
                   />
                   <button
@@ -473,13 +474,13 @@ export default function MapFilterPanel({
                     disabled={!locationSearch.trim() || isSearchingLocation}
                     className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
                   >
-                    {isSearchingLocation ? '⏳ Buscando...' : '🔍 Buscar ubicación'}
+                    {isSearchingLocation ? `⏳ ${t('searching')}` : `🔍 ${t('searchLocationBtn')}`}
                   </button>
                   {customLocation && (
                     <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border-2 border-green-300 dark:border-green-700">
                       <div className="flex-1">
                         <p className="text-sm font-semibold text-green-700 dark:text-green-300 flex items-center gap-1">
-                          ✓ Ubicación establecida
+                          ✓ {t('locationSet')}
                         </p>
                         <p className="text-xs text-green-600 dark:text-green-400 mt-0.5">
                           📍 {customLocation[0].toFixed(4)}, {customLocation[1].toFixed(4)}
@@ -492,7 +493,7 @@ export default function MapFilterPanel({
                         }}
                         className="px-3 py-1 text-xs text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-md font-medium transition-colors"
                       >
-                        Limpiar
+                        {t('clear')}
                       </button>
                     </div>
                   )}
@@ -506,7 +507,7 @@ export default function MapFilterPanel({
                     {proximityRadius === null ? '∞' : `${proximityRadius} km`}
                   </div>
                   <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {proximityRadius === null ? 'Sin límite' : 'Radio de búsqueda'}
+                    {proximityRadius === null ? t('noLimit') : t('searchRadius')}
                   </div>
                 </div>
 
@@ -514,7 +515,7 @@ export default function MapFilterPanel({
                 {proximityRadius !== null && (
                   <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
                     <div className="flex items-center justify-center gap-2">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">🔍 Zoom del mapa:</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">🔍 {t('mapZoom')}</span>
                       <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">
                         {proximityRadius <= 1 ? '14 (máximo)' :
                          proximityRadius <= 2 ? '13' :
@@ -580,7 +581,7 @@ export default function MapFilterPanel({
           <div className="mb-6">
             <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-3 uppercase tracking-wide flex items-center gap-1">
               <BuildingOfficeIcon className="h-4 w-4" />
-              <span>Comunidades ({selectedCommunities.size > 0 ? selectedCommunities.size : 'Todas'})</span>
+              <span>{t('communities')} ({selectedCommunities.size > 0 ? selectedCommunities.size : t('all')})</span>
             </label>
             <div className="space-y-1.5 bg-gray-50 dark:bg-gray-700/30 rounded-xl p-2">
               {communities.map((community: any) => (
