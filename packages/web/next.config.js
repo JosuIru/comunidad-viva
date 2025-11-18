@@ -7,6 +7,12 @@ const nextConfig = {
   experimental: {
     skipMiddlewareUrlNormalize: true,
   },
+  // i18n configuration for multi-language support
+  i18n: {
+    locales: ['es', 'eu', 'en', 'ca'],
+    defaultLocale: 'es',
+    localeDetection: false,
+  },
   // PWA Configuration
   headers: async () => [
     {
