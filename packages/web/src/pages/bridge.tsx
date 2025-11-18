@@ -5,6 +5,7 @@ import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 import WalletModal from '@/components/WalletModal';
 import { getI18nProps } from '@/lib/i18n';
+import { useTranslations } from 'next-intl';
 import {
   LockClosedIcon,
   LockOpenIcon,
@@ -37,6 +38,7 @@ interface BridgeTransaction {
 
 export default function BridgePage() {
   const router = useRouter();
+  const tToasts = useTranslations('toasts');
   const [loading, setLoading] = useState(false);
   const [chains, setChains] = useState<SupportedChain[]>([]);
   const [history, setHistory] = useState<BridgeTransaction[]>([]);
@@ -86,14 +88,14 @@ export default function BridgePage() {
       }
     } catch (error: any) {
       console.error('Error loading data:', error);
-      toast.error('Error cargando datos del bridge');
+      toast.error(tToasts('error.loadBridge'));
     }
   };
 
   const connectMetaMask = async () => {
     try {
       if (typeof window === 'undefined' || !(window as any).ethereum) {
-        toast.error('MetaMask no está instalado');
+        toast.error(tToasts('error.metamaskNotInstalled'));
         window.open('https://metamask.io/download/', '_blank');
         return;
       }
@@ -104,16 +106,16 @@ export default function BridgePage() {
 
       setExternalAddress(accounts[0]);
       setIsWalletModalOpen(false);
-      toast.success('MetaMask conectado');
+      toast.success(tToasts('success.walletConnected'));
     } catch (error) {
-      toast.error('Error conectando MetaMask');
+      toast.error(tToasts('error.connectWallet'));
     }
   };
 
   const connectPhantom = async () => {
     try {
       if (typeof window === 'undefined' || !(window as any).solana?.isPhantom) {
-        toast.error('Phantom no está instalado');
+        toast.error(tToasts('error.phantomNotInstalled'));
         window.open('https://phantom.app/', '_blank');
         return;
       }
@@ -123,26 +125,26 @@ export default function BridgePage() {
 
       setExternalAddress(walletAddress);
       setIsWalletModalOpen(false);
-      toast.success('Phantom conectado');
+      toast.success(tToasts('success.walletConnected'));
     } catch (error) {
-      toast.error('Error conectando Phantom');
+      toast.error(tToasts('error.connectWallet'));
     }
   };
 
   const handleBridgeLock = async () => {
     if (!amount || parseFloat(amount) <= 0) {
-      toast.error('Ingresa una cantidad válida');
+      toast.error(tToasts('error.invalidAmount'));
       return;
     }
 
     if (!externalAddress) {
-      toast.error('Conecta tu wallet primero');
+      toast.error(tToasts('error.walletNotConnected'));
       return;
     }
 
     const selectedChainData = chains.find((c) => c.chain === selectedChain);
     if (!selectedChainData) {
-      toast.error('Chain no soportada');
+      toast.error(tToasts('error.chainNotSupported'));
       return;
     }
 
@@ -154,7 +156,7 @@ export default function BridgePage() {
 
     const totalCost = amountNum + selectedChainData.fee;
     if (totalCost > semillaBalance) {
-      toast.error(`Balance insuficiente. Necesitas ${totalCost} SEMILLA (${amountNum} + ${selectedChainData.fee} fee)`);
+      toast.error(tToasts('error.insufficientBalance'));
       return;
     }
 
@@ -167,7 +169,7 @@ export default function BridgePage() {
         externalAddress,
       });
 
-      toast.success('Bridge iniciado! Los tokens llegarán en ~30 segundos');
+      toast.success(tToasts('success.bridgeStarted'));
       setAmount('');
       await loadData();
 
@@ -177,7 +179,7 @@ export default function BridgePage() {
         historySection?.scrollIntoView({ behavior: 'smooth' });
       }, 500);
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Error al crear bridge');
+      toast.error(error.response?.data?.message || tToasts('error.createBridge'));
     } finally {
       setLoading(false);
     }
@@ -185,12 +187,12 @@ export default function BridgePage() {
 
   const handleBridgeUnlock = async () => {
     if (!amount || parseFloat(amount) <= 0) {
-      toast.error('Ingresa una cantidad válida');
+      toast.error(tToasts('error.invalidAmount'));
       return;
     }
 
     if (!externalTxHash) {
-      toast.error('Ingresa el hash de la transacción');
+      toast.error(tToasts('error.txHashRequired'));
       return;
     }
 
@@ -203,12 +205,12 @@ export default function BridgePage() {
         externalTxHash,
       });
 
-      toast.success('Bridge de regreso completado!');
+      toast.success(tToasts('success.returnBridgeComplete'));
       setAmount('');
       setExternalTxHash('');
       await loadData();
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Error al desbloquear');
+      toast.error(error.response?.data?.message || tToasts('error.unlockFailed'));
     } finally {
       setLoading(false);
     }

@@ -3632,11 +3632,17 @@
       "walletConnectComingSoon": "WalletConnect laster eskuragarri",
       "coinbaseComingSoon": "Coinbase Wallet laster eskuragarri",
       "trustComingSoon": "Trust Wallet laster eskuragarri"
+    },
+    "confirmations": {
+      "deleteOffer": "Ziur zaude eskaintza hau ezabatu nahi duzula?",
+      "deleteEvent": "Ziur zaude ekitaldi hau ezabatu nahi duzula?",
+      "deleteSolution": "Ziur zaude etxebizitza-irtenbide hau ezabatu nahi duzula? Ekintza hau ezin da desegin."
     }
   },
   "confirmations": {
     "deleteOffer": "Ziur zaude eskaintza hau ezabatu nahi duzula?",
-    "deleteEvent": "Ziur zaude ekitaldi hau ezabatu nahi duzula?"
+    "deleteEvent": "Ziur zaude ekitaldi hau ezabatu nahi duzula?",
+    "deleteSolution": "Ziur zaude etxebizitza-irtenbide hau ezabatu nahi duzula? Ekintza hau ezin da desegin."
   },
   "buttons": {
     "confirm": "Berretsi",

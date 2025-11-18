@@ -4,6 +4,7 @@ import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { GiftIcon, HandRaisedIcon, CubeIcon } from '@heroicons/react/24/outline';
+import { useTranslations } from 'next-intl';
 
 interface Offer {
   id: string;
@@ -27,6 +28,7 @@ interface Offer {
 
 export default function MyOffers() {
   const queryClient = useQueryClient();
+  const tToasts = useTranslations('toasts');
   const [selectedOffer, setSelectedOffer] = useState<Offer | null>(null);
   const [showInterestedModal, setShowInterestedModal] = useState(false);
 
@@ -43,11 +45,11 @@ export default function MyOffers() {
       await api.delete(`/offers/${offerId}`);
     },
     onSuccess: () => {
-      toast.success('Oferta eliminada');
+      toast.success(tToasts('success.offerDeleted'));
       queryClient.invalidateQueries({ queryKey: ['my-offers'] });
     },
     onError: () => {
-      toast.error('Error al eliminar oferta');
+      toast.error(tToasts('error.deleteOffer'));
     },
   });
 

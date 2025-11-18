@@ -12,6 +12,7 @@ import { createEventSchema, type CreateEventFormData } from '@/lib/validations';
 export default function NewEvent() {
   const router = useRouter();
   const t = useTranslations('eventCreate');
+  const tToasts = useTranslations('toasts');
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   // Initialize form validation
@@ -149,7 +150,7 @@ export default function NewEvent() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      toast.success('Evento creado exitosamente');
+      toast.success(tToasts('success.eventCreated'));
       router.push(`/events/${response.data.id}`);
     } catch (error: unknown) {
       logger.error('Error creating event', { error });

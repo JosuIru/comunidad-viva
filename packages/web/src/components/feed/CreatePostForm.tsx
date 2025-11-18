@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 
 interface CreatePostFormProps {
   currentUser?: {
@@ -18,6 +19,7 @@ export default function CreatePostForm({
   onSubmit,
   loading = false,
 }: CreatePostFormProps) {
+  const tToasts = useTranslations('toasts');
   const [content, setContent] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [images, setImages] = useState<File[]>([]);
@@ -32,14 +34,14 @@ export default function CreatePostForm({
     // Validate file types
     const invalidFiles = files.filter(file => !file.type.match(/^image\/(jpeg|jpg|png|gif|webp)$/));
     if (invalidFiles.length > 0) {
-      toast.error('Solo se permiten imágenes (JPG, PNG, GIF, WEBP)');
+      toast.error(tToasts('error.invalidImageType'));
       return;
     }
 
     // Validate file sizes (max 5MB each)
     const oversizedFiles = files.filter(file => file.size > 5 * 1024 * 1024);
     if (oversizedFiles.length > 0) {
-      toast.error('Las imágenes deben ser menores a 5MB');
+      toast.error(tToasts('error.imageTooLarge'));
       return;
     }
 
@@ -114,7 +116,7 @@ export default function CreatePostForm({
       setShowForm(false);
     } catch (error) {
       console.error('Error creating post:', error);
-      toast.error('Error al crear la publicación');
+      toast.error(tToasts('error.createPost'));
     }
   };
 

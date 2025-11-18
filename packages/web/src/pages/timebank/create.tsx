@@ -34,6 +34,7 @@ const EXPERIENCE_LEVELS = [
 export default function CreateTimeBankOffer() {
   const router = useRouter();
   const t = useTranslations('timebank');
+  const tToasts = useTranslations('toasts');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -70,15 +71,15 @@ export default function CreateTimeBankOffer() {
     try {
       // Validación básica
       if (!formData.title.trim()) {
-        toast.error('El título es obligatorio');
+        toast.error(tToasts('error.titleRequired'));
         return;
       }
       if (!formData.description.trim()) {
-        toast.error('La descripción es obligatoria');
+        toast.error(tToasts('error.descriptionRequired'));
         return;
       }
       if (!formData.category) {
-        toast.error('Selecciona una categoría');
+        toast.error(tToasts('error.categoryRequired'));
         return;
       }
 
@@ -112,11 +113,11 @@ export default function CreateTimeBankOffer() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      toast.success('¡Servicio de tiempo creado exitosamente! 🎉');
+      toast.success(tToasts('success.timebankCreated'));
       router.push('/manage');
     } catch (error: any) {
       logger.error('Error creating time bank offer', { error, response: error.response?.data });
-      toast.error(error.response?.data?.message || 'Error al crear el servicio');
+      toast.error(error.response?.data?.message || tToasts('error.createTimebank'));
     } finally {
       setIsSubmitting(false);
     }

@@ -4,6 +4,7 @@ import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { AcademicCapIcon, SparklesIcon, TrophyIcon, TicketIcon, CalendarIcon, CheckIcon } from '@heroicons/react/24/outline';
+import { useTranslations } from 'next-intl';
 
 interface Event {
   id: string;
@@ -29,6 +30,7 @@ interface Event {
 
 export default function MyEvents() {
   const queryClient = useQueryClient();
+  const tToasts = useTranslations('toasts');
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [showAttendeesModal, setShowAttendeesModal] = useState(false);
 
@@ -45,11 +47,11 @@ export default function MyEvents() {
       await api.delete(`/events/${eventId}`);
     },
     onSuccess: () => {
-      toast.success('Evento eliminado');
+      toast.success(tToasts('success.eventDeleted'));
       queryClient.invalidateQueries({ queryKey: ['my-events'] });
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al eliminar evento');
+      toast.error(error.response?.data?.message || tToasts('error.deleteEvent'));
     },
   });
 

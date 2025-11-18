@@ -56,6 +56,7 @@ export default function EventDetailPage() {
   const queryClient = useQueryClient();
   const [isRegistering, setIsRegistering] = useState(false);
   const t = useTranslations('eventDetail');
+  const tToasts = useTranslations('toasts');
   const userLocale = router.locale || 'es';
 
   const dateFormatter = useMemo(
@@ -131,11 +132,11 @@ export default function EventDetailPage() {
   const deleteMutation = useMutation({
     mutationFn: () => api.delete(`/events/${id}`),
     onSuccess: () => {
-      toast.success('Evento eliminado exitosamente');
+      toast.success(tToasts('success.eventDeleted'));
       router.push('/events');
     },
     onError: (err: any) => {
-      const message = err.response?.data?.message || 'Error al eliminar el evento';
+      const message = err.response?.data?.message || tToasts('error.deleteEvent');
       toast.error(message);
     },
   });
@@ -167,7 +168,7 @@ export default function EventDetailPage() {
   };
 
   const handleDelete = () => {
-    if (confirm('¿Estás seguro de que quieres eliminar este evento? Esta acción no se puede deshacer.')) {
+    if (confirm(tToasts('confirmations.deleteEvent'))) {
       deleteMutation.mutate();
     }
   };

@@ -4,6 +4,7 @@ import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 import {
   ArrowLeftIcon,
   PaperAirplaneIcon,
@@ -31,6 +32,7 @@ interface FlowPreview {
 }
 
 export default function FlowSendPage() {
+  const tToasts = useTranslations('toasts');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [amount, setAmount] = useState('');
@@ -70,24 +72,24 @@ export default function FlowSendPage() {
       return response.data;
     },
     onSuccess: () => {
-      toast.success('¡Créditos enviados con éxito! 🎉');
+      toast.success(tToasts('success.creditsSent'));
       setSelectedUser(null);
       setAmount('');
       setMessage('');
       setSearchTerm('');
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al enviar créditos');
+      toast.error(error.response?.data?.message || tToasts('error.sendCredits'));
     },
   });
 
   const handleSend = () => {
     if (!selectedUser) {
-      toast.error('Selecciona un destinatario');
+      toast.error(tToasts('error.selectRecipient'));
       return;
     }
     if (!amount || parseFloat(amount) <= 0) {
-      toast.error('Ingresa una cantidad válida');
+      toast.error(tToasts('error.invalidAmount'));
       return;
     }
     sendMutation.mutate();

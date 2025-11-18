@@ -139,6 +139,7 @@ export default function CommunityDetailPage() {
   const [userCommunityId, setUserCommunityId] = useState<string | null>(null);
   const t = useTranslations('communityDetail');
   const tCommon = useTranslations('communities');
+  const tToasts = useTranslations('toasts');
 
   useEffect(() => {
     const userStr = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
@@ -212,7 +213,7 @@ export default function CommunityDetailPage() {
       return response.data;
     },
     onSuccess: () => {
-      toast.success('Has abandonado la comunidad correctamente');
+      toast.success(tToasts('success.communityLeft'));
       queryClient.invalidateQueries({ queryKey: ['community', slug] });
 
       // Invalidate user queries to update profile and other pages
@@ -224,7 +225,7 @@ export default function CommunityDetailPage() {
       setShowLeaveModal(false);
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al abandonar la comunidad');
+      toast.error(error.response?.data?.message || tToasts('error.leaveCommunity'));
     },
   });
 

@@ -3632,11 +3632,17 @@
       "walletConnectComingSoon": "WalletConnect próximamente disponible",
       "coinbaseComingSoon": "Coinbase Wallet próximamente disponible",
       "trustComingSoon": "Trust Wallet próximamente disponible"
+    },
+    "confirmations": {
+      "deleteOffer": "¿Estás seguro de que deseas eliminar esta oferta?",
+      "deleteEvent": "¿Estás seguro de que deseas eliminar este evento?",
+      "deleteSolution": "¿Estás seguro de que quieres eliminar esta solución de vivienda? Esta acción no se puede deshacer."
     }
   },
   "confirmations": {
     "deleteOffer": "¿Estás seguro de que deseas eliminar esta oferta?",
-    "deleteEvent": "¿Estás seguro de que deseas eliminar este evento?"
+    "deleteEvent": "¿Estás seguro de que deseas eliminar este evento?",
+    "deleteSolution": "¿Estás seguro de que quieres eliminar esta solución de vivienda? Esta acción no se puede deshacer."
   },
   "buttons": {
     "confirm": "Confirmar",

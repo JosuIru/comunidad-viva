@@ -41,6 +41,7 @@ export default function OfferDetailPage() {
   const { id } = router.query;
   const queryClient = useQueryClient();
   const t = useTranslations('offerDetail');
+  const tToasts = useTranslations('toasts');
   const userLocale = router.locale || 'es';
   const numberFormatter = useMemo(
     () =>
@@ -102,11 +103,11 @@ export default function OfferDetailPage() {
   const deleteMutation = useMutation({
     mutationFn: () => api.delete(`/offers/${id}`),
     onSuccess: () => {
-      toast.success('Oferta eliminada exitosamente');
+      toast.success(tToasts('success.offerDeleted'));
       router.push('/offers');
     },
     onError: (err: any) => {
-      const message = err.response?.data?.message || 'Error al eliminar la oferta';
+      const message = err.response?.data?.message || tToasts('error.deleteOffer');
       toast.error(message);
     },
   });
@@ -116,7 +117,7 @@ export default function OfferDetailPage() {
   };
 
   const handleDelete = () => {
-    if (confirm('¿Estás seguro de que quieres eliminar esta oferta? Esta acción no se puede deshacer.')) {
+    if (confirm(tToasts('confirmations.deleteOffer'))) {
       deleteMutation.mutate();
     }
   };

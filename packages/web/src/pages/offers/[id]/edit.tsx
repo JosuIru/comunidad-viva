@@ -33,6 +33,7 @@ export default function EditOfferPage() {
   const router = useRouter();
   const { id } = router.query;
   const t = useTranslations('offerCreate');
+  const tToasts = useTranslations('toasts');
   const queryClient = useQueryClient();
 
   const [formData, setFormData] = useState({
@@ -91,12 +92,12 @@ export default function EditOfferPage() {
       return response.data;
     },
     onSuccess: () => {
-      toast.success('Oferta actualizada exitosamente');
+      toast.success(tToasts('success.offerUpdated'));
       queryClient.invalidateQueries({ queryKey: ['offer', id] });
       router.push(`/offers/${id}`);
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al actualizar la oferta');
+      toast.error(error.response?.data?.message || tToasts('error.updateOffer'));
     },
   });
 
@@ -153,7 +154,7 @@ export default function EditOfferPage() {
         uploadedUrls.push(response.data.url);
       } catch (error) {
         console.error('Error uploading image:', error);
-        toast.error(`Error al subir imagen: ${image.name}`);
+        toast.error(`${tToasts('error.uploadImage')}: ${image.name}`);
       }
     }
 
@@ -187,7 +188,7 @@ export default function EditOfferPage() {
 
       updateMutation.mutate(payload);
     } catch (error) {
-      toast.error('Error al actualizar la oferta');
+      toast.error(tToasts('error.updateOffer'));
     }
   };
 

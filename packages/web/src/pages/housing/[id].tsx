@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
@@ -23,6 +24,7 @@ export default function HousingSolutionDetailPage() {
   const router = useRouter();
   const { id } = router.query;
   const queryClient = useQueryClient();
+  const tToasts = useTranslations('toasts');
   const [showJoinModal, setShowJoinModal] = useState(false);
 
   // Form data for different solution types
@@ -79,7 +81,7 @@ export default function HousingSolutionDetailPage() {
       return response.data;
     },
     onSuccess: () => {
-      toast.success('¡Te has unido exitosamente!');
+      toast.success(tToasts('success.joinedSuccessfully'));
       queryClient.invalidateQueries({ queryKey: ['housing-solution', id] });
       setShowJoinModal(false);
       // Reset form
@@ -96,7 +98,7 @@ export default function HousingSolutionDetailPage() {
       });
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al unirse');
+      toast.error(error.response?.data?.message || tToasts('error.joinFailed'));
     },
   });
 
@@ -111,11 +113,11 @@ export default function HousingSolutionDetailPage() {
       return await api.delete(endpoint);
     },
     onSuccess: () => {
-      toast.success('Solución eliminada exitosamente');
+      toast.success(tToasts('success.solutionDeleted'));
       router.push('/housing');
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al eliminar');
+      toast.error(error.response?.data?.message || tToasts('error.deleteSolution'));
     },
   });
 
@@ -134,7 +136,7 @@ export default function HousingSolutionDetailPage() {
   };
 
   const handleDelete = () => {
-    if (confirm('¿Estás seguro de que quieres eliminar esta solución de vivienda? Esta acción no se puede deshacer.')) {
+    if (confirm(tToasts('confirmations.deleteSolution'))) {
       deleteMutation.mutate();
     }
   };

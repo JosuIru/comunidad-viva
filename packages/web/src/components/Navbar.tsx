@@ -48,6 +48,7 @@ export default function Navbar() {
   const tAuth = useTranslations('auth');
   const tCommon = useTranslations('common');
   const tCredits = useTranslations('credits');
+  const tToasts = useTranslations('toasts');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showPlatformMenu, setShowPlatformMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -156,11 +157,11 @@ export default function Navbar() {
         delete user.walletType;
         localStorage.setItem('user', JSON.stringify(user));
         setWalletAddress(null);
-        toast.success('Wallet desconectada exitosamente');
+        toast.success(tToasts('success.walletDisconnected'));
       }
     } catch (error: any) {
       logger.error('Error disconnecting wallet', { error, response: error.response?.data });
-      toast.error(error.response?.data?.message || 'Error al desconectar wallet');
+      toast.error(error.response?.data?.message || tToasts('error.disconnectWallet'));
     }
     setShowWalletMenu(false);
   };
@@ -171,7 +172,7 @@ export default function Navbar() {
 
   const connectMetaMask = async () => {
     if (typeof window === 'undefined' || !window.ethereum) {
-      toast.error('MetaMask no está instalado');
+      toast.error(tToasts('error.metamaskNotInstalled'));
       return;
     }
 
@@ -216,20 +217,20 @@ export default function Navbar() {
         setWalletAddress(walletAddressToLink);
       }
 
-      toast.success('Wallet conectada exitosamente');
+      toast.success(tToasts('success.walletConnected'));
     } catch (error: any) {
       logger.error('MetaMask connection failed', {
         error,
         message: error.message,
         response: error.response?.data
       });
-      toast.error(error.response?.data?.message || error.message || 'Error al conectar wallet');
+      toast.error(error.response?.data?.message || error.message || tToasts('error.connectWallet'));
     }
   };
 
   const connectPhantom = async () => {
     if (typeof window === 'undefined' || !window.solana?.isPhantom) {
-      toast.error('Phantom no está instalado');
+      toast.error(tToasts('error.phantomNotInstalled'));
       return;
     }
 
@@ -270,14 +271,14 @@ export default function Navbar() {
         setWalletAddress(walletAddressToLink);
       }
 
-      toast.success('Wallet conectada exitosamente');
+      toast.success(tToasts('success.walletConnected'));
     } catch (error: any) {
       logger.error('Phantom wallet connection failed', {
         error,
         message: error.message,
         response: error.response?.data
       });
-      toast.error(error.response?.data?.message || error.message || 'Error al conectar wallet');
+      toast.error(error.response?.data?.message || error.message || tToasts('error.connectWallet'));
     }
   };
 
@@ -312,10 +313,10 @@ export default function Navbar() {
       isInstalled: false,
       installUrl: 'https://walletconnect.com/',
       onConnect: async () => {
-        toast.info('WalletConnect próximamente disponible');
+        toast.info(tToasts('info.walletConnectComingSoon'));
       },
     },
-  ], [connectMetaMask, connectPhantom]);
+  ], [connectMetaMask, connectPhantom, tToasts]);
 
   return (
     <>

@@ -7,6 +7,7 @@ import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import { createHousingSchema, type CreateHousingFormData } from '@/lib/validations';
+import { useTranslations } from 'next-intl';
 
 const SOLUTION_TYPES = [
   { value: 'SPACE_BANK', label: 'Banco de Espacios', description: 'Intercambio temporal de espacios habitables' },
@@ -17,6 +18,7 @@ const SOLUTION_TYPES = [
 
 export default function NewHousingSolutionPage() {
   const router = useRouter();
+  const tToasts = useTranslations('toasts');
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [solutionType, setSolutionType] = useState<string>('SPACE_BANK');
 
@@ -55,11 +57,11 @@ export default function NewHousingSolutionPage() {
       return response.data;
     },
     onSuccess: (data) => {
-      toast.success('Solución de vivienda creada exitosamente');
+      toast.success(tToasts('success.housingCreated'));
       router.push(`/housing/${data.id}`);
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al crear la solución');
+      toast.error(error.response?.data?.message || tToasts('error.createHousing'));
     },
   });
 
