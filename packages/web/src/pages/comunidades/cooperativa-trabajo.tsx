@@ -6,4 +6,4 @@ export default function CooperativaTrabajoPage() {
   return <PackLandingPage pack={WORKER_COOP_PACK} />;
 }
 
-export const getStaticProps = getI18nProps;
+export const getStaticProps = async (context: any) => getI18nProps(context);

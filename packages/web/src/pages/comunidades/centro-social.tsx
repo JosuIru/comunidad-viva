@@ -6,4 +6,4 @@ export default function CentroSocialPage() {
   return <PackLandingPage pack={SOCIAL_CENTER_PACK} />;
 }
 
-export const getStaticProps = getI18nProps;
+export const getStaticProps = async (context: any) => getI18nProps(context);

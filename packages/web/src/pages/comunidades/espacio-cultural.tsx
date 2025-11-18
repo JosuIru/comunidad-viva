@@ -6,4 +6,4 @@ export default function EspacioCulturalPage() {
   return <PackLandingPage pack={CULTURAL_SPACE_PACK} />;
 }
 
-export const getStaticProps = getI18nProps;
+export const getStaticProps = async (context: any) => getI18nProps(context);

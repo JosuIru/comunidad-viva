@@ -190,4 +190,4 @@ export default function CommunityPacksIndex() {
   );
 }
 
-export const getStaticProps = getI18nProps;
+export const getStaticProps = async (context: any) => getI18nProps(context);

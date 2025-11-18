@@ -285,4 +285,4 @@ function BadgeCard({ badge, isUnlocked, index }: BadgeCardProps) {
   );
 }
 
-export const getStaticProps = getI18nProps;
+export const getStaticProps = async (context: any) => getI18nProps(context);
