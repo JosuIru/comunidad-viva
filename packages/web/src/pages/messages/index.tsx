@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { getI18nProps } from '@/lib/i18n';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -24,6 +25,8 @@ interface Conversation {
 }
 
 export default function Messages() {
+  const t = useTranslations('messages');
+  const tCommon = useTranslations('common');
   const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
 
   const { data: conversations, isLoading } = useQuery<Conversation[]>({
@@ -62,9 +65,9 @@ export default function Messages() {
       <Layout>
         <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
-            <p className="text-yellow-800">Debes iniciar sesión para ver tus mensajes</p>
+            <p className="text-yellow-800">{t('loginToView')}</p>
             <Link href="/auth/login" className="text-green-600 hover:underline mt-2 inline-block">
-              Ir a login
+              {tCommon('goToLogin')}
             </Link>
           </div>
         </div>
@@ -75,16 +78,16 @@ export default function Messages() {
   return (
     <Layout>
       <Head>
-        <title>Mensajes - Truk</title>
+        <title>{t('title')} - Truk</title>
       </Head>
 
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">Mensajes</h1>
+        <h1 className="text-3xl font-bold mb-6">{t('title')}</h1>
 
         {isLoading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-green-600"></div>
-            <p className="mt-4 text-gray-600">Cargando conversaciones...</p>
+            <p className="mt-4 text-gray-600">{t('loadingConversations')}</p>
           </div>
         ) : conversations && conversations.length > 0 ? (
           <div className="bg-white rounded-lg shadow divide-y divide-gray-200">
@@ -150,9 +153,9 @@ export default function Messages() {
                 d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
               />
             </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No tienes conversaciones</h3>
+            <h3 className="mt-2 text-sm font-medium text-gray-900">{t('noConversations')}</h3>
             <p className="mt-1 text-sm text-gray-500">
-              Cuando alguien te envíe un mensaje, aparecerá aquí.
+              {t('noConversationsDesc')}
             </p>
           </div>
         )}

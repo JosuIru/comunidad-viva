@@ -73,7 +73,7 @@
     "filter": "Filtrar",
     "loading": "Carregant...",
     "loadingOffers": "Carregant ofertes...",
-    "error": "S'ha produït un error",
+    "error": "Error",
     "success": "Èxit!",
     "noResults": "No s'han trobat resultats",
     "viewMore": "Veure més",
@@ -81,7 +81,22 @@
     "noImage": "Sense imatge",
     "credits": "crèdits",
     "views": "visualitzacions",
-    "filters": "Filtres"
+    "filters": "Filtres",
+    "back": "Enrere",
+    "create": "Crear",
+    "send": "Enviar",
+    "confirm": "Confirmar",
+    "yes": "Sí",
+    "no": "No",
+    "share": "Compartir",
+    "copy": "Copiar",
+    "copied": "Copiat",
+    "showLess": "Veure menys",
+    "loginRequired": "Has d'iniciar sessió",
+    "goToLogin": "Anar a login",
+    "notFound": "No trobat",
+    "results": "resultats",
+    "result": "resultat"
   },
   "offers": {
     "title": "Ofertes",
@@ -128,7 +143,9 @@
     "credits": "crèdits",
     "attendees": "assistents",
     "organizedBy": "Organitzat per",
-    "organizer": "Organitzador"
+    "organizer": "Organitzador",
+    "notFound": "Esdeveniment no trobat",
+    "editEvent": "Editar Esdeveniment"
   },
   "credits": {
     "balance": "Saldo",
@@ -142,7 +159,28 @@
     "myProfile": "El meu perfil",
     "editProfile": "Editar perfil",
     "settings": "Configuració",
-    "language": "Idioma"
+    "language": "Idioma",
+    "title": "Perfil",
+    "loadingProfile": "Carregant perfil...",
+    "notFound": "Usuari no trobat",
+    "notFoundDesc": "No hem pogut trobar aquest perfil.",
+    "generosityPoints": "{points} punts de generositat",
+    "credits": "{credits} crèdits",
+    "statistics": "Estadístiques",
+    "donated": "DONADES",
+    "hoursShared": "Hores compartides",
+    "received": "REBUDES",
+    "hoursReceived": "Hores rebudes",
+    "score": "PUNTUACIÓ",
+    "generosity": "Generositat",
+    "memberSince": "Membre des de",
+    "connect": "Connectar",
+    "sendMessage": "Enviar Missatge",
+    "bio": "Biografia",
+    "location": "Ubicació",
+    "skills": "Habilitats",
+    "bioPlaceholder": "Explica'ns una mica sobre tu...",
+    "locationPlaceholder": "Carrer, Ciutat, País"
   },
   "manage": {
     "title": "Gestionar",
@@ -1130,7 +1168,34 @@
     "noLocations": "No hi ha ubicacions per mostrar",
     "groupbuy": {
       "fallbackTitle": "Compra Col·lectiva"
-    }
+    },
+    "discover": "Descobreix",
+    "myActivity": "La meva Activitat",
+    "community": "Comunitat",
+    "customize": "Personalitzar",
+    "customizeDashboard": "Personalitzar Tauler",
+    "map": "Mapa",
+    "feed": "Feed",
+    "viewFullscreen": "Veure en pantalla completa",
+    "closeFullscreen": "Tancar pantalla completa",
+    "helpTour": "Veure tour d'ajuda",
+    "dailyCredits": "Guanya crèdits diaris!",
+    "customizeSearch": "Personalitza la teva cerca",
+    "interactiveMap": "Mapa Interactiu",
+    "hideFilters": "Amagar filtres",
+    "showFilters": "Mostrar filtres",
+    "hide": "Amagar",
+    "filters": "Filtres",
+    "help": "Ajuda",
+    "yourCommunity": "La teva Comunitat",
+    "communityImpact": "L'impacte que estem generant junts",
+    "communityMetrics": "Mètriques Comunitàries",
+    "dailySeed": "La teva Llavor Diària",
+    "upcomingEvents": "Propers Esdeveniments",
+    "yourLocation": "La teva ubicació",
+    "searchingAround": "Cercant en {radius}km al voltant",
+    "searchingFrom": "Cercant en {radius}km des d'aquesta comunitat",
+    "customLocationSearch": "Ubicació personalitzada"
   },
   "map": {
     "loading": "Carregant mapa...",
@@ -1236,7 +1301,10 @@
     "roles": {
       "provider": "Proveïdor",
       "requester": "Sol·licitant"
-    }
+    },
+    "servicePlaceholder": "Ex: Classes de català, Reparació de bicicletes, Ajuda amb mudança...",
+    "serviceDescPlaceholder": "Descriu quin servei ofereixes, què inclou, requisits previs, etc.",
+    "describeNeed": "Descriu què necessites..."
   },
   "managePage": {
     "description": "Administra les teves ofertes, esdeveniments i perfil en un sol lloc"
@@ -1330,7 +1398,19 @@
       "SOCIAL": "Social",
       "OTHER": "Altre"
     },
-    "progress": "Progrés"
+    "progress": "Progrés",
+    "needTitlePlaceholder": "Ex: Necessito ajuda amb...",
+    "needDescPlaceholder": "Descriu la teva necessitat amb el màxim detall possible...",
+    "projectTitlePlaceholder": "Ex: Escola a Ghana",
+    "projectDescPlaceholder": "Descriu el projecte en detall...",
+    "impactPlaceholder": "Quin impacte vols aconseguir amb aquest projecte?",
+    "cityPlaceholder": "Ciutat",
+    "countryPlaceholder": "País",
+    "regionPlaceholder": "Regió/Estat",
+    "beneficiariesPlaceholder": "Nombre de persones",
+    "goalsPlaceholder": "Un objectiu per línia...",
+    "skillsPlaceholder": "Una habilitat per línia...",
+    "supportMessagePlaceholder": "Escriu un missatge de suport..."
   },
   "eventCreate": {
     "layout": {
@@ -1500,116 +1580,7 @@
     }
   },
   "governance": {
-    "proposals": {
-      "layout": {
-        "title": "Propostes Comunitàries - Truk"
-      },
-      "header": {
-        "title": "🏛️ Propostes Comunitàries",
-        "subtitle": "Sistema de governança descentralitzada - Proof of Help"
-      },
-      "reputation": {
-        "title": "La teva Reputació",
-        "level": "Nou",
-        "privilegesTitle": "Privilegis",
-        "requirementInfo": "💡 Necessites reputació 20+ per crear propostes. Actual: {current}"
-      },
-      "toasts": {
-        "createSuccess": "Proposta creada correctament!",
-        "createError": "Error en crear la proposta",
-        "voteSuccess": "Vot registrat correctament!",
-        "voteError": "Error en votar",
-        "reputationRequired": "Necessites reputació 20+ per crear propostes"
-      },
-      "filters": {
-        "all": "Totes",
-        "discussion": "En Discussió",
-        "voting": "Votació",
-        "approved": "Aprovades"
-      },
-      "buttons": {
-        "newProposal": "+ Nova Proposta"
-      },
-      "loading": "Carregant...",
-      "empty": {
-        "title": "No hi ha propostes",
-        "description": "Sigues el primer a crear una proposta comunitària",
-        "button": "Crear Primera Proposta"
-      },
-      "status": {
-        "DISCUSSION": "En Discussió",
-        "VOTING": "Votació Activa",
-        "APPROVED": "Aprovada",
-        "REJECTED": "Rebutjada"
-      },
-      "type": {
-        "FEATURE": "✨ Nova Funcionalitat",
-        "RULE_CHANGE": "⚖️ Canvi de Regles",
-        "FUND_ALLOCATION": "💰 Assignació de Fons",
-        "PARTNERSHIP": "🤝 Associació"
-      },
-      "meta": {
-        "author": "Anònim",
-        "budget": "€{amount}"
-      },
-      "voting": {
-        "votesFor": "A favor: {count}",
-        "votesAgainst": "En contra: {count}"
-      },
-      "actions": {
-        "viewDetails": "Veure Detalls",
-        "voteNow": "Votar Ara",
-        "alreadyVoted": "✓ Ja has votat"
-      },
-      "form": {
-        "title": {
-          "label": "Títol",
-          "placeholder": "Títol concís de la teva proposta"
-        },
-        "description": {
-          "label": "Descripció",
-          "placeholder": "Descriu detalladament la teva proposta"
-        },
-        "implementation": {
-          "label": "Pla d'Implementació",
-          "placeholder": "Com s'implementarà aquesta proposta?"
-        },
-        "budget": {
-          "label": "Pressupost Requerit (€)",
-          "placeholder": "0"
-        },
-        "typeLabel": "Tipus de Proposta",
-        "typeOptions": {
-          "FEATURE": "Nova Funcionalitat",
-          "RULE_CHANGE": "Canvi de Regles",
-          "FUND_ALLOCATION": "Assignació de Fons",
-          "PARTNERSHIP": "Associació"
-        },
-        "processInfo": {
-          "title": "📋 Procés de Proposta",
-          "step1": "Fase de discussió: 3 dies",
-          "step2": "Fase de votació: 4 dies",
-          "step3": "Si arriba al llindar (10% usuaris actius) → Aprovada"
-        },
-        "cancel": "Cancel·lar",
-        "submit": "Crear Proposta",
-        "submitting": "Creant..."
-      },
-      "voteModal": {
-        "title": "Votar Proposta",
-        "quadraticTitle": "📊 Votació Quadràtica",
-        "quadraticInfo": "El cost de votar augmenta quadràticament: Votar 1 punt = 1 crèdit, 5 punts = 25 crèdits, 10 punts = 100 crèdits",
-        "pointsLabel": "Punts a votar: {points}",
-        "costLabel": "Cost:",
-        "costAmount": "{cost} crèdits",
-        "cancel": "Cancel·lar",
-        "confirm": "Confirmar Vot",
-        "confirming": "Votant..."
-      },
-      "modal": {
-        "newProposal": "Nova Proposta Comunitària"
-      }
-    },
+    "proposals": "Propostes",
     "delegation": {
       "layout": {
         "title": "Delegació de Vots - Truk"
@@ -1659,7 +1630,20 @@
         "revokeSuccess": "Delegació revocada correctament",
         "revokeError": "Error en revocar delegació"
       }
-    }
+    },
+    "title": "Governança Comunitària",
+    "loadingProposals": "Carregant propostes...",
+    "createProposal": "Crear Proposta",
+    "proposalTitlePlaceholder": "Ex: Crear un hort comunitari",
+    "proposalDescPlaceholder": "Descriu la teva proposta detalladament...",
+    "loginToVote": "Has d'iniciar sessió per votar",
+    "loginToCreate": "Has d'iniciar sessió per crear propostes",
+    "keep": "Mantenir",
+    "keepDesc": "El contingut no viola les regles de la comunitat",
+    "warn": "Advertir",
+    "warnDesc": "Enviar una advertència a l'autor del contingut",
+    "remove": "Eliminar",
+    "removeDesc": "El contingut viola les regles i s'ha d'eliminar"
   },
   "groupBuyDetail": {
     "errors": {
@@ -1971,7 +1955,7 @@
     "filters": {
       "all": "Totes"
     },
-    "capacity": "Capacitat:",
+    "capacity": "Capacitat",
     "capacityPeople": "persones",
     "members": "membres",
     "monthlyContribution": "€/mes",
@@ -1979,7 +1963,16 @@
       "title": "No hi ha solucions d'habitatge disponibles",
       "description": "Sigues el primer a crear una solució d'habitatge comunitari",
       "button": "Crear Solució"
-    }
+    },
+    "titlePlaceholder": "Ex: Pis compartit al centre",
+    "descPlaceholder": "Descriu els detalls d'aquesta solució d'habitatge...",
+    "locationPlaceholder": "Ex: Barcelona, Espanya",
+    "capacityPlaceholder": "Persones",
+    "amenitiesPlaceholder": "Una comoditat per línia...",
+    "requirementsPlaceholder": "Un requisit per línia...",
+    "rulesPlaceholder": "Una norma per línia...",
+    "whyJoinPlaceholder": "Explica'ns per què vols unir-te...",
+    "skillsPlaceholder": "ex: fusteria, disseny, comptabilitat"
   },
   "docs": {
     "title": "Documentació - Comunitat Viva",
@@ -3201,7 +3194,15 @@
         "title": "Per què són anònimes?",
         "description": "Les celebracions són anònimes per protegir la dignitat de qui rep i la humilitat de qui dóna. L'important no és qui va participar, sinó que la comunitat es va unir per satisfer una necessitat. Així celebrem la solidaritat sense assenyalar ningú."
       }
-    }
+    },
+    "celebrationsTitle": "Celebracions i Esdeveniments",
+    "createBridgeEvent": "Crear Esdeveniment Pont",
+    "eventName": "Nom de l'Esdeveniment",
+    "eventNamePlaceholder": "Ex: Diàleg entre Capes Econòmiques",
+    "eventDescPlaceholder": "Descriu el propòsit i activitats de l'esdeveniment",
+    "dateTime": "Data i Hora",
+    "venuePlaceholder": "Ex: Centre Comunitari, Carrer Principal 123",
+    "locationOptional": "Ubicació (opcional)"
   },
   "economy": {
     "dashboard": {
@@ -3795,7 +3796,17 @@
     "circuitBreakerClosed": "Circuit Breaker TANCAT - Operacions del bridge represes",
     "entryAdded": "{type} afegit a la llista negra",
     "entryRemoved": "Entrada eliminada de la llista negra",
-    "packComplete": "Pack configurat correctament!"
+    "packComplete": "Pack configurat correctament!",
+    "title": "Missatges",
+    "loadingConversations": "Carregant converses...",
+    "loadingMessages": "Carregant missatges...",
+    "noConversations": "No tens converses",
+    "noConversationsDesc": "Quan algú t'enviï un missatge, apareixerà aquí.",
+    "noMessages": "Encara no hi ha missatges",
+    "noMessagesDesc": "Envia el primer missatge per començar la conversa",
+    "placeholder": "Escriu un missatge...",
+    "sendMessage": "Enviar Missatge",
+    "loginToView": "Has d'iniciar sessió per veure els teus missatges"
   },
   "admin": {
     "bridge": {
@@ -3869,7 +3880,21 @@
       "buttons": {
         "claim": "Reclamar 100 SEMILLA"
       }
-    }
+    },
+    "nodeId": "Node ID: {id}",
+    "protocol": "Protocol: {protocol} • Versió: {version}",
+    "currentNode": "Node Actual",
+    "semillaEconomy": "Economia SEMILLA",
+    "totalSupply": "Subministrament Total",
+    "transactions": "Transaccions",
+    "activeUsers": "Usuaris Actius",
+    "averageBalance": "Balanç Mitjà",
+    "status": "Estat",
+    "created": "Creat",
+    "copyDid": "Copiar DID",
+    "sendSemilla": "Enviar SEMILLA",
+    "recipientPlaceholder": "did:gailu:node:user:uuid",
+    "reasonPlaceholder": "Pagament per serveis, donació, etc."
   },
   "flow": {
     "poolRequests": {
@@ -3979,5 +4004,102 @@
     "availableServices": "Serveis disponibles",
     "upcomingEvents": "Esdeveniments propers",
     "localMerchants": "Comerços locals"
+  },
+  "forms": {
+    "title": "Títol",
+    "description": "Descripció",
+    "name": "Nom",
+    "email": "Email",
+    "password": "Contrasenya",
+    "location": "Ubicació",
+    "category": "Categoria",
+    "tags": "Etiquetes",
+    "tagsPlaceholder": "Afegeix etiquetes i prem Enter",
+    "tagsSeparated": "Separades per comes",
+    "image": "Imatge",
+    "images": "Imatges",
+    "currentImage": "Imatge actual:",
+    "addPhoto": "Afegir foto",
+    "latitude": "Latitud",
+    "longitude": "Longitud",
+    "latitudeCoord": "Coordenada de latitud",
+    "longitudeCoord": "Coordenada de longitud",
+    "maxAttendees": "Màxim d'assistents",
+    "noLimit": "Sense límit",
+    "leaveEmptyNoLimit": "Deixar buit per sense límit",
+    "creditsReward": "Crèdits que guanyaran els assistents",
+    "creating": "Creant...",
+    "saving": "Desant...",
+    "sending": "Enviant...",
+    "tipsForEvent": "Consells per al teu esdeveniment:"
+  },
+  "empty": {
+    "noOffers": "No hi ha ofertes disponibles",
+    "noEvents": "No hi ha esdeveniments propers",
+    "noProposals": "Encara no hi ha propostes",
+    "noRequests": "No hi ha sol·licituds",
+    "noRequestsStatus": "No hi ha sol·licituds amb estat \"{status}\"",
+    "noChallenges": "No hi ha repte actiu",
+    "noFlashDeals": "No hi ha Flash Deals actius",
+    "noMoreProfiles": "No hi ha més perfils ara",
+    "noDelegates": "No hi ha delegats disponibles",
+    "noDelegations": "No tens delegacions actives",
+    "noCelebrations": "No hi ha celebracions recents",
+    "noBridges": "Encara no has fet cap bridge"
+  },
+  "social": {
+    "loadingPost": "Carregant publicació...",
+    "postNotFound": "Publicació no trobada",
+    "writeComment": "Escriu un comentari...",
+    "deletePost": "Eliminar publicació",
+    "deleteReview": "Eliminar ressenya",
+    "whatAreYouThinking": "Què estàs pensant?",
+    "shareExperience": "Comparteix la teva experiència...",
+    "inspireOthers": "Això ajudarà a inspirar altres..."
+  },
+  "gamification": {
+    "achievements": "Assoliments i Badges",
+    "unlockedBadges": "Badges Desbloquejats",
+    "completed": "Completat",
+    "totalPoints": "Punts Totals",
+    "earnCredits": "Guanya Crèdits",
+    "weeklyChallenge": "Setmana Solidària",
+    "ecoWarrior": "Guerrer Ecològic",
+    "tradeMaster": "Mestre d'Intercanvis",
+    "notInterested": "No m'interessa",
+    "interested": "M'interessa",
+    "createGroupBuy": "Crear Compra Grupal",
+    "productNamePlaceholder": "Ex: Pack de productes orgànics",
+    "productDescPlaceholder": "Descriu què inclou la compra grupal",
+    "specificProductPlaceholder": "Nom específic del producte"
+  },
+  "circles": {
+    "myActiveCircles": "Els meus Cercles Actius",
+    "circleTypes": "Tipus de Cercles:",
+    "features": "Característiques:",
+    "locationPlaceholder": "Ex: Zoom / Barcelona"
+  },
+  "network": {
+    "networkMap": "Mapa de la Xarxa",
+    "activeConnections": "Connexions Actives",
+    "averageStrength": "Força Mitjana"
+  },
+  "bridge": {
+    "title": "Bridge - SEMILLA Multi-Chain",
+    "sendSemilla": "Enviar SEMILLA",
+    "connectWallet": "Connectar cartera",
+    "connectWalletTitle": "Connectar Cartera Web3",
+    "connectWalletSubtitle": "Tria la teva cartera per connectar al Bridge i enviar tokens entre cadenes"
+  },
+  "pools": {
+    "explainNeed": "Explica per què necessites aquest suport i com t'ajudarà...",
+    "sendRequest": "Enviar Sol·licitud",
+    "explainDecision": "Explica la teva decisió..."
+  },
+  "feedback": {
+    "placeholder": "Explica'ns què t'ha agradat o què podríem millorar..."
+  },
+  "proximity": {
+    "locationPlaceholder": "Ex: Barcelona, Girona, Tarragona..."
   }
 }

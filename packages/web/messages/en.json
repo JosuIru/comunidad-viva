@@ -73,7 +73,7 @@
     "filter": "Filter",
     "loading": "Loading...",
     "loadingOffers": "Loading offers...",
-    "error": "An error occurred",
+    "error": "Error",
     "success": "Success!",
     "noResults": "No results found",
     "viewMore": "View more",
@@ -81,7 +81,22 @@
     "noImage": "No image",
     "credits": "credits",
     "views": "views",
-    "filters": "Filters"
+    "filters": "Filters",
+    "back": "Back",
+    "create": "Create",
+    "send": "Send",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "share": "Share",
+    "copy": "Copy",
+    "copied": "Copied",
+    "showLess": "Show less",
+    "loginRequired": "You must log in",
+    "goToLogin": "Go to login",
+    "notFound": "Not found",
+    "results": "results",
+    "result": "result"
   },
   "offers": {
     "title": "Offers",
@@ -128,7 +143,9 @@
     "credits": "credits",
     "attendees": "attendees",
     "organizedBy": "Organized by",
-    "organizer": "Organizer"
+    "organizer": "Organizer",
+    "notFound": "Event not found",
+    "editEvent": "Edit Event"
   },
   "credits": {
     "balance": "Balance",
@@ -142,7 +159,28 @@
     "myProfile": "My profile",
     "editProfile": "Edit profile",
     "settings": "Settings",
-    "language": "Language"
+    "language": "Language",
+    "title": "Profile",
+    "loadingProfile": "Loading profile...",
+    "notFound": "User not found",
+    "notFoundDesc": "We couldn't find this profile.",
+    "generosityPoints": "{points} generosity points",
+    "credits": "{credits} credits",
+    "statistics": "Statistics",
+    "donated": "DONATED",
+    "hoursShared": "Hours shared",
+    "received": "RECEIVED",
+    "hoursReceived": "Hours received",
+    "score": "SCORE",
+    "generosity": "Generosity",
+    "memberSince": "Member since",
+    "connect": "Connect",
+    "sendMessage": "Send Message",
+    "bio": "Bio",
+    "location": "Location",
+    "skills": "Skills",
+    "bioPlaceholder": "Tell us a bit about yourself...",
+    "locationPlaceholder": "Street, City, Country"
   },
   "manage": {
     "title": "Manage",
@@ -1130,7 +1168,34 @@
     "noLocations": "No locations to display",
     "groupbuy": {
       "fallbackTitle": "Group Purchase"
-    }
+    },
+    "discover": "Discover",
+    "myActivity": "My Activity",
+    "community": "Community",
+    "customize": "Customize",
+    "customizeDashboard": "Customize Dashboard",
+    "map": "Map",
+    "feed": "Feed",
+    "viewFullscreen": "View in fullscreen",
+    "closeFullscreen": "Close fullscreen",
+    "helpTour": "View help tour",
+    "dailyCredits": "Earn daily credits!",
+    "customizeSearch": "Customize your search",
+    "interactiveMap": "Interactive Map",
+    "hideFilters": "Hide filters",
+    "showFilters": "Show filters",
+    "hide": "Hide",
+    "filters": "Filters",
+    "help": "Help",
+    "yourCommunity": "Your Community",
+    "communityImpact": "The impact we're generating together",
+    "communityMetrics": "Community Metrics",
+    "dailySeed": "Your Daily Seed",
+    "upcomingEvents": "Upcoming Events",
+    "yourLocation": "Your location",
+    "searchingAround": "Searching within {radius}km",
+    "searchingFrom": "Searching {radius}km from this community",
+    "customLocationSearch": "Custom location"
   },
   "map": {
     "loading": "Loading map...",
@@ -1236,7 +1301,10 @@
     "roles": {
       "provider": "Provider",
       "requester": "Requester"
-    }
+    },
+    "servicePlaceholder": "E.g.: Basque lessons, Bike repair, Moving help...",
+    "serviceDescPlaceholder": "Describe what service you offer, what it includes, prerequisites, etc.",
+    "describeNeed": "Describe what you need..."
   },
   "managePage": {
     "description": "Manage your offers, events and profile in one place"
@@ -1330,7 +1398,19 @@
       "SOCIAL": "Social",
       "OTHER": "Other"
     },
-    "progress": "Progress"
+    "progress": "Progress",
+    "needTitlePlaceholder": "E.g.: I need help with...",
+    "needDescPlaceholder": "Describe your need in as much detail as possible...",
+    "projectTitlePlaceholder": "E.g.: School in Ghana",
+    "projectDescPlaceholder": "Describe the project in detail...",
+    "impactPlaceholder": "What impact do you want to achieve with this project?",
+    "cityPlaceholder": "City",
+    "countryPlaceholder": "Country",
+    "regionPlaceholder": "Region/State",
+    "beneficiariesPlaceholder": "Number of people",
+    "goalsPlaceholder": "One goal per line...",
+    "skillsPlaceholder": "One skill per line...",
+    "supportMessagePlaceholder": "Write a support message..."
   },
   "eventCreate": {
     "layout": {
@@ -1500,116 +1580,7 @@
     }
   },
   "governance": {
-    "proposals": {
-      "layout": {
-        "title": "Community Proposals - Truk"
-      },
-      "header": {
-        "title": "🏛️ Community Proposals",
-        "subtitle": "Decentralised governance system - Proof of Help"
-      },
-      "reputation": {
-        "title": "Your Reputation",
-        "level": "New",
-        "privilegesTitle": "Privileges",
-        "requirementInfo": "💡 You need reputation 20+ to create proposals. Current: {current}"
-      },
-      "toasts": {
-        "createSuccess": "Proposal created successfully!",
-        "createError": "Error creating proposal",
-        "voteSuccess": "Vote registered successfully!",
-        "voteError": "Error voting",
-        "reputationRequired": "You need reputation 20+ to create proposals"
-      },
-      "filters": {
-        "all": "All",
-        "discussion": "In Discussion",
-        "voting": "Voting",
-        "approved": "Approved"
-      },
-      "buttons": {
-        "newProposal": "+ New Proposal"
-      },
-      "loading": "Loading...",
-      "empty": {
-        "title": "No proposals",
-        "description": "Be the first to create a community proposal",
-        "button": "Create First Proposal"
-      },
-      "status": {
-        "DISCUSSION": "In Discussion",
-        "VOTING": "Active Voting",
-        "APPROVED": "Approved",
-        "REJECTED": "Rejected"
-      },
-      "type": {
-        "FEATURE": "✨ New Feature",
-        "RULE_CHANGE": "⚖️ Rule Change",
-        "FUND_ALLOCATION": "💰 Fund Allocation",
-        "PARTNERSHIP": "🤝 Partnership"
-      },
-      "meta": {
-        "author": "Anonymous",
-        "budget": "£{amount}"
-      },
-      "voting": {
-        "votesFor": "In favour: {count}",
-        "votesAgainst": "Against: {count}"
-      },
-      "actions": {
-        "viewDetails": "View Details",
-        "voteNow": "Vote Now",
-        "alreadyVoted": "✓ Already voted"
-      },
-      "form": {
-        "title": {
-          "label": "Title",
-          "placeholder": "Concise title for your proposal"
-        },
-        "description": {
-          "label": "Description",
-          "placeholder": "Describe your proposal in detail"
-        },
-        "implementation": {
-          "label": "Implementation Plan",
-          "placeholder": "How will this proposal be implemented?"
-        },
-        "budget": {
-          "label": "Required Budget (£)",
-          "placeholder": "0"
-        },
-        "typeLabel": "Proposal Type",
-        "typeOptions": {
-          "FEATURE": "New Feature",
-          "RULE_CHANGE": "Rule Change",
-          "FUND_ALLOCATION": "Fund Allocation",
-          "PARTNERSHIP": "Partnership"
-        },
-        "processInfo": {
-          "title": "📋 Proposal Process",
-          "step1": "Discussion phase: 3 days",
-          "step2": "Voting phase: 4 days",
-          "step3": "If it reaches threshold (10% active users) → Approved"
-        },
-        "cancel": "Cancel",
-        "submit": "Create Proposal",
-        "submitting": "Creating..."
-      },
-      "voteModal": {
-        "title": "Vote on Proposal",
-        "quadraticTitle": "📊 Quadratic Voting",
-        "quadraticInfo": "The cost of voting increases quadratically: Voting 1 point = 1 credit, 5 points = 25 credits, 10 points = 100 credits",
-        "pointsLabel": "Points to vote: {points}",
-        "costLabel": "Cost:",
-        "costAmount": "{cost} credits",
-        "cancel": "Cancel",
-        "confirm": "Confirm Vote",
-        "confirming": "Voting..."
-      },
-      "modal": {
-        "newProposal": "New Community Proposal"
-      }
-    },
+    "proposals": "Proposals",
     "delegation": {
       "layout": {
         "title": "Vote Delegation - Truk"
@@ -1659,7 +1630,20 @@
         "revokeSuccess": "Delegation revoked successfully",
         "revokeError": "Error revoking delegation"
       }
-    }
+    },
+    "title": "Community Governance",
+    "loadingProposals": "Loading proposals...",
+    "createProposal": "Create Proposal",
+    "proposalTitlePlaceholder": "E.g.: Create a community garden",
+    "proposalDescPlaceholder": "Describe your proposal in detail...",
+    "loginToVote": "You must log in to vote",
+    "loginToCreate": "You must log in to create proposals",
+    "keep": "Keep",
+    "keepDesc": "The content doesn't violate community rules",
+    "warn": "Warn",
+    "warnDesc": "Send a warning to the content author",
+    "remove": "Remove",
+    "removeDesc": "The content violates rules and must be removed"
   },
   "groupBuyDetail": {
     "errors": {
@@ -1971,7 +1955,7 @@
     "filters": {
       "all": "All"
     },
-    "capacity": "Capacity:",
+    "capacity": "Capacity",
     "capacityPeople": "people",
     "members": "members",
     "monthlyContribution": "€/month",
@@ -1979,7 +1963,16 @@
       "title": "No housing solutions available",
       "description": "Be the first to create a community housing solution",
       "button": "Create Solution"
-    }
+    },
+    "titlePlaceholder": "E.g.: Shared flat in the center",
+    "descPlaceholder": "Describe the details of this housing solution...",
+    "locationPlaceholder": "E.g.: London, UK",
+    "capacityPlaceholder": "People",
+    "amenitiesPlaceholder": "One amenity per line...",
+    "requirementsPlaceholder": "One requirement per line...",
+    "rulesPlaceholder": "One rule per line...",
+    "whyJoinPlaceholder": "Tell us why you want to join...",
+    "skillsPlaceholder": "e.g.: carpentry, design, accounting"
   },
   "docs": {
     "title": "Documentation - Living Community",
@@ -3201,7 +3194,15 @@
         "title": "Why are they anonymous?",
         "description": "Celebrations are anonymous to protect the dignity of those who receive and the humility of those who give. What matters is not who participated, but that the community came together to meet a need. This is how we celebrate solidarity without singling anyone out."
       }
-    }
+    },
+    "celebrationsTitle": "Celebrations and Events",
+    "createBridgeEvent": "Create Bridge Event",
+    "eventName": "Event Name",
+    "eventNamePlaceholder": "E.g.: Dialogue between Economic Layers",
+    "eventDescPlaceholder": "Describe the purpose and activities of the event",
+    "dateTime": "Date and Time",
+    "venuePlaceholder": "E.g.: Community Center, Main Street 123",
+    "locationOptional": "Location (optional)"
   },
   "economy": {
     "dashboard": {
@@ -3795,7 +3796,17 @@
     "circuitBreakerClosed": "Circuit Breaker CLOSED - Bridge operations resumed",
     "entryAdded": "{type} added to blacklist",
     "entryRemoved": "Entry removed from blacklist",
-    "packComplete": "Pack configured successfully!"
+    "packComplete": "Pack configured successfully!",
+    "title": "Messages",
+    "loadingConversations": "Loading conversations...",
+    "loadingMessages": "Loading messages...",
+    "noConversations": "You have no conversations",
+    "noConversationsDesc": "When someone sends you a message, it will appear here.",
+    "noMessages": "No messages yet",
+    "noMessagesDesc": "Send the first message to start the conversation",
+    "placeholder": "Write a message...",
+    "sendMessage": "Send Message",
+    "loginToView": "You must log in to view your messages"
   },
   "admin": {
     "bridge": {
@@ -3869,7 +3880,21 @@
       "buttons": {
         "claim": "Claim 100 SEMILLA"
       }
-    }
+    },
+    "nodeId": "Node ID: {id}",
+    "protocol": "Protocol: {protocol} • Version: {version}",
+    "currentNode": "Current Node",
+    "semillaEconomy": "SEMILLA Economy",
+    "totalSupply": "Total Supply",
+    "transactions": "Transactions",
+    "activeUsers": "Active Users",
+    "averageBalance": "Average Balance",
+    "status": "Status",
+    "created": "Created",
+    "copyDid": "Copy DID",
+    "sendSemilla": "Send SEMILLA",
+    "recipientPlaceholder": "did:gailu:node:user:uuid",
+    "reasonPlaceholder": "Payment for services, donation, etc."
   },
   "flow": {
     "poolRequests": {
@@ -3979,5 +4004,102 @@
     "availableServices": "Available services",
     "upcomingEvents": "Upcoming events",
     "localMerchants": "Local merchants"
+  },
+  "forms": {
+    "title": "Title",
+    "description": "Description",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "location": "Location",
+    "category": "Category",
+    "tags": "Tags",
+    "tagsPlaceholder": "Add tags and press Enter",
+    "tagsSeparated": "Separated by commas",
+    "image": "Image",
+    "images": "Images",
+    "currentImage": "Current image:",
+    "addPhoto": "Add photo",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "latitudeCoord": "Latitude coordinate",
+    "longitudeCoord": "Longitude coordinate",
+    "maxAttendees": "Maximum attendees",
+    "noLimit": "No limit",
+    "leaveEmptyNoLimit": "Leave empty for no limit",
+    "creditsReward": "Credits attendees will earn",
+    "creating": "Creating...",
+    "saving": "Saving...",
+    "sending": "Sending...",
+    "tipsForEvent": "Tips for your event:"
+  },
+  "empty": {
+    "noOffers": "No offers available",
+    "noEvents": "No upcoming events",
+    "noProposals": "No proposals yet",
+    "noRequests": "No requests",
+    "noRequestsStatus": "No requests with status \"{status}\"",
+    "noChallenges": "No active challenge",
+    "noFlashDeals": "No active Flash Deals",
+    "noMoreProfiles": "No more profiles for now",
+    "noDelegates": "No delegates available",
+    "noDelegations": "You have no active delegations",
+    "noCelebrations": "No recent celebrations",
+    "noBridges": "You haven't made any bridges yet"
+  },
+  "social": {
+    "loadingPost": "Loading post...",
+    "postNotFound": "Post not found",
+    "writeComment": "Write a comment...",
+    "deletePost": "Delete post",
+    "deleteReview": "Delete review",
+    "whatAreYouThinking": "What are you thinking?",
+    "shareExperience": "Share your experience...",
+    "inspireOthers": "This will help inspire others..."
+  },
+  "gamification": {
+    "achievements": "Achievements and Badges",
+    "unlockedBadges": "Unlocked Badges",
+    "completed": "Completed",
+    "totalPoints": "Total Points",
+    "earnCredits": "Earn Credits",
+    "weeklyChallenge": "Solidarity Week",
+    "ecoWarrior": "Eco Warrior",
+    "tradeMaster": "Trade Master",
+    "notInterested": "Not interested",
+    "interested": "Interested",
+    "createGroupBuy": "Create Group Buy",
+    "productNamePlaceholder": "E.g.: Organic products pack",
+    "productDescPlaceholder": "Describe what the group buy includes",
+    "specificProductPlaceholder": "Specific product name"
+  },
+  "circles": {
+    "myActiveCircles": "My Active Circles",
+    "circleTypes": "Circle Types:",
+    "features": "Features:",
+    "locationPlaceholder": "E.g.: Zoom / Barcelona"
+  },
+  "network": {
+    "networkMap": "Network Map",
+    "activeConnections": "Active Connections",
+    "averageStrength": "Average Strength"
+  },
+  "bridge": {
+    "title": "Bridge - SEMILLA Multi-Chain",
+    "sendSemilla": "Send SEMILLA",
+    "connectWallet": "Connect wallet",
+    "connectWalletTitle": "Connect Web3 Wallet",
+    "connectWalletSubtitle": "Choose your wallet to connect to the Bridge and send tokens cross-chain"
+  },
+  "pools": {
+    "explainNeed": "Explain why you need this support and how it will help you...",
+    "sendRequest": "Send Request",
+    "explainDecision": "Explain your decision..."
+  },
+  "feedback": {
+    "placeholder": "Tell us what you liked or what we could improve..."
+  },
+  "proximity": {
+    "locationPlaceholder": "E.g.: London, Paris, Berlin..."
   }
 }

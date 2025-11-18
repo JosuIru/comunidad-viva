@@ -74,14 +74,29 @@
     "filters": "Filtros",
     "loading": "Cargando...",
     "loadingOffers": "Cargando ofertas...",
-    "error": "Ha ocurrido un error",
+    "error": "Error",
     "success": "¡Éxito!",
     "noResults": "No se encontraron resultados",
     "viewMore": "Ver más",
     "viewLess": "Ver menos",
     "noImage": "Sin imagen",
     "credits": "créditos",
-    "views": "visualizaciones"
+    "views": "visualizaciones",
+    "back": "Volver",
+    "create": "Crear",
+    "send": "Enviar",
+    "confirm": "Confirmar",
+    "yes": "Sí",
+    "no": "No",
+    "share": "Compartir",
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "showLess": "Ver menos",
+    "loginRequired": "Debes iniciar sesión",
+    "goToLogin": "Ir a login",
+    "notFound": "No encontrado",
+    "results": "resultados",
+    "result": "resultado"
   },
   "offers": {
     "title": "Ofertas",
@@ -128,7 +143,9 @@
     "credits": "créditos",
     "attendees": "asistentes",
     "organizedBy": "Organizado por",
-    "organizer": "Organizador"
+    "organizer": "Organizador",
+    "notFound": "Evento no encontrado",
+    "editEvent": "Editar Evento"
   },
   "credits": {
     "balance": "Saldo",
@@ -142,7 +159,28 @@
     "myProfile": "Mi perfil",
     "editProfile": "Editar perfil",
     "settings": "Configuración",
-    "language": "Idioma"
+    "language": "Idioma",
+    "title": "Perfil",
+    "loadingProfile": "Cargando perfil...",
+    "notFound": "Usuario no encontrado",
+    "notFoundDesc": "No pudimos encontrar este perfil.",
+    "generosityPoints": "{points} puntos de generosidad",
+    "credits": "{credits} créditos",
+    "statistics": "Estadísticas",
+    "donated": "DONADAS",
+    "hoursShared": "Horas compartidas",
+    "received": "RECIBIDAS",
+    "hoursReceived": "Horas recibidas",
+    "score": "PUNTUACIÓN",
+    "generosity": "Generosidad",
+    "memberSince": "Miembro desde",
+    "connect": "Conectar",
+    "sendMessage": "Enviar Mensaje",
+    "bio": "Biografía",
+    "location": "Ubicación",
+    "skills": "Habilidades",
+    "bioPlaceholder": "Cuéntanos un poco sobre ti...",
+    "locationPlaceholder": "Calle, Ciudad, País"
   },
   "manage": {
     "title": "Gestionar",
@@ -1144,7 +1182,34 @@
     "noLocations": "No hay ubicaciones para mostrar",
     "groupbuy": {
       "fallbackTitle": "Compra Grupal"
-    }
+    },
+    "discover": "Descubre",
+    "myActivity": "Mi Actividad",
+    "community": "Comunidad",
+    "customize": "Personalizar",
+    "customizeDashboard": "Personalizar Dashboard",
+    "map": "Mapa",
+    "feed": "Feed",
+    "viewFullscreen": "Ver en pantalla completa",
+    "closeFullscreen": "Cerrar pantalla completa",
+    "helpTour": "Ver tour de ayuda",
+    "dailyCredits": "¡Gana créditos diarios!",
+    "customizeSearch": "Personaliza tu búsqueda",
+    "interactiveMap": "Mapa Interactivo",
+    "hideFilters": "Ocultar filtros",
+    "showFilters": "Mostrar filtros",
+    "hide": "Ocultar",
+    "filters": "Filtros",
+    "help": "Ayuda",
+    "yourCommunity": "Tu Comunidad",
+    "communityImpact": "El impacto que estamos generando juntos",
+    "communityMetrics": "Métricas Comunitarias",
+    "dailySeed": "Tu Semilla Diaria",
+    "upcomingEvents": "Próximos Eventos",
+    "yourLocation": "Tu ubicación",
+    "searchingAround": "Buscando en {radius}km a la redonda",
+    "searchingFrom": "Buscando en {radius}km desde esta comunidad",
+    "customLocationSearch": "Ubicación personalizada"
   },
   "map": {
     "loading": "Cargando mapa...",
@@ -1250,7 +1315,10 @@
     "roles": {
       "provider": "Proveedor",
       "requester": "Solicitante"
-    }
+    },
+    "servicePlaceholder": "Ej: Clases de euskera, Reparación de bicicletas, Ayuda con mudanza...",
+    "serviceDescPlaceholder": "Describe qué servicio ofreces, qué incluye, requisitos previos, etc.",
+    "describeNeed": "Describe qué necesitas..."
   },
   "managePage": {
     "description": "Administra tus ofertas, eventos y perfil en un solo lugar"
@@ -1344,7 +1412,19 @@
       "SOCIAL": "Social",
       "OTHER": "Otro"
     },
-    "progress": "Progreso"
+    "progress": "Progreso",
+    "needTitlePlaceholder": "Ej: Necesito ayuda con...",
+    "needDescPlaceholder": "Describe tu necesidad con el mayor detalle posible...",
+    "projectTitlePlaceholder": "Ej: Escuela en Ghana",
+    "projectDescPlaceholder": "Describe el proyecto en detalle...",
+    "impactPlaceholder": "¿Qué impacto quieres lograr con este proyecto?",
+    "cityPlaceholder": "Ciudad",
+    "countryPlaceholder": "País",
+    "regionPlaceholder": "Región/Estado",
+    "beneficiariesPlaceholder": "Número de personas",
+    "goalsPlaceholder": "Un objetivo por línea...",
+    "skillsPlaceholder": "Una habilidad por línea...",
+    "supportMessagePlaceholder": "Escribe un mensaje de apoyo..."
   },
   "eventCreate": {
     "layout": {
@@ -1514,116 +1594,7 @@
     }
   },
   "governance": {
-    "proposals": {
-      "layout": {
-        "title": "Propuestas Comunitarias - Truk"
-      },
-      "header": {
-        "title": "🏛️ Propuestas Comunitarias",
-        "subtitle": "Sistema de gobernanza descentralizada - Proof of Help"
-      },
-      "reputation": {
-        "title": "Tu Reputación",
-        "level": "Nuevo",
-        "privilegesTitle": "Privilegios",
-        "requirementInfo": "💡 Necesitas reputación 20+ para crear propuestas. Actual: {current}"
-      },
-      "toasts": {
-        "createSuccess": "¡Propuesta creada exitosamente!",
-        "createError": "Error al crear propuesta",
-        "voteSuccess": "¡Voto registrado exitosamente!",
-        "voteError": "Error al votar",
-        "reputationRequired": "Necesitas reputación 20+ para crear propuestas"
-      },
-      "filters": {
-        "all": "Todas",
-        "discussion": "En Discusión",
-        "voting": "Votación",
-        "approved": "Aprobadas"
-      },
-      "buttons": {
-        "newProposal": "+ Nueva Propuesta"
-      },
-      "loading": "Cargando...",
-      "empty": {
-        "title": "No hay propuestas",
-        "description": "Sé el primero en crear una propuesta comunitaria",
-        "button": "Crear Primera Propuesta"
-      },
-      "status": {
-        "DISCUSSION": "En Discusión",
-        "VOTING": "Votación Activa",
-        "APPROVED": "Aprobada",
-        "REJECTED": "Rechazada"
-      },
-      "type": {
-        "FEATURE": "✨ Nueva Funcionalidad",
-        "RULE_CHANGE": "⚖️ Cambio de Reglas",
-        "FUND_ALLOCATION": "💰 Asignación de Fondos",
-        "PARTNERSHIP": "🤝 Asociación"
-      },
-      "meta": {
-        "author": "Anónimo",
-        "budget": "€{amount}"
-      },
-      "voting": {
-        "votesFor": "A favor: {count}",
-        "votesAgainst": "En contra: {count}"
-      },
-      "actions": {
-        "viewDetails": "Ver Detalles",
-        "voteNow": "Votar Ahora",
-        "alreadyVoted": "✓ Ya votaste"
-      },
-      "form": {
-        "title": {
-          "label": "Título",
-          "placeholder": "Título conciso de tu propuesta"
-        },
-        "description": {
-          "label": "Descripción",
-          "placeholder": "Describe detalladamente tu propuesta"
-        },
-        "implementation": {
-          "label": "Plan de Implementación",
-          "placeholder": "¿Cómo se implementará esta propuesta?"
-        },
-        "budget": {
-          "label": "Presupuesto Requerido (€)",
-          "placeholder": "0"
-        },
-        "typeLabel": "Tipo de Propuesta",
-        "typeOptions": {
-          "FEATURE": "Nueva Funcionalidad",
-          "RULE_CHANGE": "Cambio de Reglas",
-          "FUND_ALLOCATION": "Asignación de Fondos",
-          "PARTNERSHIP": "Asociación"
-        },
-        "processInfo": {
-          "title": "📋 Proceso de Propuesta",
-          "step1": "Fase de discusión: 3 días",
-          "step2": "Fase de votación: 4 días",
-          "step3": "Si alcanza threshold (10% usuarios activos) → Aprobada"
-        },
-        "cancel": "Cancelar",
-        "submit": "Crear Propuesta",
-        "submitting": "Creando..."
-      },
-      "voteModal": {
-        "title": "Votar Propuesta",
-        "quadraticTitle": "📊 Votación Cuadrática",
-        "quadraticInfo": "El costo de votar aumenta cuadráticamente: Votar 1 punto = 1 crédito, 5 puntos = 25 créditos, 10 puntos = 100 créditos",
-        "pointsLabel": "Puntos a votar: {points}",
-        "costLabel": "Costo:",
-        "costAmount": "{cost} créditos",
-        "cancel": "Cancelar",
-        "confirm": "Confirmar Voto",
-        "confirming": "Votando..."
-      },
-      "modal": {
-        "newProposal": "Nueva Propuesta Comunitaria"
-      }
-    },
+    "proposals": "Propuestas",
     "delegation": {
       "layout": {
         "title": "Delegación de Votos - Truk"
@@ -1673,7 +1644,20 @@
         "revokeSuccess": "Delegación revocada exitosamente",
         "revokeError": "Error al revocar delegación"
       }
-    }
+    },
+    "title": "Gobernanza Comunitaria",
+    "loadingProposals": "Cargando propuestas...",
+    "createProposal": "Crear Propuesta",
+    "proposalTitlePlaceholder": "Ej: Crear un huerto comunitario",
+    "proposalDescPlaceholder": "Describe detalladamente tu propuesta...",
+    "loginToVote": "Debes iniciar sesión para votar",
+    "loginToCreate": "Debes iniciar sesión para crear propuestas",
+    "keep": "Mantener",
+    "keepDesc": "El contenido no viola las reglas de la comunidad",
+    "warn": "Advertir",
+    "warnDesc": "Enviar una advertencia al autor del contenido",
+    "remove": "Eliminar",
+    "removeDesc": "El contenido viola las reglas y debe ser eliminado"
   },
   "groupBuyDetail": {
     "errors": {
@@ -1985,7 +1969,7 @@
     "filters": {
       "all": "Todas"
     },
-    "capacity": "Capacidad:",
+    "capacity": "Capacidad",
     "capacityPeople": "personas",
     "members": "miembros",
     "monthlyContribution": "€/mes",
@@ -1993,7 +1977,16 @@
       "title": "No hay soluciones de vivienda disponibles",
       "description": "Sé el primero en crear una solución de vivienda comunitaria",
       "button": "Crear Solución"
-    }
+    },
+    "titlePlaceholder": "Ej: Piso compartido en el centro",
+    "descPlaceholder": "Describe los detalles de esta solución de vivienda...",
+    "locationPlaceholder": "Ej: Madrid, España",
+    "capacityPlaceholder": "Personas",
+    "amenitiesPlaceholder": "Una comodidad por línea...",
+    "requirementsPlaceholder": "Un requisito por línea...",
+    "rulesPlaceholder": "Una norma por línea...",
+    "whyJoinPlaceholder": "Cuéntanos por qué quieres unirte...",
+    "skillsPlaceholder": "ej: carpintería, diseño, contabilidad"
   },
   "hybrid": {
     "dashboard": {
@@ -2101,7 +2094,15 @@
         "title": "¿Por qué son anónimas?",
         "description": "Las celebraciones son anónimas para proteger la dignidad de quienes reciben y la humildad de quienes dan. Lo importante no es quién participó, sino que la comunidad se unió para satisfacer una necesidad. Así celebramos la solidaridad sin señalar a nadie."
       }
-    }
+    },
+    "celebrationsTitle": "Celebraciones y Eventos",
+    "createBridgeEvent": "Crear Evento Puente",
+    "eventName": "Nombre del Evento",
+    "eventNamePlaceholder": "Ej: Diálogo entre Capas Económicas",
+    "eventDescPlaceholder": "Describe el propósito y actividades del evento",
+    "dateTime": "Fecha y Hora",
+    "venuePlaceholder": "Ej: Centro Comunitario, Calle Principal 123",
+    "locationOptional": "Ubicación (opcional)"
   },
   "economy": {
     "dashboard": {
@@ -3738,7 +3739,17 @@
     "circuitBreakerClosed": "Circuit Breaker CERRADO - Operaciones del bridge reanudadas",
     "entryAdded": "{type} añadido a la lista negra",
     "entryRemoved": "Entrada removida de la lista negra",
-    "packComplete": "¡Pack configurado correctamente!"
+    "packComplete": "¡Pack configurado correctamente!",
+    "title": "Mensajes",
+    "loadingConversations": "Cargando conversaciones...",
+    "loadingMessages": "Cargando mensajes...",
+    "noConversations": "No tienes conversaciones",
+    "noConversationsDesc": "Cuando alguien te envíe un mensaje, aparecerá aquí.",
+    "noMessages": "No hay mensajes todavía",
+    "noMessagesDesc": "Envía el primer mensaje para comenzar la conversación",
+    "placeholder": "Escribe un mensaje...",
+    "sendMessage": "Enviar Mensaje",
+    "loginToView": "Debes iniciar sesión para ver tus mensajes"
   },
   "admin": {
     "bridge": {
@@ -3812,7 +3823,21 @@
       "buttons": {
         "claim": "Reclamar 100 SEMILLA"
       }
-    }
+    },
+    "nodeId": "Node ID: {id}",
+    "protocol": "Protocolo: {protocol} • Versión: {version}",
+    "currentNode": "Nodo Actual",
+    "semillaEconomy": "Economía SEMILLA",
+    "totalSupply": "Suministro Total",
+    "transactions": "Transacciones",
+    "activeUsers": "Usuarios Activos",
+    "averageBalance": "Balance Promedio",
+    "status": "Estado",
+    "created": "Creado",
+    "copyDid": "Copiar DID",
+    "sendSemilla": "Enviar SEMILLA",
+    "recipientPlaceholder": "did:gailu:node:user:uuid",
+    "reasonPlaceholder": "Pago por servicios, donación, etc."
   },
   "flow": {
     "poolRequests": {
@@ -3922,5 +3947,102 @@
     "availableServices": "Servicios disponibles",
     "upcomingEvents": "Eventos próximos",
     "localMerchants": "Comercios locales"
+  },
+  "forms": {
+    "title": "Título",
+    "description": "Descripción",
+    "name": "Nombre",
+    "email": "Email",
+    "password": "Contraseña",
+    "location": "Ubicación",
+    "category": "Categoría",
+    "tags": "Etiquetas",
+    "tagsPlaceholder": "Añade etiquetas y presiona Enter",
+    "tagsSeparated": "Separadas por comas",
+    "image": "Imagen",
+    "images": "Imágenes",
+    "currentImage": "Imagen actual:",
+    "addPhoto": "Añadir foto",
+    "latitude": "Latitud",
+    "longitude": "Longitud",
+    "latitudeCoord": "Coordenada de latitud",
+    "longitudeCoord": "Coordenada de longitud",
+    "maxAttendees": "Máximo de asistentes",
+    "noLimit": "Sin límite",
+    "leaveEmptyNoLimit": "Dejar vacío para sin límite",
+    "creditsReward": "Créditos que ganarán los asistentes",
+    "creating": "Creando...",
+    "saving": "Guardando...",
+    "sending": "Enviando...",
+    "tipsForEvent": "Consejos para tu evento:"
+  },
+  "empty": {
+    "noOffers": "No hay ofertas disponibles",
+    "noEvents": "No hay eventos próximos",
+    "noProposals": "No hay propuestas aún",
+    "noRequests": "No hay solicitudes",
+    "noRequestsStatus": "No hay solicitudes con estado \"{status}\"",
+    "noChallenges": "No hay reto activo",
+    "noFlashDeals": "No hay Flash Deals activos",
+    "noMoreProfiles": "No hay más perfiles por ahora",
+    "noDelegates": "No hay delegados disponibles",
+    "noDelegations": "No tienes delegaciones activas",
+    "noCelebrations": "No hay celebraciones recientes",
+    "noBridges": "No has hecho ningún bridge todavía"
+  },
+  "social": {
+    "loadingPost": "Cargando publicación...",
+    "postNotFound": "Post no encontrado",
+    "writeComment": "Escribe un comentario...",
+    "deletePost": "Eliminar publicación",
+    "deleteReview": "Eliminar reseña",
+    "whatAreYouThinking": "¿Qué estás pensando?",
+    "shareExperience": "Comparte tu experiencia...",
+    "inspireOthers": "Esto ayudará a inspirar a otros..."
+  },
+  "gamification": {
+    "achievements": "Logros y Badges",
+    "unlockedBadges": "Badges Desbloqueados",
+    "completed": "Completado",
+    "totalPoints": "Puntos Totales",
+    "earnCredits": "Gana Créditos",
+    "weeklyChallenge": "Semana Solidaria",
+    "ecoWarrior": "Guerrero Ecológico",
+    "tradeMaster": "Maestro de Intercambios",
+    "notInterested": "No me interesa",
+    "interested": "Me interesa",
+    "createGroupBuy": "Crear Compra Grupal",
+    "productNamePlaceholder": "Ej: Pack de productos orgánicos",
+    "productDescPlaceholder": "Describe qué incluye la compra grupal",
+    "specificProductPlaceholder": "Nombre específico del producto"
+  },
+  "circles": {
+    "myActiveCircles": "Mis Círculos Activos",
+    "circleTypes": "Tipos de Círculos:",
+    "features": "Características:",
+    "locationPlaceholder": "Ej: Zoom / Barcelona"
+  },
+  "network": {
+    "networkMap": "Mapa de la Red",
+    "activeConnections": "Conexiones Activas",
+    "averageStrength": "Fuerza Promedio"
+  },
+  "bridge": {
+    "title": "Bridge - SEMILLA Multi-Chain",
+    "sendSemilla": "Enviar SEMILLA",
+    "connectWallet": "Conectar billetera",
+    "connectWalletTitle": "Conectar Billetera Web3",
+    "connectWalletSubtitle": "Elige tu billetera para conectar al Bridge y enviar tokens cross-chain"
+  },
+  "pools": {
+    "explainNeed": "Explica por qué necesitas este apoyo y cómo te ayudará...",
+    "sendRequest": "Enviar Solicitud",
+    "explainDecision": "Explica tu decisión..."
+  },
+  "feedback": {
+    "placeholder": "Cuéntanos qué te gustó o qué podríamos mejorar..."
+  },
+  "proximity": {
+    "locationPlaceholder": "Ej: Bilbao, Pamplona, Madrid..."
   }
 }

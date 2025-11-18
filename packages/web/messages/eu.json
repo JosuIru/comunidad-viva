@@ -74,14 +74,29 @@
     "filters": "Iragazkiak",
     "loading": "Kargatzen...",
     "loadingOffers": "Eskaintzak kargatzen...",
-    "error": "Errorea gertatu da",
+    "error": "Errorea",
     "success": "Arrakasta!",
     "noResults": "Ez da emaitzarik aurkitu",
     "viewMore": "Ikusi gehiago",
     "viewLess": "Ikusi gutxiago",
     "noImage": "Irudirik gabe",
     "credits": "kredituak",
-    "views": "ikustaldiak"
+    "views": "ikustaldiak",
+    "back": "Atzera",
+    "create": "Sortu",
+    "send": "Bidali",
+    "confirm": "Berretsi",
+    "yes": "Bai",
+    "no": "Ez",
+    "share": "Partekatu",
+    "copy": "Kopiatu",
+    "copied": "Kopiatuta",
+    "showLess": "Ikusi gutxiago",
+    "loginRequired": "Saioa hasi behar duzu",
+    "goToLogin": "Joan saio hasierara",
+    "notFound": "Ez da aurkitu",
+    "results": "emaitza",
+    "result": "emaitza"
   },
   "offers": {
     "title": "Eskaintzak",
@@ -128,7 +143,9 @@
     "credits": "kredituak",
     "attendees": "partaideak",
     "organizedBy": "Antolatuta",
-    "organizer": "Antolatzailea"
+    "organizer": "Antolatzailea",
+    "notFound": "Ez da ekitaldia aurkitu",
+    "editEvent": "Editatu Ekitaldia"
   },
   "credits": {
     "balance": "Saldoa",
@@ -140,9 +157,30 @@
   },
   "profile": {
     "myProfile": "Nire profila",
-    "editProfile": "Profila editatu",
+    "editProfile": "Editatu profila",
     "settings": "Ezarpenak",
-    "language": "Hizkuntza"
+    "language": "Hizkuntza",
+    "title": "Profila",
+    "loadingProfile": "Profila kargatzen...",
+    "notFound": "Erabiltzailea ez da aurkitu",
+    "notFoundDesc": "Ezin izan dugu profil hau aurkitu.",
+    "generosityPoints": "{points} eskuzabaltasun puntu",
+    "credits": "{credits} kreditu",
+    "statistics": "Estatistikak",
+    "donated": "EMANDAKOAK",
+    "hoursShared": "Partekatutako orduak",
+    "received": "JASOTAKOAK",
+    "hoursReceived": "Jasotako orduak",
+    "score": "PUNTUAZIOA",
+    "generosity": "Eskuzabaltasuna",
+    "memberSince": "Kide data",
+    "connect": "Konektatu",
+    "sendMessage": "Bidali Mezua",
+    "bio": "Biografia",
+    "location": "Kokapena",
+    "skills": "Gaitasunak",
+    "bioPlaceholder": "Kontatu zerbait zuri buruz...",
+    "locationPlaceholder": "Kalea, Hiria, Herrialdea"
   },
   "manage": {
     "title": "Kudeatu",
@@ -1144,7 +1182,34 @@
     "noLocations": "Ez dago erakusteko kokalekurik",
     "groupbuy": {
       "fallbackTitle": "Talde Erosketa"
-    }
+    },
+    "discover": "Aurkitu",
+    "myActivity": "Nire Jarduera",
+    "community": "Komunitatea",
+    "customize": "Pertsonalizatu",
+    "customizeDashboard": "Pertsonalizatu Panela",
+    "map": "Mapa",
+    "feed": "Feed",
+    "viewFullscreen": "Ikusi pantaila osoan",
+    "closeFullscreen": "Itxi pantaila osoa",
+    "helpTour": "Ikusi laguntza bisita",
+    "dailyCredits": "Irabazi eguneroko kredituak!",
+    "customizeSearch": "Pertsonalizatu zure bilaketa",
+    "interactiveMap": "Mapa Interaktiboa",
+    "hideFilters": "Ezkutatu iragazkiak",
+    "showFilters": "Erakutsi iragazkiak",
+    "hide": "Ezkutatu",
+    "filters": "Iragazkiak",
+    "help": "Laguntza",
+    "yourCommunity": "Zure Komunitatea",
+    "communityImpact": "Elkarrekin sortzen ari garen eragina",
+    "communityMetrics": "Komunitate Metrikak",
+    "dailySeed": "Zure Eguneroko Hazia",
+    "upcomingEvents": "Datozen Ekitaldiak",
+    "yourLocation": "Zure kokapena",
+    "searchingAround": "{radius}km inguruan bilatzen",
+    "searchingFrom": "Komunitate honetatik {radius}km-ra bilatzen",
+    "customLocationSearch": "Kokapen pertsonalizatua"
   },
   "map": {
     "loading": "Mapa kargatzen...",
@@ -1250,7 +1315,10 @@
     "roles": {
       "provider": "Hornitzailea",
       "requester": "Eskatzailea"
-    }
+    },
+    "servicePlaceholder": "Adib: Euskara klaseak, Bizikleta konponketa, Mugitze laguntza...",
+    "serviceDescPlaceholder": "Deskribatu zer zerbitzu eskaintzen duzun, zer biltzen duen, aurre-baldintzak, etab.",
+    "describeNeed": "Deskribatu zer behar duzun..."
   },
   "managePage": {
     "description": "Kudeatu zure eskaintzak, ekitaldiak eta profila leku bakarrean"
@@ -1344,7 +1412,19 @@
       "SOCIAL": "Soziala",
       "OTHER": "Beste bat"
     },
-    "progress": "Aurrerakuntza"
+    "progress": "Aurrerakuntza",
+    "needTitlePlaceholder": "Adib: Laguntza behar dut...",
+    "needDescPlaceholder": "Deskribatu zure beharra ahalik eta xehetasun gehienekin...",
+    "projectTitlePlaceholder": "Adib: Eskola Ghana-n",
+    "projectDescPlaceholder": "Deskribatu proiektua xehetasunez...",
+    "impactPlaceholder": "Zer inpaktu lortu nahi duzu proiektu honekin?",
+    "cityPlaceholder": "Hiria",
+    "countryPlaceholder": "Herrialdea",
+    "regionPlaceholder": "Eskualdea/Estatua",
+    "beneficiariesPlaceholder": "Pertsona kopurua",
+    "goalsPlaceholder": "Helburu bat lerro bakoitzeko...",
+    "skillsPlaceholder": "Gaitasun bat lerro bakoitzeko...",
+    "supportMessagePlaceholder": "Idatzi laguntza mezu bat..."
   },
   "eventCreate": {
     "layout": {
@@ -1514,116 +1594,7 @@
     }
   },
   "governance": {
-    "proposals": {
-      "layout": {
-        "title": "Komunitateko Proposamenak - Comunidad Viva"
-      },
-      "header": {
-        "title": "🏛️ Komunitateko Proposamenak",
-        "subtitle": "Gobernantza deszentralizatu sistema - Proof of Help"
-      },
-      "reputation": {
-        "title": "Zure Ospeaketa",
-        "level": "Berria",
-        "privilegesTitle": "Pribilegoak",
-        "requirementInfo": "💡 20+ ospea behar duzu proposamenak sortzeko. Oraingoa: {current}"
-      },
-      "toasts": {
-        "createSuccess": "Proposamena arrakastaz sortuta!",
-        "createError": "Errorea proposamena sortzean",
-        "voteSuccess": "Botoa arrakastaz erregistratuta!",
-        "voteError": "Errorea bozkatzean",
-        "reputationRequired": "20+ ospea behar duzu proposamenak sortzeko"
-      },
-      "filters": {
-        "all": "Guztiak",
-        "discussion": "Eztabaidan",
-        "voting": "Bozketan",
-        "approved": "Onartuta"
-      },
-      "buttons": {
-        "newProposal": "+ Proposamen Berria"
-      },
-      "loading": "Kargatzen...",
-      "empty": {
-        "title": "Ez dago proposamenik",
-        "description": "Izan lehena komunitateko proposamen bat sortzen",
-        "button": "Lehen Proposamena Sortu"
-      },
-      "status": {
-        "DISCUSSION": "Eztabaidan",
-        "VOTING": "Bozketa Aktiboa",
-        "APPROVED": "Onartuta",
-        "REJECTED": "Baztertuta"
-      },
-      "type": {
-        "FEATURE": "✨ Funtzionalitate Berria",
-        "RULE_CHANGE": "⚖️ Arau Aldaketa",
-        "FUND_ALLOCATION": "💰 Funts Esleipena",
-        "PARTNERSHIP": "🤝 Elkartasuna"
-      },
-      "meta": {
-        "author": "Anonimoa",
-        "budget": "€{amount}"
-      },
-      "voting": {
-        "votesFor": "Alde: {count}",
-        "votesAgainst": "Kontra: {count}"
-      },
-      "actions": {
-        "viewDetails": "Xehetasunak Ikusi",
-        "voteNow": "Orain Bozkatu",
-        "alreadyVoted": "✓ Dagoeneko bozkatu duzu"
-      },
-      "form": {
-        "title": {
-          "label": "Izenburua",
-          "placeholder": "Zure proposamenaren izenburu laburra"
-        },
-        "description": {
-          "label": "Deskribapena",
-          "placeholder": "Deskribatu xehetasunez zure proposamena"
-        },
-        "implementation": {
-          "label": "Inplementazio Plana",
-          "placeholder": "Nola inplementatuko da proposamen hau?"
-        },
-        "budget": {
-          "label": "Beharrezko Aurrekontua (€)",
-          "placeholder": "0"
-        },
-        "typeLabel": "Proposamen Mota",
-        "typeOptions": {
-          "FEATURE": "Funtzionalitate Berria",
-          "RULE_CHANGE": "Arau Aldaketa",
-          "FUND_ALLOCATION": "Funts Esleipena",
-          "PARTNERSHIP": "Elkartasuna"
-        },
-        "processInfo": {
-          "title": "📋 Proposamen Prozesua",
-          "step1": "Eztabaida fasea: 3 egun",
-          "step2": "Bozketa fasea: 4 egun",
-          "step3": "Threshold-a lortzen badu (% 10 erabiltzaile aktibo) → Onartuta"
-        },
-        "cancel": "Utzi",
-        "submit": "Proposamena Sortu",
-        "submitting": "Sortzen..."
-      },
-      "voteModal": {
-        "title": "Proposamena Bozkatu",
-        "quadraticTitle": "📊 Bozketa Koadratikoa",
-        "quadraticInfo": "Bozkatzearen kostua koadratikoki handitzen da: Puntu 1 bozkatzea = kreditu 1, 5 puntu = 25 kreditu, 10 puntu = 100 kreditu",
-        "pointsLabel": "Bozkatzeko puntuak: {points}",
-        "costLabel": "Kostua:",
-        "costAmount": "{cost} kreditu",
-        "cancel": "Utzi",
-        "confirm": "Botoa Baieztatu",
-        "confirming": "Bozkatzen..."
-      },
-      "modal": {
-        "newProposal": "Komunitateko Proposamen Berria"
-      }
-    },
+    "proposals": "Proposamenak",
     "delegation": {
       "layout": {
         "title": "Botoen Delegazioa - Truk"
@@ -1673,7 +1644,20 @@
         "revokeSuccess": "Delegazioa arrakastaz ezeztatua",
         "revokeError": "Errorea delegazioa ezeztatzean"
       }
-    }
+    },
+    "title": "Komunitate Gobernantza",
+    "loadingProposals": "Proposamenak kargatzen...",
+    "createProposal": "Sortu Proposamena",
+    "proposalTitlePlaceholder": "Adib: Komunitate baratze bat sortu",
+    "proposalDescPlaceholder": "Deskribatu zure proposamena xehetasunez...",
+    "loginToVote": "Saioa hasi behar duzu botoa emateko",
+    "loginToCreate": "Saioa hasi behar duzu proposamenak sortzeko",
+    "keep": "Mantendu",
+    "keepDesc": "Edukiak ez ditu komunitatearen arauak urratzen",
+    "warn": "Ohartarazi",
+    "warnDesc": "Bidali ohartarazpen bat edukiaren egileari",
+    "remove": "Ezabatu",
+    "removeDesc": "Edukiak arauak urratzen ditu eta ezabatu behar da"
   },
   "groupBuyDetail": {
     "errors": {
@@ -2041,7 +2025,7 @@
     "filters": {
       "all": "Guztiak"
     },
-    "capacity": "Edukiera:",
+    "capacity": "Ahalmena",
     "capacityPeople": "pertsona",
     "members": "kide",
     "monthlyContribution": "€/hilabetean",
@@ -2049,7 +2033,16 @@
       "title": "Ez dago etxebizitza-soluziorik eskuragarri",
       "description": "Izan zaitez lehena komunitateko etxebizitza-soluzioa sortzen",
       "button": "Sortu Soluzio"
-    }
+    },
+    "titlePlaceholder": "Adib: Partekatutako pisua erdigunean",
+    "descPlaceholder": "Deskribatu etxebizitza irtenbide honen xehetasunak...",
+    "locationPlaceholder": "Adib: Madril, Espainia",
+    "capacityPlaceholder": "Pertsonak",
+    "amenitiesPlaceholder": "Erosotasun bat lerro bakoitzeko...",
+    "requirementsPlaceholder": "Baldintza bat lerro bakoitzeko...",
+    "rulesPlaceholder": "Arau bat lerro bakoitzeko...",
+    "whyJoinPlaceholder": "Kontaiguzu zergatik nahi duzun batu...",
+    "skillsPlaceholder": "adib: arozteria, diseinua, kontabilitatea"
   },
   "hybrid": {
     "dashboard": {
@@ -2157,7 +2150,15 @@
         "title": "Zergatik dira anonimoak?",
         "description": "Ospakizunak anonimoak dira jasotzen dutenen duintasuna eta ematen dutenen apaltasuna babesteko. Garrantzitsua ez da nor parte hartu zuen, baizik eta komunitatea bildu zela beharrizan bat betetzeko. Horrela elkartasuna ospatzen dugu inor seinalatu gabe."
       }
-    }
+    },
+    "celebrationsTitle": "Ospakizunak eta Ekitaldiak",
+    "createBridgeEvent": "Sortu Zubi Ekitaldia",
+    "eventName": "Ekitaldiaren Izena",
+    "eventNamePlaceholder": "Adib: Geruza Ekonomikoen arteko Elkarrizketa",
+    "eventDescPlaceholder": "Deskribatu ekitaldiaren helburua eta jarduerak",
+    "dateTime": "Data eta Ordua",
+    "venuePlaceholder": "Adib: Komunitate Zentroa, Kale Nagusia 123",
+    "locationOptional": "Kokapena (aukerakoa)"
   },
   "challenges": {
     "title": "Erronkak eta Gamifikazioa",
@@ -3738,7 +3739,17 @@
     "circuitBreakerClosed": "Circuit Breaker ITXITA - Bridge-aren eragiketak berrabiarazi dira",
     "entryAdded": "{type} zerrenda beltzean gehitu da",
     "entryRemoved": "Sarrera zerrenda beltzetik kendu da",
-    "packComplete": "Pack-a ondo konfiguratu da!"
+    "packComplete": "Pack-a ondo konfiguratu da!",
+    "title": "Mezuak",
+    "loadingConversations": "Elkarrizketak kargatzen...",
+    "loadingMessages": "Mezuak kargatzen...",
+    "noConversations": "Ez duzu elkarrizketarik",
+    "noConversationsDesc": "Norbaitek mezu bat bidaltzen dizunean, hemen agertuko da.",
+    "noMessages": "Oraindik ez dago mezurik",
+    "noMessagesDesc": "Bidali lehen mezua elkarrizketa hasteko",
+    "placeholder": "Idatzi mezu bat...",
+    "sendMessage": "Bidali Mezua",
+    "loginToView": "Saioa hasi behar duzu zure mezuak ikusteko"
   },
   "admin": {
     "bridge": {
@@ -3812,7 +3823,21 @@
       "buttons": {
         "claim": "100 SEMILLA eskatu"
       }
-    }
+    },
+    "nodeId": "Node ID: {id}",
+    "protocol": "Protokoloa: {protocol} • Bertsioa: {version}",
+    "currentNode": "Oraingo Nodoa",
+    "semillaEconomy": "SEMILLA Ekonomia",
+    "totalSupply": "Guztizko Hornidura",
+    "transactions": "Transakzioak",
+    "activeUsers": "Erabiltzaile Aktiboak",
+    "averageBalance": "Batez Besteko Saldoa",
+    "status": "Egoera",
+    "created": "Sortua",
+    "copyDid": "Kopiatu DID",
+    "sendSemilla": "Bidali SEMILLA",
+    "recipientPlaceholder": "did:gailu:node:user:uuid",
+    "reasonPlaceholder": "Zerbitzuen ordainketa, dohaintza, etab."
   },
   "flow": {
     "poolRequests": {
@@ -3922,5 +3947,102 @@
     "availableServices": "Zerbitzu erabilgarriak",
     "upcomingEvents": "Datozen ekitaldiak",
     "localMerchants": "Tokiko merkatariak"
+  },
+  "forms": {
+    "title": "Izenburua",
+    "description": "Deskribapena",
+    "name": "Izena",
+    "email": "Emaila",
+    "password": "Pasahitza",
+    "location": "Kokapena",
+    "category": "Kategoria",
+    "tags": "Etiketak",
+    "tagsPlaceholder": "Gehitu etiketak eta sakatu Enter",
+    "tagsSeparated": "Komaz bereizita",
+    "image": "Irudia",
+    "images": "Irudiak",
+    "currentImage": "Oraingo irudia:",
+    "addPhoto": "Gehitu argazkia",
+    "latitude": "Latitudea",
+    "longitude": "Longitudea",
+    "latitudeCoord": "Latitudea koordinatua",
+    "longitudeCoord": "Longitudea koordinatua",
+    "maxAttendees": "Gehienezko bertaratzaileak",
+    "noLimit": "Mugarik gabe",
+    "leaveEmptyNoLimit": "Utzi hutsik mugarik gabe",
+    "creditsReward": "Bertaratzaileek irabaziko dituzten kredituak",
+    "creating": "Sortzen...",
+    "saving": "Gordetzen...",
+    "sending": "Bidaltzen...",
+    "tipsForEvent": "Zure ekitaldirako aholkuak:"
+  },
+  "empty": {
+    "noOffers": "Ez dago eskaintzarik",
+    "noEvents": "Ez dago datozen ekitaldirik",
+    "noProposals": "Oraindik ez dago proposamenik",
+    "noRequests": "Ez dago eskaerarik",
+    "noRequestsStatus": "Ez dago \"{status}\" egoerako eskaerarik",
+    "noChallenges": "Ez dago erronka aktiborik",
+    "noFlashDeals": "Ez dago Flash Deal aktiborik",
+    "noMoreProfiles": "Ez dago profil gehiago oraingoz",
+    "noDelegates": "Ez dago delegaturik",
+    "noDelegations": "Ez duzu delegazio aktiborik",
+    "noCelebrations": "Ez dago azken ospakizunik",
+    "noBridges": "Oraindik ez duzu bridge-rik egin"
+  },
+  "social": {
+    "loadingPost": "Argitalpena kargatzen...",
+    "postNotFound": "Ez da argitalpena aurkitu",
+    "writeComment": "Idatzi iruzkin bat...",
+    "deletePost": "Ezabatu argitalpena",
+    "deleteReview": "Ezabatu kritika",
+    "whatAreYouThinking": "Zertan ari zara pentsatzen?",
+    "shareExperience": "Partekatu zure esperientzia...",
+    "inspireOthers": "Honek beste batzuk inspiratzen lagunduko du..."
+  },
+  "gamification": {
+    "achievements": "Lorpenak eta Badges",
+    "unlockedBadges": "Desblokeatutako Badges",
+    "completed": "Osatuta",
+    "totalPoints": "Guztizko Puntuak",
+    "earnCredits": "Irabazi Kredituak",
+    "weeklyChallenge": "Aste Solidarioa",
+    "ecoWarrior": "Gerlari Ekologikoa",
+    "tradeMaster": "Truke Maisua",
+    "notInterested": "Ez zait interesatzen",
+    "interested": "Interesatzen zait",
+    "createGroupBuy": "Sortu Talde Erosketa",
+    "productNamePlaceholder": "Adib: Produktu organikoen paketea",
+    "productDescPlaceholder": "Deskribatu zer biltzen duen talde erosketak",
+    "specificProductPlaceholder": "Produktuaren izen zehatza"
+  },
+  "circles": {
+    "myActiveCircles": "Nire Zirkulu Aktiboak",
+    "circleTypes": "Zirkulu Motak:",
+    "features": "Ezaugarriak:",
+    "locationPlaceholder": "Adib: Zoom / Bartzelona"
+  },
+  "network": {
+    "networkMap": "Sarearen Mapa",
+    "activeConnections": "Konexio Aktiboak",
+    "averageStrength": "Batez Besteko Indarra"
+  },
+  "bridge": {
+    "title": "Bridge - SEMILLA Multi-Chain",
+    "sendSemilla": "Bidali SEMILLA",
+    "connectWallet": "Konektatu diruzorroa",
+    "connectWalletTitle": "Konektatu Web3 Diruzorroa",
+    "connectWalletSubtitle": "Aukeratu zure diruzorroa Bridge-ra konektatzeko eta tokenak kate artean bidaltzeko"
+  },
+  "pools": {
+    "explainNeed": "Azaldu zergatik behar duzun laguntza hau eta nola lagunduko dizun...",
+    "sendRequest": "Bidali Eskaera",
+    "explainDecision": "Azaldu zure erabakia..."
+  },
+  "feedback": {
+    "placeholder": "Kontaiguzu zer gustatu zaizun edo zer hobetu genezakeen..."
+  },
+  "proximity": {
+    "locationPlaceholder": "Adib: Bilbo, Iruña, Madril..."
   }
 }

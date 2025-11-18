@@ -77,6 +77,7 @@ interface MapPin {
 
 export default function HomePage() {
   const t = useTranslations('common');
+  const tHome = useTranslations('home');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [activeTab, setActiveTab] = useState<'discover' | 'activity' | 'community'>('discover');
   const [view, setView] = useState<'map' | 'feed'>('map');
@@ -649,7 +650,7 @@ export default function HomePage() {
             >
               <div className="flex items-center justify-center gap-2">
                 <HomeIcon className="h-5 w-5" />
-                <span className="hidden sm:inline">Descubre</span>
+                <span className="hidden sm:inline">{tHome('discover')}</span>
               </div>
             </button>
             <button
@@ -665,7 +666,7 @@ export default function HomePage() {
             >
               <div className="flex items-center justify-center gap-2">
                 <UserIcon className="h-5 w-5" />
-                <span className="hidden sm:inline">Mi Actividad</span>
+                <span className="hidden sm:inline">{tHome('myActivity')}</span>
               </div>
             </button>
             <button
@@ -681,7 +682,7 @@ export default function HomePage() {
             >
               <div className="flex items-center justify-center gap-2">
                 <ChartBarIcon className="h-5 w-5" />
-                <span className="hidden sm:inline">Comunidad</span>
+                <span className="hidden sm:inline">{tHome('community')}</span>
               </div>
             </button>
             <button
@@ -690,11 +691,11 @@ export default function HomePage() {
                 Analytics.track(ANALYTICS_EVENTS.DASHBOARD_CUSTOMIZER_OPENED);
               }}
               className="px-4 py-3 rounded-md font-medium transition-all bg-purple-100 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-800/30"
-              title="Personalizar Dashboard"
+              title={tHome('customizeDashboard')}
             >
               <div className="flex items-center justify-center gap-2">
                 <Cog6ToothIcon className="h-5 w-5" />
-                <span className="hidden sm:inline">Personalizar</span>
+                <span className="hidden sm:inline">{tHome('customize')}</span>
               </div>
             </button>
           </div>
@@ -736,7 +737,7 @@ export default function HomePage() {
                       >
                         <div className="flex items-center gap-2">
                           <MapIcon className="h-5 w-5" />
-                          <span>Mapa</span>
+                          <span>{tHome('map')}</span>
                         </div>
                         {view === 'map' && filteredPins.length > 0 && (
                           <span className="ml-2 px-2 py-0.5 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 rounded-full text-xs">
@@ -754,7 +755,7 @@ export default function HomePage() {
                       >
                         <div className="flex items-center gap-2">
                           <NewspaperIcon className="h-5 w-5" />
-                          <span>Feed</span>
+                          <span>{tHome('feed')}</span>
                         </div>
                       </Button>
                       {view === 'map' && filteredPins.length > 0 && (
