@@ -1814,13 +1814,259 @@
         "reputation": "Ospea",
         "delegations": "Delegazioak",
         "success": "Arrakasta",
-        "expertise": "Esperientzia Arloak"
+        "expertise": "Esperientzia Arloak",
+        "delegateVote": "Delegatu Botoa"
       },
       "toasts": {
         "delegateSuccess": "Delegazioa arrakastaz sortua!",
         "delegateError": "Errorea delegazioa sortzean",
         "revokeSuccess": "Delegazioa arrakastaz ezeztatua",
         "revokeError": "Errorea delegazioa ezeztatzean"
+      },
+      "myDelegations": {
+        "category": "Kategoria",
+        "power": "Ahalmena",
+        "since": "Noiztik",
+        "expires": "Iraungitzen",
+        "active": "Aktiboa",
+        "inactive": "Ez-aktiboa",
+        "revoke": "Ezeztatu"
+      },
+      "empty": {
+        "noDelegates": {
+          "title": "Ez dago delegaturik eskuragarri",
+          "description": "Delegatuak hemen agertuko dira nahikoa ospe duten kideak daudenean"
+        },
+        "noDelegations": {
+          "title": "Ez dituzu delegazio aktiboak",
+          "description": "Delegatu zure botoa adituei zure izenean bozkatzeko",
+          "button": "Ikusi Delegatu Eskuragarriak"
+        }
+      },
+      "howItWorks": {
+        "title": "Nola funtzionatzen du Delegazioak?",
+        "step1": {
+          "title": "Aukeratu Delegatu bat",
+          "description": "Aukeratu interesatzen zaizun arloan esperientzia duen norbait"
+        },
+        "step2": {
+          "title": "Delegatu Ahalmena",
+          "description": "Erabaki zenbat bozka ahalmen transferitu nahi duzun"
+        },
+        "step3": {
+          "title": "Haiek Bozkatzen Dute",
+          "description": "Delegatuak zure izenean bozkatzen du proposamenetan"
+        },
+        "step4": {
+          "title": "Ezeztatu Dezakezu",
+          "description": "Kendu delegazioa edozein unetan iritzia aldatzen baduzu"
+        },
+        "benefits": {
+          "title": "Delegatzeko Onurak",
+          "item1": "Zure ahotsak balio du parte hartzeko denborarik ez baduzu ere",
+          "item2": "Adituek erabaki informatuak hartzen dituzte",
+          "item3": "Kategoria zehatzen arabera delegatu dezakezu",
+          "item4": "Gobernantzako partaidetza handitzen du"
+        },
+        "tips": {
+          "title": "Delegatzeko Aholkuak",
+          "item1": "Berrikusi delegatuaren ospea eta arrakasta tasa",
+          "item2": "Kontuan hartu haien esperientzia arlo zehatzetan",
+          "item3": "Hasi ahalmen gutxirekin eta handitu pixkanaka",
+          "item4": "Jarraitu nola bozkatzen duten zure delegatuak"
+        }
+      },
+      "modal": {
+        "title": "Delegatu Botoa",
+        "reputation": "Ospea",
+        "success": "Arrakasta",
+        "categoryLabel": "Kategoria (aukerakoa)",
+        "categoryHint": "Aukeratu kategoria zehatz bat edo utzi \"Guztiak\" dena delegatzeko",
+        "powerLabel": "Delegatzeko Bozka Ahalmena: {power}",
+        "important": {
+          "title": "Garrantzitsua",
+          "item1": "Delegatuak zure izenean bozkatuko du esleitutako ahalmenarekin",
+          "item2": "Delegazioa ezeztatu dezakezu edozein unetan",
+          "item3": "Delegazioa mantentzen da ezeztatu arte",
+          "item4": "Delegazio aktibo ugari izan ditzakezu"
+        },
+        "cancel": "Utzi",
+        "delegating": "Delegatzen...",
+        "confirm": "Baieztatu Delegazioa"
+      }
+    },
+    "dashboard": {
+      "header": {
+        "title": "Gobernantza Arbela",
+        "subtitle": "Gobernantza sistema deszentralizatua bozketa kuadratiko eta demokrazia likidoarekin"
+      },
+      "stats": {
+        "activeProposals": "Proposamen Aktiboak",
+        "totalVotes": "Bozka Guztira",
+        "participants": "Partaideak",
+        "pendingModerations": "Moderazio Pendienteak",
+        "of": "{total}-(e)tik"
+      },
+      "features": {
+        "proposals": {
+          "title": "Proposamenak (CIPs)",
+          "description": "Sortu eta bozkatu komunitate hobekuntza proposamenak",
+          "badge": "{count} aktibo"
+        },
+        "delegation": {
+          "title": "Delegazio Likidoa",
+          "description": "Delegatu zure bozka ahalmena fidagarriak diren ordezkariei"
+        },
+        "moderation": {
+          "title": "DAO Moderazioa",
+          "description": "Parte hartu komunitate moderazio deszentralizatuan",
+          "badge": "{count} pendiente"
+        },
+        "leaderboard": {
+          "title": "Ospe Sailkapena",
+          "description": "Kideen rankinga Proof of Help arabera"
+        },
+        "blocks": {
+          "title": "Konfiantza Blokeak",
+          "description": "Komunitateak balioztutako ekintzen historiala",
+          "badge": "{count} bloke"
+        },
+        "myReputation": {
+          "title": "Nire Ospea",
+          "description": "Ikusi zure puntuazioa eta gobernantza pribilegioak"
+        }
+      },
+      "recentProposals": {
+        "title": "Proposamen Berriak",
+        "viewAll": "Ikusi guztiak",
+        "by": "{author}-(e)k",
+        "empty": "Oraindik ez dago proposamenik",
+        "createFirst": "Sortu Lehen Proposamena"
+      },
+      "infoBox": {
+        "title": "Gobernantza Sistemari buruz",
+        "description": "Truk-ek gobernantza sistema hibridoa erabiltzen du bozketa kuadratikoa, demokrazia likidoa eta Proof of Help konbinatzen dituena erabaki justu eta deszentralizatuetarako.",
+        "quadratic": {
+          "title": "Bozketa Kuadratikoa",
+          "description": "Bozkatu puntuekin. Kostua kuadratikoki handitzen da plutokrazia saihesteko"
+        },
+        "liquid": {
+          "title": "Demokrazia Likidoa",
+          "description": "Delegatu zure botoa adituei edo bozkatu zuzenean"
+        },
+        "proofOfHelp": {
+          "title": "Proof of Help",
+          "description": "Zure ospeak zure gobernantza pribilegioak zehazten ditu"
+        }
+      }
+    },
+    "proposals": {
+      "layout": {
+        "title": "Proposamenak - Truk"
+      },
+      "header": {
+        "title": "Komunitate Proposamenak (CIPs)",
+        "subtitle": "Sortu, eztabaidatu eta bozkatu hobekuntza proposamenak komunitatearentzat"
+      },
+      "reputation": {
+        "title": "Zure Ospea",
+        "level": "Uneko Maila",
+        "privilegesTitle": "Pribilegioak",
+        "requirementInfo": "20 ospe puntu behar dituzu proposamenak sortzeko. Orain {current} dituzu."
+      },
+      "filters": {
+        "all": "Guztiak",
+        "discussion": "Eztabaida",
+        "voting": "Bozketa",
+        "approved": "Onartutakoak"
+      },
+      "buttons": {
+        "newProposal": "Proposamen Berria"
+      },
+      "status": {
+        "DISCUSSION": "Eztabaida",
+        "VOTING": "Bozketa",
+        "APPROVED": "Onartua",
+        "REJECTED": "Baztertua"
+      },
+      "type": {
+        "FEATURE": "Funtzio Berria",
+        "RULE_CHANGE": "Arau Aldaketa",
+        "FUND_ALLOCATION": "Funtsen Esleipena",
+        "PARTNERSHIP": "Aliantza"
+      },
+      "meta": {
+        "author": "Egile Anonimoa",
+        "budget": "{amount}€ aurrekontua"
+      },
+      "voting": {
+        "votesFor": "Aldeko: {count}",
+        "votesAgainst": "Aurka: {count}"
+      },
+      "actions": {
+        "viewDetails": "Ikusi Xehetasunak",
+        "voteNow": "Bozkatu Orain",
+        "alreadyVoted": "Dagoeneko Bozkatu Duzu"
+      },
+      "empty": {
+        "title": "Ez dago proposamenik",
+        "description": "Izan zaitez lehena komunitatea hobetzeko proposamen bat sortzeko",
+        "button": "Sortu Lehen Proposamena"
+      },
+      "modal": {
+        "newProposal": "Proposamen Berria"
+      },
+      "form": {
+        "typeLabel": "Proposamen Mota",
+        "typeOptions": {
+          "FEATURE": "Funtzio Berria",
+          "RULE_CHANGE": "Arau Aldaketa",
+          "FUND_ALLOCATION": "Funtsen Esleipena",
+          "PARTNERSHIP": "Aliantza"
+        },
+        "title": {
+          "label": "Izenburua",
+          "placeholder": "Zure proposamenerako izenburu argi eta deskribatzailea"
+        },
+        "description": {
+          "label": "Deskribapena",
+          "placeholder": "Deskribatu zure proposamena eta bere justifikazioa xehetasunez..."
+        },
+        "implementation": {
+          "label": "Inplementazio Plana",
+          "placeholder": "Deskribatu nola inplementatuko litzatekeen proposamen hau..."
+        },
+        "budget": {
+          "label": "Beharrezko Aurrekontua (€)",
+          "placeholder": "0"
+        },
+        "processInfo": {
+          "title": "Onarpen Prozesua",
+          "step1": "Proposamena 3 egun egongo da eztabaidan",
+          "step2": "Gero 4 egun bozketa kuadratikoan",
+          "step3": "Ataria lortzen badu, onartuko da"
+        },
+        "cancel": "Utzi",
+        "submitting": "Sortzen...",
+        "submit": "Sortu Proposamena"
+      },
+      "voteModal": {
+        "title": "Bozkatu Proposamenean",
+        "quadraticTitle": "Bozketa Kuadratikoa",
+        "quadraticInfo": "Kostua kuadratikoki handitzen da: 1 puntu = 1 kreditu, 5 puntu = 25 kreditu, 10 puntu = 100 kreditu",
+        "pointsLabel": "Bozka puntuak: {points}",
+        "costLabel": "Kostua kreditutan:",
+        "costAmount": "{cost} kreditu",
+        "cancel": "Utzi",
+        "confirming": "Baieztatzen...",
+        "confirm": "Baieztatu Botoa"
+      },
+      "toasts": {
+        "createSuccess": "Proposamena arrakastaz sortua!",
+        "createError": "Errorea proposamena sortzean",
+        "voteSuccess": "Botoa arrakastaz erregistratua!",
+        "voteError": "Errorea botoa erregistratzean",
+        "reputationRequired": "Gutxienez 20 ospe puntu behar dituzu proposamenak sortzeko"
       }
     },
     "title": "Komunitate Gobernantza",
@@ -4440,9 +4686,121 @@
     "connectWalletSubtitle": "Aukeratu zure diruzorroa Bridge-ra konektatzeko eta tokenak kate artean bidaltzeko"
   },
   "pools": {
+    "pageTitle": "Komunitateko Putzuak - Truk",
+    "requestsPageTitle": "Putzu Eskaerak - Truk",
+    "requestDetailPageTitle": "Putzu Eskaera - Truk",
+    "title": "Komunitateko Putzuak",
+    "subtitle": "Baliabide kolektiboak elkar laguntzeko eta gure komunitatea indartzeko",
+    "viewRequests": "Ikusi Eskaerak",
+    "totalBalance": "Putzuen Balantze Totala",
+    "availableCredits": "Komunitaterako eskuragarri dauden kredituak",
+    "howPoolsWork": "Nola funtzionatzen dute Putzuek?",
+    "howPoolsWorkDesc": "Komunitateko putzuak automatikoki elikatzen dira P2P transakzio bakoitzaren % 2arekin. Komunitatearen behar ezberdinak laguntzeko baliabide kolektiboak dira.",
+    "howPoolsWorkBullet1": "Edozein kidek putzu batetik laguntza eskatu dezake",
+    "howPoolsWorkBullet2": "Eskaerak komunitatearen adostasunez berrikusten eta onartzen dira",
+    "howPoolsWorkBullet3": "Baliabideak zirkulatzeko eta gehien behar duenari laguntzeko diseinatuta daude",
+    "howPoolsWorkBullet4": "Komunitateari ekarpena egiteak zure ospea eta generosityScore handitzen ditu",
+    "currentBalance": "Uneko Balantzea",
+    "totalReceived": "Guztira Jasota",
+    "totalDistributed": "Guztira Banatuta",
+    "requestSupport": "Laguntza Eskatu",
+    "requestSupportTitle": "Laguntza Eskatu",
+    "availableBalance": "Balantze eskuragarria: {amount} kreditu",
+    "requestedAmount": "Eskatutako zenbatekoa",
+    "requestReason": "Eskaeraren arrazoia",
     "explainNeed": "Azaldu zergatik behar duzun laguntza hau eta nola lagunduko dizun...",
+    "requestWarning": "Zure eskaera komunitateak berrikusiko du. Izan zintzoa eta zehatza zure beharrari buruz.",
+    "cancel": "Utzi",
+    "sending": "Bidaltzen...",
     "sendRequest": "Bidali Eskaera",
-    "explainDecision": "Azaldu zure erabakia..."
+    "howToContribute": "Nola Ekarpenak Egin?",
+    "contributeDesc": "Putzuak automatikoki elikatzen dira zuk egiten duzun P2P transakzio bakoitzaren % 2arekin.",
+    "sendCredits": "Bidali Kredituak",
+    "sendCreditsDesc": "Transakzio bakoitzak automatikoki ekarpena egiten du",
+    "directHelp": "Laguntza Zuzena",
+    "directHelpDesc": "Parte hartu eskaerak berrikustean",
+    "mustLogin": "Saioa hasi behar duzu",
+    "selectPool": "Hautatu putzu bat",
+    "enterValidAmount": "Sartu zenbateko baliogarri bat",
+    "describeReason": "Deskribatu zure eskaeraren arrazoia",
+    "requestSent": "Eskaera bidali da. Komunitateak laster berrikusiko du.",
+    "errorSendingRequest": "Errorea eskaera bidaltzean",
+    "poolTypes": {
+      "NEEDS": {
+        "name": "Oinarrizko Beharrak",
+        "description": "Larrialdi laguntza oinarrizko beharretarako: janaria, etxebizitza, osasuna"
+      },
+      "PROJECTS": {
+        "name": "Komunitateko Proiektuak",
+        "description": "Komunitate osoari onura ekartzen dioten ekimenetarako finantzaketa"
+      },
+      "EMERGENCY": {
+        "name": "Larrialdiakv",
+        "description": "Erantzun azkarra larrialdi premiazkoetarako"
+      },
+      "CELEBRATION": {
+        "name": "Ospakizunak",
+        "description": "Komunitateko ekitaldiak, festak eta ospakizun kolektiboak"
+      },
+      "EQUALITY": {
+        "name": "Berdintasun Ekonomikoa",
+        "description": "Birbanaketa komunitatean berdintasun ekonomikoa mantentzeko"
+      }
+    },
+    "status": {
+      "PENDING": "Zain",
+      "APPROVED": "Onartua",
+      "REJECTED": "Baztertua",
+      "DISTRIBUTED": "Banatua",
+      "CANCELLED": "Bertan behera utzita"
+    },
+    "requests": {
+      "title": "Putzu Eskaerak",
+      "subtitle": "Berrikusi eta bozkatu komunitatearen laguntza eskaerak",
+      "back": "Itzuli",
+      "all": "Guztiak",
+      "noRequests": "Ez dago eskaerarik",
+      "noRequestsYet": "Oraindik ez da eskaerarik sortu",
+      "noRequestsWithStatus": "Ez dago \"{status}\" egoerarekin eskaerarik",
+      "creditsRequested": "kreditu eskatuta",
+      "reason": "Arrazoia:",
+      "vote": "boto",
+      "votes": "boto",
+      "alreadyVoted": "Dagoeneko bozkatu duzu",
+      "pendingYourVote": "Zure botoaren zain",
+      "statusLabel": "Egoera: {status}",
+      "distributedOn": "Banatua: {date}",
+      "generosity": "Eskuzabaltasuna: {score}",
+      "poolBalance": "Putzuaren balantzea: {amount} kreditu",
+      "requestReasonTitle": "Eskaeraren Arrazoia",
+      "communityVotes": "Komunitatearen Botoak",
+      "inFavor": "Alde",
+      "against": "Aurka",
+      "total": "Guztira",
+      "autoApprovalInfo": "3 boto alde aurkakorik gabe behar dira onarpen automatikorako, edo 3 aurkako baztertze automatikorako.",
+      "yourVote": "Zure botoa: {vote}",
+      "inFavorVote": "Alde",
+      "againstVote": "Aurka",
+      "changeVote": "Aldatu botoa",
+      "voteOnRequest": "Bozkatu eskaera honi buruz",
+      "distributeFunds": "Banatu Funtsak",
+      "distributing": "Banatzen...",
+      "votesCount": "Botoak ({count})",
+      "castVote": "Eman Botoa",
+      "yourDecision": "Zure erabakia",
+      "approve": "Onartu",
+      "reject": "Baztertu",
+      "commentOptional": "Iruzkina (aukerakoa)",
+      "explainDecision": "Azaldu zure erabakia...",
+      "voting": "Bozkatzen...",
+      "confirmVote": "Berretsi Botoa",
+      "voteSuccess": "Botoa ongi erregistratu da",
+      "voteError": "Errorea bozkatzean",
+      "approveSuccess": "Eskaera onartua",
+      "approveError": "Errorea onartzean",
+      "distributeSuccess": "Funtsak ongi banatu dira",
+      "distributeError": "Errorea funtsak banatzean"
+    }
   },
   "feedback": {
     "placeholder": "Kontaiguzu zer gustatu zaizun edo zer hobetu genezakeen..."

@@ -1821,6 +1821,258 @@
         "delegateError": "Error al crear delegación",
         "revokeSuccess": "Delegación revocada exitosamente",
         "revokeError": "Error al revocar delegación"
+      },
+      "delegateCard": {
+        "reputation": "Reputación",
+        "delegations": "Delegaciones",
+        "success": "Éxito",
+        "expertise": "Áreas de Experiencia",
+        "delegateVote": "Delegar Voto"
+      },
+      "myDelegations": {
+        "category": "Categoría",
+        "power": "Poder",
+        "since": "Desde",
+        "expires": "Expira",
+        "active": "Activa",
+        "inactive": "Inactiva",
+        "revoke": "Revocar"
+      },
+      "empty": {
+        "noDelegates": {
+          "title": "No hay delegados disponibles",
+          "description": "Los delegados aparecerán aquí cuando haya miembros con suficiente reputación"
+        },
+        "noDelegations": {
+          "title": "No tienes delegaciones activas",
+          "description": "Delega tu voto en expertos para que voten en tu nombre",
+          "button": "Ver Delegados Disponibles"
+        }
+      },
+      "howItWorks": {
+        "title": "¿Cómo funciona la Delegación?",
+        "step1": {
+          "title": "Elige un Delegado",
+          "description": "Selecciona a alguien con experiencia en el área que te interesa"
+        },
+        "step2": {
+          "title": "Delega Poder",
+          "description": "Decide cuánto poder de voto quieres transferir"
+        },
+        "step3": {
+          "title": "Ellos Votan",
+          "description": "El delegado vota en tu nombre en las propuestas"
+        },
+        "step4": {
+          "title": "Puedes Revocar",
+          "description": "Retira la delegación en cualquier momento si cambias de opinión"
+        },
+        "benefits": {
+          "title": "Beneficios de Delegar",
+          "item1": "Tu voz cuenta aunque no tengas tiempo de participar",
+          "item2": "Los expertos toman decisiones informadas",
+          "item3": "Puedes delegar por categorías específicas",
+          "item4": "Aumenta la participación en la gobernanza"
+        },
+        "tips": {
+          "title": "Consejos para Delegar",
+          "item1": "Revisa la reputación y tasa de éxito del delegado",
+          "item2": "Considera su experiencia en áreas específicas",
+          "item3": "Empieza con poco poder y aumenta gradualmente",
+          "item4": "Monitorea cómo votan tus delegados"
+        }
+      },
+      "modal": {
+        "title": "Delegar Voto",
+        "reputation": "Reputación",
+        "success": "Éxito",
+        "categoryLabel": "Categoría (opcional)",
+        "categoryHint": "Elige una categoría específica o deja en \"Todas\" para delegar en todo",
+        "powerLabel": "Poder de Voto a Delegar: {power}",
+        "important": {
+          "title": "Importante",
+          "item1": "El delegado votará en tu nombre con el poder asignado",
+          "item2": "Puedes revocar la delegación en cualquier momento",
+          "item3": "La delegación se mantiene hasta que la revoque",
+          "item4": "Puedes tener múltiples delegaciones activas"
+        },
+        "cancel": "Cancelar",
+        "delegating": "Delegando...",
+        "confirm": "Confirmar Delegación"
+      }
+    },
+    "dashboard": {
+      "header": {
+        "title": "Dashboard de Gobernanza",
+        "subtitle": "Sistema de gobernanza descentralizada con votación cuadrática y democracia líquida"
+      },
+      "stats": {
+        "activeProposals": "Propuestas Activas",
+        "totalVotes": "Total de Votos",
+        "participants": "Participantes",
+        "pendingModerations": "Moderaciones Pendientes",
+        "of": "de {total}"
+      },
+      "features": {
+        "proposals": {
+          "title": "Propuestas (CIPs)",
+          "description": "Crea y vota propuestas de mejora comunitaria",
+          "badge": "{count} activas"
+        },
+        "delegation": {
+          "title": "Delegación Líquida",
+          "description": "Delega tu poder de voto a representantes de confianza"
+        },
+        "moderation": {
+          "title": "Moderación DAO",
+          "description": "Participa en la moderación comunitaria descentralizada",
+          "badge": "{count} pendientes"
+        },
+        "leaderboard": {
+          "title": "Leaderboard de Reputación",
+          "description": "Ranking de miembros según su Proof of Help"
+        },
+        "blocks": {
+          "title": "Bloques de Confianza",
+          "description": "Historial de acciones validadas por la comunidad",
+          "badge": "{count} bloques"
+        },
+        "myReputation": {
+          "title": "Mi Reputación",
+          "description": "Ve tu puntuación y privilegios de gobernanza"
+        }
+      },
+      "recentProposals": {
+        "title": "Propuestas Recientes",
+        "viewAll": "Ver todas",
+        "by": "Por {author}",
+        "empty": "No hay propuestas todavía",
+        "createFirst": "Crear Primera Propuesta"
+      },
+      "infoBox": {
+        "title": "Sobre el Sistema de Gobernanza",
+        "description": "Truk utiliza un sistema híbrido de gobernanza que combina votación cuadrática, democracia líquida y Proof of Help para decisiones justas y descentralizadas.",
+        "quadratic": {
+          "title": "Votación Cuadrática",
+          "description": "Vota con puntos. El costo aumenta cuadráticamente para evitar plutocracia"
+        },
+        "liquid": {
+          "title": "Democracia Líquida",
+          "description": "Delega tu voto a expertos o vota directamente"
+        },
+        "proofOfHelp": {
+          "title": "Proof of Help",
+          "description": "Tu reputación determina tus privilegios de gobernanza"
+        }
+      }
+    },
+    "proposals": {
+      "layout": {
+        "title": "Propuestas - Truk"
+      },
+      "header": {
+        "title": "Propuestas Comunitarias (CIPs)",
+        "subtitle": "Crea, debate y vota propuestas de mejora para la comunidad"
+      },
+      "reputation": {
+        "title": "Tu Reputación",
+        "level": "Nivel Actual",
+        "privilegesTitle": "Privilegios",
+        "requirementInfo": "Necesitas 20 puntos de reputación para crear propuestas. Actualmente tienes {current}."
+      },
+      "filters": {
+        "all": "Todas",
+        "discussion": "Discusión",
+        "voting": "Votación",
+        "approved": "Aprobadas"
+      },
+      "buttons": {
+        "newProposal": "Nueva Propuesta"
+      },
+      "status": {
+        "DISCUSSION": "Discusión",
+        "VOTING": "Votación",
+        "APPROVED": "Aprobada",
+        "REJECTED": "Rechazada"
+      },
+      "type": {
+        "FEATURE": "Nueva Función",
+        "RULE_CHANGE": "Cambio de Reglas",
+        "FUND_ALLOCATION": "Asignación de Fondos",
+        "PARTNERSHIP": "Alianza"
+      },
+      "meta": {
+        "author": "Autor Anónimo",
+        "budget": "{amount}€ presupuesto"
+      },
+      "voting": {
+        "votesFor": "A favor: {count}",
+        "votesAgainst": "En contra: {count}"
+      },
+      "actions": {
+        "viewDetails": "Ver Detalles",
+        "voteNow": "Votar Ahora",
+        "alreadyVoted": "Ya Votaste"
+      },
+      "empty": {
+        "title": "No hay propuestas",
+        "description": "Sé el primero en crear una propuesta para mejorar la comunidad",
+        "button": "Crear Primera Propuesta"
+      },
+      "modal": {
+        "newProposal": "Nueva Propuesta"
+      },
+      "form": {
+        "typeLabel": "Tipo de Propuesta",
+        "typeOptions": {
+          "FEATURE": "Nueva Función",
+          "RULE_CHANGE": "Cambio de Reglas",
+          "FUND_ALLOCATION": "Asignación de Fondos",
+          "PARTNERSHIP": "Alianza"
+        },
+        "title": {
+          "label": "Título",
+          "placeholder": "Título claro y descriptivo de tu propuesta"
+        },
+        "description": {
+          "label": "Descripción",
+          "placeholder": "Describe detalladamente tu propuesta y su justificación..."
+        },
+        "implementation": {
+          "label": "Plan de Implementación",
+          "placeholder": "Describe cómo se implementaría esta propuesta..."
+        },
+        "budget": {
+          "label": "Presupuesto Requerido (€)",
+          "placeholder": "0"
+        },
+        "processInfo": {
+          "title": "Proceso de Aprobación",
+          "step1": "La propuesta estará 3 días en discusión",
+          "step2": "Luego 4 días en votación cuadrática",
+          "step3": "Si alcanza el umbral, se aprueba"
+        },
+        "cancel": "Cancelar",
+        "submitting": "Creando...",
+        "submit": "Crear Propuesta"
+      },
+      "voteModal": {
+        "title": "Votar en Propuesta",
+        "quadraticTitle": "Votación Cuadrática",
+        "quadraticInfo": "El costo aumenta cuadráticamente: 1 punto = 1 crédito, 5 puntos = 25 créditos, 10 puntos = 100 créditos",
+        "pointsLabel": "Puntos de voto: {points}",
+        "costLabel": "Costo en créditos:",
+        "costAmount": "{cost} créditos",
+        "cancel": "Cancelar",
+        "confirming": "Confirmando...",
+        "confirm": "Confirmar Voto"
+      },
+      "toasts": {
+        "createSuccess": "¡Propuesta creada exitosamente!",
+        "createError": "Error al crear la propuesta",
+        "voteSuccess": "¡Voto registrado exitosamente!",
+        "voteError": "Error al registrar el voto",
+        "reputationRequired": "Necesitas al menos 20 puntos de reputación para crear propuestas"
       }
     },
     "title": "Gobernanza Comunitaria",
@@ -4440,9 +4692,121 @@
     "connectWalletSubtitle": "Elige tu billetera para conectar al Bridge y enviar tokens cross-chain"
   },
   "pools": {
+    "pageTitle": "Pools Comunitarios - Truk",
+    "requestsPageTitle": "Solicitudes de Pool - Truk",
+    "requestDetailPageTitle": "Solicitud de Pool - Truk",
+    "title": "Pools Comunitarios",
+    "subtitle": "Recursos colectivos para apoyarnos mutuamente y fortalecer nuestra comunidad",
+    "viewRequests": "Ver Solicitudes",
+    "totalBalance": "Balance Total de Pools",
+    "availableCredits": "Créditos disponibles para la comunidad",
+    "howPoolsWork": "Como funcionan los Pools?",
+    "howPoolsWorkDesc": "Los pools comunitarios se alimentan automáticamente del 2% de cada transacción P2P. Son recursos colectivos para apoyar diferentes necesidades de la comunidad.",
+    "howPoolsWorkBullet1": "Cualquier miembro puede solicitar apoyo de un pool",
+    "howPoolsWorkBullet2": "Las solicitudes se revisan y aprueban por consenso comunitario",
+    "howPoolsWorkBullet3": "Los recursos están diseñados para circular y ayudar a quien más lo necesita",
+    "howPoolsWorkBullet4": "Contribuir a la comunidad aumenta tu reputación y generosityScore",
+    "currentBalance": "Balance Actual",
+    "totalReceived": "Total Recibido",
+    "totalDistributed": "Total Distribuido",
+    "requestSupport": "Solicitar Apoyo",
+    "requestSupportTitle": "Solicitar Apoyo",
+    "availableBalance": "Balance disponible: {amount} créditos",
+    "requestedAmount": "Monto solicitado",
+    "requestReason": "Motivo de la solicitud",
     "explainNeed": "Explica por qué necesitas este apoyo y cómo te ayudará...",
+    "requestWarning": "Tu solicitud será revisada por la comunidad. Sé honesto y específico sobre tu necesidad.",
+    "cancel": "Cancelar",
+    "sending": "Enviando...",
     "sendRequest": "Enviar Solicitud",
-    "explainDecision": "Explica tu decisión..."
+    "howToContribute": "Como Contribuir?",
+    "contributeDesc": "Los pools se alimentan automáticamente del 2% de cada transacción P2P que realices.",
+    "sendCredits": "Envía Créditos",
+    "sendCreditsDesc": "Cada transacción contribuye automáticamente",
+    "directHelp": "Ayuda Directa",
+    "directHelpDesc": "Participa en la revisión de solicitudes",
+    "mustLogin": "Debes iniciar sesión",
+    "selectPool": "Selecciona un pool",
+    "enterValidAmount": "Ingresa un monto válido",
+    "describeReason": "Describe el motivo de tu solicitud",
+    "requestSent": "Solicitud enviada. La comunidad la revisará pronto.",
+    "errorSendingRequest": "Error al enviar solicitud",
+    "poolTypes": {
+      "NEEDS": {
+        "name": "Necesidades Básicas",
+        "description": "Apoyo de emergencia para necesidades básicas como alimentos, vivienda, salud"
+      },
+      "PROJECTS": {
+        "name": "Proyectos Comunitarios",
+        "description": "Financiamiento para iniciativas que benefician a toda la comunidad"
+      },
+      "EMERGENCY": {
+        "name": "Emergencias",
+        "description": "Respuesta rápida a situaciones de emergencia urgentes"
+      },
+      "CELEBRATION": {
+        "name": "Celebraciones",
+        "description": "Eventos comunitarios, fiestas, y celebraciones colectivas"
+      },
+      "EQUALITY": {
+        "name": "Igualdad Económica",
+        "description": "Redistribución para mantener la igualdad económica en la comunidad"
+      }
+    },
+    "status": {
+      "PENDING": "Pendiente",
+      "APPROVED": "Aprobada",
+      "REJECTED": "Rechazada",
+      "DISTRIBUTED": "Distribuida",
+      "CANCELLED": "Cancelada"
+    },
+    "requests": {
+      "title": "Solicitudes de Pool",
+      "subtitle": "Revisa y vota sobre las solicitudes de apoyo de la comunidad",
+      "back": "Volver",
+      "all": "Todas",
+      "noRequests": "No hay solicitudes",
+      "noRequestsYet": "No se han creado solicitudes todavía",
+      "noRequestsWithStatus": "No hay solicitudes con estado \"{status}\"",
+      "creditsRequested": "créditos solicitados",
+      "reason": "Motivo:",
+      "vote": "voto",
+      "votes": "votos",
+      "alreadyVoted": "Ya votaste",
+      "pendingYourVote": "Pendiente de tu voto",
+      "statusLabel": "Estado: {status}",
+      "distributedOn": "Distribuido: {date}",
+      "generosity": "Generosidad: {score}",
+      "poolBalance": "Balance del pool: {amount} créditos",
+      "requestReasonTitle": "Motivo de la Solicitud",
+      "communityVotes": "Votos de la Comunidad",
+      "inFavor": "A favor",
+      "against": "En contra",
+      "total": "Total",
+      "autoApprovalInfo": "Se necesitan 3 votos a favor sin rechazos para aprobación automática, o 3 rechazos para rechazo automático.",
+      "yourVote": "Tu voto: {vote}",
+      "inFavorVote": "A favor",
+      "againstVote": "En contra",
+      "changeVote": "Cambiar voto",
+      "voteOnRequest": "Votar sobre esta solicitud",
+      "distributeFunds": "Distribuir Fondos",
+      "distributing": "Distribuyendo...",
+      "votesCount": "Votos ({count})",
+      "castVote": "Emitir Voto",
+      "yourDecision": "Tu decisión",
+      "approve": "Aprobar",
+      "reject": "Rechazar",
+      "commentOptional": "Comentario (opcional)",
+      "explainDecision": "Explica tu decisión...",
+      "voting": "Votando...",
+      "confirmVote": "Confirmar Voto",
+      "voteSuccess": "Voto registrado exitosamente",
+      "voteError": "Error al votar",
+      "approveSuccess": "Solicitud aprobada",
+      "approveError": "Error al aprobar",
+      "distributeSuccess": "Fondos distribuidos exitosamente",
+      "distributeError": "Error al distribuir fondos"
+    }
   },
   "feedback": {
     "placeholder": "Cuéntanos qué te gustó o qué podríamos mejorar..."

@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 
 interface Pool {
   type: string;
@@ -18,42 +19,26 @@ interface EconomicMetrics {
   totalPoolBalance: number;
 }
 
-const POOL_INFO = {
-  NEEDS: {
-    name: 'Necesidades Básicas',
-    icon: '🆘',
-    description: 'Apoyo de emergencia para necesidades básicas como alimentos, vivienda, salud',
-    color: 'from-red-500 to-orange-600',
-  },
-  PROJECTS: {
-    name: 'Proyectos Comunitarios',
-    icon: '🚀',
-    description: 'Financiamiento para iniciativas que benefician a toda la comunidad',
-    color: 'from-blue-500 to-purple-600',
-  },
-  EMERGENCY: {
-    name: 'Emergencias',
-    icon: '⚡',
-    description: 'Respuesta rápida a situaciones de emergencia urgentes',
-    color: 'from-yellow-500 to-red-600',
-  },
-  CELEBRATION: {
-    name: 'Celebraciones',
-    icon: '🎉',
-    description: 'Eventos comunitarios, fiestas, y celebraciones colectivas',
-    color: 'from-pink-500 to-purple-600',
-  },
-  EQUALITY: {
-    name: 'Igualdad Económica',
-    icon: '⚖️',
-    description: 'Redistribución para mantener la igualdad económica en la comunidad',
-    color: 'from-green-500 to-teal-600',
-  },
+const POOL_ICONS = {
+  NEEDS: '🆘',
+  PROJECTS: '🚀',
+  EMERGENCY: '⚡',
+  CELEBRATION: '🎉',
+  EQUALITY: '⚖️',
+};
+
+const POOL_COLORS = {
+  NEEDS: 'from-red-500 to-orange-600',
+  PROJECTS: 'from-blue-500 to-purple-600',
+  EMERGENCY: 'from-yellow-500 to-red-600',
+  CELEBRATION: 'from-pink-500 to-purple-600',
+  EQUALITY: 'from-green-500 to-teal-600',
 };
 
 export default function CommunityPoolsPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const t = useTranslations('pools');
   const [userId, setUserId] = useState<string | null>(null);
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [selectedPool, setSelectedPool] = useState<string | null>(null);
@@ -63,13 +48,13 @@ export default function CommunityPoolsPage() {
   useEffect(() => {
     const userStr = localStorage.getItem('user');
     if (!userStr) {
-      toast.error('Debes iniciar sesión');
+      toast.error(t('mustLogin'));
       router.push('/auth/login');
       return;
     }
     const user = JSON.parse(userStr);
     setUserId(user.id);
-  }, [router]);
+  }, [router, t]);
 
   const { data: metrics, isLoading } = useQuery<EconomicMetrics>({
     queryKey: ['economy-metrics'],
@@ -86,7 +71,7 @@ export default function CommunityPoolsPage() {
       return response.data;
     },
     onSuccess: (data) => {
-      toast.success(data.message || 'Solicitud enviada. La comunidad la revisará pronto.');
+      toast.success(data.message || t('requestSent'));
       setShowRequestModal(false);
       setSelectedPool(null);
       setRequestAmount('');
@@ -94,7 +79,7 @@ export default function CommunityPoolsPage() {
       queryClient.invalidateQueries({ queryKey: ['economy-metrics'] });
     },
     onError: (error: any) => {
-      const message = error.response?.data?.message || 'Error al enviar solicitud';
+      const message = error.response?.data?.message || t('errorSendingRequest');
       toast.error(message);
     },
   });
@@ -103,17 +88,17 @@ export default function CommunityPoolsPage() {
     e.preventDefault();
 
     if (!selectedPool) {
-      toast.error('Selecciona un pool');
+      toast.error(t('selectPool'));
       return;
     }
 
     if (!requestAmount || parseFloat(requestAmount) <= 0) {
-      toast.error('Ingresa un monto válido');
+      toast.error(t('enterValidAmount'));
       return;
     }
 
     if (!requestReason.trim()) {
-      toast.error('Describe el motivo de tu solicitud');
+      toast.error(t('describeReason'));
       return;
     }
 
@@ -135,16 +120,16 @@ export default function CommunityPoolsPage() {
   }
 
   return (
-    <Layout title="Pools Comunitarios - Truk">
+    <Layout title={t('pageTitle')}>
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="container mx-auto px-4 max-w-6xl">
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">Pools Comunitarios</h1>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('title')}</h1>
                 <p className="text-gray-600">
-                  Recursos colectivos para apoyarnos mutuamente y fortalecer nuestra comunidad
+                  {t('subtitle')}
                 </p>
               </div>
               <div className="flex gap-3">
@@ -152,7 +137,7 @@ export default function CommunityPoolsPage() {
                   onClick={() => router.push('/economy/pools/requests')}
                   className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium transition-colors"
                 >
-                  📋 Ver Solicitudes
+                  {t('viewRequests')}
                 </button>
               </div>
             </div>
@@ -162,9 +147,9 @@ export default function CommunityPoolsPage() {
           <div className="bg-gradient-to-br from-green-500 to-teal-600 rounded-lg shadow-lg p-8 text-white mb-8">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm text-white/80 mb-2">Balance Total de Pools</div>
+                <div className="text-sm text-white/80 mb-2">{t('totalBalance')}</div>
                 <div className="text-6xl font-bold mb-2">{metrics?.totalPoolBalance || 0}</div>
-                <div className="text-xl text-white/90">Créditos disponibles para la comunidad</div>
+                <div className="text-xl text-white/90">{t('availableCredits')}</div>
               </div>
               <div className="text-8xl opacity-20">🏦</div>
             </div>
@@ -172,17 +157,16 @@ export default function CommunityPoolsPage() {
 
           {/* Info Box */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-            <h3 className="text-lg font-semibold text-blue-900 mb-3">💡 ¿Cómo funcionan los Pools?</h3>
+            <h3 className="text-lg font-semibold text-blue-900 mb-3">{t('howPoolsWork')}</h3>
             <div className="text-sm text-blue-800 space-y-2">
               <p>
-                Los pools comunitarios se alimentan automáticamente del 2% de cada transacción P2P.
-                Son recursos colectivos para apoyar diferentes necesidades de la comunidad.
+                {t('howPoolsWorkDesc')}
               </p>
               <ul className="list-disc list-inside space-y-1 mt-2">
-                <li>Cualquier miembro puede solicitar apoyo de un pool</li>
-                <li>Las solicitudes se revisan y aprueban por consenso comunitario</li>
-                <li>Los recursos están diseñados para circular y ayudar a quien más lo necesita</li>
-                <li>Contribuir a la comunidad aumenta tu reputación y generosityScore</li>
+                <li>{t('howPoolsWorkBullet1')}</li>
+                <li>{t('howPoolsWorkBullet2')}</li>
+                <li>{t('howPoolsWorkBullet3')}</li>
+                <li>{t('howPoolsWorkBullet4')}</li>
               </ul>
             </div>
           </div>
@@ -190,35 +174,36 @@ export default function CommunityPoolsPage() {
           {/* Pools Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {metrics?.pools.map((pool) => {
-              const info = POOL_INFO[pool.type as keyof typeof POOL_INFO];
-              if (!info) return null;
+              const poolIcon = POOL_ICONS[pool.type as keyof typeof POOL_ICONS];
+              const poolColor = POOL_COLORS[pool.type as keyof typeof POOL_COLORS];
+              if (!poolIcon) return null;
 
               return (
                 <div
                   key={pool.type}
                   className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
                 >
-                  <div className={`bg-gradient-to-br ${info.color} p-6 text-white`}>
+                  <div className={`bg-gradient-to-br ${poolColor} p-6 text-white`}>
                     <div className="flex items-center justify-between mb-3">
-                      <h3 className="text-xl font-bold">{info.name}</h3>
-                      <span className="text-4xl">{info.icon}</span>
+                      <h3 className="text-xl font-bold">{t(`poolTypes.${pool.type}.name`)}</h3>
+                      <span className="text-4xl">{poolIcon}</span>
                     </div>
-                    <p className="text-sm text-white/90">{info.description}</p>
+                    <p className="text-sm text-white/90">{t(`poolTypes.${pool.type}.description`)}</p>
                   </div>
 
                   <div className="p-6">
                     <div className="space-y-3 mb-4">
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-600">Balance Actual</span>
+                        <span className="text-gray-600">{t('currentBalance')}</span>
                         <span className="text-2xl font-bold text-gray-900">{pool.balance}</span>
                       </div>
                       <div className="h-px bg-gray-200"></div>
                       <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600">Total Recibido</span>
+                        <span className="text-gray-600">{t('totalReceived')}</span>
                         <span className="text-gray-700">{pool.totalReceived}</span>
                       </div>
                       <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600">Total Distribuido</span>
+                        <span className="text-gray-600">{t('totalDistributed')}</span>
                         <span className="text-gray-700">{pool.totalDistributed}</span>
                       </div>
                     </div>
@@ -230,7 +215,7 @@ export default function CommunityPoolsPage() {
                       }}
                       className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
                     >
-                      Solicitar Apoyo
+                      {t('requestSupport')}
                     </button>
                   </div>
                 </div>
@@ -243,7 +228,7 @@ export default function CommunityPoolsPage() {
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900">Solicitar Apoyo</h2>
+                  <h2 className="text-2xl font-bold text-gray-900">{t('requestSupportTitle')}</h2>
                   <button
                     onClick={() => {
                       setShowRequestModal(false);
@@ -258,15 +243,14 @@ export default function CommunityPoolsPage() {
                 <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                   <div className="flex items-center gap-3">
                     <span className="text-3xl">
-                      {POOL_INFO[selectedPool as keyof typeof POOL_INFO]?.icon}
+                      {POOL_ICONS[selectedPool as keyof typeof POOL_ICONS]}
                     </span>
                     <div>
                       <div className="font-semibold text-gray-900">
-                        {POOL_INFO[selectedPool as keyof typeof POOL_INFO]?.name}
+                        {t(`poolTypes.${selectedPool}.name`)}
                       </div>
                       <div className="text-sm text-gray-600">
-                        Balance disponible:{' '}
-                        {metrics?.pools.find((p) => p.type === selectedPool)?.balance || 0} créditos
+                        {t('availableBalance', { amount: metrics?.pools.find((p) => p.type === selectedPool)?.balance || 0 })}
                       </div>
                     </div>
                   </div>
@@ -275,7 +259,7 @@ export default function CommunityPoolsPage() {
                 <form onSubmit={handleRequestSubmit} className="space-y-4">
                   <div>
                     <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-2">
-                      Monto solicitado <span className="text-red-500">*</span>
+                      {t('requestedAmount')} <span className="text-red-500">*</span>
                     </label>
                     <input
                       id="amount"
@@ -292,7 +276,7 @@ export default function CommunityPoolsPage() {
 
                   <div>
                     <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-2">
-                      Motivo de la solicitud <span className="text-red-500">*</span>
+                      {t('requestReason')} <span className="text-red-500">*</span>
                     </label>
                     <textarea
                       id="reason"
@@ -300,15 +284,14 @@ export default function CommunityPoolsPage() {
                       onChange={(e) => setRequestReason(e.target.value)}
                       rows={4}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                      placeholder="Explica por qué necesitas este apoyo y cómo te ayudará..."
+                      placeholder={t('explainNeed')}
                       required
                     />
                   </div>
 
                   <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
                     <p className="text-sm text-yellow-800">
-                      ⚠️ Tu solicitud será revisada por la comunidad. Sé honesto y específico sobre
-                      tu necesidad.
+                      {t('requestWarning')}
                     </p>
                   </div>
 
@@ -321,14 +304,14 @@ export default function CommunityPoolsPage() {
                       }}
                       className="flex-1 py-2 px-4 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium transition-colors"
                     >
-                      Cancelar
+                      {t('cancel')}
                     </button>
                     <button
                       type="submit"
                       disabled={requestMutation.isPending}
                       className="flex-1 py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors disabled:opacity-50"
                     >
-                      {requestMutation.isPending ? 'Enviando...' : 'Enviar Solicitud'}
+                      {requestMutation.isPending ? t('sending') : t('sendRequest')}
                     </button>
                   </div>
                 </form>
@@ -338,27 +321,27 @@ export default function CommunityPoolsPage() {
 
           {/* How to Contribute */}
           <div className="bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-200 rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">💚 ¿Cómo Contribuir?</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">{t('howToContribute')}</h3>
             <div className="space-y-3 text-gray-700">
               <p>
-                Los pools se alimentan automáticamente del 2% de cada transacción P2P que realices.
+                {t('contributeDesc')}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                 <div className="flex items-start gap-3">
                   <span className="text-2xl">💸</span>
                   <div>
-                    <div className="font-semibold">Envía Créditos</div>
+                    <div className="font-semibold">{t('sendCredits')}</div>
                     <div className="text-sm text-gray-600">
-                      Cada transacción contribuye automáticamente
+                      {t('sendCreditsDesc')}
                     </div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="text-2xl">🤝</span>
                   <div>
-                    <div className="font-semibold">Ayuda Directa</div>
+                    <div className="font-semibold">{t('directHelp')}</div>
                     <div className="text-sm text-gray-600">
-                      Participa en la revisión de solicitudes
+                      {t('directHelpDesc')}
                     </div>
                   </div>
                 </div>

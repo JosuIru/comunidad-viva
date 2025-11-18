@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 
 interface User {
   id: string;
@@ -41,46 +42,43 @@ interface PoolRequest {
   distributedAt?: string;
 }
 
-const POOL_INFO: Record<string, any> = {
-  NEEDS: {
-    name: 'Necesidades Básicas',
-    icon: '🆘',
-    color: 'from-red-500 to-orange-600',
-  },
-  PROJECTS: {
-    name: 'Proyectos Comunitarios',
-    icon: '🚀',
-    color: 'from-blue-500 to-purple-600',
-  },
-  EMERGENCY: {
-    name: 'Emergencias',
-    icon: '⚡',
-    color: 'from-yellow-500 to-red-600',
-  },
-  CELEBRATION: {
-    name: 'Celebraciones',
-    icon: '🎉',
-    color: 'from-pink-500 to-purple-600',
-  },
-  EQUALITY: {
-    name: 'Igualdad Económica',
-    icon: '⚖️',
-    color: 'from-green-500 to-teal-600',
-  },
+const POOL_ICONS: Record<string, string> = {
+  NEEDS: '🆘',
+  PROJECTS: '🚀',
+  EMERGENCY: '⚡',
+  CELEBRATION: '🎉',
+  EQUALITY: '⚖️',
 };
 
-const STATUS_INFO = {
-  PENDING: { label: 'Pendiente', color: 'bg-yellow-100 text-yellow-800', icon: '⏳' },
-  APPROVED: { label: 'Aprobada', color: 'bg-green-100 text-green-800', icon: '✅' },
-  REJECTED: { label: 'Rechazada', color: 'bg-red-100 text-red-800', icon: '❌' },
-  DISTRIBUTED: { label: 'Distribuida', color: 'bg-blue-100 text-blue-800', icon: '💰' },
-  CANCELLED: { label: 'Cancelada', color: 'bg-gray-100 text-gray-800', icon: '🚫' },
+const POOL_COLORS: Record<string, string> = {
+  NEEDS: 'from-red-500 to-orange-600',
+  PROJECTS: 'from-blue-500 to-purple-600',
+  EMERGENCY: 'from-yellow-500 to-red-600',
+  CELEBRATION: 'from-pink-500 to-purple-600',
+  EQUALITY: 'from-green-500 to-teal-600',
+};
+
+const STATUS_COLORS: Record<string, string> = {
+  PENDING: 'bg-yellow-100 text-yellow-800',
+  APPROVED: 'bg-green-100 text-green-800',
+  REJECTED: 'bg-red-100 text-red-800',
+  DISTRIBUTED: 'bg-blue-100 text-blue-800',
+  CANCELLED: 'bg-gray-100 text-gray-800',
+};
+
+const STATUS_ICONS: Record<string, string> = {
+  PENDING: '⏳',
+  APPROVED: '✅',
+  REJECTED: '❌',
+  DISTRIBUTED: '💰',
+  CANCELLED: '🚫',
 };
 
 export default function PoolRequestDetailPage() {
   const router = useRouter();
   const { id } = router.query;
   const queryClient = useQueryClient();
+  const t = useTranslations('pools');
   const [userId, setUserId] = useState<string | null>(null);
   const [showVoteForm, setShowVoteForm] = useState(false);
   const [voteValue, setVoteValue] = useState<boolean>(true);
@@ -89,13 +87,13 @@ export default function PoolRequestDetailPage() {
   useEffect(() => {
     const userStr = localStorage.getItem('user');
     if (!userStr) {
-      toast.error('Debes iniciar sesión');
+      toast.error(t('mustLogin'));
       router.push('/auth/login');
       return;
     }
     const user = JSON.parse(userStr);
     setUserId(user.id);
-  }, [router]);
+  }, [router, t]);
 
   const { data: request, isLoading } = useQuery<PoolRequest>({
     queryKey: ['pool-request', id],
@@ -112,14 +110,14 @@ export default function PoolRequestDetailPage() {
       return response.data;
     },
     onSuccess: (data) => {
-      toast.success(data.message || 'Voto registrado exitosamente');
+      toast.success(data.message || t('requests.voteSuccess'));
       queryClient.invalidateQueries({ queryKey: ['pool-request', id] });
       queryClient.invalidateQueries({ queryKey: ['pool-requests'] });
       setShowVoteForm(false);
       setVoteComment('');
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al votar');
+      toast.error(error.response?.data?.message || t('requests.voteError'));
     },
   });
 
@@ -129,12 +127,12 @@ export default function PoolRequestDetailPage() {
       return response.data;
     },
     onSuccess: (data) => {
-      toast.success(data.message || 'Solicitud aprobada');
+      toast.success(data.message || t('requests.approveSuccess'));
       queryClient.invalidateQueries({ queryKey: ['pool-request', id] });
       queryClient.invalidateQueries({ queryKey: ['pool-requests'] });
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al aprobar');
+      toast.error(error.response?.data?.message || t('requests.approveError'));
     },
   });
 
@@ -144,13 +142,13 @@ export default function PoolRequestDetailPage() {
       return response.data;
     },
     onSuccess: (data) => {
-      toast.success(data.message || 'Fondos distribuidos exitosamente');
+      toast.success(data.message || t('requests.distributeSuccess'));
       queryClient.invalidateQueries({ queryKey: ['pool-request', id] });
       queryClient.invalidateQueries({ queryKey: ['pool-requests'] });
       queryClient.invalidateQueries({ queryKey: ['economy-metrics'] });
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error al distribuir fondos');
+      toast.error(error.response?.data?.message || t('requests.distributeError'));
     },
   });
 
@@ -172,15 +170,17 @@ export default function PoolRequestDetailPage() {
     );
   }
 
-  const poolInfo = POOL_INFO[request.pool.type];
-  const statusInfo = STATUS_INFO[request.status];
+  const poolIcon = POOL_ICONS[request.pool.type];
+  const poolColor = POOL_COLORS[request.pool.type];
+  const statusColor = STATUS_COLORS[request.status];
+  const statusIcon = STATUS_ICONS[request.status];
   const approveVotes = request.votes.filter((v) => v.vote).length;
   const rejectVotes = request.votes.filter((v) => !v.vote).length;
   const userVote = request.votes.find((v) => v.voter.id === userId);
   const isRequestor = request.user.id === userId;
 
   return (
-    <Layout title={`Solicitud de Pool - Truk`}>
+    <Layout title={t('requestDetailPageTitle')}>
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Header */}
@@ -189,21 +189,21 @@ export default function PoolRequestDetailPage() {
               onClick={() => router.back()}
               className="text-blue-600 hover:text-blue-700 flex items-center gap-2 mb-4"
             >
-              ← Volver
+              {t('requests.back')}
             </button>
           </div>
 
           {/* Request Card */}
           <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
             {/* Status Banner */}
-            <div className={`p-4 ${statusInfo.color.replace('bg-', 'bg-gradient-to-r from-').replace('text-', 'to-')} border-b`}>
+            <div className={`p-4 ${statusColor.replace('bg-', 'bg-gradient-to-r from-').replace('text-', 'to-')} border-b`}>
               <div className="flex items-center justify-between">
                 <span className="text-lg font-semibold">
-                  {statusInfo.icon} Estado: {statusInfo.label}
+                  {statusIcon} {t('requests.statusLabel', { status: t(`status.${request.status}`) })}
                 </span>
                 {request.distributedAt && (
                   <span className="text-sm">
-                    Distribuido: {new Date(request.distributedAt).toLocaleDateString('es-ES')}
+                    {t('requests.distributedOn', { date: new Date(request.distributedAt).toLocaleDateString('es-ES') })}
                   </span>
                 )}
               </div>
@@ -220,7 +220,7 @@ export default function PoolRequestDetailPage() {
                   <div className="text-sm text-gray-600">{request.user.email}</div>
                   {request.user.generosityScore !== undefined && (
                     <div className="text-sm text-gray-600">
-                      Generosidad: {request.user.generosityScore.toFixed(1)}
+                      {t('requests.generosity', { score: request.user.generosityScore.toFixed(1) })}
                     </div>
                   )}
                 </div>
@@ -236,29 +236,29 @@ export default function PoolRequestDetailPage() {
               </div>
 
               {/* Pool Type */}
-              <div className={`bg-gradient-to-r ${poolInfo.color} rounded-lg p-6 text-white mb-6`}>
+              <div className={`bg-gradient-to-r ${poolColor} rounded-lg p-6 text-white mb-6`}>
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="text-4xl">{poolInfo.icon}</span>
+                      <span className="text-4xl">{poolIcon}</span>
                       <div>
-                        <div className="text-2xl font-bold">{poolInfo.name}</div>
+                        <div className="text-2xl font-bold">{t(`poolTypes.${request.pool.type}.name`)}</div>
                         <div className="text-sm text-white/80">
-                          Balance del pool: {request.pool.balance} créditos
+                          {t('requests.poolBalance', { amount: request.pool.balance })}
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="text-right">
                     <div className="text-4xl font-bold">{request.amount}</div>
-                    <div className="text-sm text-white/90">créditos solicitados</div>
+                    <div className="text-sm text-white/90">{t('requests.creditsRequested')}</div>
                   </div>
                 </div>
               </div>
 
               {/* Reason */}
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Motivo de la Solicitud</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">{t('requests.requestReasonTitle')}</h3>
                 <div className="bg-gray-50 p-4 rounded-lg text-gray-900 whitespace-pre-wrap">
                   {request.reason}
                 </div>
@@ -266,26 +266,26 @@ export default function PoolRequestDetailPage() {
 
               {/* Vote Stats */}
               <div className="bg-gray-50 p-6 rounded-lg mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Votos de la Comunidad</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('requests.communityVotes')}</h3>
                 <div className="grid grid-cols-3 gap-4">
                   <div className="bg-white p-4 rounded-lg text-center">
                     <div className="text-3xl font-bold text-green-600">{approveVotes}</div>
-                    <div className="text-sm text-gray-600">✓ A favor</div>
+                    <div className="text-sm text-gray-600">{t('requests.inFavor')}</div>
                   </div>
                   <div className="bg-white p-4 rounded-lg text-center">
                     <div className="text-3xl font-bold text-red-600">{rejectVotes}</div>
-                    <div className="text-sm text-gray-600">✗ En contra</div>
+                    <div className="text-sm text-gray-600">{t('requests.against')}</div>
                   </div>
                   <div className="bg-white p-4 rounded-lg text-center">
                     <div className="text-3xl font-bold text-gray-900">{request.votes.length}</div>
-                    <div className="text-sm text-gray-600">Total</div>
+                    <div className="text-sm text-gray-600">{t('requests.total')}</div>
                   </div>
                 </div>
 
                 {/* Auto-approval info */}
                 {request.status === 'PENDING' && (
                   <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
-                    💡 Se necesitan 3 votos a favor sin rechazos para aprobación automática, o 3 rechazos para rechazo automático.
+                    {t('requests.autoApprovalInfo')}
                   </div>
                 )}
               </div>
@@ -301,7 +301,7 @@ export default function PoolRequestDetailPage() {
                         </div>
                         <div className="flex-1">
                           <div className="font-semibold text-gray-900 mb-1">
-                            Tu voto: {userVote.vote ? 'A favor' : 'En contra'}
+                            {t('requests.yourVote', { vote: userVote.vote ? t('requests.inFavorVote') : t('requests.againstVote') })}
                           </div>
                           {userVote.comment && (
                             <div className="text-sm text-gray-700 bg-white p-3 rounded">
@@ -312,7 +312,7 @@ export default function PoolRequestDetailPage() {
                             onClick={() => setShowVoteForm(true)}
                             className="mt-3 text-sm text-blue-600 hover:text-blue-700"
                           >
-                            Cambiar voto
+                            {t('requests.changeVote')}
                           </button>
                         </div>
                       </div>
@@ -322,7 +322,7 @@ export default function PoolRequestDetailPage() {
                       onClick={() => setShowVoteForm(true)}
                       className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
                     >
-                      Votar sobre esta solicitud
+                      {t('requests.voteOnRequest')}
                     </button>
                   )}
                 </div>
@@ -336,7 +336,7 @@ export default function PoolRequestDetailPage() {
                     disabled={distributeMutation.isPending}
                     className="w-full py-3 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium transition-colors disabled:opacity-50"
                   >
-                    {distributeMutation.isPending ? 'Distribuyendo...' : '💰 Distribuir Fondos'}
+                    {distributeMutation.isPending ? t('requests.distributing') : t('requests.distributeFunds')}
                   </button>
                 </div>
               )}
@@ -347,7 +347,7 @@ export default function PoolRequestDetailPage() {
           {request.votes.length > 0 && (
             <div className="bg-white rounded-lg shadow-lg p-6">
               <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Votos ({request.votes.length})
+                {t('requests.votesCount', { count: request.votes.length })}
               </h3>
               <div className="space-y-3">
                 {request.votes.map((vote) => (
@@ -389,7 +389,7 @@ export default function PoolRequestDetailPage() {
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900">Emitir Voto</h2>
+                  <h2 className="text-2xl font-bold text-gray-900">{t('requests.castVote')}</h2>
                   <button
                     onClick={() => {
                       setShowVoteForm(false);
@@ -405,7 +405,7 @@ export default function PoolRequestDetailPage() {
                   {/* Vote Choice */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-3">
-                      Tu decisión <span className="text-red-500">*</span>
+                      {t('requests.yourDecision')} <span className="text-red-500">*</span>
                     </label>
                     <div className="grid grid-cols-2 gap-3">
                       <button
@@ -418,7 +418,7 @@ export default function PoolRequestDetailPage() {
                         }`}
                       >
                         <div className="text-3xl mb-2">✓</div>
-                        <div className="font-semibold">Aprobar</div>
+                        <div className="font-semibold">{t('requests.approve')}</div>
                       </button>
                       <button
                         type="button"
@@ -430,7 +430,7 @@ export default function PoolRequestDetailPage() {
                         }`}
                       >
                         <div className="text-3xl mb-2">✗</div>
-                        <div className="font-semibold">Rechazar</div>
+                        <div className="font-semibold">{t('requests.reject')}</div>
                       </button>
                     </div>
                   </div>
@@ -438,7 +438,7 @@ export default function PoolRequestDetailPage() {
                   {/* Comment */}
                   <div>
                     <label htmlFor="comment" className="block text-sm font-medium text-gray-700 mb-2">
-                      Comentario (opcional)
+                      {t('requests.commentOptional')}
                     </label>
                     <textarea
                       id="comment"
@@ -446,7 +446,7 @@ export default function PoolRequestDetailPage() {
                       onChange={(e) => setVoteComment(e.target.value)}
                       rows={3}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                      placeholder="Explica tu decisión..."
+                      placeholder={t('requests.explainDecision')}
                     />
                   </div>
 
@@ -459,14 +459,14 @@ export default function PoolRequestDetailPage() {
                       }}
                       className="flex-1 py-2 px-4 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium transition-colors"
                     >
-                      Cancelar
+                      {t('cancel')}
                     </button>
                     <button
                       type="submit"
                       disabled={voteMutation.isPending}
                       className="flex-1 py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors disabled:opacity-50"
                     >
-                      {voteMutation.isPending ? 'Votando...' : 'Confirmar Voto'}
+                      {voteMutation.isPending ? t('requests.voting') : t('requests.confirmVote')}
                     </button>
                   </div>
                 </form>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import Link from 'next/link';
@@ -44,6 +45,8 @@ interface Proposal {
 }
 
 export default function GovernanceDashboardPage() {
+  const t = useTranslations('governance.dashboard');
+  const tCommon = useTranslations('common');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -73,7 +76,7 @@ export default function GovernanceDashboardPage() {
 
   const stats = [
     {
-      title: 'Propuestas Activas',
+      title: t('stats.activeProposals'),
       value: dashboard?.activeProposals || 0,
       total: dashboard?.totalProposals || 0,
       icon: DocumentTextIcon,
@@ -81,21 +84,21 @@ export default function GovernanceDashboardPage() {
       href: '/governance/proposals',
     },
     {
-      title: 'Total de Votos',
+      title: t('stats.totalVotes'),
       value: dashboard?.totalVotes || 0,
       icon: CheckCircleIcon,
       color: 'bg-green-500',
       href: '/governance/proposals',
     },
     {
-      title: 'Participantes',
+      title: t('stats.participants'),
       value: dashboard?.totalParticipants || 0,
       icon: UserGroupIcon,
       color: 'bg-purple-500',
       href: '/governance/leaderboard',
     },
     {
-      title: 'Moderaciones Pendientes',
+      title: t('stats.pendingModerations'),
       value: dashboard?.pendingModerations || 0,
       icon: ShieldCheckIcon,
       color: 'bg-orange-500',
@@ -105,46 +108,46 @@ export default function GovernanceDashboardPage() {
 
   const features = [
     {
-      title: 'Propuestas (CIPs)',
-      description: 'Crea y vota propuestas de mejora comunitaria',
+      title: t('features.proposals.title'),
+      description: t('features.proposals.description'),
       icon: DocumentTextIcon,
       href: '/governance/proposals',
       color: 'bg-gradient-to-br from-blue-600 to-blue-700',
-      badge: `${dashboard?.activeProposals || 0} activas`,
+      badge: t('features.proposals.badge', { count: dashboard?.activeProposals || 0 }),
     },
     {
-      title: 'Delegación Líquida',
-      description: 'Delega tu poder de voto a representantes de confianza',
+      title: t('features.delegation.title'),
+      description: t('features.delegation.description'),
       icon: UserGroupIcon,
       href: '/governance/delegation',
       color: 'bg-gradient-to-br from-purple-600 to-purple-700',
     },
     {
-      title: 'Moderación DAO',
-      description: 'Participa en la moderación comunitaria descentralizada',
+      title: t('features.moderation.title'),
+      description: t('features.moderation.description'),
       icon: ShieldCheckIcon,
       href: '/governance/moderation',
       color: 'bg-gradient-to-br from-orange-600 to-orange-700',
-      badge: dashboard?.pendingModerations ? `${dashboard.pendingModerations} pendientes` : undefined,
+      badge: dashboard?.pendingModerations ? t('features.moderation.badge', { count: dashboard.pendingModerations }) : undefined,
     },
     {
-      title: 'Leaderboard de Reputación',
-      description: 'Ranking de miembros según su Proof of Help',
+      title: t('features.leaderboard.title'),
+      description: t('features.leaderboard.description'),
       icon: TrophyIcon,
       href: '/governance/leaderboard',
       color: 'bg-gradient-to-br from-yellow-600 to-yellow-700',
     },
     {
-      title: 'Bloques de Confianza',
-      description: 'Historial de acciones validadas por la comunidad',
+      title: t('features.blocks.title'),
+      description: t('features.blocks.description'),
       icon: SparklesIcon,
       href: '/governance/blocks',
       color: 'bg-gradient-to-br from-green-600 to-green-700',
-      badge: `${dashboard?.totalBlocks || 0} bloques`,
+      badge: t('features.blocks.badge', { count: dashboard?.totalBlocks || 0 }),
     },
     {
-      title: 'Mi Reputación',
-      description: 'Ve tu puntuación y privilegios de gobernanza',
+      title: t('features.myReputation.title'),
+      description: t('features.myReputation.description'),
       icon: FireIcon,
       href: '/governance/my-reputation',
       color: 'bg-gradient-to-br from-red-600 to-red-700',
@@ -191,11 +194,11 @@ export default function GovernanceDashboardPage() {
           <div className="flex items-center gap-3 mb-4">
             <ChartBarIcon className="h-8 w-8 text-orange-600" />
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Dashboard de Gobernanza
+              {t('header.title')}
             </h1>
           </div>
           <p className="text-gray-600 dark:text-gray-400">
-            Sistema de gobernanza descentralizada con votación cuadrática y democracia líquida
+            {t('header.subtitle')}
           </p>
         </div>
 
@@ -221,7 +224,7 @@ export default function GovernanceDashboardPage() {
                       </div>
                       {stat.total !== undefined && (
                         <span className="text-sm text-gray-500 dark:text-gray-400">
-                          de {stat.total}
+                          {t('stats.of', { total: stat.total })}
                         </span>
                       )}
                     </div>
@@ -273,13 +276,13 @@ export default function GovernanceDashboardPage() {
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  Propuestas Recientes
+                  {t('recentProposals.title')}
                 </h2>
                 <Link
                   href="/governance/proposals"
                   className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
                 >
-                  Ver todas →
+                  {t('recentProposals.viewAll')}
                 </Link>
               </div>
 
@@ -311,7 +314,7 @@ export default function GovernanceDashboardPage() {
                       </p>
                       <div className="flex items-center justify-between">
                         <span className="text-xs text-gray-500 dark:text-gray-400">
-                          Por {proposal.author.name} • {new Date(proposal.createdAt).toLocaleDateString('es-ES')}
+                          {t('recentProposals.by', { author: proposal.author.name })} • {new Date(proposal.createdAt).toLocaleDateString()}
                         </span>
                         {proposal.status === 'ACTIVE' && (
                           <div className="flex items-center gap-4 text-xs">
@@ -331,14 +334,14 @@ export default function GovernanceDashboardPage() {
                 <div className="text-center py-8">
                   <DocumentTextIcon className="mx-auto h-12 w-12 text-gray-400" />
                   <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-                    No hay propuestas todavía
+                    {t('recentProposals.empty')}
                   </p>
                   {isAuthenticated && (
                     <Link
                       href="/governance/proposals/create"
                       className="mt-4 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
                     >
-                      Crear Primera Propuesta
+                      {t('recentProposals.createFirst')}
                     </Link>
                   )}
                 </div>
@@ -348,35 +351,34 @@ export default function GovernanceDashboardPage() {
             {/* Info Box */}
             <div className="mt-8 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900 dark:to-red-900 dark:bg-opacity-20 rounded-lg p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                💡 Sobre el Sistema de Gobernanza
+                {t('infoBox.title')}
               </h3>
               <p className="text-gray-700 dark:text-gray-300 mb-4">
-                Truk utiliza un sistema híbrido de gobernanza que combina votación cuadrática,
-                democracia líquida y Proof of Help para decisiones justas y descentralizadas.
+                {t('infoBox.description')}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
                   <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-2">
-                    📊 Votación Cuadrática
+                    {t('infoBox.quadratic.title')}
                   </h4>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
-                    Vota con puntos. El costo aumenta cuadráticamente para evitar plutocracy
+                    {t('infoBox.quadratic.description')}
                   </p>
                 </div>
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
                   <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-2">
-                    🔄 Democracia Líquida
+                    {t('infoBox.liquid.title')}
                   </h4>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
-                    Delega tu voto a expertos o vota directamente
+                    {t('infoBox.liquid.description')}
                   </p>
                 </div>
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
                   <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-2">
-                    ✨ Proof of Help
+                    {t('infoBox.proofOfHelp.title')}
                   </h4>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
-                    Tu reputación determina tus privilegios de gobernanza
+                    {t('infoBox.proofOfHelp.description')}
                   </p>
                 </div>
               </div>

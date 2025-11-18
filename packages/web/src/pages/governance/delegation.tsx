@@ -279,7 +279,7 @@ export default function DelegationPage() {
                           onClick={() => setSelectedDelegate(delegate)}
                           className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-700 dark:to-purple-700 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 dark:hover:from-indigo-600 dark:hover:to-purple-600 transition-colors font-semibold"
                         >
-                          🗳️ Delegar Voto
+                          {t('delegateCard.delegateVote')}
                         </button>
                       </div>
                     </div>
@@ -288,9 +288,9 @@ export default function DelegationPage() {
               ) : (
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-12 text-center">
                   <div className="text-6xl mb-4">👥</div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">No hay delegados disponibles</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">{t('empty.noDelegates.title')}</h3>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Los delegados aparecerán aquí cuando haya miembros con suficiente reputación
+                    {t('empty.noDelegates.description')}
                   </p>
                 </div>
               )}
@@ -314,16 +314,16 @@ export default function DelegationPage() {
                         <div className="flex-1">
                           <h4 className="font-bold text-gray-900 dark:text-gray-100 text-lg">{delegation.delegateName}</h4>
                           {delegation.category && (
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Categoría: {delegation.category}</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">{t('myDelegations.category')}: {delegation.category}</p>
                           )}
                           <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mt-1">
-                            <span>Poder: {delegation.votingPower}</span>
+                            <span>{t('myDelegations.power')}: {delegation.votingPower}</span>
                             <span>
-                              Desde: {new Date(delegation.createdAt).toLocaleDateString()}
+                              {t('myDelegations.since')}: {new Date(delegation.createdAt).toLocaleDateString()}
                             </span>
                             {delegation.expiresAt && (
                               <span>
-                                Expira: {new Date(delegation.expiresAt).toLocaleDateString()}
+                                {t('myDelegations.expires')}: {new Date(delegation.expiresAt).toLocaleDateString()}
                               </span>
                             )}
                           </div>
@@ -338,7 +338,7 @@ export default function DelegationPage() {
                               : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'
                           }`}
                         >
-                          {delegation.active ? '✓ Activa' : 'Inactiva'}
+                          {delegation.active ? t('myDelegations.active') : t('myDelegations.inactive')}
                         </span>
                         {delegation.active && (
                           <button
@@ -346,7 +346,7 @@ export default function DelegationPage() {
                             disabled={revokeMutation.isPending}
                             className="px-4 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors font-semibold disabled:opacity-50"
                           >
-                            Revocar
+                            {t('myDelegations.revoke')}
                           </button>
                         )}
                       </div>
@@ -356,15 +356,15 @@ export default function DelegationPage() {
               ) : (
                 <div className="bg-white rounded-lg shadow-lg p-12 text-center">
                   <div className="text-6xl mb-4">📋</div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">No tienes delegaciones activas</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('empty.noDelegations.title')}</h3>
                   <p className="text-gray-600 mb-6">
-                    Delega tu voto en expertos para que voten en tu nombre
+                    {t('empty.noDelegations.description')}
                   </p>
                   <button
                     onClick={() => setActiveTab('delegates')}
                     className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-semibold"
                   >
-                    Ver Delegados Disponibles
+                    {t('empty.noDelegations.button')}
                   </button>
                 </div>
               )}
@@ -373,56 +373,56 @@ export default function DelegationPage() {
 
           {/* How it Works */}
           <div className="mt-12 bg-white rounded-lg shadow-lg p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">¿Cómo funciona la Delegación?</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">{t('howItWorks.title')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div className="text-center">
-                <div className="text-4xl mb-3">1️⃣</div>
-                <h4 className="font-bold mb-2">Elige un Delegado</h4>
+                <div className="text-4xl mb-3">1</div>
+                <h4 className="font-bold mb-2">{t('howItWorks.step1.title')}</h4>
                 <p className="text-sm text-gray-600">
-                  Selecciona a alguien con experiencia en el área que te interesa
+                  {t('howItWorks.step1.description')}
                 </p>
               </div>
               <div className="text-center">
-                <div className="text-4xl mb-3">2️⃣</div>
-                <h4 className="font-bold mb-2">Delega Poder</h4>
+                <div className="text-4xl mb-3">2</div>
+                <h4 className="font-bold mb-2">{t('howItWorks.step2.title')}</h4>
                 <p className="text-sm text-gray-600">
-                  Decide cuánto poder de voto quieres transferir
+                  {t('howItWorks.step2.description')}
                 </p>
               </div>
               <div className="text-center">
-                <div className="text-4xl mb-3">3️⃣</div>
-                <h4 className="font-bold mb-2">Ellos Votan</h4>
+                <div className="text-4xl mb-3">3</div>
+                <h4 className="font-bold mb-2">{t('howItWorks.step3.title')}</h4>
                 <p className="text-sm text-gray-600">
-                  El delegado vota en tu nombre en las propuestas
+                  {t('howItWorks.step3.description')}
                 </p>
               </div>
               <div className="text-center">
-                <div className="text-4xl mb-3">4️⃣</div>
-                <h4 className="font-bold mb-2">Puedes Revocar</h4>
+                <div className="text-4xl mb-3">4</div>
+                <h4 className="font-bold mb-2">{t('howItWorks.step4.title')}</h4>
                 <p className="text-sm text-gray-600">
-                  Retira la delegación en cualquier momento si cambias de opinión
+                  {t('howItWorks.step4.description')}
                 </p>
               </div>
             </div>
 
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6">
-                <h4 className="font-bold text-green-900 mb-3">✓ Beneficios de Delegar</h4>
+                <h4 className="font-bold text-green-900 mb-3">{t('howItWorks.benefits.title')}</h4>
                 <ul className="text-sm text-green-800 space-y-2">
-                  <li>• Tu voz cuenta aunque no tengas tiempo de participar</li>
-                  <li>• Los expertos toman decisiones informadas</li>
-                  <li>• Puedes delegar por categorías específicas</li>
-                  <li>• Aumenta la participación en la gobernanza</li>
+                  <li>{t('howItWorks.benefits.item1')}</li>
+                  <li>{t('howItWorks.benefits.item2')}</li>
+                  <li>{t('howItWorks.benefits.item3')}</li>
+                  <li>{t('howItWorks.benefits.item4')}</li>
                 </ul>
               </div>
 
               <div className="bg-purple-50 border-2 border-purple-200 rounded-lg p-6">
-                <h4 className="font-bold text-purple-900 mb-3">💡 Consejos para Delegar</h4>
+                <h4 className="font-bold text-purple-900 mb-3">{t('howItWorks.tips.title')}</h4>
                 <ul className="text-sm text-purple-800 space-y-2">
-                  <li>• Revisa la reputación y tasa de éxito del delegado</li>
-                  <li>• Considera su experiencia en áreas específicas</li>
-                  <li>• Empieza con poco poder y aumenta gradualmente</li>
-                  <li>• Monitorea cómo votan tus delegados</li>
+                  <li>{t('howItWorks.tips.item1')}</li>
+                  <li>{t('howItWorks.tips.item2')}</li>
+                  <li>{t('howItWorks.tips.item3')}</li>
+                  <li>{t('howItWorks.tips.item4')}</li>
                 </ul>
               </div>
             </div>
@@ -433,7 +433,7 @@ export default function DelegationPage() {
         {selectedDelegate && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-lg max-w-2xl w-full p-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Delegar Voto</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">{t('modal.title')}</h3>
 
               <div className="bg-gradient-to-r from-indigo-50 to-purple-50 border-2 border-indigo-200 rounded-lg p-6 mb-6">
                 <div className="flex items-center gap-4 mb-4">
@@ -443,7 +443,7 @@ export default function DelegationPage() {
                   <div>
                     <h4 className="text-xl font-bold text-gray-900">{selectedDelegate.userName}</h4>
                     <p className="text-sm text-gray-600">
-                      Reputación: {selectedDelegate.reputation} • Éxito: {Math.round(selectedDelegate.successRate)}%
+                      {t('modal.reputation')}: {selectedDelegate.reputation} • {t('modal.success')}: {Math.round(selectedDelegate.successRate)}%
                     </p>
                   </div>
                 </div>
@@ -465,7 +465,7 @@ export default function DelegationPage() {
               <div className="space-y-4 mb-6">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Categoría (opcional)
+                    {t('modal.categoryLabel')}
                   </label>
                   <select
                     value={delegationCategory}
@@ -473,19 +473,19 @@ export default function DelegationPage() {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   >
                     {categories.map((category) => (
-                      <option key={category} value={category === 'Todas las Categorías' ? '' : category}>
+                      <option key={category} value={category === t('categories.all') ? '' : category}>
                         {category}
                       </option>
                     ))}
                   </select>
                   <p className="text-xs text-gray-500 mt-1">
-                    Elige una categoría específica o deja en "Todas" para delegar en todo
+                    {t('modal.categoryHint')}
                   </p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Poder de Voto a Delegar: {delegationPower}
+                    {t('modal.powerLabel', { power: delegationPower })}
                   </label>
                   <input
                     type="range"
@@ -504,12 +504,12 @@ export default function DelegationPage() {
               </div>
 
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-6">
-                <h4 className="font-semibold text-yellow-900 mb-2">⚠️ Importante</h4>
+                <h4 className="font-semibold text-yellow-900 mb-2">{t('modal.important.title')}</h4>
                 <ul className="text-sm text-yellow-800 space-y-1">
-                  <li>• El delegado votará en tu nombre con el poder asignado</li>
-                  <li>• Puedes revocar la delegación en cualquier momento</li>
-                  <li>• La delegación se mantiene hasta que la revoque</li>
-                  <li>• Puedes tener múltiples delegaciones activas</li>
+                  <li>{t('modal.important.item1')}</li>
+                  <li>{t('modal.important.item2')}</li>
+                  <li>{t('modal.important.item3')}</li>
+                  <li>{t('modal.important.item4')}</li>
                 </ul>
               </div>
 
@@ -518,7 +518,7 @@ export default function DelegationPage() {
                   onClick={() => setSelectedDelegate(null)}
                   className="flex-1 py-3 px-4 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-semibold"
                 >
-                  Cancelar
+                  {t('modal.cancel')}
                 </button>
                 <button
                   onClick={() =>
@@ -531,7 +531,7 @@ export default function DelegationPage() {
                   disabled={delegateMutation.isPending}
                   className="flex-1 py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-colors font-semibold disabled:opacity-50"
                 >
-                  {delegateMutation.isPending ? 'Delegando...' : '🗳️ Confirmar Delegación'}
+                  {delegateMutation.isPending ? t('modal.delegating') : t('modal.confirm')}
                 </button>
               </div>
             </div>

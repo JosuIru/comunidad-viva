@@ -1800,13 +1800,259 @@
         "reputation": "Reputació",
         "delegations": "Delegacions",
         "success": "Èxit",
-        "expertise": "Àrees d'Experiència"
+        "expertise": "Àrees d'Experiència",
+        "delegateVote": "Delegar Vot"
       },
       "toasts": {
         "delegateSuccess": "Delegació creada correctament!",
         "delegateError": "Error en crear delegació",
         "revokeSuccess": "Delegació revocada correctament",
         "revokeError": "Error en revocar delegació"
+      },
+      "myDelegations": {
+        "category": "Categoria",
+        "power": "Poder",
+        "since": "Des de",
+        "expires": "Expira",
+        "active": "Activa",
+        "inactive": "Inactiva",
+        "revoke": "Revocar"
+      },
+      "empty": {
+        "noDelegates": {
+          "title": "No hi ha delegats disponibles",
+          "description": "Els delegats apareixeran aquí quan hi hagi membres amb prou reputació"
+        },
+        "noDelegations": {
+          "title": "No tens delegacions actives",
+          "description": "Delega el teu vot en experts perquè votin en nom teu",
+          "button": "Veure Delegats Disponibles"
+        }
+      },
+      "howItWorks": {
+        "title": "Com funciona la Delegació?",
+        "step1": {
+          "title": "Tria un Delegat",
+          "description": "Selecciona algú amb experiència en l'àrea que t'interessa"
+        },
+        "step2": {
+          "title": "Delega Poder",
+          "description": "Decideix quant poder de vot vols transferir"
+        },
+        "step3": {
+          "title": "Ells Voten",
+          "description": "El delegat vota en nom teu en les propostes"
+        },
+        "step4": {
+          "title": "Pots Revocar",
+          "description": "Retira la delegació en qualsevol moment si canvies d'opinió"
+        },
+        "benefits": {
+          "title": "Beneficis de Delegar",
+          "item1": "La teva veu compta encara que no tinguis temps de participar",
+          "item2": "Els experts prenen decisions informades",
+          "item3": "Pots delegar per categories específiques",
+          "item4": "Augmenta la participació en la governança"
+        },
+        "tips": {
+          "title": "Consells per Delegar",
+          "item1": "Revisa la reputació i taxa d'èxit del delegat",
+          "item2": "Considera la seva experiència en àrees específiques",
+          "item3": "Comença amb poc poder i augmenta gradualment",
+          "item4": "Monitoritza com voten els teus delegats"
+        }
+      },
+      "modal": {
+        "title": "Delegar Vot",
+        "reputation": "Reputació",
+        "success": "Èxit",
+        "categoryLabel": "Categoria (opcional)",
+        "categoryHint": "Tria una categoria específica o deixa en \"Totes\" per delegar en tot",
+        "powerLabel": "Poder de Vot a Delegar: {power}",
+        "important": {
+          "title": "Important",
+          "item1": "El delegat votarà en nom teu amb el poder assignat",
+          "item2": "Pots revocar la delegació en qualsevol moment",
+          "item3": "La delegació es manté fins que la revoquis",
+          "item4": "Pots tenir múltiples delegacions actives"
+        },
+        "cancel": "Cancel·lar",
+        "delegating": "Delegant...",
+        "confirm": "Confirmar Delegació"
+      }
+    },
+    "dashboard": {
+      "header": {
+        "title": "Tauler de Governança",
+        "subtitle": "Sistema de governança descentralitzada amb votació quadràtica i democràcia líquida"
+      },
+      "stats": {
+        "activeProposals": "Propostes Actives",
+        "totalVotes": "Total de Vots",
+        "participants": "Participants",
+        "pendingModerations": "Moderacions Pendents",
+        "of": "de {total}"
+      },
+      "features": {
+        "proposals": {
+          "title": "Propostes (CIPs)",
+          "description": "Crea i vota propostes de millora comunitària",
+          "badge": "{count} actives"
+        },
+        "delegation": {
+          "title": "Delegació Líquida",
+          "description": "Delega el teu poder de vot a representants de confiança"
+        },
+        "moderation": {
+          "title": "Moderació DAO",
+          "description": "Participa en la moderació comunitària descentralitzada",
+          "badge": "{count} pendents"
+        },
+        "leaderboard": {
+          "title": "Classificació de Reputació",
+          "description": "Rànquing de membres segons el seu Proof of Help"
+        },
+        "blocks": {
+          "title": "Blocs de Confiança",
+          "description": "Historial d'accions validades per la comunitat",
+          "badge": "{count} blocs"
+        },
+        "myReputation": {
+          "title": "La Meva Reputació",
+          "description": "Veu la teva puntuació i privilegis de governança"
+        }
+      },
+      "recentProposals": {
+        "title": "Propostes Recents",
+        "viewAll": "Veure totes",
+        "by": "Per {author}",
+        "empty": "No hi ha propostes encara",
+        "createFirst": "Crear Primera Proposta"
+      },
+      "infoBox": {
+        "title": "Sobre el Sistema de Governança",
+        "description": "Truk utilitza un sistema híbrid de governança que combina votació quadràtica, democràcia líquida i Proof of Help per decisions justes i descentralitzades.",
+        "quadratic": {
+          "title": "Votació Quadràtica",
+          "description": "Vota amb punts. El cost augmenta quadràticament per evitar plutocràcia"
+        },
+        "liquid": {
+          "title": "Democràcia Líquida",
+          "description": "Delega el teu vot a experts o vota directament"
+        },
+        "proofOfHelp": {
+          "title": "Proof of Help",
+          "description": "La teva reputació determina els teus privilegis de governança"
+        }
+      }
+    },
+    "proposals": {
+      "layout": {
+        "title": "Propostes - Truk"
+      },
+      "header": {
+        "title": "Propostes Comunitàries (CIPs)",
+        "subtitle": "Crea, debat i vota propostes de millora per a la comunitat"
+      },
+      "reputation": {
+        "title": "La Teva Reputació",
+        "level": "Nivell Actual",
+        "privilegesTitle": "Privilegis",
+        "requirementInfo": "Necessites 20 punts de reputació per crear propostes. Actualment tens {current}."
+      },
+      "filters": {
+        "all": "Totes",
+        "discussion": "Discussió",
+        "voting": "Votació",
+        "approved": "Aprovades"
+      },
+      "buttons": {
+        "newProposal": "Nova Proposta"
+      },
+      "status": {
+        "DISCUSSION": "Discussió",
+        "VOTING": "Votació",
+        "APPROVED": "Aprovada",
+        "REJECTED": "Rebutjada"
+      },
+      "type": {
+        "FEATURE": "Nova Funció",
+        "RULE_CHANGE": "Canvi de Regles",
+        "FUND_ALLOCATION": "Assignació de Fons",
+        "PARTNERSHIP": "Aliança"
+      },
+      "meta": {
+        "author": "Autor Anònim",
+        "budget": "{amount}€ pressupost"
+      },
+      "voting": {
+        "votesFor": "A favor: {count}",
+        "votesAgainst": "En contra: {count}"
+      },
+      "actions": {
+        "viewDetails": "Veure Detalls",
+        "voteNow": "Votar Ara",
+        "alreadyVoted": "Ja Has Votat"
+      },
+      "empty": {
+        "title": "No hi ha propostes",
+        "description": "Sigues el primer en crear una proposta per millorar la comunitat",
+        "button": "Crear Primera Proposta"
+      },
+      "modal": {
+        "newProposal": "Nova Proposta"
+      },
+      "form": {
+        "typeLabel": "Tipus de Proposta",
+        "typeOptions": {
+          "FEATURE": "Nova Funció",
+          "RULE_CHANGE": "Canvi de Regles",
+          "FUND_ALLOCATION": "Assignació de Fons",
+          "PARTNERSHIP": "Aliança"
+        },
+        "title": {
+          "label": "Títol",
+          "placeholder": "Títol clar i descriptiu de la teva proposta"
+        },
+        "description": {
+          "label": "Descripció",
+          "placeholder": "Descriu detalladament la teva proposta i la seva justificació..."
+        },
+        "implementation": {
+          "label": "Pla d'Implementació",
+          "placeholder": "Descriu com s'implementaria aquesta proposta..."
+        },
+        "budget": {
+          "label": "Pressupost Requerit (€)",
+          "placeholder": "0"
+        },
+        "processInfo": {
+          "title": "Procés d'Aprovació",
+          "step1": "La proposta estarà 3 dies en discussió",
+          "step2": "Després 4 dies en votació quadràtica",
+          "step3": "Si arriba al llindar, s'aprova"
+        },
+        "cancel": "Cancel·lar",
+        "submitting": "Creant...",
+        "submit": "Crear Proposta"
+      },
+      "voteModal": {
+        "title": "Votar en Proposta",
+        "quadraticTitle": "Votació Quadràtica",
+        "quadraticInfo": "El cost augmenta quadràticament: 1 punt = 1 crèdit, 5 punts = 25 crèdits, 10 punts = 100 crèdits",
+        "pointsLabel": "Punts de vot: {points}",
+        "costLabel": "Cost en crèdits:",
+        "costAmount": "{cost} crèdits",
+        "cancel": "Cancel·lar",
+        "confirming": "Confirmant...",
+        "confirm": "Confirmar Vot"
+      },
+      "toasts": {
+        "createSuccess": "Proposta creada correctament!",
+        "createError": "Error en crear la proposta",
+        "voteSuccess": "Vot registrat correctament!",
+        "voteError": "Error en registrar el vot",
+        "reputationRequired": "Necessites almenys 20 punts de reputació per crear propostes"
       }
     },
     "title": "Governança Comunitària",
@@ -4497,9 +4743,121 @@
     "connectWalletSubtitle": "Tria la teva cartera per connectar al Bridge i enviar tokens entre cadenes"
   },
   "pools": {
+    "pageTitle": "Pools Comunitaris - Truk",
+    "requestsPageTitle": "Sol·licituds de Pool - Truk",
+    "requestDetailPageTitle": "Sol·licitud de Pool - Truk",
+    "title": "Pools Comunitaris",
+    "subtitle": "Recursos col·lectius per ajudar-nos mútuament i enfortir la nostra comunitat",
+    "viewRequests": "Veure Sol·licituds",
+    "totalBalance": "Balanc Total de Pools",
+    "availableCredits": "Crèdits disponibles per a la comunitat",
+    "howPoolsWork": "Com funcionen els Pools?",
+    "howPoolsWorkDesc": "Els pools comunitaris s'alimenten automàticament del 2% de cada transacció P2P. Són recursos col·lectius per donar suport a diferents necessitats de la comunitat.",
+    "howPoolsWorkBullet1": "Qualsevol membre pot sol·licitar suport d'un pool",
+    "howPoolsWorkBullet2": "Les sol·licituds es revisen i aproven per consens comunitari",
+    "howPoolsWorkBullet3": "Els recursos estan dissenyats per circular i ajudar a qui més ho necessita",
+    "howPoolsWorkBullet4": "Contribuir a la comunitat augmenta la teva reputació i generosityScore",
+    "currentBalance": "Balanc Actual",
+    "totalReceived": "Total Rebut",
+    "totalDistributed": "Total Distribuït",
+    "requestSupport": "Sol·licitar Suport",
+    "requestSupportTitle": "Sol·licitar Suport",
+    "availableBalance": "Balanc disponible: {amount} crèdits",
+    "requestedAmount": "Import sol·licitat",
+    "requestReason": "Motiu de la sol·licitud",
     "explainNeed": "Explica per què necessites aquest suport i com t'ajudarà...",
+    "requestWarning": "La teva sol·licitud serà revisada per la comunitat. Sigues honest i específic sobre la teva necessitat.",
+    "cancel": "Cancel·lar",
+    "sending": "Enviant...",
     "sendRequest": "Enviar Sol·licitud",
-    "explainDecision": "Explica la teva decisió..."
+    "howToContribute": "Com Contribuir?",
+    "contributeDesc": "Els pools s'alimenten automàticament del 2% de cada transacció P2P que facis.",
+    "sendCredits": "Envia Crèdits",
+    "sendCreditsDesc": "Cada transacció contribueix automàticament",
+    "directHelp": "Ajuda Directa",
+    "directHelpDesc": "Participa en la revisió de sol·licituds",
+    "mustLogin": "Has d'iniciar sessió",
+    "selectPool": "Selecciona un pool",
+    "enterValidAmount": "Introdueix un import vàlid",
+    "describeReason": "Descriu el motiu de la teva sol·licitud",
+    "requestSent": "Sol·licitud enviada. La comunitat la revisarà aviat.",
+    "errorSendingRequest": "Error en enviar la sol·licitud",
+    "poolTypes": {
+      "NEEDS": {
+        "name": "Necessitats Bàsiques",
+        "description": "Suport d'emergència per necessitats bàsiques com aliments, habitatge, salut"
+      },
+      "PROJECTS": {
+        "name": "Projectes Comunitaris",
+        "description": "Financament per iniciatives que beneficien tota la comunitat"
+      },
+      "EMERGENCY": {
+        "name": "Emergències",
+        "description": "Resposta ràpida a situacions d'emergència urgents"
+      },
+      "CELEBRATION": {
+        "name": "Celebracions",
+        "description": "Esdeveniments comunitaris, festes i celebracions col·lectives"
+      },
+      "EQUALITY": {
+        "name": "Igualtat Econòmica",
+        "description": "Redistribució per mantenir la igualtat econòmica a la comunitat"
+      }
+    },
+    "status": {
+      "PENDING": "Pendent",
+      "APPROVED": "Aprovada",
+      "REJECTED": "Rebutjada",
+      "DISTRIBUTED": "Distribuïda",
+      "CANCELLED": "Cancel·lada"
+    },
+    "requests": {
+      "title": "Sol·licituds de Pool",
+      "subtitle": "Revisa i vota sobre les sol·licituds de suport de la comunitat",
+      "back": "Tornar",
+      "all": "Totes",
+      "noRequests": "No hi ha sol·licituds",
+      "noRequestsYet": "Encara no s'han creat sol·licituds",
+      "noRequestsWithStatus": "No hi ha sol·licituds amb estat \"{status}\"",
+      "creditsRequested": "crèdits sol·licitats",
+      "reason": "Motiu:",
+      "vote": "vot",
+      "votes": "vots",
+      "alreadyVoted": "Ja has votat",
+      "pendingYourVote": "Pendent del teu vot",
+      "statusLabel": "Estat: {status}",
+      "distributedOn": "Distribuït: {date}",
+      "generosity": "Generositat: {score}",
+      "poolBalance": "Balanc del pool: {amount} crèdits",
+      "requestReasonTitle": "Motiu de la Sol·licitud",
+      "communityVotes": "Vots de la Comunitat",
+      "inFavor": "A favor",
+      "against": "En contra",
+      "total": "Total",
+      "autoApprovalInfo": "Es necessiten 3 vots a favor sense rebutjos per aprovació automàtica, o 3 rebutjos per rebuig automàtic.",
+      "yourVote": "El teu vot: {vote}",
+      "inFavorVote": "A favor",
+      "againstVote": "En contra",
+      "changeVote": "Canviar vot",
+      "voteOnRequest": "Votar sobre aquesta sol·licitud",
+      "distributeFunds": "Distribuir Fons",
+      "distributing": "Distribuint...",
+      "votesCount": "Vots ({count})",
+      "castVote": "Emetre Vot",
+      "yourDecision": "La teva decisió",
+      "approve": "Aprovar",
+      "reject": "Rebutjar",
+      "commentOptional": "Comentari (opcional)",
+      "explainDecision": "Explica la teva decisió...",
+      "voting": "Votant...",
+      "confirmVote": "Confirmar Vot",
+      "voteSuccess": "Vot registrat correctament",
+      "voteError": "Error en votar",
+      "approveSuccess": "Sol·licitud aprovada",
+      "approveError": "Error en aprovar",
+      "distributeSuccess": "Fons distribuïts correctament",
+      "distributeError": "Error en distribuir fons"
+    }
   },
   "feedback": {
     "placeholder": "Explica'ns què t'ha agradat o què podríem millorar..."
