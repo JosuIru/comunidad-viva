@@ -670,42 +670,6 @@
       "greatDescription": "Zure balorazio altuak komunitatearekiko konpromisoa erakusten du. Horrela jarraitu!"
     }
   },
-  "magicOnboarding": {
-    "steps": {
-      "welcome": {
-        "title": "Ongi etorri Truk-era!",
-        "description": "Zure lankidetza ekonomia lokaleko plataforma. Deskubritu, konektatu eta partekatu zure komunitatearekin."
-      },
-      "exploreOffers": {
-        "title": "Deskubritu zure komunitatea",
-        "description": "Arakatu eskaintzak, zerbitzuak eta zure inguruko pertsonak mapa interaktiboan."
-      },
-      "joinCommunity": {
-        "title": "Batu eta parte hartu",
-        "description": "Joan ekitaldietara, ezagutu auzokoak eta hasi kreditu komunitarioak erabiltzen."
-      },
-      "completed": {
-        "title": "Dena prest!",
-        "description": "Dagoeneko komunitateko kide aktiboa zara. Orain zure lehen eskaintza sor dezakezu edo gehiago esploratu. Irabazi 50 kreditu bonusa!"
-      }
-    },
-    "toast": {
-      "completed": "Onboarding-a osatua! 🎉 50 kreditu bonus irabazi dituzu"
-    },
-    "buttons": {
-      "skip": "Saltatu ✕",
-      "previous": "← Aurrekoa",
-      "next": "Hurrengoa",
-      "goNow": "Joan orain →",
-      "complete": "Hasi esploratzen! 🚀",
-      "createOffer": "Sortu nire lehen eskaintza"
-    },
-    "progress": {
-      "step": "Pausoa {current}/{total}",
-      "percent": "Osatuta {percent}%"
-    },
-    "reward": "🎁 Osatu onboarding-a eta jaso 50 kreditu bonus!"
-  },
   "adminCommunities": {
     "layout": {
       "title": "Admin - Komunitateen Kudeaketa",

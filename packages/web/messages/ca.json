@@ -638,61 +638,6 @@
       "greatDescription": "La teva alta valoració demostra el teu compromís amb la comunitat. Continua així!"
     }
   },
-  "magicOnboarding": {
-    "steps": {
-      "welcome": {
-        "title": "Benvingut!",
-        "description": "Coneix Truk, on l'economia local pren vida."
-      },
-      "exploreOffers": {
-        "title": "Explora Ofertes",
-        "description": "Descobreix serveis i productes de la teva comunitat."
-      },
-      "createOffer": {
-        "title": "Crea la teva Primera Oferta",
-        "description": "Què pots oferir? Comparteix les teves habilitats amb la comunitat."
-      },
-      "localMap": {
-        "title": "Coneix el Mapa Local",
-        "description": "Troba negocis i persones a prop teu."
-      },
-      "sendCredits": {
-        "title": "Envia el teu Primer Crèdit",
-        "description": "Recolza algú de la comunitat amb crèdits."
-      },
-      "joinEvent": {
-        "title": "Uneix-te a un Esdeveniment",
-        "description": "Participa en esdeveniments comunitaris i coneix gent nova."
-      },
-      "completed": {
-        "title": "Llest!",
-        "description": "Ja formes part activa de la comunitat. A per els teus primers 50 crèdits de bonificació!"
-      },
-      "joinCommunity": {
-        "title": "Uneix-te i Participa",
-        "description": "Assisteix a esdeveniments, coneix veïns i comença a fer servir crèdits comunitaris."
-      }
-    },
-    "toast": {
-      "completed": "Onboarding completat! 🎉 Has guanyat 50 crèdits de bonificació"
-    },
-    "messages": {
-      "mapSoon": "Funció de mapa pròximament"
-    },
-    "buttons": {
-      "skip": "Saltar ✕",
-      "previous": "← Anterior",
-      "next": "Següent",
-      "goNow": "Anar-hi ara →",
-      "complete": "Completar! 🎉",
-      "createOffer": "Crear la meva primera oferta"
-    },
-    "progress": {
-      "step": "Pas {current} de {total}",
-      "percent": "{percent}% completat"
-    },
-    "reward": "🎁 Completa l'onboarding i rep 50 crèdits de bonificació!"
-  },
   "adminCommunities": {
     "layout": {
       "title": "Admin - Gestió de Comunitats",

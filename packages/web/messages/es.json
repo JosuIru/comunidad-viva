@@ -670,42 +670,6 @@
       "greatDescription": "Tu alta valoración demuestra tu compromiso con la comunidad. ¡Sigue así!"
     }
   },
-  "magicOnboarding": {
-    "steps": {
-      "welcome": {
-        "title": "¡Bienvenido a Truk!",
-        "description": "Tu plataforma de economía colaborativa local. Descubre, conecta y comparte con tu comunidad."
-      },
-      "exploreOffers": {
-        "title": "Descubre tu Comunidad",
-        "description": "Explora ofertas, servicios y personas cerca de ti en el mapa interactivo."
-      },
-      "joinCommunity": {
-        "title": "Únete y Participa",
-        "description": "Asiste a eventos, conoce vecinos y empieza a usar créditos comunitarios."
-      },
-      "completed": {
-        "title": "¡Todo Listo!",
-        "description": "Ya eres parte activa de la comunidad. Ahora puedes crear tu primera oferta o explorar más. ¡Gana 50 créditos de bono!"
-      }
-    },
-    "toast": {
-      "completed": "¡Onboarding completado! 🎉 Has ganado 50 créditos de bono"
-    },
-    "buttons": {
-      "skip": "Saltar ✕",
-      "previous": "← Anterior",
-      "next": "Siguiente",
-      "goNow": "Ir ahora →",
-      "complete": "¡Empezar a explorar! 🚀",
-      "createOffer": "Crear mi primera oferta"
-    },
-    "progress": {
-      "step": "Paso {current} de {total}",
-      "percent": "{percent}% completado"
-    },
-    "reward": "🎁 ¡Completa el onboarding y recibe 50 créditos de bono!"
-  },
   "adminCommunities": {
     "layout": {
       "title": "Admin - Gestión de Comunidades",
