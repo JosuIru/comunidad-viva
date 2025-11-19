@@ -117,13 +117,11 @@ function MutualAidPageContent() {
         <div className="container mx-auto px-4">
           {/* Header */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{t('title')}</h1>
-                <p className="text-gray-600 dark:text-gray-400 mt-2">
-                  {t('subtitle')}
-                </p>
-              </div>
+            <div className="mb-4">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">{t('title')}</h1>
+              <p className="text-gray-600 dark:text-gray-400 mt-1 sm:mt-2 text-sm sm:text-base">
+                {t('subtitle')}
+              </p>
             </div>
 
             {/* Tabs */}
@@ -229,7 +227,7 @@ function MutualAidPageContent() {
             <div>
               <div className="flex justify-end mb-4">
                 <Link href="/mutual-aid/needs/new">
-                  <Button variant="primary" size="lg">
+                  <Button variant="primary" size="md" className="whitespace-nowrap">
                     {t('buttons.publishNeed')}
                   </Button>
                 </Link>
@@ -330,7 +328,7 @@ function MutualAidPageContent() {
             <div>
               <div className="flex justify-end mb-4">
                 <Link href="/mutual-aid/projects/new">
-                  <Button variant="primary" size="lg">
+                  <Button variant="primary" size="md" className="whitespace-nowrap">
                     {t('buttons.createProject')}
                   </Button>
                 </Link>
