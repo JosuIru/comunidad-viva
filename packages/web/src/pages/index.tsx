@@ -27,6 +27,7 @@ import Analytics, { ANALYTICS_EVENTS } from '@/lib/analytics';
 import ProgressiveOnboardingManager, { OnboardingTip } from '@/lib/progressiveOnboarding';
 import AdaptiveTourManager, { AdaptiveTour } from '@/lib/adaptiveTours';
 import ProfileSelector from '@/components/ProfileSelector';
+import BeginnerWelcome from '@/components/BeginnerWelcome';
 import DashboardSettings from '@/lib/dashboardSettings';
 import {
   HomeIcon,
@@ -92,6 +93,8 @@ export default function HomePage() {
   const [enabledWidgets, setEnabledWidgets] = useState<string[]>([]);
   const [showProfileSelector, setShowProfileSelector] = useState(false);
   const [adaptiveTour, setAdaptiveTour] = useState<AdaptiveTour | null>(null);
+  const [showBeginnerMode, setShowBeginnerMode] = useState(false);
+  const [userName, setUserName] = useState('');
 
   // Filter states
   const [selectedTypes, setSelectedTypes] = useState<Set<string>>(
@@ -115,8 +118,25 @@ export default function HomePage() {
     setIsAuthenticated(!!token);
     setUserId(storedUserId);
 
+    // Get user name for beginner welcome
+    if (storedUser) {
+      try {
+        const user = JSON.parse(storedUser);
+        setUserName(user.name || 'Usuario');
+      } catch {
+        setUserName('Usuario');
+      }
+    }
+
     // Check if user has completed the tour
     if (token) {
+      // Check if beginner mode should be shown
+      const beginnerCompleted = localStorage.getItem('beginner_mode_completed');
+      if (!beginnerCompleted) {
+        setShowBeginnerMode(true);
+        return; // Don't show other onboarding if in beginner mode
+      }
+
       // First time: Show profile selector
       const hasSelectedProfile = localStorage.getItem('user_profile');
       if (!hasSelectedProfile) {
@@ -629,6 +649,25 @@ export default function HomePage() {
       position: 'left' as const,
     },
   ];
+
+  // Show beginner welcome for new users
+  if (isAuthenticated && showBeginnerMode) {
+    return (
+      <Layout>
+        <BeginnerWelcome
+          userName={userName}
+          onComplete={() => {
+            setShowBeginnerMode(false);
+            localStorage.setItem('beginner_mode_completed', 'true');
+          }}
+          onSkip={() => {
+            setShowBeginnerMode(false);
+            localStorage.setItem('beginner_mode_completed', 'true');
+          }}
+        />
+      </Layout>
+    );
+  }
 
   // Show dashboard for authenticated users
   return (

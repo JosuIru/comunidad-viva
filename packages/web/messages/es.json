@@ -79,6 +79,33 @@
   "auth": {
     "sessionClosed": "Sesión cerrada"
   },
+  "beginnerWelcome": {
+    "badge": "Bienvenido a Truk",
+    "greeting": "¡Hola, {name}!",
+    "subtitle": "Elige qué quieres hacer primero. Completa 2 acciones para desbloquear todas las funciones.",
+    "actions": {
+      "explore": {
+        "title": "Explorar ofertas",
+        "description": "Descubre productos y servicios cerca de ti"
+      },
+      "create": {
+        "title": "Crear una oferta",
+        "description": "Ofrece tus productos o servicios a la comunidad"
+      },
+      "community": {
+        "title": "Unirme a comunidad",
+        "description": "Conecta con grupos locales de tu interés"
+      }
+    },
+    "startNow": "Empezar",
+    "progress": "{completed} de {total} completadas",
+    "skipToFullDashboard": "Saltar al dashboard completo",
+    "completed": {
+      "title": "¡Genial!",
+      "message": "Ya conoces lo básico. Ahora tienes acceso a todas las funciones de Truk.",
+      "button": "Ir al dashboard"
+    }
+  },
   "common": {
     "menu": "Menú",
     "close": "Cerrar",

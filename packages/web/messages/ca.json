@@ -79,6 +79,33 @@
   "auth": {
     "sessionClosed": "Sessió tancada"
   },
+  "beginnerWelcome": {
+    "badge": "Benvingut a Truk",
+    "greeting": "Hola, {name}!",
+    "subtitle": "Tria què vols fer primer. Completa 2 accions per desbloquejar totes les funcions.",
+    "actions": {
+      "explore": {
+        "title": "Explorar ofertes",
+        "description": "Descobreix productes i serveis a prop teu"
+      },
+      "create": {
+        "title": "Crear una oferta",
+        "description": "Ofereix els teus productes o serveis a la comunitat"
+      },
+      "community": {
+        "title": "Unir-me a comunitat",
+        "description": "Connecta amb grups locals del teu interès"
+      }
+    },
+    "startNow": "Començar",
+    "progress": "{completed} de {total} completades",
+    "skipToFullDashboard": "Saltar al dashboard complet",
+    "completed": {
+      "title": "Genial!",
+      "message": "Ja coneixes el bàsic. Ara tens accés a totes les funcions de Truk.",
+      "button": "Anar al dashboard"
+    }
+  },
   "common": {
     "menu": "Menú",
     "close": "Tancar",

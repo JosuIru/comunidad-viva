@@ -79,6 +79,33 @@
   "auth": {
     "sessionClosed": "Saioa itxita"
   },
+  "beginnerWelcome": {
+    "badge": "Ongi etorri Truk-era",
+    "greeting": "Kaixo, {name}!",
+    "subtitle": "Aukeratu zer egin nahi duzun lehenik. Osatu 2 ekintza funtzio guztiak desblokeatzeko.",
+    "actions": {
+      "explore": {
+        "title": "Eskaintzak arakatu",
+        "description": "Aurkitu produktuak eta zerbitzuak zure inguruan"
+      },
+      "create": {
+        "title": "Eskaintza sortu",
+        "description": "Eskaini zure produktuak edo zerbitzuak komunitateari"
+      },
+      "community": {
+        "title": "Komunitatera batu",
+        "description": "Konektatu interesatzen zaizkizun tokiko taldeekin"
+      }
+    },
+    "startNow": "Hasi",
+    "progress": "{completed} / {total} osatuak",
+    "skipToFullDashboard": "Saltatu dashboard osora",
+    "completed": {
+      "title": "Bikain!",
+      "message": "Oinarrizkoa ezagutzen duzu dagoeneko. Truk-en funtzio guztietara sarbidea duzu.",
+      "button": "Joan dashboard-era"
+    }
+  },
   "common": {
     "menu": "Menua",
     "close": "Itxi",
