@@ -1,9 +1,11 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit, Inject, forwardRef } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ethers } from 'ethers';
 import { PrismaService } from '../prisma/prisma.service';
 import SemillaTokenABI from './abis/SemillaToken.abi.json';
 import { randomUUID } from 'crypto';
+import { BridgeService, BridgeChain } from './bridge.service';
+import { NotificationService } from './notification.service';
 
 export enum BlockchainNetwork {
   AMOY = 'amoy',
@@ -37,6 +39,9 @@ export class BlockchainService implements OnModuleInit {
   constructor(
     private prisma: PrismaService,
     private configService: ConfigService,
+    @Inject(forwardRef(() => BridgeService))
+    private bridgeService: BridgeService,
+    private notificationService: NotificationService,
   ) {}
 
   async onModuleInit() {
@@ -242,20 +247,126 @@ export class BlockchainService implements OnModuleInit {
     amount: bigint,
     event: any,
   ) {
+    const amountFormatted = ethers.formatEther(amount);
+    const txHash = event.log.transactionHash;
+
     this.logger.log(
-      `🔥 TokensBurned on ${network}: ${ethers.formatEther(amount)} SEMILLA from ${from}`,
+      `🔥 TokensBurned on ${network}: ${amountFormatted} SEMILLA from ${from}`,
     );
 
     try {
-      // TODO: Implement reverse bridge logic
-      // This would unlock SEMILLA on Gailu Chain when tokens are burned on external chain
+      // Map network to BridgeChain
+      const chainMap: Record<BlockchainNetwork, BridgeChain | null> = {
+        [BlockchainNetwork.AMOY]: BridgeChain.POLYGON, // Amoy is Polygon testnet
+        [BlockchainNetwork.POLYGON]: BridgeChain.POLYGON,
+        [BlockchainNetwork.BSC_TESTNET]: null, // Not supported yet
+        [BlockchainNetwork.BSC]: null, // Not supported yet
+      };
+
+      const bridgeChain = chainMap[network];
+      if (!bridgeChain) {
+        this.logger.warn(`⚠️ Chain ${network} not supported for bridge unlock`);
+        return;
+      }
+
+      // Find the pending LOCK transaction for this burn
+      const pendingBridge = await this.prisma.bridgeTransaction.findFirst({
+        where: {
+          externalAddress: from.toLowerCase(),
+          targetChain: bridgeChain,
+          status: { in: ['LOCKED', 'MINTED'] },
+          direction: 'LOCK',
+        },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      if (!pendingBridge) {
+        // This might be a direct burn without a lock (user initiated unlock)
+        this.logger.log(
+          `ℹ️ No pending bridge found for burn from ${from}. This may be a user-initiated unlock.`,
+        );
+
+        // Log the event for manual review
+        await this.prisma.security_events.create({
+          data: {
+            id: randomUUID(),
+            type: 'BRIDGE_BURN_NO_LOCK',
+            severity: 'INFO',
+            details: {
+              network,
+              from,
+              amount: amountFormatted,
+              txHash,
+              blockNumber: event.log.blockNumber,
+            },
+          },
+        });
+        return;
+      }
+
+      // Process the unlock
       this.logger.log(
-        `⚠️  Reverse bridge not yet implemented. Tokens burned: ${ethers.formatEther(amount)}`,
+        `🔓 Processing reverse bridge unlock for user ${pendingBridge.userDID}`,
       );
+
+      // Update bridge transaction with burn info and mark for unlock
+      await this.prisma.bridgeTransaction.update({
+        where: { id: pendingBridge.id },
+        data: {
+          status: 'BURNED',
+          externalTxHash: txHash,
+        },
+      });
+
+      // Call the bridge service to complete the unlock
+      const unlockResult = await this.bridgeService.burnAndUnlock(
+        pendingBridge.userDID,
+        parseFloat(amountFormatted),
+        bridgeChain,
+        txHash,
+      );
+
+      this.logger.log(
+        `✅ Reverse bridge completed! Unlocked ${amountFormatted} SEMILLA for ${pendingBridge.userDID} (tx: ${unlockResult.id})`,
+      );
+
+      // Log successful unlock event
+      await this.prisma.security_events.create({
+        data: {
+          id: randomUUID(),
+          type: 'BRIDGE_UNLOCK_SUCCESS',
+          severity: 'INFO',
+          details: {
+            network,
+            from,
+            userDID: pendingBridge.userDID,
+            amount: amountFormatted,
+            txHash,
+            bridgeTxId: unlockResult.id,
+          },
+        },
+      });
+
     } catch (error) {
       this.logger.error(
         `❌ Error handling TokensBurned event: ${error.message}`,
       );
+
+      // Log error event
+      await this.prisma.security_events.create({
+        data: {
+          id: randomUUID(),
+          type: 'BRIDGE_UNLOCK_FAILED',
+          severity: 'ERROR',
+          details: {
+            network,
+            from,
+            amount: amountFormatted,
+            txHash: event.log.transactionHash,
+            error: error.message,
+          },
+        },
+      });
     }
   }
 
@@ -289,7 +400,13 @@ export class BlockchainService implements OnModuleInit {
         },
       });
 
-      // TODO: Send alert notifications (email, Discord, etc)
+      // Send alert notifications
+      await this.notificationService.sendEmergencyPauseAlert(
+        network,
+        pauser,
+        reason,
+        event.log.transactionHash,
+      );
     } catch (error) {
       this.logger.error(
         `❌ Error handling EmergencyPause event: ${error.message}`,
@@ -323,6 +440,13 @@ export class BlockchainService implements OnModuleInit {
           },
         },
       });
+
+      // Send alert notification
+      await this.notificationService.sendEmergencyUnpauseAlert(
+        network,
+        unpauser,
+        event.log.transactionHash,
+      );
     } catch (error) {
       this.logger.error(
         `❌ Error handling EmergencyUnpause event: ${error.message}`,
