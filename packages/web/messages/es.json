@@ -24,6 +24,7 @@
     "platform": {
       "label": "Plataforma",
       "main": "Principal",
+      "popularFeatures": "Funciones Populares",
       "gamification": "Gamificación",
       "economy": "Economía & Gobernanza",
       "economyGovernance": "Economía & Gobernanza",

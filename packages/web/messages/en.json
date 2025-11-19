@@ -23,6 +23,8 @@
     "communityPools": "Community Pools",
     "platform": {
       "label": "Platform",
+      "main": "Main",
+      "popularFeatures": "Popular Features",
       "sections": {
         "gamification": "🎮 GAMIFICATION",
         "economy": "💰 ECONOMY",

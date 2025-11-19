@@ -23,6 +23,8 @@
     "communityPools": "Pools Comunitaris",
     "platform": {
       "label": "Plataforma",
+      "main": "Principal",
+      "popularFeatures": "Funcions Populars",
       "sections": {
         "gamification": "🎮 GAMIFICACIÓ",
         "economy": "💰 ECONOMIA",

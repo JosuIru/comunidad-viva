@@ -53,8 +53,6 @@ export default function Navbar() {
   const [showPlatformMenu, setShowPlatformMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showMobileGamification, setShowMobileGamification] = useState(false);
-  const [showMobileEconomy, setShowMobileEconomy] = useState(false);
   const [userName, setUserName] = useState(() => t('userMenu.defaultName'));
   const [userId, setUserId] = useState<string | null>(null);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
@@ -609,10 +607,9 @@ export default function Navbar() {
                 </button>
 
                 {showPlatformMenu && (
-                  <div className="absolute top-full right-0 mt-2 w-72 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2 dropdown-menu z-50 max-h-[80vh] overflow-y-auto">
-                    {/* Colaboración */}
+                  <div className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2 dropdown-menu z-50">
+                    {/* Popular Features - Only 6 most used */}
                     <div className="px-3 py-1">
-                      <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">🤝 Colaboración</p>
                       <Link
                         href="/mutual-aid"
                         className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 rounded-md transition"
@@ -631,13 +628,6 @@ export default function Navbar() {
                         </svg>
                         {t('platform.items.timebank')}
                       </Link>
-                    </div>
-
-                    <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
-
-                    {/* Gamificación */}
-                    <div className="px-3 py-1">
-                      <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">🎮 Gamificación</p>
                       <Link
                         href="/gamification/challenges"
                         className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 rounded-md transition"
@@ -647,83 +637,13 @@ export default function Navbar() {
                         {t('platform.items.challenges')}
                       </Link>
                       <Link
-                        href="/gamification/swipe"
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-pink-50 dark:hover:bg-pink-900/20 hover:text-pink-600 dark:hover:text-pink-400 rounded-md transition"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        <SparklesIcon className="h-5 w-5" />
-                        {t('platform.items.swipe')}
-                      </Link>
-                      <Link
-                        href="/gamification/flash-deals"
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 hover:text-yellow-600 dark:hover:text-yellow-400 rounded-md transition"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        <BoltIcon className="h-5 w-5" />
-                        {t('platform.items.flashDeals')}
-                      </Link>
-                      <Link
                         href="/gamification/group-buys"
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 rounded-md transition"
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-600 dark:hover:text-green-400 rounded-md transition"
                         onClick={() => setShowPlatformMenu(false)}
                       >
                         <ShoppingCartIcon className="h-5 w-5" />
                         {t('platform.items.groupBuys')}
                       </Link>
-                      <Link
-                        href="/gamification/referrals"
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-600 dark:hover:text-green-400 rounded-md transition"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        <UsersIcon className="h-5 w-5" />
-                        {t('platform.items.referrals')}
-                      </Link>
-                    </div>
-
-                    <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
-
-                    {/* Economía & Gobernanza */}
-                    <div className="px-3 py-1">
-                      <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">⚖️ Economía & Gobernanza</p>
-                      <Link
-                        href="/flow-economics"
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 rounded-md transition"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        <ChartBarIcon className="h-5 w-5" />
-                        {t('platform.items.economyDashboard')}
-                      </Link>
-                      <Link
-                        href="/bridge"
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-md transition"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        <ArrowsRightLeftIcon className="h-5 w-5" />
-                        {t('platform.items.bridge')}
-                      </Link>
-                      <Link
-                        href="/governance/proposals"
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 rounded-md transition"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        <DocumentTextIcon className="h-5 w-5" />
-                        {t('platform.items.proposals')}
-                      </Link>
-                      <Link
-                        href="/governance/delegation"
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-md transition"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        <RectangleStackIcon className="h-5 w-5" />
-                        {t('platform.items.delegation')}
-                      </Link>
-                    </div>
-
-                    <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
-
-                    {/* Comunidad */}
-                    <div className="px-3 py-1">
-                      <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">🌍 Comunidad</p>
                       <Link
                         href="/impacto"
                         className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-600 dark:hover:text-green-400 rounded-md transition"
@@ -733,28 +653,18 @@ export default function Navbar() {
                         {t('platform.items.impact')}
                       </Link>
                       <Link
-                        href="/red-comunidades"
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 rounded-md transition"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        {t('platform.items.communityNetwork')}
-                      </Link>
-                      <Link
-                        href="/hybrid/celebrations"
+                        href="/governance/proposals"
                         className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 rounded-md transition"
                         onClick={() => setShowPlatformMenu(false)}
                       >
-                        <SparklesIcon className="h-5 w-5" />
-                        {t('platform.items.hybridEvents')}
+                        <DocumentTextIcon className="h-5 w-5" />
+                        {t('platform.items.proposals')}
                       </Link>
                     </div>
 
                     <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
 
-                    {/* Documentación */}
+                    {/* All Features Link */}
                     <div className="px-3 py-1">
                       <Link
                         href="/docs"
@@ -837,10 +747,10 @@ export default function Navbar() {
                   </svg>
                 </Link>
 
-                {/* Colaboración Section */}
+                {/* Popular Features - Simplified list */}
                 <div className="mt-4">
                   <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    🤝 Colaboración
+                    {t('platform.popularFeatures')}
                   </div>
                   <Link
                     href="/mutual-aid"
@@ -860,137 +770,22 @@ export default function Navbar() {
                     </svg>
                     <span>{t('platform.items.timebank')}</span>
                   </Link>
-                </div>
-
-                {/* Gamification Section - Collapsible */}
-                <div className="mt-4">
-                  <button
-                    onClick={() => setShowMobileGamification(!showMobileGamification)}
-                    className="w-full flex items-center justify-between px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                  <Link
+                    href="/gamification/challenges"
+                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                    onClick={() => setShowMobileMenu(false)}
                   >
-                    <span className="flex items-center gap-2">
-                      <PuzzlePieceIcon className="h-5 w-5" />
-                      <span className="font-medium">🎮 {t('platform.gamification')}</span>
-                    </span>
-                    <svg
-                      className={`w-5 h-5 transition-transform ${showMobileGamification ? 'rotate-180' : ''}`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-
-                  {showMobileGamification && (
-                    <div className="ml-4 mt-1 flex flex-col space-y-1 border-l-2 border-purple-200 dark:border-purple-800 pl-2">
-                      <Link
-                        href="/gamification/challenges"
-                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
-                        onClick={() => setShowMobileMenu(false)}
-                      >
-                        <BoltIcon className="h-5 w-5" />
-                        <span>{t('platform.items.challenges')}</span>
-                      </Link>
-                      <Link
-                        href="/gamification/swipe"
-                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
-                        onClick={() => setShowMobileMenu(false)}
-                      >
-                        <SparklesIcon className="h-5 w-5" />
-                        <span>{t('platform.items.swipe')}</span>
-                      </Link>
-                      <Link
-                        href="/gamification/flash-deals"
-                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
-                        onClick={() => setShowMobileMenu(false)}
-                      >
-                        <BoltIcon className="h-5 w-5" />
-                        <span>{t('platform.items.flashDeals')}</span>
-                      </Link>
-                      <Link
-                        href="/gamification/group-buys"
-                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
-                        onClick={() => setShowMobileMenu(false)}
-                      >
-                        <ShoppingCartIcon className="h-5 w-5" />
-                        <span>{t('platform.items.groupBuys')}</span>
-                      </Link>
-                      <Link
-                        href="/gamification/referrals"
-                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
-                        onClick={() => setShowMobileMenu(false)}
-                      >
-                        <UsersIcon className="h-5 w-5" />
-                        <span>{t('platform.items.referrals')}</span>
-                      </Link>
-                    </div>
-                  )}
-                </div>
-
-                {/* Economy & Governance Section - Collapsible */}
-                <div className="mt-2">
-                  <button
-                    onClick={() => setShowMobileEconomy(!showMobileEconomy)}
-                    className="w-full flex items-center justify-between px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                    <BoltIcon className="h-5 w-5" />
+                    <span>{t('platform.items.challenges')}</span>
+                  </Link>
+                  <Link
+                    href="/gamification/group-buys"
+                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                    onClick={() => setShowMobileMenu(false)}
                   >
-                    <span className="flex items-center gap-2">
-                      <ChartBarIcon className="h-5 w-5" />
-                      <span className="font-medium">⚖️ {t('platform.economy')}</span>
-                    </span>
-                    <svg
-                      className={`w-5 h-5 transition-transform ${showMobileEconomy ? 'rotate-180' : ''}`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-
-                  {showMobileEconomy && (
-                    <div className="ml-4 mt-1 flex flex-col space-y-1 border-l-2 border-green-200 dark:border-green-800 pl-2">
-                      <Link
-                        href="/flow-economics"
-                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
-                        onClick={() => setShowMobileMenu(false)}
-                      >
-                        <ChartBarIcon className="h-5 w-5" />
-                        <span>{t('platform.items.economyDashboard')}</span>
-                      </Link>
-                      <Link
-                        href="/bridge"
-                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
-                        onClick={() => setShowMobileMenu(false)}
-                      >
-                        <ArrowsRightLeftIcon className="h-5 w-5" />
-                        <span>{t('platform.items.bridge')}</span>
-                      </Link>
-                      <Link
-                        href="/governance/proposals"
-                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
-                        onClick={() => setShowMobileMenu(false)}
-                      >
-                        <DocumentTextIcon className="h-5 w-5" />
-                        <span>{t('platform.items.proposals')}</span>
-                      </Link>
-                      <Link
-                        href="/governance/delegation"
-                        className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
-                        onClick={() => setShowMobileMenu(false)}
-                      >
-                        <RectangleStackIcon className="h-5 w-5" />
-                        <span>{t('platform.items.delegation')}</span>
-                      </Link>
-                    </div>
-                  )}
-                </div>
-
-                {/* Comunidad Section */}
-                <div className="mt-4">
-                  <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    🌍 Comunidad
-                  </div>
+                    <ShoppingCartIcon className="h-5 w-5" />
+                    <span>{t('platform.items.groupBuys')}</span>
+                  </Link>
                   <Link
                     href="/impacto"
                     className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
@@ -1000,22 +795,12 @@ export default function Navbar() {
                     <span>{t('platform.items.impact')}</span>
                   </Link>
                   <Link
-                    href="/red-comunidades"
+                    href="/governance/proposals"
                     className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
                     onClick={() => setShowMobileMenu(false)}
                   >
-                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>{t('platform.items.communityNetwork')}</span>
-                  </Link>
-                  <Link
-                    href="/hybrid/celebrations"
-                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    <SparklesIcon className="h-5 w-5" />
-                    <span>{t('platform.items.hybridEvents')}</span>
+                    <DocumentTextIcon className="h-5 w-5" />
+                    <span>{t('platform.items.proposals')}</span>
                   </Link>
                 </div>
 
