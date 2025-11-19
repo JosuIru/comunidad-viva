@@ -216,7 +216,7 @@ function EventsPageContent() {
             <div className="text-center py-12">
               <p className="text-gray-600 dark:text-gray-400 text-lg mb-4">{t('noEvents')}</p>
               <Link href="/events/new">
-                <Button variant="success" size="lg">
+                <Button variant="success" size="md">
                   {t('createFirst')}
                 </Button>
               </Link>

@@ -279,7 +279,7 @@ function OffersPageContent() {
             <div className="text-center py-12">
               <p className="text-gray-600 dark:text-gray-400 text-lg mb-4">{t('noOffersAvailable')}</p>
               <Link href="/offers/new">
-                <Button variant="primary" size="lg">
+                <Button variant="primary" size="md">
                   {t('createFirstOffer')}
                 </Button>
               </Link>

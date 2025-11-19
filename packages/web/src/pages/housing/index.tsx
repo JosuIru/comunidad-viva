@@ -224,7 +224,7 @@ function HousingPageContent() {
                 {t('empty.description')}
               </p>
               <Link href="/housing/new">
-                <Button variant="primary" size="lg">
+                <Button variant="primary" size="md">
                   {t('empty.button')}
                 </Button>
               </Link>

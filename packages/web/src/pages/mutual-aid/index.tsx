@@ -314,7 +314,7 @@ function MutualAidPageContent() {
                     {t('empty.needs.description')}
                   </p>
                   <Link href="/mutual-aid/needs/new">
-                    <Button variant="primary" size="lg">
+                    <Button variant="primary" size="md">
                       {t('empty.needs.button')}
                     </Button>
                   </Link>
@@ -445,13 +445,13 @@ function MutualAidPageContent() {
                     <Button
                       onClick={() => setSelectedSDG(null)}
                       variant="outline"
-                      size="lg"
+                      size="md"
                     >
                       {t('buttons.viewAll')}
                     </Button>
                   ) : (
                     <Link href="/mutual-aid/projects/new">
-                      <Button variant="primary" size="lg">
+                      <Button variant="primary" size="md">
                         {t('empty.projects.button')}
                       </Button>
                     </Link>

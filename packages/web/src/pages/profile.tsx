@@ -232,7 +232,7 @@ export default function ProfilePage() {
                   <div className="p-6 bg-gray-50 dark:bg-gray-700 rounded-lg text-center">
                     <p className="text-gray-600 dark:text-gray-400 mb-4">{t('sections.notInCommunity')}</p>
                     <Link href="/communities">
-                      <Button variant="primary" size="lg">
+                      <Button variant="primary" size="md">
                         {t('sections.exploreCommunities')}
                       </Button>
                     </Link>
