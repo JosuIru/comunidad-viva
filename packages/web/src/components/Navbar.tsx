@@ -41,6 +41,7 @@ import WalletModal from './WalletModal';
 import EconomicLayerBadge, { EconomicLayer } from './EconomicLayerBadge';
 import { api } from '@/lib/api';
 import { logger } from '@/lib/logger';
+import { useUserLevel } from '@/hooks/useUserLevel';
 
 export default function Navbar() {
   const router = useRouter();
@@ -59,6 +60,10 @@ export default function Navbar() {
   const [showWalletMenu, setShowWalletMenu] = useState(false);
   const [showWalletConnectModal, setShowWalletConnectModal] = useState(false);
   const [economicLayer, setEconomicLayer] = useState<EconomicLayer>('TRADITIONAL');
+
+  // User level for feature gating
+  const { level: userLevel, getFeatureVisibility } = useUserLevel();
+  const featureVisibility = getFeatureVisibility();
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -608,58 +613,73 @@ export default function Navbar() {
 
                 {showPlatformMenu && (
                   <div className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-2 dropdown-menu z-50">
-                    {/* Popular Features - Only 6 most used */}
+                    {/* Popular Features - Filtered by user level */}
                     <div className="px-3 py-1">
-                      <Link
-                        href="/mutual-aid"
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 rounded-md transition"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        <HandRaisedIcon className="h-5 w-5" />
-                        {t('platform.items.mutualAid')}
-                      </Link>
-                      <Link
-                        href="/timebank"
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-amber-50 dark:hover:bg-amber-900/20 hover:text-amber-600 dark:hover:text-amber-400 rounded-md transition"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        {t('platform.items.timebank')}
-                      </Link>
-                      <Link
-                        href="/gamification/challenges"
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 rounded-md transition"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        <BoltIcon className="h-5 w-5" />
-                        {t('platform.items.challenges')}
-                      </Link>
-                      <Link
-                        href="/gamification/group-buys"
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-600 dark:hover:text-green-400 rounded-md transition"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        <ShoppingCartIcon className="h-5 w-5" />
-                        {t('platform.items.groupBuys')}
-                      </Link>
-                      <Link
-                        href="/impacto"
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-600 dark:hover:text-green-400 rounded-md transition"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        <ChartBarIcon className="h-5 w-5" />
-                        {t('platform.items.impact')}
-                      </Link>
-                      <Link
-                        href="/governance/proposals"
-                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 rounded-md transition"
-                        onClick={() => setShowPlatformMenu(false)}
-                      >
-                        <DocumentTextIcon className="h-5 w-5" />
-                        {t('platform.items.proposals')}
-                      </Link>
+                      {/* Level 2+ features */}
+                      {featureVisibility.mutualAid && (
+                        <Link
+                          href="/mutual-aid"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 rounded-md transition"
+                          onClick={() => setShowPlatformMenu(false)}
+                        >
+                          <HandRaisedIcon className="h-5 w-5" />
+                          {t('platform.items.mutualAid')}
+                        </Link>
+                      )}
+                      {featureVisibility.timebank && (
+                        <Link
+                          href="/timebank"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-amber-50 dark:hover:bg-amber-900/20 hover:text-amber-600 dark:hover:text-amber-400 rounded-md transition"
+                          onClick={() => setShowPlatformMenu(false)}
+                        >
+                          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          {t('platform.items.timebank')}
+                        </Link>
+                      )}
+                      {/* Level 3+ features */}
+                      {featureVisibility.challenges && (
+                        <Link
+                          href="/gamification/challenges"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 rounded-md transition"
+                          onClick={() => setShowPlatformMenu(false)}
+                        >
+                          <BoltIcon className="h-5 w-5" />
+                          {t('platform.items.challenges')}
+                        </Link>
+                      )}
+                      {featureVisibility.groupBuys && (
+                        <Link
+                          href="/gamification/group-buys"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-600 dark:hover:text-green-400 rounded-md transition"
+                          onClick={() => setShowPlatformMenu(false)}
+                        >
+                          <ShoppingCartIcon className="h-5 w-5" />
+                          {t('platform.items.groupBuys')}
+                        </Link>
+                      )}
+                      {/* Level 5+ features */}
+                      {featureVisibility.impact && (
+                        <Link
+                          href="/impacto"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-600 dark:hover:text-green-400 rounded-md transition"
+                          onClick={() => setShowPlatformMenu(false)}
+                        >
+                          <ChartBarIcon className="h-5 w-5" />
+                          {t('platform.items.impact')}
+                        </Link>
+                      )}
+                      {featureVisibility.proposals && (
+                        <Link
+                          href="/governance/proposals"
+                          className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 rounded-md transition"
+                          onClick={() => setShowPlatformMenu(false)}
+                        >
+                          <DocumentTextIcon className="h-5 w-5" />
+                          {t('platform.items.proposals')}
+                        </Link>
+                      )}
                     </div>
 
                     <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
@@ -747,61 +767,76 @@ export default function Navbar() {
                   </svg>
                 </Link>
 
-                {/* Popular Features - Simplified list */}
+                {/* Popular Features - Filtered by user level */}
                 <div className="mt-4">
                   <div className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     {t('platform.popularFeatures')}
                   </div>
-                  <Link
-                    href="/mutual-aid"
-                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    <HandRaisedIcon className="h-5 w-5" />
-                    <span>{t('platform.items.mutualAid')}</span>
-                  </Link>
-                  <Link
-                    href="/timebank"
-                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>{t('platform.items.timebank')}</span>
-                  </Link>
-                  <Link
-                    href="/gamification/challenges"
-                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    <BoltIcon className="h-5 w-5" />
-                    <span>{t('platform.items.challenges')}</span>
-                  </Link>
-                  <Link
-                    href="/gamification/group-buys"
-                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    <ShoppingCartIcon className="h-5 w-5" />
-                    <span>{t('platform.items.groupBuys')}</span>
-                  </Link>
-                  <Link
-                    href="/impacto"
-                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    <ChartBarIcon className="h-5 w-5" />
-                    <span>{t('platform.items.impact')}</span>
-                  </Link>
-                  <Link
-                    href="/governance/proposals"
-                    className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    <DocumentTextIcon className="h-5 w-5" />
-                    <span>{t('platform.items.proposals')}</span>
-                  </Link>
+                  {/* Level 2+ features */}
+                  {featureVisibility.mutualAid && (
+                    <Link
+                      href="/mutual-aid"
+                      className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <HandRaisedIcon className="h-5 w-5" />
+                      <span>{t('platform.items.mutualAid')}</span>
+                    </Link>
+                  )}
+                  {featureVisibility.timebank && (
+                    <Link
+                      href="/timebank"
+                      className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>{t('platform.items.timebank')}</span>
+                    </Link>
+                  )}
+                  {/* Level 3+ features */}
+                  {featureVisibility.challenges && (
+                    <Link
+                      href="/gamification/challenges"
+                      className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <BoltIcon className="h-5 w-5" />
+                      <span>{t('platform.items.challenges')}</span>
+                    </Link>
+                  )}
+                  {featureVisibility.groupBuys && (
+                    <Link
+                      href="/gamification/group-buys"
+                      className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <ShoppingCartIcon className="h-5 w-5" />
+                      <span>{t('platform.items.groupBuys')}</span>
+                    </Link>
+                  )}
+                  {/* Level 5+ features */}
+                  {featureVisibility.impact && (
+                    <Link
+                      href="/impacto"
+                      className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <ChartBarIcon className="h-5 w-5" />
+                      <span>{t('platform.items.impact')}</span>
+                    </Link>
+                  )}
+                  {featureVisibility.proposals && (
+                    <Link
+                      href="/governance/proposals"
+                      className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <DocumentTextIcon className="h-5 w-5" />
+                      <span>{t('platform.items.proposals')}</span>
+                    </Link>
+                  )}
                 </div>
 
                 {/* Documentation */}
