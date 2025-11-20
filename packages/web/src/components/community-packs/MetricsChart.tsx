@@ -116,9 +116,9 @@ export default function MetricsChart({
     return metrics.find((m) => m.metricKey === selectedMetric);
   };
 
-  const formatValue = (value: number) => {
+  const formatValue = (value: number): string => {
     const metric = getCurrentMetric();
-    if (!metric) return value;
+    if (!metric) return String(value);
 
     const unit = metric.unit || '';
 

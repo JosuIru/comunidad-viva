@@ -473,7 +473,7 @@ export default function CommunityDetailPage() {
               <CommunityPackCard
                 communityId={community.id}
                 communitySlug={community.slug}
-                isAdmin={isMember}
+                isAdmin={false}
               />
 
               {/* Recent Activity */}

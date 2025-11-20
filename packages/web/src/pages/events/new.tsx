@@ -21,7 +21,9 @@ export default function NewEvent() {
     errors,
     isSubmitting,
     handleChange,
-    handleBlur,
+    createOnChange,
+    getInputProps,
+    getSelectProps,
     validateForm,
     setValues,
   } = useFormValidation<CreateEventFormData>({
@@ -36,12 +38,6 @@ export default function NewEvent() {
       requirements: [],
     },
   });
-
-  // Wrapper for handleChange to work with input events
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    handleChange(name as keyof CreateEventFormData, value);
-  };
 
   const geocodeAddress = async () => {
     if (!formData.address) {
@@ -197,11 +193,13 @@ export default function NewEvent() {
               id="title"
               name="title"
               required
-              value={formData.title}
-              onChange={handleInputChange}
+              {...getInputProps('title')}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               placeholder={t('form.title.placeholder')}
             />
+            {errors.title && (
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.title}</p>
+            )}
           </div>
 
           {/* Description */}
@@ -214,11 +212,13 @@ export default function NewEvent() {
               name="description"
               required
               rows={4}
-              value={formData.description}
-              onChange={handleInputChange}
+              {...getInputProps('description')}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               placeholder={t('form.description.placeholder')}
             />
+            {errors.description && (
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.description}</p>
+            )}
           </div>
 
           {/* Event Type */}
@@ -230,14 +230,16 @@ export default function NewEvent() {
               id="type"
               name="type"
               required
-              value={formData.type}
-              onChange={handleInputChange}
+              {...getSelectProps('type')}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             >
               {eventTypes.map(type => (
                 <option key={type.value} value={type.value}>{type.label}</option>
               ))}
             </select>
+            {errors.type && (
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.type}</p>
+            )}
           </div>
 
           {/* Date and Time */}
@@ -252,10 +254,12 @@ export default function NewEvent() {
                 name="startsAt"
                 required
                 min={minDateTime}
-                value={formData.startsAt}
-                onChange={handleInputChange}
+                {...getInputProps('startsAt')}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               />
+              {errors.startsAt && (
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.startsAt}</p>
+              )}
             </div>
 
             <div>
@@ -268,10 +272,12 @@ export default function NewEvent() {
                 name="endsAt"
                 required
                 min={formData.startsAt || minDateTime}
-                value={formData.endsAt}
-                onChange={handleInputChange}
+                {...getInputProps('endsAt')}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               />
+              {errors.endsAt && (
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.endsAt}</p>
+              )}
             </div>
           </div>
 
@@ -286,8 +292,7 @@ export default function NewEvent() {
                 id="address"
                 name="address"
                 required
-                value={formData.address}
-                onChange={handleInputChange}
+                {...getInputProps('address')}
                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder={t('form.address.placeholder')}
               />
@@ -299,6 +304,9 @@ export default function NewEvent() {
                 {t('form.address.button')}
               </button>
             </div>
+            {errors.address && (
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.address}</p>
+            )}
             <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
               Introduce la dirección y haz clic en "Obtener coordenadas" para rellenar automáticamente lat/lng
             </p>
@@ -315,8 +323,8 @@ export default function NewEvent() {
                 id="lat"
                 name="lat"
                 step="any"
-                value={formData.lat}
-                onChange={handleInputChange}
+                value={formData.lat ?? ''}
+                onChange={createOnChange('lat', (v) => v === '' ? undefined : parseFloat(v))}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder={t('form.lat.placeholder')}
               />
@@ -332,8 +340,8 @@ export default function NewEvent() {
                 id="lng"
                 name="lng"
                 step="any"
-                value={formData.lng}
-                onChange={handleInputChange}
+                value={formData.lng ?? ''}
+                onChange={createOnChange('lng', (v) => v === '' ? undefined : parseFloat(v))}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder={t('form.lng.placeholder')}
               />
@@ -353,8 +361,8 @@ export default function NewEvent() {
                 name="capacity"
                 min="1"
                 step="1"
-                value={formData.capacity}
-                onChange={handleInputChange}
+                value={formData.capacity ?? ''}
+                onChange={createOnChange('capacity', (v) => v === '' ? undefined : parseInt(v, 10))}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder={t('form.capacity.placeholder')}
               />
@@ -371,8 +379,8 @@ export default function NewEvent() {
                 name="creditsReward"
                 min="0"
                 step="1"
-                value={formData.creditsReward}
-                onChange={handleInputChange}
+                value={formData.creditsReward ?? ''}
+                onChange={createOnChange('creditsReward', (v) => v === '' ? undefined : parseInt(v, 10))}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder={t('form.rewardCredits.placeholder')}
               />
@@ -403,7 +411,7 @@ export default function NewEvent() {
                     />
                     <button
                       type="button"
-                      onClick={() => removeImage(index)}
+                      onClick={() => removeImage()}
                       className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
                     >
                       x

@@ -18,7 +18,7 @@ const queryClient = new QueryClient({
     queries: {
       // Cache configuration for better performance
       staleTime: 5 * 60 * 1000, // 5 minutes - data is fresh for this time
-      cacheTime: 10 * 60 * 1000, // 10 minutes - keep unused data in cache
+      gcTime: 10 * 60 * 1000, // 10 minutes - keep unused data in cache (renamed from cacheTime in v5)
 
       // Refetch configuration
       refetchOnWindowFocus: false, // Don't refetch on window focus

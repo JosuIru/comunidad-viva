@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { EmailService } from '../notifications/email.service';
 
 export enum NotificationChannel {
   EMAIL = 'EMAIL',
@@ -31,7 +32,10 @@ export class NotificationService {
   private readonly telegramBotToken: string | null;
   private readonly telegramChatId: string | null;
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private emailService: EmailService,
+  ) {
     this.adminEmails = (this.configService.get('ADMIN_EMAILS') || '')
       .split(',')
       .filter(Boolean);
@@ -263,20 +267,62 @@ export class NotificationService {
     if (this.adminEmails.length === 0) return;
 
     try {
-      // In production, integrate with email service (SendGrid, AWS SES, etc.)
-      // For now, just log that we would send an email
-      this.logger.log(
-        `📧 Would send email alert to ${this.adminEmails.join(', ')}: ${payload.title}`,
-      );
+      const severityEmoji = {
+        [NotificationSeverity.INFO]: 'ℹ️',
+        [NotificationSeverity.WARNING]: '⚠️',
+        [NotificationSeverity.ERROR]: '❌',
+        [NotificationSeverity.CRITICAL]: '🚨',
+      };
 
-      // TODO: Implement actual email sending
-      // Example with SendGrid:
-      // await this.sendgrid.send({
-      //   to: this.adminEmails,
-      //   from: 'alerts@truk.gailu.com',
-      //   subject: `[${payload.severity}] ${payload.title}`,
-      //   html: this.formatEmailHtml(payload),
-      // });
+      const severityColors = {
+        [NotificationSeverity.INFO]: '#3498db',
+        [NotificationSeverity.WARNING]: '#f39c12',
+        [NotificationSeverity.ERROR]: '#e74c3c',
+        [NotificationSeverity.CRITICAL]: '#9b59b6',
+      };
+
+      const emoji = severityEmoji[payload.severity];
+      const color = severityColors[payload.severity];
+
+      // Format details as HTML
+      let detailsHtml = '';
+      if (payload.details) {
+        detailsHtml = '<div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 15px 0;"><h3 style="margin: 0 0 10px 0;">Details:</h3><ul style="margin: 0; padding-left: 20px;">';
+        for (const [key, value] of Object.entries(payload.details)) {
+          detailsHtml += `<li><strong>${key}:</strong> ${value}</li>`;
+        }
+        detailsHtml += '</ul></div>';
+      }
+
+      const html = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background: ${color}; color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+            <h1 style="margin: 0; font-size: 24px;">${emoji} ${payload.severity} ALERT</h1>
+          </div>
+          <div style="background: white; padding: 20px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px;">
+            <h2 style="margin: 0 0 15px 0; color: ${color};">${payload.title}</h2>
+            <p style="font-size: 16px; line-height: 1.5; color: #374151;">${payload.message}</p>
+            ${detailsHtml}
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 12px; color: #6b7280;">
+              <p style="margin: 0;">Time: ${new Date().toISOString()}</p>
+              <p style="margin: 5px 0 0 0;">Truk Blockchain Monitor</p>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Send email to all admin emails
+      for (const adminEmail of this.adminEmails) {
+        await this.emailService.sendEmail({
+          to: adminEmail,
+          subject: `[${payload.severity}] ${payload.title}`,
+          html,
+        });
+      }
+
+      this.logger.log(
+        `📧 Email alert sent to ${this.adminEmails.join(', ')}: ${payload.title}`,
+      );
     } catch (error) {
       this.logger.error(`Failed to send email alert: ${error.message}`);
     }

@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { randomUUID } from 'crypto';
 
 /**
  * Advanced Bridge Security Service
@@ -95,7 +96,7 @@ export class BridgeSecurityAdvancedService {
 
       // Auto-block if very high risk
       if (patternRisk >= 90) {
-        this.blockAddress(walletAddress, `Automated block - high risk score: ${patternRisk}`);
+        await this.blockAddress(walletAddress, `Automated block - high risk score: ${patternRisk}`);
         return {
           allowed: false,
           reason: 'Transaction blocked due to suspicious activity pattern',
@@ -131,7 +132,7 @@ export class BridgeSecurityAdvancedService {
     const failedCount = this.failedAttempts.get(walletAddress) || 0;
     if (failedCount >= this.MAX_FAILED_ATTEMPTS) {
       this.logger.warn(`Address ${walletAddress} has ${failedCount} failed attempts`);
-      this.blockAddress(walletAddress, 'Too many failed transaction attempts');
+      await this.blockAddress(walletAddress, 'Too many failed transaction attempts');
       return {
         allowed: false,
         reason: 'Address temporarily blocked due to failed attempts',
@@ -260,19 +261,35 @@ export class BridgeSecurityAdvancedService {
   /**
    * Block an address
    */
-  blockAddress(address: string, reason: string) {
+  async blockAddress(address: string, reason: string) {
     this.blockedAddresses.add(address);
     this.logger.warn(`🚫 Blocked address: ${address} - Reason: ${reason}`);
 
     // Log security event
-    this.logSecurityEvent({
+    await this.logSecurityEvent({
       type: 'ADDRESS_BLOCKED',
       walletAddress: address,
       severity: 'CRITICAL',
       reason,
     });
 
-    // TODO: Store in database for persistence
+    // Store in database for persistence
+    try {
+      await this.prisma.security_events.create({
+        data: {
+          id: randomUUID(),
+          type: 'ADDRESS_BLOCKED',
+          severity: 'CRITICAL',
+          details: {
+            walletAddress: address,
+            reason,
+            timestamp: new Date().toISOString(),
+          },
+        },
+      });
+    } catch (error) {
+      this.logger.error(`Failed to persist blocked address to database: ${error.message}`);
+    }
   }
 
   /**
@@ -308,8 +325,24 @@ export class BridgeSecurityAdvancedService {
     try {
       this.logger.warn(`🔒 Security Event: ${JSON.stringify(event)}`);
 
-      // TODO: Store in database SecurityEvent table
+      // Store in database SecurityEvent table
+      await this.prisma.security_events.create({
+        data: {
+          id: randomUUID(),
+          type: event.type || 'UNKNOWN',
+          severity: event.severity || 'INFO',
+          details: {
+            ...event,
+            timestamp: new Date().toISOString(),
+          },
+        },
+      });
+
       // TODO: Send to monitoring service (Sentry, Datadog, etc.)
+      // This could integrate with external services like:
+      // - Sentry for error tracking
+      // - Datadog for monitoring
+      // - PagerDuty for critical alerts
     } catch (error) {
       this.logger.error('Failed to log security event:', error);
     }

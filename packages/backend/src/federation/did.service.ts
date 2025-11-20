@@ -1,5 +1,29 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
+
+export interface RemoteDIDDocument {
+  did: string;
+  type: string;
+  name: string;
+  image?: string;
+  summary?: string;
+  nodeId: string;
+  semillaBalance?: number;
+  proofOfHelpScore?: number;
+  consciousnessLevel?: string;
+}
+
+interface CachedDID {
+  document: RemoteDIDDocument;
+  cachedAt: Date;
+  expiresAt: Date;
+}
+
+interface FederationNode {
+  nodeId: string;
+  endpoint: string;
+}
 
 /**
  * DID Service - Decentralized Identity for Gailu Labs Federation
@@ -14,9 +38,49 @@ export class DIDService {
   private readonly logger = new Logger(DIDService.name);
   private readonly nodeId: string;
 
+  // Cache for remote DIDs (TTL: 1 hour)
+  private readonly didCache: Map<string, CachedDID> = new Map();
+  private readonly cacheTTLMs = 60 * 60 * 1000; // 1 hour
+
+  // Known federation nodes
+  private readonly federationNodes: Map<string, string> = new Map();
+
   constructor(private prisma: PrismaService) {
     // Node ID can be configured via environment variable
     this.nodeId = process.env.GAILU_NODE_ID || 'comunidad-viva-main';
+
+    // Initialize known federation nodes from environment
+    this.initializeFederationNodes();
+  }
+
+  /**
+   * Initialize known federation nodes from environment configuration
+   */
+  private initializeFederationNodes(): void {
+    const nodesConfig = process.env.GAILU_FEDERATION_NODES;
+    if (nodesConfig) {
+      try {
+        // Format: nodeId1:endpoint1,nodeId2:endpoint2
+        const nodes = nodesConfig.split(',');
+        for (const node of nodes) {
+          const [nodeId, endpoint] = node.trim().split(':');
+          if (nodeId && endpoint) {
+            this.federationNodes.set(nodeId, endpoint.startsWith('http') ? endpoint : `https://${endpoint}`);
+            this.logger.log(`Registered federation node: ${nodeId} -> ${endpoint}`);
+          }
+        }
+      } catch (error) {
+        this.logger.warn(`Failed to parse federation nodes config: ${error.message}`);
+      }
+    }
+  }
+
+  /**
+   * Register a new federation node
+   */
+  registerNode(nodeId: string, endpoint: string): void {
+    this.federationNodes.set(nodeId, endpoint);
+    this.logger.log(`Registered federation node: ${nodeId} -> ${endpoint}`);
   }
 
   /**
@@ -93,11 +157,8 @@ export class DIDService {
           };
         }
       } else {
-        // For remote DIDs, we would fetch from the federated node
-        // This would involve an HTTP request to the remote node's DID resolver
-        this.logger.log(`Remote DID resolution not yet implemented: ${did}`);
-        // TODO: Implement remote DID resolution
-        return null;
+        // For remote DIDs, fetch from the federated node
+        return await this.resolveRemoteDID(did, parsed.nodeId, parsed.userId);
       }
 
       return null;
@@ -195,5 +256,155 @@ export class DIDService {
    */
   getNodeId(): string {
     return this.nodeId;
+  }
+
+  /**
+   * Resolve a DID from a remote federation node
+   */
+  private async resolveRemoteDID(
+    did: string,
+    nodeId: string,
+    userId: string,
+  ): Promise<RemoteDIDDocument | null> {
+    // Check cache first
+    const cached = this.getCachedDID(did);
+    if (cached) {
+      this.logger.debug(`Cache hit for DID: ${did}`);
+      return cached;
+    }
+
+    // Get the endpoint for this node
+    const endpoint = this.federationNodes.get(nodeId);
+    if (!endpoint) {
+      this.logger.warn(`Unknown federation node: ${nodeId}. Cannot resolve DID: ${did}`);
+      return null;
+    }
+
+    try {
+      const resolverUrl = `${endpoint}/api/federation/did/${encodeURIComponent(did)}`;
+      this.logger.debug(`Fetching remote DID from: ${resolverUrl}`);
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+      const response = await fetch(resolverUrl, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'X-Federation-Node': this.nodeId,
+        },
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          this.logger.warn(`DID not found on remote node ${nodeId}: ${did}`);
+          return null;
+        }
+        throw new Error(`Remote node returned ${response.status}: ${response.statusText}`);
+      }
+
+      const document = await response.json() as RemoteDIDDocument;
+
+      // Validate the response
+      if (!document.did || document.did !== did) {
+        this.logger.error(`Invalid DID document received for ${did}`);
+        return null;
+      }
+
+      // Cache the result
+      this.cacheDID(did, document);
+
+      this.logger.log(`Successfully resolved remote DID: ${did} from node ${nodeId}`);
+      return document;
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        this.logger.error(`Timeout resolving remote DID ${did} from node ${nodeId}`);
+      } else {
+        this.logger.error(`Failed to resolve remote DID ${did}: ${error.message}`);
+      }
+      return null;
+    }
+  }
+
+  /**
+   * Get a cached DID if it exists and hasn't expired
+   */
+  private getCachedDID(did: string): RemoteDIDDocument | null {
+    const cached = this.didCache.get(did);
+    if (!cached) {
+      return null;
+    }
+
+    // Check if expired
+    if (new Date() > cached.expiresAt) {
+      this.didCache.delete(did);
+      return null;
+    }
+
+    return cached.document;
+  }
+
+  /**
+   * Cache a resolved DID document
+   */
+  private cacheDID(did: string, document: RemoteDIDDocument): void {
+    const now = new Date();
+    this.didCache.set(did, {
+      document,
+      cachedAt: now,
+      expiresAt: new Date(now.getTime() + this.cacheTTLMs),
+    });
+  }
+
+  /**
+   * Clear expired entries from the cache
+   */
+  clearExpiredCache(): number {
+    const now = new Date();
+    let cleared = 0;
+
+    for (const [did, cached] of this.didCache.entries()) {
+      if (now > cached.expiresAt) {
+        this.didCache.delete(did);
+        cleared++;
+      }
+    }
+
+    if (cleared > 0) {
+      this.logger.debug(`Cleared ${cleared} expired DID cache entries`);
+    }
+
+    return cleared;
+  }
+
+  /**
+   * Invalidate a specific DID from cache
+   */
+  invalidateCache(did: string): boolean {
+    return this.didCache.delete(did);
+  }
+
+  /**
+   * Get cache statistics
+   */
+  getCacheStats(): { size: number; nodes: number } {
+    return {
+      size: this.didCache.size,
+      nodes: this.federationNodes.size,
+    };
+  }
+
+  /**
+   * Get all registered federation nodes
+   */
+  getFederationNodes(): Array<{ nodeId: string; endpoint: string }> {
+    const nodes: Array<{ nodeId: string; endpoint: string }> = [];
+    for (const [nodeId, endpoint] of this.federationNodes.entries()) {
+      nodes.push({ nodeId, endpoint });
+    }
+    return nodes;
   }
 }

@@ -1,6 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { BlockchainService, BlockchainNetwork } from './blockchain.service';
+import { ethers } from 'ethers';
 
 /**
  * Batch Bridge Service
@@ -16,7 +18,10 @@ export class BatchBridgeService {
 
   private pendingBatches: Map<string, any[]> = new Map(); // chain -> transactions
 
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private blockchainService: BlockchainService,
+  ) {}
 
   /**
    * Add a transaction to the pending batch
@@ -74,15 +79,66 @@ export class BatchBridgeService {
         transactionIds.push(tx.id);
       }
 
-      // Call batchMint on smart contract
-      // Note: This requires the optimized contract with batchMint function
-      this.logger.log(`Calling batchMint for ${recipients.length} recipients on ${chain}`);
+      // Map chain name to BlockchainNetwork enum
+      const networkMap: Record<string, BlockchainNetwork> = {
+        'polygon': BlockchainNetwork.POLYGON,
+        'amoy': BlockchainNetwork.AMOY,
+        'bsc': BlockchainNetwork.BSC,
+        'bsc_testnet': BlockchainNetwork.BSC_TESTNET,
+      };
 
-      // TODO: Implement actual blockchain call
-      // const result = await this.blockchainService.batchMint(chain, recipients, amounts);
+      const network = networkMap[chain.toLowerCase()];
+      if (!network) {
+        throw new Error(`Unsupported chain: ${chain}`);
+      }
 
-      // For now, simulate success
-      const batchTxHash = `0xbatch-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+      // NOTE: Current contract doesn't have batchMint function
+      // For production, consider upgrading contract to include:
+      // function batchMint(address[] calldata recipients, uint256[] calldata amounts)
+      // This would reduce gas costs significantly
+
+      // Get contract and signer
+      const contract = this.blockchainService.getContract(network);
+      const provider = this.blockchainService.getProvider(network);
+
+      if (!contract || !provider) {
+        throw new Error(`Contract or provider not available for ${network}`);
+      }
+
+      // Get minter wallet from environment
+      const minterPrivateKey = this.getMinterPrivateKey(network);
+      const minterWallet = new ethers.Wallet(minterPrivateKey, provider);
+      const contractWithSigner = contract.connect(minterWallet);
+
+      this.logger.log(`Processing ${recipients.length} mints on ${chain} from ${minterWallet.address}`);
+
+      // Process mints sequentially (could be optimized with parallel nonce management)
+      const txHashes: string[] = [];
+      let batchTxHash = '';
+
+      try {
+        for (let i = 0; i < recipients.length; i++) {
+          const recipient = recipients[i];
+          const amount = amounts[i];
+          const amountInWei = ethers.parseEther(amount);
+
+          this.logger.debug(`Minting ${amount} SEMILLA to ${recipient} (${i + 1}/${recipients.length})`);
+
+          const tx = await contractWithSigner.mint(recipient, amountInWei);
+          await tx.wait();
+
+          txHashes.push(tx.hash);
+          this.logger.debug(`✓ Mint ${i + 1}/${recipients.length} completed: ${tx.hash}`);
+        }
+
+        // Use first tx hash as batch identifier
+        batchTxHash = txHashes[0];
+        this.logger.log(`✅ Batch of ${recipients.length} mints completed. Lead tx: ${batchTxHash}`);
+
+      } catch (error) {
+        this.logger.error(`Failed to process batch mints: ${error.message}`);
+        throw error;
+      }
 
       // Update all transactions in database
       await this.prisma.bridgeTransaction.updateMany({
@@ -157,6 +213,29 @@ export class BatchBridgeService {
     } catch (error) {
       this.logger.error('Failed to record batch analytics:', error);
     }
+  }
+
+  /**
+   * Get minter private key for a network
+   */
+  private getMinterPrivateKey(network: BlockchainNetwork): string {
+    const envKeyMap: Record<BlockchainNetwork, string> = {
+      [BlockchainNetwork.POLYGON]: 'POLYGON_MINTER_PRIVATE_KEY',
+      [BlockchainNetwork.AMOY]: 'AMOY_MINTER_PRIVATE_KEY',
+      [BlockchainNetwork.BSC]: 'BSC_MINTER_PRIVATE_KEY',
+      [BlockchainNetwork.BSC_TESTNET]: 'BSC_TESTNET_MINTER_PRIVATE_KEY',
+    };
+
+    const envKey = envKeyMap[network];
+    const privateKey = process.env[envKey];
+
+    if (!privateKey) {
+      throw new Error(
+        `Minter private key not configured for ${network}. Set ${envKey} in environment variables.`,
+      );
+    }
+
+    return privateKey;
   }
 
   /**

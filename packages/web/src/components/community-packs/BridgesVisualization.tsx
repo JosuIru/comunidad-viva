@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Network, LinkHorizontal, Users, GitBranch, Heart, TrendingUp } from 'lucide-react';
+import { Network, Link2, Users, GitBranch, Heart, TrendingUp } from 'lucide-react';
 
 interface Bridge {
   id: string;

@@ -1,9 +1,9 @@
-import { Fragment } from 'react';
+import { Fragment, ReactNode } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
 interface WalletOption {
   name: string;
-  icon: string;
+  icon: ReactNode;
   description: string;
   isInstalled: boolean;
   installUrl: string;
@@ -55,13 +55,14 @@ export default function WalletModal({
                 <div className="flex items-center justify-between mb-4">
                   <Dialog.Title
                     as="h3"
-                    className="text-2xl font-bold text-gray-900 dark:text-gray-100"
+                    className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100"
                   >
                     {title}
                   </Dialog.Title>
                   <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors flex-shrink-0"
+                    aria-label="Cerrar modal"
                   >
                     <svg
                       className="w-6 h-6"
@@ -94,10 +95,10 @@ export default function WalletModal({
                           : 'border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 cursor-not-allowed opacity-60'
                       }`}
                     >
-                      <div className="text-4xl">{wallet.icon}</div>
-                      <div className="flex-1 text-left">
-                        <div className="flex items-center gap-2">
-                          <p className="font-bold text-gray-900 dark:text-gray-100">
+                      <div className="text-3xl sm:text-4xl flex-shrink-0">{wallet.icon}</div>
+                      <div className="flex-1 text-left min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <p className="font-bold text-gray-900 dark:text-gray-100 text-sm sm:text-base">
                             {wallet.name}
                           </p>
                           {wallet.isInstalled && (
@@ -106,7 +107,7 @@ export default function WalletModal({
                             </span>
                           )}
                         </div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
                           {wallet.description}
                         </p>
                         {!wallet.isInstalled && (

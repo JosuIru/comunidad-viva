@@ -15,11 +15,10 @@ export default function NewNeedPage() {
   const tCommon = useTranslations('common');
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
-  const SCOPE_OPTIONS = [
-    { value: 'PERSONAL', label: t('scope.PERSONAL'), description: t('newNeed.scopeDescriptions.PERSONAL') },
+  const SCOPE_OPTIONS: Array<{ value: 'INDIVIDUAL' | 'FAMILY' | 'COMMUNITY'; label: string; description: string }> = [
+    { value: 'INDIVIDUAL', label: t('scope.PERSONAL'), description: t('newNeed.scopeDescriptions.PERSONAL') },
+    { value: 'FAMILY', label: t('scope.FAMILY') || 'Familia', description: t('newNeed.scopeDescriptions.FAMILY') || 'Para tu familia' },
     { value: 'COMMUNITY', label: t('scope.COMMUNITY'), description: t('newNeed.scopeDescriptions.COMMUNITY') },
-    { value: 'INTERCOMMUNITY', label: t('newNeed.scopes.INTERCOMMUNITY'), description: t('newNeed.scopeDescriptions.INTERCOMMUNITY') },
-    { value: 'GLOBAL', label: t('scope.GLOBAL'), description: t('newNeed.scopeDescriptions.GLOBAL') },
   ];
 
   const TYPE_OPTIONS = [
@@ -39,7 +38,7 @@ export default function NewNeedPage() {
     errors,
     isSubmitting,
     handleChange,
-    handleBlur,
+    createOnChange,
     validateForm,
     setFormData,
   } = useFormValidation<CreateNeedFormData>({
@@ -145,8 +144,8 @@ export default function NewNeedPage() {
                   </label>
                   <select
                     name="type"
-                    value={formData.type}
-                    onChange={handleChange}
+                    value={formData.type ?? 'FOOD'}
+                    onChange={createOnChange('type')}
                     required
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                   >
@@ -166,8 +165,8 @@ export default function NewNeedPage() {
                   <input
                     type="text"
                     name="title"
-                    value={formData.title}
-                    onChange={handleChange}
+                    value={formData.title ?? ''}
+                    onChange={createOnChange('title')}
                     required
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                     placeholder={t('needTitlePlaceholder')}
@@ -181,8 +180,8 @@ export default function NewNeedPage() {
                   </label>
                   <textarea
                     name="description"
-                    value={formData.description}
-                    onChange={handleChange}
+                    value={formData.description ?? ''}
+                    onChange={createOnChange('description')}
                     required
                     rows={4}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
@@ -198,8 +197,8 @@ export default function NewNeedPage() {
                   <input
                     type="text"
                     name="location"
-                    value={formData.location}
-                    onChange={handleChange}
+                    value={formData.location ?? ''}
+                    onChange={createOnChange('location')}
                     required
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                     placeholder={t('newNeed.placeholders.location')}
@@ -214,8 +213,8 @@ export default function NewNeedPage() {
                   <input
                     type="range"
                     name="urgencyLevel"
-                    value={formData.urgencyLevel}
-                    onChange={handleChange}
+                    value={formData.urgencyLevel ?? 'MEDIUM'}
+                    onChange={createOnChange('urgencyLevel')}
                     min="1"
                     max="10"
                     className="w-full"
@@ -244,8 +243,8 @@ export default function NewNeedPage() {
                       <input
                         type="number"
                         name="targetEur"
-                        value={formData.targetEur}
-                        onChange={handleChange}
+                        value={formData.targetEur ?? ''}
+                        onChange={createOnChange('targetEur', (v) => v === '' ? undefined : parseFloat(v))}
                         min="0"
                         step="0.01"
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
@@ -260,8 +259,8 @@ export default function NewNeedPage() {
                       <input
                         type="number"
                         name="targetCredits"
-                        value={formData.targetCredits}
-                        onChange={handleChange}
+                        value={formData.targetCredits ?? ''}
+                        onChange={createOnChange('targetCredits', (v) => v === '' ? undefined : parseInt(v, 10))}
                         min="0"
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                         placeholder="0"
@@ -275,8 +274,8 @@ export default function NewNeedPage() {
                       <input
                         type="number"
                         name="targetHours"
-                        value={formData.targetHours}
-                        onChange={handleChange}
+                        value={formData.targetHours ?? ''}
+                        onChange={createOnChange('targetHours', (v) => v === '' ? undefined : parseFloat(v))}
                         min="0"
                         step="0.5"
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
@@ -293,8 +292,8 @@ export default function NewNeedPage() {
                   </label>
                   <textarea
                     name="neededSkills"
-                    value={formData.neededSkills}
-                    onChange={handleChange}
+                    value={Array.isArray(formData.neededSkills) ? formData.neededSkills.join(', ') : formData.neededSkills ?? ''}
+                    onChange={createOnChange('neededSkills', (v) => v.split(',').map(s => s.trim()).filter(Boolean))}
                     rows={3}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                     placeholder={t('newNeed.placeholders.skills')}

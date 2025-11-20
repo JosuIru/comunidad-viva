@@ -56,7 +56,7 @@ function Avatar({ name, src, size = 'md', className = '' }: AvatarProps) {
   const initials = getInitials(name);
   const gradient = getColorFromName(name);
 
-  if (isValidImageSrc(src)) {
+  if (src && isValidImageSrc(src)) {
     const sizeMap = { xs: 24, sm: 32, md: 40, lg: 48, xl: 64 };
     const pixelSize = sizeMap[size];
 

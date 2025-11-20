@@ -11,6 +11,8 @@ import {
   HttpStatus,
   Res,
   Header,
+  ForbiddenException,
+  NotFoundException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
@@ -25,6 +27,7 @@ import { UpdateCommunityPackDto } from './dto/update-community-pack.dto';
 import { CompleteStepDto } from './dto/complete-step.dto';
 import { UpdateMetricDto } from './dto/update-metric.dto';
 import { OrganizedCommunityType } from '@prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
 
 @ApiTags('Community Packs')
 @Controller('community-packs')
@@ -35,6 +38,7 @@ export class CommunityPacksController {
     private readonly bridgesService: BridgesService,
     private readonly exportService: ExportService,
     private readonly networkAnalyticsService: NetworkAnalyticsService,
+    private readonly prisma: PrismaService,
   ) {}
 
   @Get('types')
@@ -228,7 +232,40 @@ export class CommunityPacksController {
   @ApiResponse({ status: 403, description: 'User not authorized' })
   @ApiResponse({ status: 404, description: 'Bridge not found' })
   async acceptBridge(@Param('bridgeId') bridgeId: string, @Request() req) {
-    // TODO: Add authorization check (must be admin of target community)
+    // Get bridge details
+    const bridge = await this.prisma.communityBridge.findUnique({
+      where: { id: bridgeId },
+      include: {
+        targetCommunity: {
+          include: {
+            CommunityGovernance: true,
+          },
+        },
+      },
+    });
+
+    if (!bridge) {
+      throw new NotFoundException('Bridge not found');
+    }
+
+    // Get user info
+    const user = await this.prisma.user.findUnique({
+      where: { id: req.user.userId },
+      select: { communityId: true, generosityScore: true },
+    });
+
+    // Check if user is authorized (must be admin/founder of target community or high reputation member)
+    const targetCommunity = bridge.targetCommunity;
+    const isFounder = targetCommunity.CommunityGovernance?.founders.includes(req.user.userId) || false;
+    const isMember = user?.communityId === targetCommunity.id;
+    const hasAdminRights = user && user.generosityScore >= 10; // High reputation users can manage bridges
+
+    if (!isMember || (!isFounder && !hasAdminRights)) {
+      throw new ForbiddenException(
+        'Only founders or high-reputation members of the target community can accept bridge proposals',
+      );
+    }
+
     return this.bridgesService.acceptMentorship(bridgeId);
   }
 
@@ -240,7 +277,29 @@ export class CommunityPacksController {
   @ApiResponse({ status: 200, description: 'Bridge detection completed' })
   @ApiResponse({ status: 403, description: 'User not authorized' })
   async triggerBridgeDetection(@Request() req) {
-    // TODO: Add admin-only check
+    // Check if user is platform admin (high generosity score or specific admin role)
+    const user = await this.prisma.user.findUnique({
+      where: { id: req.user.userId },
+      select: {
+        generosityScore: true,
+        // In the future, could add an isAdmin field to User model
+      },
+    });
+
+    if (!user) {
+      throw new ForbiddenException('User not found');
+    }
+
+    // Platform admins have generosityScore >= 50 or are community founders
+    // This is a manual operation that affects the whole platform
+    const isPlatformAdmin = user.generosityScore >= 50;
+
+    if (!isPlatformAdmin) {
+      throw new ForbiddenException(
+        'Only platform administrators can manually trigger bridge detection',
+      );
+    }
+
     await this.bridgesService.detectAllBridges();
     return { message: 'Bridge detection completed' };
   }

@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
+import toast from 'react-hot-toast';
 import {
   UserGroupIcon,
   PlusIcon,
@@ -88,7 +89,7 @@ export default function Circulos() {
         schedule: '',
         location: '',
       });
-      alert(t('createSuccess'));
+      toast.success(t('createSuccess'));
     },
   });
 
@@ -101,7 +102,7 @@ export default function Circulos() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['circulos'] });
       queryClient.invalidateQueries({ queryKey: ['my-circulos'] });
-      alert(t('joinSuccess'));
+      toast.success(t('joinSuccess'));
     },
   });
 
@@ -114,7 +115,7 @@ export default function Circulos() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['circulos'] });
       queryClient.invalidateQueries({ queryKey: ['my-circulos'] });
-      alert(t('leaveSuccess'));
+      toast.success(t('leaveSuccess'));
     },
   });
 

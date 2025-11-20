@@ -49,7 +49,8 @@ export default function SetupProgress({ communityId, onStepClick }: SetupProgres
   };
 
   const getStepConfig = (stepKey: string) => {
-    const packConfig = getCommunityPack(pack?.packType);
+    if (!pack?.packType) return undefined;
+    const packConfig = getCommunityPack(pack.packType);
     return packConfig?.setupSteps.find((s) => s.key === stepKey);
   };
 

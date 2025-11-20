@@ -1,10 +1,21 @@
 'use client';
 
-import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
+import toast from 'react-hot-toast';
+import { useFormValidation } from '@/hooks/useFormValidation';
+import { z } from 'zod';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+
+// Schema de validación para la solicitud
+const createRequestSchema = z.object({
+  description: z.string().min(5, 'La descripción debe tener al menos 5 caracteres'),
+  hours: z.number().min(0.5, 'Mínimo 0.5 horas').max(24, 'Máximo 24 horas'),
+  scheduledFor: z.string().min(1, 'La fecha es requerida'),
+});
+
+type CreateRequestFormData = z.infer<typeof createRequestSchema>;
 
 interface CreateRequestModalProps {
   offer?: any;
@@ -12,11 +23,24 @@ interface CreateRequestModalProps {
 }
 
 export default function CreateRequestModal({ offer, onClose }: CreateRequestModalProps) {
-  const [description, setDescription] = useState(offer?.offer?.title || '');
-  const [hours, setHours] = useState(offer?.estimatedHours || 1);
-  const [scheduledFor, setScheduledFor] = useState('');
   const queryClient = useQueryClient();
   const tToasts = useTranslations('toasts');
+
+  // Initialize form validation
+  const {
+    formData,
+    errors,
+    getInputProps,
+    handleChange,
+    validateForm,
+  } = useFormValidation<CreateRequestFormData>({
+    schema: createRequestSchema,
+    initialData: {
+      description: offer?.offer?.title || '',
+      hours: offer?.estimatedHours || 1,
+      scheduledFor: '',
+    },
+  });
 
   const createMutation = useMutation({
     mutationFn: async (data: any) => {
@@ -44,17 +68,22 @@ export default function CreateRequestModal({ offer, onClose }: CreateRequestModa
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!scheduledFor) {
-      alert(tToasts('dateTimeRequired'));
+    // Validate form
+    const validation = validateForm();
+    if (!validation.success) {
+      const firstError = Object.values(validation.errors)[0];
+      if (firstError) {
+        toast.error(firstError);
+      }
       return;
     }
 
     createMutation.mutate({
       providerId: offer.offer.userId,
       offerId: offer.id,
-      description,
-      hours: parseFloat(hours.toString()),
-      scheduledFor,
+      description: validation.data.description,
+      hours: validation.data.hours,
+      scheduledFor: validation.data.scheduledFor,
     });
   };
 
@@ -69,7 +98,8 @@ export default function CreateRequestModal({ offer, onClose }: CreateRequestModa
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-2xl"
+            aria-label="Cerrar modal"
+            className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           >
             ×
           </button>
@@ -97,13 +127,17 @@ export default function CreateRequestModal({ offer, onClose }: CreateRequestModa
               Descripción del servicio
             </label>
             <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              {...getInputProps('description')}
               required
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+                errors.description ? 'border-red-500' : 'border-gray-300'
+              }`}
               placeholder="Describe qué necesitas..."
             />
+            {errors.description && (
+              <p className="mt-1 text-sm text-red-600">{errors.description}</p>
+            )}
           </div>
 
           {/* Hours */}
@@ -114,17 +148,23 @@ export default function CreateRequestModal({ offer, onClose }: CreateRequestModa
             <div className="flex items-center gap-2">
               <input
                 type="number"
-                value={hours}
-                onChange={(e) => setHours(parseFloat(e.target.value))}
+                {...getInputProps('hours', {
+                  transform: (v) => v === '' ? 0 : parseFloat(v)
+                })}
                 required
                 min="0.5"
                 step="0.5"
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className={`flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+                  errors.hours ? 'border-red-500' : 'border-gray-300'
+                }`}
               />
               <span className="text-sm text-gray-600">
-                = {Math.round(hours)} créditos
+                = {Math.round(formData.hours || 0)} créditos
               </span>
             </div>
+            {errors.hours && (
+              <p className="mt-1 text-sm text-red-600">{errors.hours}</p>
+            )}
             <p className="mt-1 text-xs text-gray-500">
               Estimadas: {offer.estimatedHours}h según la oferta
             </p>
@@ -137,12 +177,16 @@ export default function CreateRequestModal({ offer, onClose }: CreateRequestModa
             </label>
             <input
               type="datetime-local"
-              value={scheduledFor}
-              onChange={(e) => setScheduledFor(e.target.value)}
+              {...getInputProps('scheduledFor')}
               required
               min={new Date().toISOString().slice(0, 16)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+                errors.scheduledFor ? 'border-red-500' : 'border-gray-300'
+              }`}
             />
+            {errors.scheduledFor && (
+              <p className="mt-1 text-sm text-red-600">{errors.scheduledFor}</p>
+            )}
           </div>
 
           {/* Tools needed info */}

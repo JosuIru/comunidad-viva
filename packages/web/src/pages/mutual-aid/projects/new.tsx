@@ -57,7 +57,7 @@ export default function NewProjectPage() {
     errors,
     isSubmitting,
     handleChange,
-    handleBlur,
+    createOnChange,
     validateForm,
   } = useFormValidation<CreateProjectFormData>({
     schema: createProjectSchema,
@@ -157,8 +157,8 @@ export default function NewProjectPage() {
                   </label>
                   <select
                     name="type"
-                    value={formData.type}
-                    onChange={handleChange}
+                    value={formData.type ?? 'INFRASTRUCTURE'}
+                    onChange={createOnChange('type')}
                     required
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                   >
@@ -178,8 +178,8 @@ export default function NewProjectPage() {
                   <input
                     type="text"
                     name="title"
-                    value={formData.title}
-                    onChange={handleChange}
+                    value={formData.title ?? ''}
+                    onChange={createOnChange('title')}
                     required
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                     placeholder={t('projectTitlePlaceholder')}
@@ -193,8 +193,8 @@ export default function NewProjectPage() {
                   </label>
                   <textarea
                     name="description"
-                    value={formData.description}
-                    onChange={handleChange}
+                    value={formData.description ?? ''}
+                    onChange={createOnChange('description')}
                     required
                     rows={4}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
@@ -209,8 +209,8 @@ export default function NewProjectPage() {
                   </label>
                   <textarea
                     name="vision"
-                    value={formData.vision}
-                    onChange={handleChange}
+                    value={formData.vision ?? ''}
+                    onChange={createOnChange('vision')}
                     required
                     rows={3}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
@@ -227,8 +227,8 @@ export default function NewProjectPage() {
                     <input
                       type="text"
                       name="location"
-                      value={formData.location}
-                      onChange={handleChange}
+                      value={formData.location ?? ''}
+                      onChange={createOnChange('location')}
                       required
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                       placeholder={t('cityPlaceholder')}
@@ -241,8 +241,8 @@ export default function NewProjectPage() {
                     <input
                       type="text"
                       name="country"
-                      value={formData.country}
-                      onChange={handleChange}
+                      value={formData.country ?? ''}
+                      onChange={createOnChange('country')}
                       required
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                       placeholder={t('countryPlaceholder')}
@@ -254,9 +254,9 @@ export default function NewProjectPage() {
                     </label>
                     <input
                       type="text"
-                      name="region"
-                      value={formData.region}
-                      onChange={handleChange}
+                      name="lat"
+                      value={formData.lat ?? ''}
+                      onChange={createOnChange('lat', (v) => v === '' ? 0 : parseFloat(v))}
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                       placeholder={t('regionPlaceholder')}
                     />
@@ -272,8 +272,8 @@ export default function NewProjectPage() {
                     <input
                       type="number"
                       name="beneficiaries"
-                      value={formData.beneficiaries}
-                      onChange={handleChange}
+                      value={formData.beneficiaries ?? ''}
+                      onChange={createOnChange('beneficiaries', (v) => v === '' ? undefined : parseInt(v, 10))}
                       min="1"
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                       placeholder={t('beneficiariesPlaceholder')}
@@ -286,8 +286,8 @@ export default function NewProjectPage() {
                     <input
                       type="number"
                       name="estimatedMonths"
-                      value={formData.estimatedMonths}
-                      onChange={handleChange}
+                      value={formData.estimatedMonths ?? ''}
+                      onChange={createOnChange('estimatedMonths', (v) => v === '' ? undefined : parseInt(v, 10))}
                       min="1"
                       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                       placeholder={t('newProject.placeholders.months')}
@@ -309,8 +309,8 @@ export default function NewProjectPage() {
                       <input
                         type="number"
                         name="targetEur"
-                        value={formData.targetEur}
-                        onChange={handleChange}
+                        value={formData.targetEur ?? ''}
+                        onChange={createOnChange('targetEur', (v) => v === '' ? undefined : parseFloat(v))}
                         min="0"
                         step="0.01"
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
@@ -325,8 +325,8 @@ export default function NewProjectPage() {
                       <input
                         type="number"
                         name="targetCredits"
-                        value={formData.targetCredits}
-                        onChange={handleChange}
+                        value={formData.targetCredits ?? ''}
+                        onChange={createOnChange('targetCredits', (v) => v === '' ? undefined : parseInt(v, 10))}
                         min="0"
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                         placeholder="0"
@@ -339,9 +339,9 @@ export default function NewProjectPage() {
                       </label>
                       <input
                         type="number"
-                        name="targetHours"
-                        value={formData.targetHours}
-                        onChange={handleChange}
+                        name="volunteersNeeded"
+                        value={formData.volunteersNeeded ?? ''}
+                        onChange={createOnChange('volunteersNeeded', (v) => v === '' ? undefined : parseInt(v, 10))}
                         min="0"
                         step="0.5"
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
@@ -355,9 +355,9 @@ export default function NewProjectPage() {
                       </label>
                       <input
                         type="number"
-                        name="volunteersNeeded"
-                        value={formData.volunteersNeeded}
-                        onChange={handleChange}
+                        name="lng"
+                        value={formData.lng ?? ''}
+                        onChange={createOnChange('lng', (v) => v === '' ? 0 : parseFloat(v))}
                         min="0"
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                         placeholder="0"
@@ -373,8 +373,8 @@ export default function NewProjectPage() {
                   </label>
                   <textarea
                     name="impactGoals"
-                    value={formData.impactGoals}
-                    onChange={handleChange}
+                    value={Array.isArray(formData.impactGoals) ? formData.impactGoals.join(', ') : formData.impactGoals ?? ''}
+                    onChange={createOnChange('impactGoals', (v) => v.split(',').map(s => s.trim()).filter(Boolean))}
                     required
                     rows={4}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
@@ -410,8 +410,8 @@ export default function NewProjectPage() {
                   <input
                     type="text"
                     name="tags"
-                    value={formData.tags}
-                    onChange={handleChange}
+                    value={Array.isArray(formData.tags) ? formData.tags.join(', ') : formData.tags ?? ''}
+                    onChange={createOnChange('tags', (v) => v.split(',').map(s => s.trim()).filter(Boolean))}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                     placeholder={t('newProject.placeholders.tags')}
                   />

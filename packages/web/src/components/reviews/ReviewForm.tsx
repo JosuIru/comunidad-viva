@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import StarRating from './StarRating';
+import toast from 'react-hot-toast';
 
 interface ReviewFormProps {
   entityType: 'offer' | 'user' | 'event';
@@ -24,7 +25,7 @@ export default function ReviewForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (rating === 0) {
-      alert('Por favor selecciona una valoración');
+      toast.error('Por favor selecciona una valoración');
       return;
     }
     onSubmit({ rating, comment: comment.trim() || undefined });

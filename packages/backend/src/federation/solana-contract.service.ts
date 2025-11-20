@@ -4,13 +4,16 @@ import {
   PublicKey,
   Keypair,
   Transaction,
-  SystemProgram,
   LAMPORTS_PER_SOL,
+  sendAndConfirmTransaction,
 } from '@solana/web3.js';
-
-// Solana SPL Token Program ID (well-known constant)
-// This avoids dependency on @solana/spl-token package which has security vulnerabilities
-const TOKEN_PROGRAM_ID = new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
+import {
+  TOKEN_PROGRAM_ID,
+  getOrCreateAssociatedTokenAccount,
+  mintTo,
+  getAccount,
+  getMint,
+} from '@solana/spl-token';
 
 /**
  * Solana Contract Service
@@ -137,8 +140,7 @@ export class SolanaContractService {
   /**
    * Mint wSEMILLA tokens on Solana
    *
-   * Note: This is a simplified implementation.
-   * In production, use @solana/spl-token library properly.
+   * Uses @solana/spl-token to mint tokens to recipient's associated token account
    */
   async mintTokens(
     recipientAddress: string,
@@ -155,16 +157,40 @@ export class SolanaContractService {
 
       const recipientPublicKey = new PublicKey(recipientAddress);
 
-      // In production, you'd:
-      // 1. Get or create associated token account for recipient
-      // 2. Mint tokens to that account
-      // 3. Store metadata (gailuDID, internalTxId) in a program account
+      // Get mint info to determine decimals
+      const mintInfo = await getMint(this.connection, this.tokenMintAddress);
+      const decimals = mintInfo.decimals;
 
-      // For now, we'll simulate the response
-      const signature = 'simulated_solana_signature_' + Date.now();
-      const slot = Date.now();
+      // Convert amount to raw amount with decimals (e.g., 18 decimals like SEMILLA)
+      const rawAmount = BigInt(Math.floor(amount * Math.pow(10, decimals)));
 
-      this.logger.log(`Minted successfully. Signature: ${signature}`);
+      // Get or create associated token account for recipient
+      const recipientTokenAccount = await getOrCreateAssociatedTokenAccount(
+        this.connection,
+        this.authorityKeypair, // Payer for account creation if needed
+        this.tokenMintAddress,
+        recipientPublicKey,
+      );
+
+      this.logger.log(`Recipient token account: ${recipientTokenAccount.address.toBase58()}`);
+
+      // Mint tokens to recipient's token account
+      const signature = await mintTo(
+        this.connection,
+        this.authorityKeypair, // Payer for transaction
+        this.tokenMintAddress,
+        recipientTokenAccount.address,
+        this.authorityKeypair, // Mint authority
+        rawAmount,
+      );
+
+      // Get transaction slot
+      const txInfo = await this.connection.getTransaction(signature, {
+        maxSupportedTransactionVersion: 0,
+      });
+      const slot = txInfo?.slot || 0;
+
+      this.logger.log(`Minted ${amount} wSEMILLA successfully. Signature: ${signature}`);
 
       return { signature, slot };
     } catch (error) {
@@ -175,6 +201,8 @@ export class SolanaContractService {
 
   /**
    * Verify a burn transaction on Solana
+   *
+   * Parses a transaction to find and verify burn instructions
    */
   async verifyBurnTransaction(
     signature: string,
@@ -184,13 +212,13 @@ export class SolanaContractService {
     amount: number;
     gailuDID: string;
   } | null> {
-    if (!this.connection) {
+    if (!this.connection || !this.tokenMintAddress) {
       throw new Error('Solana service not initialized');
     }
 
     try {
       // Get transaction details
-      const transaction = await this.connection.getTransaction(signature, {
+      const transaction = await this.connection.getParsedTransaction(signature, {
         maxSupportedTransactionVersion: 0,
       });
 
@@ -199,17 +227,63 @@ export class SolanaContractService {
         return null;
       }
 
-      // In production, you'd:
-      // 1. Parse transaction to find burn instruction
-      // 2. Verify it's burning the correct token
-      // 3. Extract amount and metadata
+      // Check if transaction was successful
+      if (transaction.meta?.err) {
+        this.logger.warn(`Transaction ${signature} failed: ${JSON.stringify(transaction.meta.err)}`);
+        return null;
+      }
 
-      // For now, simulate
+      // Find burn instruction in the transaction
+      const instructions = transaction.transaction.message.instructions;
+      let burnInstruction = null;
+      let burnAmount = 0;
+      let fromAddress = '';
+
+      for (const instruction of instructions) {
+        // Check if it's a parsed instruction (SPL Token program)
+        if ('parsed' in instruction && instruction.program === 'spl-token') {
+          const parsedInstruction = instruction.parsed;
+
+          // Check for burn or burnChecked instructions
+          if (parsedInstruction.type === 'burn' || parsedInstruction.type === 'burnChecked') {
+            const info = parsedInstruction.info;
+
+            // Verify it's the correct mint
+            if (info.mint && info.mint === this.tokenMintAddress.toBase58()) {
+              burnInstruction = instruction;
+              burnAmount = parseInt(info.amount || info.tokenAmount?.amount || '0');
+              fromAddress = info.authority || info.owner || '';
+              break;
+            }
+          }
+        }
+      }
+
+      if (!burnInstruction) {
+        this.logger.warn(`No burn instruction found in transaction ${signature}`);
+        return null;
+      }
+
+      // Get mint decimals to convert raw amount
+      const mintInfo = await getMint(this.connection, this.tokenMintAddress);
+      const actualAmount = burnAmount / Math.pow(10, mintInfo.decimals);
+
+      // Try to extract gailuDID from memo instruction if present
+      let gailuDID = '';
+      for (const instruction of instructions) {
+        if ('parsed' in instruction && instruction.program === 'spl-memo') {
+          gailuDID = instruction.parsed || '';
+          break;
+        }
+      }
+
+      this.logger.log(`Verified burn: ${actualAmount} wSEMILLA from ${fromAddress}`);
+
       return {
         valid: true,
-        from: 'simulated_address',
-        amount: 100,
-        gailuDID: 'did:gailu:test',
+        from: fromAddress,
+        amount: actualAmount,
+        gailuDID: gailuDID,
       };
     } catch (error) {
       this.logger.error('Verify burn failed:', error);

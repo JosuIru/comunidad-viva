@@ -4,6 +4,7 @@ import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
 import { useTranslations } from 'next-intl';
+import toast from 'react-hot-toast';
 import {
   CurrencyDollarIcon,
   ArrowUpIcon,
@@ -79,7 +80,7 @@ export default function SemillaWallet() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['semilla-balance'] });
       queryClient.invalidateQueries({ queryKey: ['semilla-transactions'] });
-      alert(tToasts('success.semillaReceived'));
+      toast.success(tToasts('success.semillaReceived'));
     },
   });
 
@@ -94,17 +95,17 @@ export default function SemillaWallet() {
       queryClient.invalidateQueries({ queryKey: ['semilla-transactions'] });
       setShowSendModal(false);
       setSendForm({ toDID: '', amount: '', reason: '' });
-      alert(tToasts('success.transferComplete'));
+      toast.success(tToasts('success.transferComplete'));
     },
     onError: (error: any) => {
-      alert(error.response?.data?.message || tToasts('error.sendingSemilla'));
+      toast.error(error.response?.data?.message || tToasts('error.sendingSemilla'));
     },
   });
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     if (!sendForm.toDID || !sendForm.amount || !sendForm.reason) {
-      alert(tToasts('error.completeAllFields'));
+      toast.error(tToasts('error.completeAllFields'));
       return;
     }
     sendMutation.mutate({

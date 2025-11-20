@@ -316,7 +316,7 @@ export default function Navbar() {
       isInstalled: false,
       installUrl: 'https://walletconnect.com/',
       onConnect: async () => {
-        toast.info(tToasts('info.walletConnectComingSoon'));
+        toast(tToasts('info.walletConnectComingSoon'), { icon: '🔗' });
       },
     },
   ], [connectMetaMask, connectPhantom, tToasts, t]);

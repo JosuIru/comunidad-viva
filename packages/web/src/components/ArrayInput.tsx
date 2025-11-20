@@ -21,7 +21,8 @@ export default function ArrayInput({
 
   const handleAdd = () => {
     const trimmed = inputValue.trim();
-    if (trimmed && !value.includes(trimmed)) {
+    // Case-insensitive duplicate check
+    if (trimmed && !value.some(v => v.toLowerCase() === trimmed.toLowerCase())) {
       onChange([...value, trimmed]);
       setInputValue('');
     }
@@ -56,7 +57,8 @@ export default function ArrayInput({
               <button
                 type="button"
                 onClick={() => handleRemove(index)}
-                className="hover:text-red-600 dark:hover:text-red-400"
+                aria-label={`Eliminar ${item}`}
+                className="p-1 -mr-1 hover:text-red-600 dark:hover:text-red-400 rounded-full hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

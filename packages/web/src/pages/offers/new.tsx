@@ -13,6 +13,7 @@ export default function NewOffer() {
   const router = useRouter();
   const t = useTranslations('offerCreate');
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [isGeocoding, setIsGeocoding] = useState(false);
 
   // Initialize form validation
   const {
@@ -20,7 +21,8 @@ export default function NewOffer() {
     errors,
     isSubmitting,
     handleChange,
-    handleBlur,
+    getInputProps,
+    getSelectProps,
     validateForm,
     setValues,
   } = useFormValidation<CreateOfferFormData>({
@@ -41,6 +43,7 @@ export default function NewOffer() {
       return;
     }
 
+    setIsGeocoding(true);
     try {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(formData.address)}&limit=1`
@@ -60,6 +63,8 @@ export default function NewOffer() {
     } catch (error) {
       logger.error('Error geocoding address', { error, address: formData.address });
       toast.error(t('toasts.geocodeError'));
+    } finally {
+      setIsGeocoding(false);
     }
   };
 
@@ -192,9 +197,7 @@ export default function NewOffer() {
               id="title"
               name="title"
               required
-              value={formData.title || ''}
-              onChange={(e) => handleChange('title', e.target.value)}
-              onBlur={() => handleBlur('title')}
+              {...getInputProps('title')}
               className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 ${
                 errors.title ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
               }`}
@@ -215,9 +218,7 @@ export default function NewOffer() {
               name="description"
               required
               rows={4}
-              value={formData.description || ''}
-              onChange={(e) => handleChange('description', e.target.value)}
-              onBlur={() => handleBlur('description')}
+              {...getInputProps('description')}
               className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 ${
                 errors.description ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
               }`}
@@ -241,9 +242,7 @@ export default function NewOffer() {
                 id="type"
                 name="type"
                 required
-                value={formData.type || 'PRODUCT'}
-                onChange={(e) => handleChange('type', e.target.value as any)}
-                onBlur={() => handleBlur('type')}
+                {...getSelectProps('type')}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 ${
                   errors.type ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
@@ -267,9 +266,7 @@ export default function NewOffer() {
                 id="category"
                 name="category"
                 required
-                value={formData.category || ''}
-                onChange={(e) => handleChange('category', e.target.value)}
-                onBlur={() => handleBlur('category')}
+                {...getSelectProps('category')}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 ${
                   errors.category ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
@@ -297,9 +294,9 @@ export default function NewOffer() {
                 name="priceEur"
                 min="0"
                 step="0.01"
-                value={formData.priceEur ?? ''}
-                onChange={(e) => handleChange('priceEur', e.target.value ? parseFloat(e.target.value) : undefined)}
-                onBlur={() => handleBlur('priceEur')}
+                {...getInputProps('priceEur', {
+                  transform: (v) => v === '' ? undefined : parseFloat(v)
+                })}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 ${
                   errors.priceEur ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
@@ -320,9 +317,9 @@ export default function NewOffer() {
                 name="priceCredits"
                 min="0"
                 step="1"
-                value={formData.priceCredits ?? ''}
-                onChange={(e) => handleChange('priceCredits', e.target.value ? parseInt(e.target.value) : undefined)}
-                onBlur={() => handleBlur('priceCredits')}
+                {...getInputProps('priceCredits', {
+                  transform: (v) => v === '' ? undefined : parseInt(v, 10)
+                })}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 ${
                   errors.priceCredits ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
@@ -343,9 +340,9 @@ export default function NewOffer() {
                 name="stock"
                 min="0"
                 step="1"
-                value={formData.stock ?? ''}
-                onChange={(e) => handleChange('stock', e.target.value ? parseInt(e.target.value) : undefined)}
-                onBlur={() => handleBlur('stock')}
+                {...getInputProps('stock', {
+                  transform: (v) => v === '' ? undefined : parseInt(v, 10)
+                })}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 ${
                   errors.stock ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
@@ -367,9 +364,7 @@ export default function NewOffer() {
                 type="text"
                 id="address"
                 name="address"
-                value={formData.address || ''}
-                onChange={(e) => handleChange('address', e.target.value)}
-                onBlur={() => handleBlur('address')}
+                {...getInputProps('address')}
                 className={`flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 ${
                   errors.address ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
@@ -378,9 +373,18 @@ export default function NewOffer() {
               <button
                 type="button"
                 onClick={geocodeAddress}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap"
+                disabled={isGeocoding}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {t('form.address.button')}
+                {isGeocoding ? (
+                  <span className="flex items-center gap-2">
+                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Buscando...
+                  </span>
+                ) : t('form.address.button')}
               </button>
             </div>
             {errors.address && (
@@ -402,9 +406,9 @@ export default function NewOffer() {
                 id="lat"
                 name="lat"
                 step="any"
-                value={formData.lat ?? ''}
-                onChange={(e) => handleChange('lat', e.target.value ? parseFloat(e.target.value) : undefined)}
-                onBlur={() => handleBlur('lat')}
+                {...getInputProps('lat', {
+                  transform: (v) => v === '' ? undefined : parseFloat(v)
+                })}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 ${
                   errors.lat ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
@@ -425,9 +429,9 @@ export default function NewOffer() {
                 id="lng"
                 name="lng"
                 step="any"
-                value={formData.lng ?? ''}
-                onChange={(e) => handleChange('lng', e.target.value ? parseFloat(e.target.value) : undefined)}
-                onBlur={() => handleBlur('lng')}
+                {...getInputProps('lng', {
+                  transform: (v) => v === '' ? undefined : parseFloat(v)
+                })}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 ${
                   errors.lng ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
@@ -449,12 +453,10 @@ export default function NewOffer() {
               type="text"
               id="tags"
               name="tags"
+              {...getInputProps('tags', {
+                transform: (v) => v.split(',').map(tag => tag.trim()).filter(Boolean)
+              })}
               value={Array.isArray(formData.tags) ? formData.tags.join(', ') : ''}
-              onChange={(e) => {
-                const tagsArray = e.target.value.split(',').map(t => t.trim()).filter(Boolean);
-                handleChange('tags', tagsArray);
-              }}
-              onBlur={() => handleBlur('tags')}
               className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-100 ${
                 errors.tags ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
               }`}
@@ -489,7 +491,8 @@ export default function NewOffer() {
                     <button
                       type="button"
                       onClick={() => removeImage(index)}
-                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                      aria-label={`Eliminar imagen ${index + 1}`}
+                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-7 h-7 flex items-center justify-center hover:bg-red-600 transition-colors shadow-md"
                     >
                       ×
                     </button>

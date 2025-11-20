@@ -235,6 +235,7 @@ model Community {
   CommunityConnection_CommunityConnection_targetCommunityIdToCommunity CommunityConnection[] @relation("CommunityConnection_targetCommunityIdToCommunity")
   CommunityGovernance                                                  CommunityGovernance?
   CommunityGuarantee                                                   CommunityGuarantee[]
+  CommunityIntegration                                                 CommunityIntegration[]
   CommunityPack                                                        CommunityPack?
   CommunityProject                                                     CommunityProject[]
   Contribution                                                         Contribution[]
@@ -294,6 +295,31 @@ model CommunityConnection {
   @@index([sourceCommunityId])
   @@index([status])
   @@index([targetCommunityId])
+}
+
+model CommunityIntegration {
+  id            String              @id @default(uuid())
+  communityId   String
+  platform      IntegrationPlatform
+  channelId     String
+  channelName   String?
+  botToken      String
+  autoPublish   Boolean             @default(false)
+  categories    String[]            @default([])
+  enabled       Boolean             @default(true)
+  publishOffers Boolean             @default(true)
+  publishEvents Boolean             @default(true)
+  publishNeeds  Boolean             @default(true)
+  messageFormat String?
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  createdBy     String?
+  Community     Community           @relation(fields: [communityId], references: [id])
+
+  @@unique([communityId, platform, channelId])
+  @@index([communityId])
+  @@index([platform])
+  @@index([enabled])
 }
 
 model CommunityGovernance {
@@ -2152,6 +2178,9 @@ model User {
   twoFactorSecret                                           String?
   walletAddress                                             String?                   @unique
   walletType                                                String?
+  telegramUsername                                          String?
+  whatsappNumber                                            String?
+  contactPreference                                         ContactMethod             @default(APP)
   BlockValidation                                           BlockValidation[]
   BridgeTransaction                                         BridgeTransaction[]
   ChainLink_ChainLink_fromUserIdToUser                      ChainLink[]               @relation("ChainLink_fromUserIdToUser")
@@ -3210,4 +3239,20 @@ enum WeeklyMood {
   LEARNING
   ORGANIZING
   RESTING
+}
+
+enum IntegrationPlatform {
+  TELEGRAM
+  WHATSAPP_BUSINESS
+  DISCORD
+  SIGNAL
+  SLACK
+}
+
+enum ContactMethod {
+  APP
+  TELEGRAM
+  WHATSAPP
+  EMAIL
+  PHONE
 }

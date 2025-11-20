@@ -71,7 +71,7 @@ export const ImageCard = memo(function ImageCard({
     <Card {...props}>
       {/* Image or Placeholder */}
       <div className="h-48 bg-gradient-to-br from-blue-400 to-purple-500 rounded-t-lg overflow-hidden relative">
-        {isValidImageSrc(imageSrc) ? (
+        {imageSrc && isValidImageSrc(imageSrc) ? (
           <Image
             src={imageSrc}
             alt={imageAlt || title}
