@@ -5324,5 +5324,133 @@
       "user": "Usuario",
       "multiplierLabel": "multiplicador"
     }
+  },
+  "newLanding": {
+    "meta": {
+      "title": "Comunidad Viva - Tu barrio, tu economía",
+      "description": "Compra, vende e intercambia con tus vecinos sin comisiones. Únete a la red de economía local más grande de tu zona."
+    },
+    "hero": {
+      "badge": "Economía local sin comisiones",
+      "title": "Tu barrio, tu economía",
+      "subtitle": "Compra, vende e intercambia con tus vecinos sin comisiones",
+      "cta": {
+        "primary": "Explorar ofertas",
+        "secondary": "Unirme gratis"
+      },
+      "trust": "Gratis para siempre. Sin letras pequeñas."
+    },
+    "benefits": {
+      "title": "Por qué elegir Comunidad Viva",
+      "subtitle": "Más que un marketplace, una red de confianza",
+      "zeroFees": {
+        "title": "Sin comisiones",
+        "description": "0% de comisión en todas las transacciones. Todo lo que ganas es tuyo."
+      },
+      "localEconomy": {
+        "title": "Economía local",
+        "description": "Apoya a comercios y vecinos de tu zona. Cada transacción fortalece tu comunidad."
+      },
+      "trustNetwork": {
+        "title": "Red de confianza",
+        "description": "Sistema de reputación y reviews verificadas. Transacciones seguras entre vecinos."
+      }
+    },
+    "howItWorks": {
+      "title": "Cómo funciona",
+      "subtitle": "Empieza en 3 simples pasos",
+      "step1": {
+        "badge": "Paso 1",
+        "title": "Regístrate gratis",
+        "description": "Crea tu cuenta en menos de 2 minutos. Sin tarjeta de crédito."
+      },
+      "step2": {
+        "badge": "Paso 2",
+        "title": "Explora o publica",
+        "description": "Encuentra lo que necesitas o publica tus productos y servicios."
+      },
+      "step3": {
+        "badge": "Paso 3",
+        "title": "Conecta con vecinos",
+        "description": "Chatea, coordina y completa transacciones de forma segura."
+      }
+    },
+    "useCases": {
+      "title": "Qué puedes hacer",
+      "subtitle": "Infinitas posibilidades en tu barrio",
+      "localProduce": {
+        "title": "Comprar verduras locales",
+        "description": "Accede a productos frescos de huertos y productores de tu zona. Km 0 real."
+      },
+      "serviceExchange": {
+        "title": "Intercambiar servicios",
+        "description": "Banco de tiempo: ofrece tus habilidades y recibe lo que necesitas sin dinero."
+      },
+      "events": {
+        "title": "Organizar eventos vecinales",
+        "description": "Desde reuniones de barrio hasta mercadillos locales. Conecta con tu comunidad."
+      },
+      "timebank": {
+        "title": "Banco de tiempo",
+        "description": "Intercambia horas de trabajo: clases, reparaciones, cuidados. Una hora vale una hora."
+      }
+    },
+    "testimonials": {
+      "title": "Lo que dicen nuestros usuarios",
+      "subtitle": "Historias reales de vecinos reales",
+      "t1": {
+        "name": "María González",
+        "location": "Gracia, Barcelona",
+        "quote": "Desde que uso Truk, compro todo local y he conocido a mis vecinos. Es increíble la cantidad de recursos que tenemos en el barrio."
+      },
+      "t2": {
+        "name": "Javier Ruiz",
+        "location": "Malasaña, Madrid",
+        "quote": "Como músico freelance, el banco de tiempo me ha salvado. Doy clases de guitarra y recibo servicios que no podría pagar en efectivo."
+      },
+      "t3": {
+        "name": "Ana López",
+        "location": "El Carmen, Valencia",
+        "quote": "Organicé un mercadillo vecinal con Truk. Vinieron 50 personas. Ahora tenemos eventos cada mes."
+      }
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "subtitle": "Todo lo que necesitas saber",
+      "q1": {
+        "question": "¿Es gratis?",
+        "answer": "Sí, completamente gratis. No cobramos comisiones en ninguna transacción. Nuestro modelo se basa en donaciones voluntarias y apoyo comunitario."
+      },
+      "q2": {
+        "question": "¿Cómo funcionan los créditos?",
+        "answer": "Los créditos son nuestra moneda local. 1 crédito = 1 euro de referencia. Los recibes al vender o intercambiar, y los usas para comprar. También puedes ganar créditos participando en la comunidad."
+      },
+      "q3": {
+        "question": "¿Es seguro?",
+        "answer": "Muy seguro. Tenemos sistema de reputación verificada, reviews de usuarios, y mediación en caso de conflictos. Todas las transacciones quedan registradas y protegidas."
+      },
+      "q4": {
+        "question": "¿Qué puedo comprar/vender?",
+        "answer": "Casi cualquier cosa: productos de segunda mano, artesanías, verduras de huerto, servicios profesionales, clases particulares, reparaciones, cuidados, y mucho más."
+      },
+      "q5": {
+        "question": "¿Funciona solo en mi barrio?",
+        "answer": "Puedes conectar con toda tu zona, pero la magia está en lo hiperlocal. La mayoría de intercambios ocurren entre vecinos cercanos, facilitando entregas y creando comunidad real."
+      },
+      "stillHaveQuestions": "¿Aún tienes dudas?",
+      "contactUs": "Contáctanos"
+    },
+    "finalCta": {
+      "title": "Únete a tu comunidad hoy",
+      "subtitle": "Únete a {count} vecinos en tu zona",
+      "description": "Sin comisiones. Sin compromisos. Solo comunidad.",
+      "button": "Empezar ahora"
+    },
+    "footer": {
+      "rights": "Todos los derechos reservados.",
+      "privacy": "Privacidad",
+      "terms": "Términos",
+      "contact": "Contacto"
+    }
   }
 }

@@ -8,6 +8,7 @@ import { api } from '@/lib/api';
 import Avatar from '@/components/Avatar';
 import SkeletonLoader from '@/components/SkeletonLoader';
 import { staggerContainer, listItem } from '@/utils/animations';
+import InfoTooltip from '@/components/InfoTooltip';
 
 interface TimeBankOffer {
   id: string;
@@ -98,7 +99,9 @@ export default function TimeBankPage() {
         {/* Header */}
         <div className="bg-gradient-to-r from-green-500 to-blue-600 text-white">
           <div className="container mx-auto px-4 py-12">
-            <h1 className="text-4xl font-bold mb-4">⏰ {t('title')}</h1>
+            <InfoTooltip content="1 hora = 1 hora. Todos valemos igual." position="bottom">
+              <h1 className="text-4xl font-bold mb-4">⏰ {t('title')}</h1>
+            </InfoTooltip>
             <p className="text-xl opacity-90">
               {t('subtitle')}
             </p>
@@ -108,10 +111,12 @@ export default function TimeBankPage() {
         {/* Stats */}
         <div className="container mx-auto px-4 -mt-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-              <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.hoursGiven}h</p>
-              <p className="text-gray-600 dark:text-gray-400">{t('stats.hoursShared')}</p>
-            </div>
+            <InfoTooltip content="Horas que has dado - horas recibidas" position="bottom">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <p className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.hoursGiven}h</p>
+                <p className="text-gray-600 dark:text-gray-400">{t('stats.hoursShared')}</p>
+              </div>
+            </InfoTooltip>
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
               <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{stats.hoursReceived}h</p>
               <p className="text-gray-600 dark:text-gray-400">{t('stats.hoursReceived')}</p>

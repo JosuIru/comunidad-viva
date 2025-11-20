@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { MapPinIcon, PencilIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import InfoTooltip from '../InfoTooltip';
 
 interface ProximityFilterProps {
   value: number;
@@ -140,7 +141,9 @@ export default function ProximityFilter({
     <div className={className}>
       <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
         <MapPinIcon className="h-4 w-4" />
-        {label}
+        <InfoTooltip content="Encuentra recursos cerca de ti o tu comunidad" position="right">
+          <span>{label}</span>
+        </InfoTooltip>
       </label>
 
       <div className="space-y-3">

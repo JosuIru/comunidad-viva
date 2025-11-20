@@ -76,6 +76,7 @@ export default function MapFilterPanel({
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const [locationSearch, setLocationSearch] = useState('');
   const [isSearchingLocation, setIsSearchingLocation] = useState(false);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
   // Filter suggestions based on search text
   const suggestions = searchText.trim().length > 0
@@ -362,34 +363,98 @@ export default function MapFilterPanel({
           )}
         </div>
 
-        {/* Content Types - Grid Layout */}
+        {/* Content Types - Simplified to dropdown */}
         <div className="mb-6">
-          <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-3 uppercase tracking-wide flex items-center gap-1">
+          <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide flex items-center gap-1">
             <FolderIcon className="h-4 w-4" />
-            <span>{t('contentTypes')}</span>
+            <span>Tipo de contenido</span>
           </label>
-          <div className="grid grid-cols-2 gap-2">
-            {contentTypes.map((type) => {
-              const IconComponent = type.icon;
-              return (
-                <button
-                  key={type.id}
-                  onClick={() => toggleType(type.id)}
-                  className={`flex items-center gap-2 p-3 rounded-xl transition-all border-2 ${
-                    selectedTypes.has(type.id)
-                      ? `${type.color} border-current scale-105 shadow-sm`
-                      : 'bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:scale-105'
-                  }`}
-                >
-                  <IconComponent className="h-5 w-5" />
-                  <span className="text-xs font-medium truncate">
-                    {t(type.labelKey)}
-                  </span>
-                </button>
-              );
-            })}
+          <div className="relative">
+            <select
+              value={selectedTypes.size === 6 ? 'all' : Array.from(selectedTypes)[0] || 'all'}
+              onChange={(e) => {
+                if (e.target.value === 'all') {
+                  onTypesChange(new Set(['offer', 'service', 'event', 'need', 'project', 'housing']));
+                } else {
+                  onTypesChange(new Set([e.target.value]));
+                }
+              }}
+              className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100 transition-all appearance-none bg-white dark:bg-gray-700"
+            >
+              <option value="all">Todos los tipos</option>
+              {contentTypes.map((type) => (
+                <option key={type.id} value={type.id}>
+                  {t(type.labelKey)}
+                </option>
+              ))}
+            </select>
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
           </div>
         </div>
+
+        {/* Advanced Filters Toggle */}
+        <div className="mb-6">
+          <button
+            onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+            className="w-full flex items-center justify-between px-4 py-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl transition-all font-medium text-gray-700 dark:text-gray-300"
+          >
+            <span className="flex items-center gap-2">
+              <FunnelIcon className="h-5 w-5" />
+              <span>Más filtros</span>
+            </span>
+            <svg
+              className={`w-5 h-5 transition-transform ${showAdvancedFilters ? 'rotate-180' : ''}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Advanced Filters Section - Collapsible */}
+        <AnimatePresence>
+          {showAdvancedFilters && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-6 overflow-hidden"
+            >
+              {/* Content Types Grid - Full View */}
+              <div className="mb-6">
+                <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-3 uppercase tracking-wide flex items-center gap-1">
+                  <FolderIcon className="h-4 w-4" />
+                  <span>{t('contentTypes')}</span>
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  {contentTypes.map((type) => {
+                    const IconComponent = type.icon;
+                    return (
+                      <button
+                        key={type.id}
+                        onClick={() => toggleType(type.id)}
+                        className={`flex items-center gap-2 p-3 rounded-xl transition-all border-2 ${
+                          selectedTypes.has(type.id)
+                            ? `${type.color} border-current scale-105 shadow-sm`
+                            : 'bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:scale-105'
+                        }`}
+                      >
+                        <IconComponent className="h-5 w-5" />
+                        <span className="text-xs font-medium truncate">
+                          {t(type.labelKey)}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
 
         {/* Proximity Filter */}
         <div className="mb-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-4 border-2 border-blue-200 dark:border-blue-800">
@@ -606,6 +671,9 @@ export default function MapFilterPanel({
             </div>
           </div>
         )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

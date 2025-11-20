@@ -8,6 +8,7 @@ import { getI18nProps } from '@/lib/i18n';
 import { logger } from '@/lib/logger';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import { createOfferSchema, type CreateOfferFormData } from '@/lib/validations';
+import InfoTooltip from '@/components/InfoTooltip';
 
 export default function NewOffer() {
   const router = useRouter();
@@ -235,9 +236,17 @@ export default function NewOffer() {
           {/* Type and Category */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="type" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                {t('form.type')} *
-              </label>
+              <InfoTooltip
+                content={formData.type === 'PRODUCT' ? 'Artículo físico para vender' :
+                  formData.type === 'SERVICE' ? 'Tu tiempo o habilidad' :
+                  formData.type === 'TIME_BANK' ? 'Intercambio de horas 1:1' :
+                  formData.type === 'GROUP_BUY' ? 'Compra grupal con descuento' : 'Selecciona un tipo'}
+                position="right"
+              >
+                <label htmlFor="type" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  {t('form.type')} *
+                </label>
+              </InfoTooltip>
               <select
                 id="type"
                 name="type"
@@ -308,9 +317,11 @@ export default function NewOffer() {
             </div>
 
             <div>
-              <label htmlFor="priceCredits" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                {t('form.priceCredits.label')}
-              </label>
+              <InfoTooltip content="Opcional. Acepta créditos además de €" position="right">
+                <label htmlFor="priceCredits" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  {t('form.priceCredits.label')}
+                </label>
+              </InfoTooltip>
               <input
                 type="number"
                 id="priceCredits"

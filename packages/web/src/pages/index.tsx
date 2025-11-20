@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
@@ -18,12 +19,14 @@ import ContextualTooltip from '@/components/ContextualTooltip';
 import OnboardingTipDisplay from '@/components/OnboardingTipDisplay';
 import BadgeNotification from '@/components/BadgeNotification';
 import DashboardCustomizer from '@/components/DashboardCustomizer';
+import InfoTooltip from '@/components/InfoTooltip';
 import { api } from '@/lib/api';
 import BadgeManager, { Badge } from '@/lib/badges';
 import { getI18nProps } from '@/lib/i18n';
 import { logger } from '@/lib/logger';
 import { fadeInUp, staggerContainer, listItem } from '@/utils/animations';
 import Analytics, { ANALYTICS_EVENTS } from '@/lib/analytics';
+import { handleImageError } from '@/lib/imageUtils';
 import ProgressiveOnboardingManager, { OnboardingTip } from '@/lib/progressiveOnboarding';
 import AdaptiveTourManager, { AdaptiveTour } from '@/lib/adaptiveTours';
 import ProfileSelector from '@/components/ProfileSelector';
@@ -46,6 +49,9 @@ import {
   ChevronRightIcon,
   ArrowsPointingOutIcon,
   XMarkIcon,
+  ShoppingBagIcon,
+  MagnifyingGlassIcon,
+  UserGroupIcon,
 } from '@heroicons/react/24/outline';
 
 const Map = dynamic(() => import('@/components/Map'), { ssr: false });
@@ -80,7 +86,7 @@ export default function HomePage() {
   const t = useTranslations('common');
   const tHome = useTranslations('home');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [activeTab, setActiveTab] = useState<'discover' | 'activity' | 'community'>('discover');
+  const [activeTab, setActiveTab] = useState<'explore' | 'activity'>('explore');
   const [view, setView] = useState<'map' | 'feed'>('map');
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
@@ -106,6 +112,7 @@ export default function HomePage() {
   const [customLocation, setCustomLocation] = useState<[number, number] | null>(null);
   const [searchText, setSearchText] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [filtersExpanded, setFiltersExpanded] = useState(false);
   const [mapZoom, setMapZoom] = useState(6);
   const [isFullscreenMap, setIsFullscreenMap] = useState(false);
@@ -674,88 +681,111 @@ export default function HomePage() {
     <Layout>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4 py-6">
-          {/* Tab Navigation */}
-          <div data-tour="tabs" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm mb-6 p-1 flex gap-1 overflow-x-auto">
-            <button
-              onClick={() => {
-                setActiveTab('discover');
-                Analytics.track(ANALYTICS_EVENTS.TAB_CHANGED, { tab: 'discover' });
-              }}
-              className={`flex-1 min-w-[120px] px-4 py-3 rounded-md font-medium transition-all ${
-                activeTab === 'discover'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-              }`}
-            >
-              <div className="flex items-center justify-center gap-2">
-                <HomeIcon className="h-5 w-5" />
-                <span className="hidden sm:inline">{tHome('discover')}</span>
-              </div>
-            </button>
-            <button
-              onClick={() => {
-                setActiveTab('activity');
-                Analytics.track(ANALYTICS_EVENTS.TAB_CHANGED, { tab: 'activity' });
-              }}
-              className={`flex-1 min-w-[120px] px-4 py-3 rounded-md font-medium transition-all ${
-                activeTab === 'activity'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-              }`}
-            >
-              <div className="flex items-center justify-center gap-2">
-                <UserIcon className="h-5 w-5" />
-                <span className="hidden sm:inline">{tHome('myActivity')}</span>
-              </div>
-            </button>
-            <button
-              onClick={() => {
-                setActiveTab('community');
-                Analytics.track(ANALYTICS_EVENTS.TAB_CHANGED, { tab: 'community' });
-              }}
-              className={`flex-1 min-w-[120px] px-4 py-3 rounded-md font-medium transition-all ${
-                activeTab === 'community'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-              }`}
-            >
-              <div className="flex items-center justify-center gap-2">
-                <ChartBarIcon className="h-5 w-5" />
-                <span className="hidden sm:inline">{tHome('community')}</span>
-              </div>
-            </button>
-            <button
-              onClick={() => {
-                setShowDashboardCustomizer(true);
-                Analytics.track(ANALYTICS_EVENTS.DASHBOARD_CUSTOMIZER_OPENED);
-              }}
-              className="px-4 py-3 rounded-md font-medium transition-all bg-purple-100 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-800/30"
-              title={tHome('customizeDashboard')}
-            >
-              <div className="flex items-center justify-center gap-2">
+          {/* Tab Navigation - Simplified to 2 tabs with prominent CTA */}
+          <div data-tour="tabs" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm mb-6 p-1 flex gap-2 overflow-x-auto items-center">
+            <div className="flex gap-1 flex-1">
+              <button
+                onClick={() => {
+                  setActiveTab('explore');
+                  Analytics.track(ANALYTICS_EVENTS.TAB_CHANGED, { tab: 'explore' });
+                }}
+                className={`flex-1 min-w-[120px] px-4 py-3 rounded-md font-medium transition-all ${
+                  activeTab === 'explore'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                }`}
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <GlobeAltIcon className="h-5 w-5" />
+                  <span className="hidden sm:inline">Explorar</span>
+                </div>
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab('activity');
+                  Analytics.track(ANALYTICS_EVENTS.TAB_CHANGED, { tab: 'activity' });
+                }}
+                className={`flex-1 min-w-[120px] px-4 py-3 rounded-md font-medium transition-all ${
+                  activeTab === 'activity'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                }`}
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <UserIcon className="h-5 w-5" />
+                  <span className="hidden sm:inline">Mi Actividad</span>
+                </div>
+              </button>
+              <button
+                onClick={() => {
+                  setShowDashboardCustomizer(true);
+                  Analytics.track(ANALYTICS_EVENTS.DASHBOARD_CUSTOMIZER_OPENED);
+                }}
+                className="px-4 py-3 rounded-md font-medium transition-all bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                title={tHome('customizeDashboard')}
+              >
                 <Cog6ToothIcon className="h-5 w-5" />
-                <span className="hidden sm:inline">{tHome('customize')}</span>
-              </div>
-            </button>
+              </button>
+            </div>
+
+            {/* Prominent CTA Button - Desktop */}
+            <Link
+              href="/offers/new"
+              className="hidden md:flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-md font-semibold shadow-lg transition-all hover:scale-105"
+            >
+              <SparklesIcon className="h-5 w-5" />
+              <span>Publicar Oferta</span>
+            </Link>
           </div>
 
-          {/* Quick Actions - Conditional based on dashboard settings */}
-          {isAuthenticated && activeTab === 'discover' && enabledWidgets.includes('quick_actions') && (
+          {/* Quick Actions - Simplified to 3 actions - Conditional based on dashboard settings */}
+          {isAuthenticated && activeTab === 'explore' && enabledWidgets.includes('quick_actions') && (
             <motion.div
               data-tour="quick-actions"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               className="mb-6"
             >
-              <QuickActions />
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                    Acciones Rápidas
+                  </h3>
+                </div>
+                <div className="grid grid-cols-3 gap-3">
+                  <Link
+                    href="/offers/new"
+                    className="flex flex-col items-center justify-center gap-2 px-4 py-5 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/50"
+                  >
+                    <ShoppingBagIcon className="h-8 w-8" />
+                    <span className="text-xs font-semibold text-center">Publicar</span>
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setShowFilters(true);
+                    }}
+                    className="flex flex-col items-center justify-center gap-2 px-4 py-5 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg transition-all hover:scale-105 hover:shadow-lg hover:shadow-green-500/50"
+                  >
+                    <MagnifyingGlassIcon className="h-8 w-8" />
+                    <span className="text-xs font-semibold text-center">Buscar</span>
+                  </button>
+                  <Link
+                    href="/communities"
+                    className="flex flex-col items-center justify-center gap-2 px-4 py-5 bg-gradient-to-br from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-lg transition-all hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50"
+                  >
+                    <UserGroupIcon className="h-8 w-8" />
+                    <span className="text-xs font-semibold text-center">Comunidad</span>
+                  </Link>
+                </div>
+              </div>
             </motion.div>
           )}
 
           {/* Tab Content */}
           <AnimatePresence mode="wait">
-            {activeTab === 'discover' && (
+            {activeTab === 'explore' && (
               <motion.div
-                key="discover"
+                key="explore"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -764,6 +794,54 @@ export default function HomePage() {
                 <div className="grid grid-cols-1 desktop:grid-cols-4 gap-6">
                   {/* Map/Feed Section */}
                   <div className="desktop:col-span-3 space-y-6">
+                    {/* Featured Section - Top 3 most recent offers */}
+                    {offersData && offersData.length > 0 && (
+                      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-5">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                            <SparklesIcon className="h-5 w-5 text-yellow-500" />
+                            Destacados
+                          </h3>
+                          <Link
+                            href="/offers"
+                            className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
+                          >
+                            Ver todo →
+                          </Link>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          {offersData.slice(0, 3).map((offer: any) => (
+                            <Link
+                              key={offer.id}
+                              href={`/offers/${offer.id}`}
+                              className="group flex flex-col bg-gray-50 dark:bg-gray-700/50 rounded-lg overflow-hidden hover:shadow-lg transition-all hover:scale-[1.02]"
+                            >
+                              {offer.images && offer.images[0] && (
+                                <div className="relative h-32 bg-gray-200 dark:bg-gray-600">
+                                  <img
+                                    src={offer.images[0]}
+                                    alt={offer.title}
+                                    className="w-full h-full object-cover"
+                                    onError={handleImageError}
+                                  />
+                                </div>
+                              )}
+                              <div className="p-3 flex-1">
+                                <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                                  {offer.title}
+                                </h4>
+                                {offer.description && (
+                                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+                                    {offer.description}
+                                  </p>
+                                )}
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
                     {/* View Toggle */}
                     <div data-tour="map-toggle" className="flex items-center gap-3">
                       <Button
@@ -1012,74 +1090,6 @@ export default function HomePage() {
               </motion.div>
             )}
 
-            {/* Tab: Comunidad */}
-            {activeTab === 'community' && (
-              <motion.div
-                key="community"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="space-y-6">
-                  {/* Header with gradient */}
-                  <div className="bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 rounded-2xl p-8 text-white shadow-xl">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h2 className="text-3xl font-bold mb-2 flex items-center gap-3">
-                          <GlobeAltIcon className="h-8 w-8" />
-                          <span>Tu Comunidad</span>
-                        </h2>
-                        <p className="text-green-100 text-lg">El impacto que estamos generando juntos</p>
-                      </div>
-                      <div className="hidden md:block opacity-20">
-                        <HandRaisedIcon className="h-16 w-16" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Stats Grid */}
-                  <div className="grid md:grid-cols-2 gap-6">
-                    {enabledWidgets.includes('community_stats') && (
-                      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-200 dark:border-gray-700">
-                        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                          <ChartBarIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                          <span>Métricas Comunitarias</span>
-                        </h3>
-                        <CommunityStats />
-                      </div>
-                    )}
-
-                    {isAuthenticated && enabledWidgets.includes('daily_seed') && (
-                      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-200 dark:border-gray-700">
-                        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                          <SparklesIcon className="h-5 w-5 text-green-600 dark:text-green-400" />
-                          <span>Tu Semilla Diaria</span>
-                        </h3>
-                        <DailySeed />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Events Section */}
-                  {enabledWidgets.includes('upcoming_events') && (
-                    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-200 dark:border-gray-700">
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                        <CalendarDaysIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-                        <span>Próximos Eventos</span>
-                      </h3>
-                      <UnifiedFeed
-                        selectedTypes={new Set(['event'])}
-                        selectedCommunities={selectedCommunities}
-                        proximityRadius={proximityRadius}
-                        searchText=""
-                        userLocation={userLocation}
-                      />
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            )}
           </AnimatePresence>
         </div>
 
@@ -1136,12 +1146,22 @@ export default function HomePage() {
           />
         )}
 
+        {/* Mobile CTA Button - Floating (FAB) */}
+        {activeTab === 'explore' && (
+          <Link
+            href="/offers/new"
+            className="md:hidden fixed bottom-20 right-4 z-[10001] bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-full shadow-2xl flex items-center gap-2 font-semibold transition-all hover:scale-105"
+          >
+            <SparklesIcon className="h-6 w-6" />
+            <span className="text-sm">Publicar</span>
+          </Link>
+        )}
+
         {/* Mobile Filter Button - Floating (only visible on map view and mobile) */}
-        {view === 'map' && (
+        {view === 'map' && activeTab === 'explore' && (
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="lg:hidden fixed bottom-20 right-4 z-[10001] bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 font-semibold transition-all hover:scale-105"
-            style={{ position: 'fixed', bottom: '5rem', right: '1rem', zIndex: 10001 }}
+            className="lg:hidden fixed bottom-20 left-4 z-[10001] bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 font-semibold transition-all hover:scale-105"
           >
             <FunnelIcon className="h-6 w-6" />
             <span className="text-sm">{t('filters')}</span>

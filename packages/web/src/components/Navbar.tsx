@@ -39,6 +39,7 @@ import Avatar from './Avatar';
 import Button from './Button';
 import WalletModal from './WalletModal';
 import EconomicLayerBadge, { EconomicLayer } from './EconomicLayerBadge';
+import InfoTooltip from './InfoTooltip';
 import { api } from '@/lib/api';
 import { logger } from '@/lib/logger';
 import { useUserLevel } from '@/hooks/useUserLevel';
@@ -329,7 +330,9 @@ export default function Navbar() {
           <div className="flex items-center justify-end h-10 gap-4">
             {/* Economic Layer Badge - Show for authenticated users */}
             {isAuthenticated && (
-              <EconomicLayerBadge layer={economicLayer} showDropdown={true} />
+              <InfoTooltip content="Usa €, créditos o horas de tiempo" position="bottom">
+                <EconomicLayerBadge layer={economicLayer} showDropdown={true} />
+              </InfoTooltip>
             )}
 
             {/* Wallet Indicator */}
@@ -403,7 +406,9 @@ export default function Navbar() {
                     <div className="px-4 py-3 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-b border-gray-200 dark:border-gray-700">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">{tCredits('balance')}</p>
+                          <InfoTooltip content="Moneda local para intercambios. 1 crédito ≈ 1€" position="right">
+                            <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">{tCredits('balance')}</p>
+                          </InfoTooltip>
                           <p className="text-2xl font-bold text-green-600 dark:text-green-400">
                             {balanceData?.balance ?? 0}
                           </p>
