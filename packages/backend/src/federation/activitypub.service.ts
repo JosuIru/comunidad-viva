@@ -103,7 +103,7 @@ export class ActivityPubService {
       const nodeId = this.didService.getNodeId();
 
       // Generate activity ID (URI)
-      const activityId = `https://${nodeId}.gailu.org/activities/${Date.now()}-${Math.random()
+      const activityId = `https://${nodeId}.gailu.net/activities/${Date.now()}-${Math.random()
         .toString(36)
         .substring(7)}`;
 
@@ -120,7 +120,7 @@ export class ActivityPubService {
             nodeId,
             name: 'Comunidad Viva',
             type: 'GENESIS',
-            url: `https://${nodeId}.gailu.org`,
+            url: `https://${nodeId}.gailu.net`,
             publicKey: this.publicKey || '',
             description: 'Plataforma de economía colaborativa local',
             updatedAt: new Date(),
@@ -456,7 +456,7 @@ export class ActivityPubService {
     const signature = signer.sign(this.privateKey, 'base64');
 
     const nodeId = this.didService.getNodeId();
-    const keyId = `https://${nodeId}.gailu.org/actor#main-key`;
+    const keyId = `https://${nodeId}.gailu.net/actor#main-key`;
 
     const headers: { [key: string]: string } = {
       Date: date,

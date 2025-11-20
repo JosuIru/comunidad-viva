@@ -304,7 +304,7 @@ POST /federation/nodes/register
   "nodeId": "spiral-bank",
   "name": "Spiral Bank",
   "type": "CURRENCY",
-  "url": "https://spiral-bank.gailu.org",
+  "url": "https://spiral-bank.gailu.net",
   "publicKey": "...",
   "description": "Banco comunitario del ecosistema"
 }

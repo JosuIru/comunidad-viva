@@ -233,7 +233,7 @@ export class DIDService {
       node: user.gailuNodeId,
       service: [{
         type: 'GailuProfile',
-        serviceEndpoint: `https://comunidad-viva.gailu.network/users/${user.id}`
+        serviceEndpoint: `https://comunidad-viva.gailu.net/users/${user.id}`
       }],
       created: user.createdAt
     };
@@ -489,7 +489,7 @@ export class ActivityPubService {
     actor: string; // DID del usuario
     object: any;
   }) {
-    const activityId = `https://comunidad-viva.gailu.network/activities/${Date.now()}`;
+    const activityId = `https://comunidad-viva.gailu.net/activities/${Date.now()}`;
 
     const activityPubFormat = {
       '@context': 'https://www.w3.org/ns/activitystreams',
@@ -498,7 +498,7 @@ export class ActivityPubService {
       actor: activity.actor,
       object: activity.object,
       published: new Date().toISOString(),
-      to: ['https://gailu.network/public'] // Público en toda la red
+      to: ['https://gailu.net/public'] // Público en toda la red
     };
 
     // Guardar localmente
