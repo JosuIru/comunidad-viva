@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PrismaModule } from '../prisma/prisma.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { NotificationsModule } from '../notifications/notifications.module';
 import { DIDService } from './did.service';
 import { SemillaService } from './semilla.service';
 import { ActivityPubService } from './activitypub.service';
@@ -30,7 +31,7 @@ import { BridgeAdminController } from './bridge-admin.controller';
  * - Círculos de Conciencia
  */
 @Module({
-  imports: [PrismaModule, ScheduleModule.forRoot()],
+  imports: [PrismaModule, ScheduleModule.forRoot(), NotificationsModule],
   providers: [
     DIDService,
     SemillaService,
