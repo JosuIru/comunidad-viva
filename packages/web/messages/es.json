@@ -889,6 +889,13 @@
         "EVENT": "Evento",
         "DONATION": "Donación"
       }
+    },
+    "contact": {
+      "title": "Contacto directo",
+      "telegram": "Contactar vía Telegram",
+      "whatsapp": "Contactar vía WhatsApp",
+      "email": "Contactar por email",
+      "phone": "Contactar por teléfono"
     }
   },
   "offerCreate": {

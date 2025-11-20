@@ -210,8 +210,8 @@ model Comment {
 }
 
 model Community {
-  id                                                                   String                @id
-  slug                                                                 String                @unique
+  id                                                                   String                 @id
+  slug                                                                 String                 @unique
   name                                                                 String
   description                                                          String?
   logo                                                                 String?
@@ -222,17 +222,17 @@ model Community {
   radiusKm                                                             Float?
   type                                                                 CommunityType
   visibility                                                           CommunityVisibility
-  requiresApproval                                                     Boolean               @default(false)
-  allowExternalOffers                                                  Boolean               @default(false)
+  requiresApproval                                                     Boolean                @default(false)
+  allowExternalOffers                                                  Boolean                @default(false)
   primaryColor                                                         String?
-  language                                                             String                @default("es")
-  currency                                                             String                @default("EUR")
-  membersCount                                                         Int                   @default(0)
-  activeOffersCount                                                    Int                   @default(0)
-  createdAt                                                            DateTime              @default(now())
+  language                                                             String                 @default("es")
+  currency                                                             String                 @default("EUR")
+  membersCount                                                         Int                    @default(0)
+  activeOffersCount                                                    Int                    @default(0)
+  createdAt                                                            DateTime               @default(now())
   updatedAt                                                            DateTime
-  CommunityConnection_CommunityConnection_sourceCommunityIdToCommunity CommunityConnection[] @relation("CommunityConnection_sourceCommunityIdToCommunity")
-  CommunityConnection_CommunityConnection_targetCommunityIdToCommunity CommunityConnection[] @relation("CommunityConnection_targetCommunityIdToCommunity")
+  CommunityConnection_CommunityConnection_sourceCommunityIdToCommunity CommunityConnection[]  @relation("CommunityConnection_sourceCommunityIdToCommunity")
+  CommunityConnection_CommunityConnection_targetCommunityIdToCommunity CommunityConnection[]  @relation("CommunityConnection_targetCommunityIdToCommunity")
   CommunityGovernance                                                  CommunityGovernance?
   CommunityGuarantee                                                   CommunityGuarantee[]
   CommunityIntegration                                                 CommunityIntegration[]

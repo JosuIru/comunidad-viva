@@ -857,6 +857,13 @@
         "EVENT": "Esdeveniment",
         "DONATION": "Donació"
       }
+    },
+    "contact": {
+      "title": "Contacte directe",
+      "telegram": "Contactar via Telegram",
+      "whatsapp": "Contactar via WhatsApp",
+      "email": "Contactar per correu electrònic",
+      "phone": "Contactar per telèfon"
     }
   },
   "offerCreate": {

@@ -857,6 +857,13 @@
         "EVENT": "Event",
         "DONATION": "Donation"
       }
+    },
+    "contact": {
+      "title": "Direct contact",
+      "telegram": "Contact via Telegram",
+      "whatsapp": "Contact via WhatsApp",
+      "email": "Contact by email",
+      "phone": "Contact by phone"
     }
   },
   "offerCreate": {

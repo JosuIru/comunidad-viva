@@ -889,6 +889,13 @@
         "EVENT": "Ekitaldia",
         "DONATION": "Dohaintza"
       }
+    },
+    "contact": {
+      "title": "Zuzeneko harremana",
+      "telegram": "Telegram bidez jarri harremanetan",
+      "whatsapp": "WhatsApp bidez jarri harremanetan",
+      "email": "Posta elektroniko bidez jarri harremanetan",
+      "phone": "Telefono bidez jarri harremanetan"
     }
   },
   "offerCreate": {

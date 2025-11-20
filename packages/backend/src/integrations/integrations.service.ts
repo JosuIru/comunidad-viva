@@ -1,4 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateIntegrationDto, IntegrationPlatform } from './dto/create-integration.dto';
 import { UpdateIntegrationDto } from './dto/update-integration.dto';
@@ -11,6 +13,7 @@ export class IntegrationsService {
   constructor(
     private prisma: PrismaService,
     private messageFormatter: MessageFormatterService,
+    @InjectQueue('integrations') private integrationsQueue: Queue,
   ) {}
 
   /**
@@ -215,7 +218,7 @@ export class IntegrationsService {
     contentId: string,
     integrations?: any[],
   ) {
-    // Fetch content with relations
+    // Fetch content with relations to validate it exists
     let content;
     let communityId;
 
@@ -224,8 +227,7 @@ export class IntegrationsService {
         content = await this.prisma.offer.findUnique({
           where: { id: contentId },
           include: {
-            user: { select: { name: true, email: true } },
-            community: { select: { id: true, name: true, slug: true } },
+            community: { select: { id: true } },
           },
         });
         communityId = content?.communityId;
@@ -234,8 +236,7 @@ export class IntegrationsService {
         content = await this.prisma.event.findUnique({
           where: { id: contentId },
           include: {
-            organizer: { select: { name: true, email: true } },
-            community: { select: { id: true, name: true, slug: true } },
+            community: { select: { id: true } },
           },
         });
         communityId = content?.communityId;
@@ -244,8 +245,7 @@ export class IntegrationsService {
         content = await this.prisma.mutualAidNeed.findUnique({
           where: { id: contentId },
           include: {
-            user: { select: { name: true, email: true } },
-            community: { select: { id: true, name: true, slug: true } },
+            community: { select: { id: true } },
           },
         });
         communityId = content?.communityId;
@@ -272,55 +272,79 @@ export class IntegrationsService {
     // Generate deep link
     const deepLink = this.generateDeepLink(contentType, contentId, 'integration');
 
-    // Queue messages for each integration
-    const publishPromises = integrations.map(async (integration) => {
+    // Add jobs to queue for each integration
+    const jobPromises = integrations.map(async (integration) => {
       try {
-        // Format message based on content type
-        let formattedMessage: string;
-        switch (contentType) {
-          case 'offer':
-            formattedMessage = this.messageFormatter.formatOfferMessage(
-              content,
-              integration.platform,
-              deepLink,
-            );
-            break;
-          case 'event':
-            formattedMessage = this.messageFormatter.formatEventMessage(
-              content,
-              integration.platform,
-              deepLink,
-            );
-            break;
-          case 'need':
-            formattedMessage = this.messageFormatter.formatNeedMessage(
-              content,
-              integration.platform,
-              deepLink,
-            );
-            break;
-        }
-
-        // Send message (in production, this would queue the message)
-        await this.sendMessage(integration, formattedMessage);
+        const job = await this.integrationsQueue.add(
+          'publish-content',
+          {
+            contentType,
+            contentId,
+            integration: {
+              id: integration.id,
+              platform: integration.platform,
+              channelId: integration.channelId,
+              botToken: integration.botToken,
+            },
+            deepLink,
+          },
+          {
+            // Job options
+            priority: this.getJobPriority(contentType),
+            attempts: 3, // Retry up to 3 times
+            backoff: {
+              type: 'exponential',
+              delay: 2000, // Start with 2 seconds, then 4s, 8s
+            },
+            removeOnComplete: true, // Clean up completed jobs
+            removeOnFail: false, // Keep failed jobs for debugging
+          },
+        );
 
         this.logger.log(
-          `Content published: ${contentType} ${contentId} to integration ${integration.id}`,
+          `Queued job ${job.id}: Publishing ${contentType} ${contentId} to ${integration.platform} (integration ${integration.id})`,
         );
+
+        return job;
       } catch (error) {
         this.logger.error(
-          `Failed to publish ${contentType} ${contentId} to integration ${integration.id}`,
+          `Failed to queue job for ${contentType} ${contentId} to integration ${integration.id}`,
           error,
         );
+        return null;
       }
     });
 
-    await Promise.allSettled(publishPromises);
+    const jobs = await Promise.all(jobPromises);
+    const successfulJobs = jobs.filter((job) => job !== null);
+
+    this.logger.log(
+      `Queued ${successfulJobs.length}/${integrations.length} jobs for ${contentType} ${contentId}`,
+    );
 
     return {
-      message: `Content queued for publishing to ${integrations.length} integration(s)`,
-      integrationsCount: integrations.length,
+      message: `Content queued for publishing to ${successfulJobs.length} integration(s)`,
+      integrationsCount: successfulJobs.length,
+      totalIntegrations: integrations.length,
+      queuedJobs: successfulJobs.map((job) => job.id),
     };
+  }
+
+  /**
+   * Get job priority based on content type
+   * Higher priority = processed first (1 is highest, 10 is lowest)
+   */
+  private getJobPriority(contentType: string): number {
+    switch (contentType) {
+      case 'need': // Needs are most urgent
+        return 1;
+      case 'event': // Events are time-sensitive
+        return 2;
+      case 'offer': // Offers are less urgent
+        return 3;
+      default:
+        return 5;
+    }
   }
 
   /**
