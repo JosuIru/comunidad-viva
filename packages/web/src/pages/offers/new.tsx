@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { api } from '../../lib/api';
@@ -37,6 +37,26 @@ export default function NewOffer() {
       images: [],
     },
   });
+
+  // Load draft data from intention onboarding
+  useEffect(() => {
+    const draftData = localStorage.getItem('offer_draft');
+    if (draftData) {
+      try {
+        const draft = JSON.parse(draftData);
+        setValues({
+          title: draft.title || '',
+          type: draft.category === 'service' ? 'SERVICE' : 'PRODUCT',
+          price: draft.price ? parseFloat(draft.price) : undefined,
+        });
+        // Clear the draft after loading
+        localStorage.removeItem('offer_draft');
+        toast.success('Datos cargados desde tu borrador');
+      } catch (error) {
+        logger.error('Error loading offer draft', { error });
+      }
+    }
+  }, [setValues]);
 
   const geocodeAddress = async () => {
     if (!formData.address) {

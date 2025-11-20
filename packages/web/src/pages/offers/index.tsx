@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getImageUrl } from '@/lib/imageUtils';
@@ -14,13 +15,15 @@ import SkeletonLoader from '@/components/SkeletonLoader';
 import { staggerContainer, listItem } from '@/utils/animations';
 import InteractiveTour from '@/components/InteractiveTour';
 import Analytics from '@/lib/analytics';
-import { CubeIcon, EyeIcon, StarIcon } from '@heroicons/react/24/outline';
+import { CubeIcon, EyeIcon, StarIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import ProximityFilter from '@/components/filters/ProximityFilter';
 import CommunityFilter from '@/components/filters/CommunityFilter';
 import PageErrorBoundary from '@/components/PageErrorBoundary';
 import ViewToggle, { ViewMode } from '@/components/ViewToggle';
+import PublicViewBanner from '@/components/PublicViewBanner';
 import dynamic from 'next/dynamic';
 import type { OffersQueryParams } from '@/types/api';
+import toast from 'react-hot-toast';
 
 const Map = dynamic(() => import('@/components/Map'), { ssr: false });
 
@@ -49,6 +52,7 @@ interface Offer {
 function OffersPageContent() {
   const t = useTranslations('offers');
   const tCommon = useTranslations('common');
+  const router = useRouter();
 
   const [filters, setFilters] = useState({
     type: '',
@@ -122,9 +126,17 @@ function OffersPageContent() {
     },
   ];
 
+  const handleProtectedAction = (action: 'create' | 'contact') => {
+    if (!isAuthenticated) {
+      toast.error(action === 'create' ? 'Regístrate para publicar ofertas' : 'Regístrate para contactar vendedores');
+      router.push(`/auth/register?returnUrl=${router.asPath}`);
+    }
+  };
+
   return (
     <Layout title={`${t('title')} - ${t('title')}`}>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {!isAuthenticated && <PublicViewBanner />}
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900" style={{ paddingTop: !isAuthenticated ? '60px' : '0' }}>
         <div className="bg-white dark:bg-gray-800 border-b dark:border-gray-700">
           <div className="container mx-auto px-4 py-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
@@ -136,11 +148,22 @@ function OffersPageContent() {
               </div>
               <div className="flex items-center gap-2 sm:gap-4">
                 <ViewToggle viewMode={viewMode} onViewModeChange={setViewMode} />
-                <Link href="/offers/new">
-                  <Button variant="primary" size="md" className="whitespace-nowrap" data-tour="create-offer">
+                {isAuthenticated ? (
+                  <Link href="/offers/new">
+                    <Button variant="primary" size="md" className="whitespace-nowrap" data-tour="create-offer">
+                      {t('newOffer')}
+                    </Button>
+                  </Link>
+                ) : (
+                  <Button
+                    variant="primary"
+                    size="md"
+                    className="whitespace-nowrap"
+                    onClick={() => handleProtectedAction('create')}
+                  >
                     {t('newOffer')}
                   </Button>
-                </Link>
+                )}
               </div>
             </div>
 

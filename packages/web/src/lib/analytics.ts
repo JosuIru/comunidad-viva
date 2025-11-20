@@ -130,6 +130,18 @@ export const ANALYTICS_EVENTS = {
   RESOURCE_VIEWED: 'resource_viewed',
   DASHBOARD_CUSTOMIZED: 'dashboard_customized',
   DASHBOARD_CUSTOMIZER_OPENED: 'dashboard_customizer_opened',
+
+  // Intention Onboarding events
+  INTENTION_ONBOARDING_OPENED: 'intention_onboarding_opened',
+  INTENTION_SELECTED: 'intention_selected',
+  INTENTION_COMPLETED: 'intention_completed',
+  INTENTION_ABANDONED: 'intention_abandoned',
+
+  // Demo Content events
+  DEMO_CONTENT_VIEWED: 'demo_content_viewed',
+  DEMO_CONTENT_CLICKED: 'demo_content_clicked',
+  DEMO_CONTENT_DISMISSED: 'demo_content_dismissed',
+  DEMO_CONVERTED_TO_REGISTER: 'demo_converted_to_register',
 } as const;
 
 export default Analytics;

@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, memo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useTranslations } from 'next-intl';
 import { api } from '@/lib/api';
 import { logger } from '@/lib/logger';
@@ -17,6 +18,10 @@ import {
 } from '@heroicons/react/24/outline';
 import EmptyState from './EmptyState';
 import { isValidImageSrc, handleImageError } from '@/lib/imageUtils';
+import { DemoContentManager, DEMO_OFFERS, DEMO_EVENTS } from '@/lib/demoContent';
+import DemoBadge from './DemoBadge';
+import Analytics, { ANALYTICS_EVENTS } from '@/lib/analytics';
+import { CompactDemoNotice } from './DemoContentNotice';
 
 type ResourceType = 'event' | 'offer' | 'timebank' | 'need' | 'project' | 'housing' | 'groupbuy';
 
@@ -38,6 +43,7 @@ interface UnifiedResource {
   };
   link: string;
   metadata?: any;
+  isDemo?: boolean; // Mark demo content
 }
 
 interface UnifiedFeedProps {
@@ -130,7 +136,9 @@ export default function UnifiedFeed({
   onTypesChange,
 }: UnifiedFeedProps = {}) {
   const t = useTranslations('unifiedFeed');
+  const router = useRouter();
   const [internalUserLocation, setInternalUserLocation] = useState<[number, number] | null>(null);
+  const [showDemoNotice, setShowDemoNotice] = useState(false);
 
   // Use external location if provided, otherwise get user's location
   const userLocation = externalUserLocation || internalUserLocation;
@@ -435,10 +443,119 @@ export default function UnifiedFeed({
     }),
   ], [events, offers, needs, projects, housing, groupbuys, userLocation]);
 
+  // Blend demo content with real content - Memoized for performance
+  const resourcesWithDemos = useMemo<UnifiedResource[]>(() => {
+    if (!userLocation) return unifiedResources;
+
+    const [userLat, userLng] = userLocation;
+
+    // Get demo offers nearby
+    const demoOffersNearby = DemoContentManager.getDemoOffersByLocation(userLat, userLng, 50);
+    const demoEventsNearby = DemoContentManager.getDemoEventsByLocation(userLat, userLng, 50);
+
+    // Transform demo offers to UnifiedResource format
+    const demOfferResources: UnifiedResource[] = demoOffersNearby.map((offer) => {
+      const distance = userLocation
+        ? calculateDistance(userLat, userLng, offer.lat, offer.lng)
+        : Number.MAX_SAFE_INTEGER;
+
+      return {
+        id: offer.id,
+        type: 'offer' as ResourceType,
+        title: offer.title,
+        description: offer.description,
+        image: offer.images?.[0],
+        date: getDaysAgo(offer.createdDaysAgo),
+        location: offer.location,
+        latitude: offer.lat,
+        longitude: offer.lng,
+        distance,
+        author: {
+          name: offer.user.name,
+          avatar: offer.user.avatar,
+        },
+        link: '#', // Demo links are handled separately
+        metadata: {
+          price: offer.priceEur,
+          priceCredits: offer.priceCredits,
+          type: offer.type,
+        },
+        isDemo: true,
+      };
+    });
+
+    // Transform demo events to UnifiedResource format
+    const demoEventResources: UnifiedResource[] = demoEventsNearby.map((event) => {
+      const distance = userLocation
+        ? calculateDistance(userLat, userLng, event.lat, event.lng)
+        : Number.MAX_SAFE_INTEGER;
+
+      return {
+        id: event.id,
+        type: 'event' as ResourceType,
+        title: event.title,
+        description: event.description,
+        image: event.image,
+        date: event.startsAt,
+        location: event.address,
+        latitude: event.lat,
+        longitude: event.lng,
+        distance,
+        author: {
+          name: event.organizer.name,
+          avatar: event.organizer.avatar,
+        },
+        link: '#', // Demo links are handled separately
+        metadata: {
+          attendees: event.registrationsCount,
+          maxAttendees: event.capacity,
+        },
+        isDemo: true,
+      };
+    });
+
+    // Blend real content with demo content
+    const realOffers = unifiedResources.filter(r => r.type === 'offer' || r.type === 'timebank');
+    const realEvents = unifiedResources.filter(r => r.type === 'event');
+    const otherResources = unifiedResources.filter(
+      r => r.type !== 'offer' && r.type !== 'timebank' && r.type !== 'event'
+    );
+
+    // Blend offers (max 50% demos)
+    // Cast demo resources as they have isDemo flag
+    const blendedOffers = DemoContentManager.blendDemoWithReal<UnifiedResource>(
+      realOffers,
+      demOfferResources as any, // Demo resources are already marked with isDemo
+      10
+    );
+
+    // Blend events (max 50% demos)
+    const blendedEvents = DemoContentManager.blendDemoWithReal<UnifiedResource>(
+      realEvents,
+      demoEventResources as any, // Demo resources are already marked with isDemo
+      8
+    );
+
+    // Show demo notice if we added demo content
+    const hasDemoContent = blendedOffers.length > realOffers.length || blendedEvents.length > realEvents.length;
+    if (hasDemoContent && !DemoContentManager.hasDismissedDemoNotice()) {
+      setShowDemoNotice(true);
+    }
+
+    return [...blendedOffers, ...blendedEvents, ...otherResources];
+  }, [unifiedResources, userLocation]);
+
+  // Helper function to get date X days ago
+  const getDaysAgo = (days: number): string => {
+    const date = new Date();
+    date.setDate(date.getDate() - days);
+    return date.toISOString();
+  };
+
   // Apply filters and sorting - Memoized for performance
   const filteredResources = useMemo(() => {
     // Apply external filters first
-  let filteredByExternalFilters = unifiedResources;
+  let filteredByExternalFilters = resourcesWithDemos;
 
   // Type filter (external)
   if (selectedTypes && selectedTypes.size > 0) {
@@ -495,37 +612,66 @@ export default function UnifiedFeed({
 
     // Filter resources by selectedTypes
     return sortedResources.filter(r => selectedTypes.has(r.type));
-  }, [unifiedResources, selectedTypes, selectedCommunities, proximityRadius, searchText]);
+  }, [resourcesWithDemos, selectedTypes, selectedCommunities, proximityRadius, searchText]);
+
+  // Handle demo content click
+  const handleDemoClick = (resource: UnifiedResource) => {
+    if (!resource.isDemo) return;
+
+    Analytics.track(ANALYTICS_EVENTS.DEMO_CONTENT_CLICKED, {
+      demoId: resource.id,
+      type: resource.type,
+      action: 'view_detail',
+    });
+
+    // Show modal explaining it's demo content
+    if (window.confirm(
+      'Esta es una oferta de demostración.\n\n' +
+      'El contenido de ejemplo está claramente marcado para ayudarte a explorar la plataforma.\n\n' +
+      '¿Quieres publicar tu primera oferta real?'
+    )) {
+      Analytics.track(ANALYTICS_EVENTS.DEMO_CONVERTED_TO_REGISTER, {
+        fromDemoId: resource.id,
+      });
+      router.push('/offers/new');
+    }
+  };
 
   // Memoized ResourceCard to prevent unnecessary re-renders
   const ResourceCard = memo(({ resource }: { resource: UnifiedResource }) => {
     const config = typeConfig[resource.type];
     const Icon = config.icon;
 
-    return (
-      <Link href={resource.link}>
-        <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md dark:hover:shadow-gray-900/50 transition border ${config.borderColor} overflow-hidden`}>
-          <div className="flex gap-4 p-4">
-            {isValidImageSrc(resource.image) && (
-              <div className="flex-shrink-0">
-                <img
-                  src={resource.image}
-                  alt={resource.title}
-                  className="w-24 h-24 object-cover rounded-lg"
-                  onError={handleImageError}
-                />
-              </div>
-            )}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-1">
-                  {resource.title}
-                </h3>
-                <span className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${config.bgColor} ${config.textColor} flex-shrink-0`}>
-                  <Icon className="w-4 h-4" />
-                  {t(config.labelKey)}
-                </span>
-              </div>
+    const cardContent = (
+      <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md dark:hover:shadow-gray-900/50 transition border ${config.borderColor} overflow-hidden relative`}>
+        {/* Demo Badge - positioned absolutely */}
+        {resource.isDemo && (
+          <div className="absolute top-2 right-2 z-10">
+            <DemoBadge variant="small" />
+          </div>
+        )}
+
+        <div className="flex gap-4 p-4">
+          {isValidImageSrc(resource.image) && (
+            <div className="flex-shrink-0">
+              <img
+                src={resource.image}
+                alt={resource.title}
+                className="w-24 h-24 object-cover rounded-lg"
+                onError={handleImageError}
+              />
+            </div>
+          )}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between gap-2 mb-2">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-1">
+                {resource.title}
+              </h3>
+              <span className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${config.bgColor} ${config.textColor} flex-shrink-0`}>
+                <Icon className="w-4 h-4" />
+                {t(config.labelKey)}
+              </span>
+            </div>
 
               <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3">
                 {resource.description}
@@ -597,6 +743,26 @@ export default function UnifiedFeed({
             </div>
           </div>
         </div>
+    );
+
+    // Wrap with Link or clickable div based on isDemo
+    if (resource.isDemo) {
+      return (
+        <div
+          onClick={(e) => {
+            e.preventDefault();
+            handleDemoClick(resource);
+          }}
+          className="cursor-pointer"
+        >
+          {cardContent}
+        </div>
+      );
+    }
+
+    return (
+      <Link href={resource.link}>
+        {cardContent}
       </Link>
     );
   });
@@ -622,10 +788,10 @@ export default function UnifiedFeed({
                 : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >
-            {t('all')} ({unifiedResources.length})
+            {t('all')} ({resourcesWithDemos.length})
           </button>
           {Object.entries(typeConfig).map(([type, config]) => {
-            const count = unifiedResources.filter(r => r.type === type).length;
+            const count = resourcesWithDemos.filter(r => r.type === type).length;
             const Icon = config.icon;
             const isSelected = selectedTypes.has(type);
             return (
@@ -658,6 +824,13 @@ export default function UnifiedFeed({
           })}
         </div>
       </div>
+
+      {/* Demo Content Notice */}
+      {showDemoNotice && (
+        <div className="mb-4">
+          <CompactDemoNotice />
+        </div>
+      )}
 
       {/* Resources grid */}
       <div className="space-y-4">

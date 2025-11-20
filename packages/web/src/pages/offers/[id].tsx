@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { getI18nProps } from '@/lib/i18n';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -10,6 +10,7 @@ import { useTranslations } from 'next-intl';
 import Button from '@/components/Button';
 import Avatar from '@/components/Avatar';
 import SkeletonLoader from '@/components/SkeletonLoader';
+import PublicViewBanner from '@/components/PublicViewBanner';
 
 interface OfferDetail {
   id: string;
@@ -48,6 +49,12 @@ export default function OfferDetailPage() {
   const t = useTranslations('offerDetail');
   const tToasts = useTranslations('toasts');
   const userLocale = router.locale || 'es';
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    setIsAuthenticated(!!token);
+  }, []);
   const numberFormatter = useMemo(
     () =>
       new Intl.NumberFormat(userLocale, {
@@ -141,7 +148,7 @@ export default function OfferDetailPage() {
     const user = localStorage.getItem('user');
     if (!user) {
       toast.error(t('toasts.loginContact'));
-      router.push('/auth/login');
+      router.push(`/auth/register?returnUrl=/offers/${id}`);
       return;
     }
 
@@ -158,7 +165,7 @@ export default function OfferDetailPage() {
     const user = localStorage.getItem('user');
     if (!user) {
       toast.error(t('toasts.loginInterest'));
-      router.push('/auth/login');
+      router.push(`/auth/register?returnUrl=/offers/${id}`);
       return;
     }
 
@@ -240,7 +247,8 @@ export default function OfferDetailPage() {
 
   return (
     <Layout title={t('layout.title', { title: offerData.title })}>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+      {!isAuthenticated && <PublicViewBanner message="Únete gratis para contactar al vendedor y publicar tus ofertas" />}
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8" style={{ paddingTop: !isAuthenticated ? '60px' : '0' }}>
         <div className="container mx-auto px-4">
           <button
             onClick={() => router.back()}
@@ -352,19 +360,21 @@ export default function OfferDetailPage() {
                     <div className="space-y-3 mb-6">
                       <button
                         onClick={handleContact}
-                        className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
+                        className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors flex items-center justify-center gap-2"
                       >
+                        {!isAuthenticated && <span>🔒</span>}
                         {t('buttons.contact')}
                       </button>
                       <button
                         onClick={handleInterest}
                         disabled={interestMutation.isPending}
-                        className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
+                        className={`w-full py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
                           offerData.userIsInterested
                             ? 'bg-blue-600 text-white hover:bg-blue-700'
                             : 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 border-2 border-blue-600 dark:border-blue-400 hover:bg-blue-50 dark:hover:bg-gray-600'
                         } ${interestMutation.isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
+                        {!isAuthenticated && <span>🔒</span>}
                         {interestMutation.isPending
                           ? t('buttons.processing')
                           : offerData.userIsInterested
@@ -372,6 +382,14 @@ export default function OfferDetailPage() {
                           : t('buttons.interest')}
                       </button>
                     </div>
+
+                    {!isAuthenticated && (
+                      <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                        <p className="text-sm text-yellow-800 dark:text-yellow-200 text-center">
+                          Regístrate gratis para contactar al vendedor
+                        </p>
+                      </div>
+                    )}
 
                     {offerData.user?.contactPreference &&
                       offerData.user.contactPreference !== 'APP' &&

@@ -32,12 +32,14 @@ import {
   RectangleStackIcon,
   BookOpenIcon,
   PuzzlePieceIcon,
+  QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline';
 import LanguageSelector from './LanguageSelector';
 import ThemeToggle from './ThemeToggle';
 import Avatar from './Avatar';
 import Button from './Button';
 import WalletModal from './WalletModal';
+import IntentionOnboarding from './IntentionOnboarding';
 import EconomicLayerBadge, { EconomicLayer } from './EconomicLayerBadge';
 import InfoTooltip from './InfoTooltip';
 import { api } from '@/lib/api';
@@ -61,6 +63,7 @@ export default function Navbar() {
   const [showWalletMenu, setShowWalletMenu] = useState(false);
   const [showWalletConnectModal, setShowWalletConnectModal] = useState(false);
   const [economicLayer, setEconomicLayer] = useState<EconomicLayer>('TRADITIONAL');
+  const [showIntentionOnboarding, setShowIntentionOnboarding] = useState(false);
 
   // User level for feature gating
   const { level: userLevel, getFeatureVisibility } = useUserLevel();
@@ -492,6 +495,20 @@ export default function Navbar() {
                     )}
 
                     <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+
+                    {/* Help: What can I do? */}
+                    <button
+                      onClick={() => {
+                        setShowIntentionOnboarding(true);
+                        setShowUserMenu(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                    >
+                      <QuestionMarkCircleIcon className="h-5 w-5" />
+                      <span>¿Qué puedo hacer?</span>
+                    </button>
+
+                    <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
                     <button
                       onClick={() => {
                         handleLogout();
@@ -868,6 +885,16 @@ export default function Navbar() {
         wallets={walletOptions}
         title={t('wallet.linkTitle')}
         subtitle={t('wallet.linkSubtitle')}
+      />
+
+      {/* Intention Onboarding Modal */}
+      <IntentionOnboarding
+        isOpen={showIntentionOnboarding}
+        onClose={() => setShowIntentionOnboarding(false)}
+        onIntentionSelected={(intention) => {
+          logger.debug('User re-selected intention from navbar', { intention });
+          setShowIntentionOnboarding(false);
+        }}
       />
     </>
   );

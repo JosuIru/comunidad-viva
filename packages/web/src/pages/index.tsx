@@ -20,6 +20,9 @@ import OnboardingTipDisplay from '@/components/OnboardingTipDisplay';
 import BadgeNotification from '@/components/BadgeNotification';
 import DashboardCustomizer from '@/components/DashboardCustomizer';
 import InfoTooltip from '@/components/InfoTooltip';
+import PublicViewBanner from '@/components/PublicViewBanner';
+import DemoContentNotice from '@/components/DemoContentNotice';
+import PlatformStats from '@/components/PlatformStats';
 import { api } from '@/lib/api';
 import BadgeManager, { Badge } from '@/lib/badges';
 import { getI18nProps } from '@/lib/i18n';
@@ -31,6 +34,7 @@ import ProgressiveOnboardingManager, { OnboardingTip } from '@/lib/progressiveOn
 import AdaptiveTourManager, { AdaptiveTour } from '@/lib/adaptiveTours';
 import ProfileSelector from '@/components/ProfileSelector';
 import BeginnerWelcome from '@/components/BeginnerWelcome';
+import IntentionOnboarding from '@/components/IntentionOnboarding';
 import DashboardSettings from '@/lib/dashboardSettings';
 import {
   HomeIcon,
@@ -98,6 +102,7 @@ export default function HomePage() {
   const [showDashboardCustomizer, setShowDashboardCustomizer] = useState(false);
   const [enabledWidgets, setEnabledWidgets] = useState<string[]>([]);
   const [showProfileSelector, setShowProfileSelector] = useState(false);
+  const [showIntentionOnboarding, setShowIntentionOnboarding] = useState(false);
   const [adaptiveTour, setAdaptiveTour] = useState<AdaptiveTour | null>(null);
   const [showBeginnerMode, setShowBeginnerMode] = useState(false);
   const [userName, setUserName] = useState('');
@@ -122,7 +127,8 @@ export default function HomePage() {
     const token = localStorage.getItem('access_token');
     const storedUser = localStorage.getItem('user');
     const storedUserId = storedUser ? JSON.parse(storedUser).id : null;
-    setIsAuthenticated(!!token);
+    const hasAuthenticated = !!token;
+    setIsAuthenticated(hasAuthenticated);
     setUserId(storedUserId);
 
     // Get user name for beginner welcome
@@ -136,7 +142,7 @@ export default function HomePage() {
     }
 
     // Check if user has completed the tour
-    if (token) {
+    if (hasAuthenticated) {
       // Check if beginner mode should be shown
       const beginnerCompleted = localStorage.getItem('beginner_mode_completed');
       if (!beginnerCompleted) {
@@ -144,7 +150,22 @@ export default function HomePage() {
         return; // Don't show other onboarding if in beginner mode
       }
 
-      // First time: Show profile selector
+      // Check if intention onboarding should be shown
+      const intentionOnboardingCompleted = localStorage.getItem('intention_onboarding_completed');
+      const userIntention = localStorage.getItem('user_intention');
+
+      // Show intention onboarding if:
+      // 1. Not completed before
+      // 2. User has no intention set
+      if (!intentionOnboardingCompleted || !userIntention) {
+        setTimeout(() => {
+          setShowIntentionOnboarding(true);
+        }, 1000);
+        return;
+      }
+
+      // If intention onboarding is completed, continue with existing flow
+      // First time: Show profile selector (deprecated - now we use intention onboarding)
       const hasSelectedProfile = localStorage.getItem('user_profile');
       if (!hasSelectedProfile) {
         setTimeout(() => {
@@ -624,9 +645,16 @@ export default function HomePage() {
     return [42.8125, -1.6458];
   })();
 
-  // Show landing page for non-authenticated users (without Layout)
+  // Show landing page ONLY if user explicitly hasn't visited before
+  // Allow public browsing for returning visitors
   if (!isAuthenticated) {
-    return <LandingPage />;
+    const hasVisitedBefore = localStorage.getItem('has_visited_public_view');
+    if (!hasVisitedBefore) {
+      // First time visitor - show landing page
+      localStorage.setItem('has_visited_public_view', 'true');
+      return <LandingPage />;
+    }
+    // Returning visitor - allow public browsing with banner
   }
 
   // Tour steps - Use adaptive tour if available, otherwise use default
@@ -676,10 +704,11 @@ export default function HomePage() {
     );
   }
 
-  // Show dashboard for authenticated users
+  // Show dashboard for authenticated users (and public browsing for non-authenticated)
   return (
     <Layout>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {!isAuthenticated && <PublicViewBanner message="Únete gratis para contactar, publicar ofertas y participar en la comunidad" />}
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900" style={{ paddingTop: !isAuthenticated ? '60px' : '0' }}>
         <div className="container mx-auto px-4 py-6">
           {/* Tab Navigation - Simplified to 2 tabs with prominent CTA */}
           <div data-tour="tabs" className="bg-white dark:bg-gray-800 rounded-lg shadow-sm mb-6 p-1 flex gap-2 overflow-x-auto items-center">
@@ -729,13 +758,23 @@ export default function HomePage() {
             </div>
 
             {/* Prominent CTA Button - Desktop */}
-            <Link
-              href="/offers/new"
-              className="hidden md:flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-md font-semibold shadow-lg transition-all hover:scale-105"
-            >
-              <SparklesIcon className="h-5 w-5" />
-              <span>Publicar Oferta</span>
-            </Link>
+            {isAuthenticated ? (
+              <Link
+                href="/offers/new"
+                className="hidden md:flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-md font-semibold shadow-lg transition-all hover:scale-105"
+              >
+                <SparklesIcon className="h-5 w-5" />
+                <span>Publicar Oferta</span>
+              </Link>
+            ) : (
+              <Link
+                href="/auth/register"
+                className="hidden md:flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-md font-semibold shadow-lg transition-all hover:scale-105"
+              >
+                <SparklesIcon className="h-5 w-5" />
+                <span>Unirse Gratis</span>
+              </Link>
+            )}
           </div>
 
           {/* Quick Actions - Simplified to 3 actions - Conditional based on dashboard settings */}
@@ -1148,13 +1187,23 @@ export default function HomePage() {
 
         {/* Mobile CTA Button - Floating (FAB) */}
         {activeTab === 'explore' && (
-          <Link
-            href="/offers/new"
-            className="md:hidden fixed bottom-20 right-4 z-[10001] bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-full shadow-2xl flex items-center gap-2 font-semibold transition-all hover:scale-105"
-          >
-            <SparklesIcon className="h-6 w-6" />
-            <span className="text-sm">Publicar</span>
-          </Link>
+          isAuthenticated ? (
+            <Link
+              href="/offers/new"
+              className="md:hidden fixed bottom-20 right-4 z-[10001] bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-full shadow-2xl flex items-center gap-2 font-semibold transition-all hover:scale-105"
+            >
+              <SparklesIcon className="h-6 w-6" />
+              <span className="text-sm">Publicar</span>
+            </Link>
+          ) : (
+            <Link
+              href="/auth/register"
+              className="md:hidden fixed bottom-20 right-4 z-[10001] bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-full shadow-2xl flex items-center gap-2 font-semibold transition-all hover:scale-105"
+            >
+              <SparklesIcon className="h-6 w-6" />
+              <span className="text-sm">Unirse</span>
+            </Link>
+          )
         )}
 
         {/* Mobile Filter Button - Floating (only visible on map view and mobile) */}
@@ -1266,6 +1315,22 @@ export default function HomePage() {
           }}
         />
 
+        {/* Intention Onboarding Modal */}
+        <IntentionOnboarding
+          isOpen={showIntentionOnboarding}
+          onClose={() => {
+            setShowIntentionOnboarding(false);
+            // Mark as completed even if they close without completing
+            localStorage.setItem('intention_onboarding_completed', 'true');
+          }}
+          onIntentionSelected={(intention) => {
+            logger.debug('User intention selected', { intention });
+            // Mark as completed
+            localStorage.setItem('intention_onboarding_completed', 'true');
+            // The component already saves the intention to localStorage
+          }}
+        />
+
         {/* Profile Selector Modal */}
         <ProfileSelector
           isOpen={showProfileSelector}
@@ -1281,6 +1346,16 @@ export default function HomePage() {
                 setShowTour(true);
               }, 500);
             }
+          }}
+        />
+
+        {/* Demo Content Notice */}
+        <DemoContentNotice
+          onDismiss={() => {
+            Analytics.track(ANALYTICS_EVENTS.DEMO_CONTENT_DISMISSED);
+          }}
+          onRegister={() => {
+            window.location.href = '/offers/new';
           }}
         />
 

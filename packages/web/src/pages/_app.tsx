@@ -10,6 +10,8 @@ import BadgeUnlockedToast from '../components/achievements/BadgeUnlockedToast';
 import PWAInstallPrompt from '../components/PWAInstallPrompt';
 import Footer from '../components/Footer';
 import ErrorBoundary from '../components/ErrorBoundary';
+import EconomyUnlockModal from '../components/EconomyUnlockModal';
+import { useEconomyProgression } from '../hooks/useEconomyProgression';
 import '../styles/globals.css';
 import 'leaflet/dist/leaflet.css';
 
@@ -39,6 +41,14 @@ const queryClient = new QueryClient({
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [authToken, setAuthToken] = useState<string | null>(null);
+
+  // Economy progression hook
+  const {
+    tier,
+    showUnlockModal,
+    unlockedTier,
+    setShowUnlockModal,
+  } = useEconomyProgression();
 
   // Extract JWT token from localStorage on mount
   useEffect(() => {
@@ -124,6 +134,18 @@ export default function App({ Component, pageProps }: AppProps) {
               </div>
               <BadgeUnlockedToast />
               <PWAInstallPrompt />
+              <EconomyUnlockModal
+                isOpen={showUnlockModal}
+                tier={unlockedTier}
+                onClose={() => setShowUnlockModal(false)}
+                onExplore={() => {
+                  if (unlockedTier === 'intermediate') {
+                    router.push('/offers?credits=true');
+                  } else if (unlockedTier === 'advanced') {
+                    router.push('/timebank');
+                  }
+                }}
+              />
             <Toaster
               position="bottom-right"
               toastOptions={{

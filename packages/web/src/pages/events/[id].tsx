@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { getI18nProps } from '@/lib/i18n';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -10,6 +10,7 @@ import { useTranslations } from 'next-intl';
 import Button from '@/components/Button';
 import Avatar from '@/components/Avatar';
 import SkeletonLoader from '@/components/SkeletonLoader';
+import PublicViewBanner from '@/components/PublicViewBanner';
 import {
   CalendarIcon,
   FlagIcon,
@@ -55,9 +56,15 @@ export default function EventDetailPage() {
   const { id } = router.query;
   const queryClient = useQueryClient();
   const [isRegistering, setIsRegistering] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const t = useTranslations('eventDetail');
   const tToasts = useTranslations('toasts');
   const userLocale = router.locale || 'es';
+
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    setIsAuthenticated(!!token);
+  }, []);
 
   const dateFormatter = useMemo(
     () =>
@@ -150,7 +157,7 @@ export default function EventDetailPage() {
     const user = localStorage.getItem('user');
     if (!user) {
       toast.error(t('toasts.loginContact'));
-      router.push('/auth/login');
+      router.push(`/auth/register?returnUrl=/events/${id}`);
       return;
     }
 
@@ -190,7 +197,7 @@ export default function EventDetailPage() {
     const user = localStorage.getItem('user');
     if (!user) {
       toast.error(t('toasts.loginRegister'));
-      router.push('/auth/login');
+      router.push(`/auth/register?returnUrl=/events/${id}`);
       return;
     }
 
@@ -279,7 +286,8 @@ export default function EventDetailPage() {
 
   return (
     <Layout title={t('layout.title', { title: eventData.title })}>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+      {!isAuthenticated && <PublicViewBanner message="Únete gratis para registrarte en este evento" />}
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8" style={{ paddingTop: !isAuthenticated ? '60px' : '0' }}>
         <div className="container mx-auto px-4">
           <Button
             onClick={() => router.back()}
@@ -484,8 +492,9 @@ export default function EventDetailPage() {
                       variant={eventData.isAttending ? "outline" : "primary"}
                       size="md"
                       isLoading={isRegistering}
-                      className="w-full"
+                      className="w-full flex items-center justify-center gap-2"
                     >
+                      {!isAuthenticated && <span>🔒</span>}
                       {eventData.isAttending
                         ? t('buttons.registered')
                         : eventData.capacity !== undefined &&
@@ -493,6 +502,13 @@ export default function EventDetailPage() {
                         ? t('buttons.capacityFull')
                         : t('buttons.register')}
                     </Button>
+                    {!isAuthenticated && (
+                      <div className="mt-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                        <p className="text-xs text-yellow-800 dark:text-yellow-200 text-center">
+                          Regístrate gratis para asistir a este evento
+                        </p>
+                      </div>
+                    )}
                     {eventData.creditsReward && !eventData.isAttending && (
                       <p className="text-sm text-center text-purple-600 dark:text-purple-400 mt-2">
                         {t('status.reward', { credits: eventData.creditsReward })}

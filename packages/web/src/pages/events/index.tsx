@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getI18nProps } from '@/lib/i18n';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
@@ -16,8 +17,10 @@ import ProximityFilter from '@/components/filters/ProximityFilter';
 import CommunityFilter from '@/components/filters/CommunityFilter';
 import PageErrorBoundary from '@/components/PageErrorBoundary';
 import ViewToggle, { ViewMode } from '@/components/ViewToggle';
+import PublicViewBanner from '@/components/PublicViewBanner';
 import dynamic from 'next/dynamic';
 import type { EventsQueryParams } from '@/types/api';
+import toast from 'react-hot-toast';
 
 const Map = dynamic(() => import('@/components/Map'), { ssr: false });
 
@@ -44,6 +47,7 @@ interface Event {
 
 function EventsPageContent() {
   const t = useTranslations('events');
+  const router = useRouter();
 
   const [filters, setFilters] = useState({
     communityId: '',
@@ -52,6 +56,19 @@ function EventsPageContent() {
 
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('cards');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    setIsAuthenticated(!!token);
+  }, []);
+
+  const handleProtectedAction = () => {
+    if (!isAuthenticated) {
+      toast.error('Regístrate para crear eventos');
+      router.push(`/auth/register?returnUrl=${router.asPath}`);
+    }
+  };
 
   const { data: eventsResponse, isLoading } = useQuery<{ data: { events: Event[]; total: number } }>({
     queryKey: ['events', filters, userLocation],
@@ -76,7 +93,8 @@ function EventsPageContent() {
 
   return (
     <Layout title="Eventos - Truk">
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+      {!isAuthenticated && <PublicViewBanner message="Únete gratis para registrarte en eventos y crear los tuyos" />}
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8" style={{ paddingTop: !isAuthenticated ? '60px' : '0' }}>
         <div className="container mx-auto px-4">
           {/* Header */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
@@ -89,11 +107,22 @@ function EventsPageContent() {
               </div>
               <div className="flex items-center gap-2 sm:gap-4">
                 <ViewToggle viewMode={viewMode} onViewModeChange={setViewMode} />
-                <Link href="/events/new">
-                  <Button variant="primary" size="md" className="whitespace-nowrap">
+                {isAuthenticated ? (
+                  <Link href="/events/new">
+                    <Button variant="primary" size="md" className="whitespace-nowrap">
+                      {t('create')}
+                    </Button>
+                  </Link>
+                ) : (
+                  <Button
+                    variant="primary"
+                    size="md"
+                    className="whitespace-nowrap"
+                    onClick={handleProtectedAction}
+                  >
                     {t('create')}
                   </Button>
-                </Link>
+                )}
               </div>
             </div>
 
