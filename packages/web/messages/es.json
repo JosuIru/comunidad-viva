@@ -24,6 +24,7 @@
     "platform": {
       "label": "Plataforma",
       "main": "Principal",
+      "popularFeatures": "Funciones Populares",
       "gamification": "Gamificación",
       "economy": "Economía & Gobernanza",
       "economyGovernance": "Economía & Gobernanza",
@@ -78,6 +79,33 @@
   },
   "auth": {
     "sessionClosed": "Sesión cerrada"
+  },
+  "beginnerWelcome": {
+    "badge": "Bienvenido a Truk",
+    "greeting": "¡Hola, {name}!",
+    "subtitle": "Elige qué quieres hacer primero. Completa 2 acciones para desbloquear todas las funciones.",
+    "actions": {
+      "explore": {
+        "title": "Explorar ofertas",
+        "description": "Descubre productos y servicios cerca de ti"
+      },
+      "create": {
+        "title": "Crear una oferta",
+        "description": "Ofrece tus productos o servicios a la comunidad"
+      },
+      "community": {
+        "title": "Unirme a comunidad",
+        "description": "Conecta con grupos locales de tu interés"
+      }
+    },
+    "startNow": "Empezar",
+    "progress": "{completed} de {total} completadas",
+    "skipToFullDashboard": "Saltar al dashboard completo",
+    "completed": {
+      "title": "¡Genial!",
+      "message": "Ya conoces lo básico. Ahora tienes acceso a todas las funciones de Truk.",
+      "button": "Ir al dashboard"
+    }
   },
   "common": {
     "menu": "Menú",
@@ -642,42 +670,6 @@
       "greatDescription": "Tu alta valoración demuestra tu compromiso con la comunidad. ¡Sigue así!"
     }
   },
-  "magicOnboarding": {
-    "steps": {
-      "welcome": {
-        "title": "¡Bienvenido a Truk!",
-        "description": "Tu plataforma de economía colaborativa local. Descubre, conecta y comparte con tu comunidad."
-      },
-      "exploreOffers": {
-        "title": "Descubre tu Comunidad",
-        "description": "Explora ofertas, servicios y personas cerca de ti en el mapa interactivo."
-      },
-      "joinCommunity": {
-        "title": "Únete y Participa",
-        "description": "Asiste a eventos, conoce vecinos y empieza a usar créditos comunitarios."
-      },
-      "completed": {
-        "title": "¡Todo Listo!",
-        "description": "Ya eres parte activa de la comunidad. Ahora puedes crear tu primera oferta o explorar más. ¡Gana 50 créditos de bono!"
-      }
-    },
-    "toast": {
-      "completed": "¡Onboarding completado! 🎉 Has ganado 50 créditos de bono"
-    },
-    "buttons": {
-      "skip": "Saltar ✕",
-      "previous": "← Anterior",
-      "next": "Siguiente",
-      "goNow": "Ir ahora →",
-      "complete": "¡Empezar a explorar! 🚀",
-      "createOffer": "Crear mi primera oferta"
-    },
-    "progress": {
-      "step": "Paso {current} de {total}",
-      "percent": "{percent}% completado"
-    },
-    "reward": "🎁 ¡Completa el onboarding y recibe 50 créditos de bono!"
-  },
   "adminCommunities": {
     "layout": {
       "title": "Admin - Gestión de Comunidades",
@@ -897,6 +889,13 @@
         "EVENT": "Evento",
         "DONATION": "Donación"
       }
+    },
+    "contact": {
+      "title": "Contacto directo",
+      "telegram": "Contactar vía Telegram",
+      "whatsapp": "Contactar vía WhatsApp",
+      "email": "Contactar por email",
+      "phone": "Contactar por teléfono"
     }
   },
   "offerCreate": {

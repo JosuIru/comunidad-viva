@@ -144,10 +144,12 @@ export default function Map({
         zoom={zoom}
         style={{ height: '100%', width: '100%', zIndex: 1 }}
         scrollWheelZoom={false}
-        whenReady={(map) => {
-          map.target.on('click', () => {
-            setScrollEnabled(true);
-          });
+        ref={(map) => {
+          if (map) {
+            map.on('click', () => {
+              setScrollEnabled(true);
+            });
+          }
         }}
       >
         <ChangeView center={center} zoom={zoom} />

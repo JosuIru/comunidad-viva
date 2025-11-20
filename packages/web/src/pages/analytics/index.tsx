@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
+import toast from 'react-hot-toast';
 import {
   ChartBarIcon,
   UsersIcon,
@@ -99,7 +100,7 @@ export default function AnalyticsDashboard() {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Error exporting CSV:', error);
-      alert('Error al exportar datos');
+      toast.error('Error al exportar datos');
     }
   };
 

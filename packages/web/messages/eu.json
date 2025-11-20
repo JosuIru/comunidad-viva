@@ -24,6 +24,7 @@
     "platform": {
       "label": "Plataforma",
       "main": "Nagusia",
+      "popularFeatures": "Funtzio Ezagunak",
       "gamification": "Gamifikazioa",
       "economy": "Ekonomia & Gobernantza",
       "economyGovernance": "Ekonomia & Gobernantza",
@@ -78,6 +79,33 @@
   },
   "auth": {
     "sessionClosed": "Saioa itxita"
+  },
+  "beginnerWelcome": {
+    "badge": "Ongi etorri Truk-era",
+    "greeting": "Kaixo, {name}!",
+    "subtitle": "Aukeratu zer egin nahi duzun lehenik. Osatu 2 ekintza funtzio guztiak desblokeatzeko.",
+    "actions": {
+      "explore": {
+        "title": "Eskaintzak arakatu",
+        "description": "Aurkitu produktuak eta zerbitzuak zure inguruan"
+      },
+      "create": {
+        "title": "Eskaintza sortu",
+        "description": "Eskaini zure produktuak edo zerbitzuak komunitateari"
+      },
+      "community": {
+        "title": "Komunitatera batu",
+        "description": "Konektatu interesatzen zaizkizun tokiko taldeekin"
+      }
+    },
+    "startNow": "Hasi",
+    "progress": "{completed} / {total} osatuak",
+    "skipToFullDashboard": "Saltatu dashboard osora",
+    "completed": {
+      "title": "Bikain!",
+      "message": "Oinarrizkoa ezagutzen duzu dagoeneko. Truk-en funtzio guztietara sarbidea duzu.",
+      "button": "Joan dashboard-era"
+    }
   },
   "common": {
     "menu": "Menua",
@@ -642,42 +670,6 @@
       "greatDescription": "Zure balorazio altuak komunitatearekiko konpromisoa erakusten du. Horrela jarraitu!"
     }
   },
-  "magicOnboarding": {
-    "steps": {
-      "welcome": {
-        "title": "Ongi etorri Truk-era!",
-        "description": "Zure lankidetza ekonomia lokaleko plataforma. Deskubritu, konektatu eta partekatu zure komunitatearekin."
-      },
-      "exploreOffers": {
-        "title": "Deskubritu zure komunitatea",
-        "description": "Arakatu eskaintzak, zerbitzuak eta zure inguruko pertsonak mapa interaktiboan."
-      },
-      "joinCommunity": {
-        "title": "Batu eta parte hartu",
-        "description": "Joan ekitaldietara, ezagutu auzokoak eta hasi kreditu komunitarioak erabiltzen."
-      },
-      "completed": {
-        "title": "Dena prest!",
-        "description": "Dagoeneko komunitateko kide aktiboa zara. Orain zure lehen eskaintza sor dezakezu edo gehiago esploratu. Irabazi 50 kreditu bonusa!"
-      }
-    },
-    "toast": {
-      "completed": "Onboarding-a osatua! 🎉 50 kreditu bonus irabazi dituzu"
-    },
-    "buttons": {
-      "skip": "Saltatu ✕",
-      "previous": "← Aurrekoa",
-      "next": "Hurrengoa",
-      "goNow": "Joan orain →",
-      "complete": "Hasi esploratzen! 🚀",
-      "createOffer": "Sortu nire lehen eskaintza"
-    },
-    "progress": {
-      "step": "Pausoa {current}/{total}",
-      "percent": "Osatuta {percent}%"
-    },
-    "reward": "🎁 Osatu onboarding-a eta jaso 50 kreditu bonus!"
-  },
   "adminCommunities": {
     "layout": {
       "title": "Admin - Komunitateen Kudeaketa",
@@ -897,6 +889,13 @@
         "EVENT": "Ekitaldia",
         "DONATION": "Dohaintza"
       }
+    },
+    "contact": {
+      "title": "Zuzeneko harremana",
+      "telegram": "Telegram bidez jarri harremanetan",
+      "whatsapp": "WhatsApp bidez jarri harremanetan",
+      "email": "Posta elektroniko bidez jarri harremanetan",
+      "phone": "Telefono bidez jarri harremanetan"
     }
   },
   "offerCreate": {

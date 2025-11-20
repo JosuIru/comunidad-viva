@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
+import toast from 'react-hot-toast';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -59,13 +60,13 @@ export default function JoinGroupBuyModal({ groupBuy, onClose }: JoinGroupBuyMod
 
   const handleJoin = () => {
     if (quantity < 1) {
-      alert(tToasts('quantityMinimum'));
+      toast.error(tToasts('quantityMinimum'));
       return;
     }
 
     const spotsLeft = groupBuy.maxParticipants - groupBuy.currentParticipants;
     if (spotsLeft <= 0) {
-      alert(tToasts('groupBuyFull'));
+      toast.error(tToasts('groupBuyFull'));
       return;
     }
 

@@ -184,9 +184,9 @@ export default function EventDetailPage() {
     }
   };
 
-  const isOrganizer = eventData && getCurrentUserId() === eventData.organizer?.id;
+  const isOrganizer = event?.data && getCurrentUserId() === event.data.organizer?.id;
 
-  const handleRegister = (eventData: EventDetail) => {
+  const handleRegister = (eventToRegister: EventDetail) => {
     const user = localStorage.getItem('user');
     if (!user) {
       toast.error(t('toasts.loginRegister'));
@@ -195,14 +195,14 @@ export default function EventDetailPage() {
     }
 
     if (
-      eventData.capacity !== undefined &&
-      eventData.attendeesCount >= eventData.capacity
+      eventToRegister.capacity !== undefined &&
+      eventToRegister.attendeesCount >= eventToRegister.capacity
     ) {
       toast.error(t('toasts.capacityReached'));
       return;
     }
 
-    if (eventData.isAttending) {
+    if (eventToRegister.isAttending) {
       toast(t('toasts.alreadyRegistered'), {
         icon: <InformationCircleIcon className="h-5 w-5 text-blue-500" />
       });
@@ -240,7 +240,7 @@ export default function EventDetailPage() {
             <Button
               onClick={() => router.push('/events')}
               variant="primary"
-              size="lg"
+              size="md"
             >
               {t('notFound.button')}
             </Button>
@@ -482,7 +482,7 @@ export default function EventDetailPage() {
                           eventData.attendeesCount >= eventData.capacity)
                       }
                       variant={eventData.isAttending ? "outline" : "primary"}
-                      size="lg"
+                      size="md"
                       isLoading={isRegistering}
                       className="w-full"
                     >

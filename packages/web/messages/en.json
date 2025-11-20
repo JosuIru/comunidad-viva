@@ -23,6 +23,8 @@
     "communityPools": "Community Pools",
     "platform": {
       "label": "Platform",
+      "main": "Main",
+      "popularFeatures": "Popular Features",
       "sections": {
         "gamification": "🎮 GAMIFICATION",
         "economy": "💰 ECONOMY",
@@ -78,6 +80,33 @@
   },
   "auth": {
     "sessionClosed": "Session closed"
+  },
+  "beginnerWelcome": {
+    "badge": "Welcome to Truk",
+    "greeting": "Hello, {name}!",
+    "subtitle": "Choose what you want to do first. Complete 2 actions to unlock all features.",
+    "actions": {
+      "explore": {
+        "title": "Explore offers",
+        "description": "Discover products and services near you"
+      },
+      "create": {
+        "title": "Create an offer",
+        "description": "Offer your products or services to the community"
+      },
+      "community": {
+        "title": "Join a community",
+        "description": "Connect with local groups that interest you"
+      }
+    },
+    "startNow": "Start",
+    "progress": "{completed} of {total} completed",
+    "skipToFullDashboard": "Skip to full dashboard",
+    "completed": {
+      "title": "Awesome!",
+      "message": "You now know the basics. You have access to all Truk features.",
+      "button": "Go to dashboard"
+    }
   },
   "common": {
     "menu": "Menu",
@@ -609,61 +638,6 @@
       "greatDescription": "Your high rating shows your commitment to the community. Keep it up!"
     }
   },
-  "magicOnboarding": {
-    "steps": {
-      "welcome": {
-        "title": "Welcome!",
-        "description": "Discover Truk, where local economy comes to life."
-      },
-      "exploreOffers": {
-        "title": "Explore Offers",
-        "description": "Discover services and products from your community."
-      },
-      "createOffer": {
-        "title": "Create Your First Offer",
-        "description": "What can you offer? Share your skills with the community."
-      },
-      "localMap": {
-        "title": "Check the Local Map",
-        "description": "Find businesses and people near you."
-      },
-      "sendCredits": {
-        "title": "Send Your First Credit",
-        "description": "Support someone in the community with credits."
-      },
-      "joinEvent": {
-        "title": "Join an Event",
-        "description": "Participate in community events and meet new people."
-      },
-      "completed": {
-        "title": "Ready!",
-        "description": "You're now an active part of the community. Get your first 50 bonus credits!"
-      },
-      "joinCommunity": {
-        "title": "Join and Participate",
-        "description": "Attend events, meet neighbors, and start using community credits."
-      }
-    },
-    "toast": {
-      "completed": "Onboarding completed! 🎉 You've earned 50 bonus credits"
-    },
-    "messages": {
-      "mapSoon": "Map feature coming soon"
-    },
-    "buttons": {
-      "skip": "Skip ✕",
-      "previous": "← Previous",
-      "next": "Next",
-      "goNow": "Go now →",
-      "complete": "Complete! 🎉",
-      "createOffer": "Create my first offer"
-    },
-    "progress": {
-      "step": "Step {current} of {total}",
-      "percent": "{percent}% complete"
-    },
-    "reward": "🎁 Complete onboarding and receive 50 bonus credits!"
-  },
   "adminCommunities": {
     "layout": {
       "title": "Admin - Community Management",
@@ -883,6 +857,13 @@
         "EVENT": "Event",
         "DONATION": "Donation"
       }
+    },
+    "contact": {
+      "title": "Direct contact",
+      "telegram": "Contact via Telegram",
+      "whatsapp": "Contact via WhatsApp",
+      "email": "Contact by email",
+      "phone": "Contact by phone"
     }
   },
   "offerCreate": {

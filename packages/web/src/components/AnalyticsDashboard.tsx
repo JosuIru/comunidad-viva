@@ -105,18 +105,18 @@ export default function AnalyticsDashboard() {
   return (
     <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 space-y-8">
       {/* Encabezado */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
             Dashboard de Analytics
           </h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">
             Seguimiento de eventos e interacciones del usuario
           </p>
         </div>
         <button
           onClick={limpiarAnalytics}
-          className="px-4 py-2 bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white rounded-lg transition-colors duration-200 font-medium"
+          className="px-3 sm:px-4 py-2 bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white rounded-lg transition-colors duration-200 font-medium text-sm sm:text-base whitespace-nowrap"
         >
           Limpiar Analytics
         </button>
@@ -127,9 +127,9 @@ export default function AnalyticsDashboard() {
         {/* Total Events Card */}
         <div className="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 rounded-lg p-6 text-white shadow-lg border border-blue-400 dark:border-blue-600">
           <div className="flex items-start justify-between">
-            <div>
-              <p className="text-blue-100 text-sm font-medium">Total de Eventos</p>
-              <p className="text-4xl font-bold mt-2">{resumenAnalytics?.totalEvents || 0}</p>
+            <div className="min-w-0">
+              <p className="text-blue-100 text-xs sm:text-sm font-medium">Total de Eventos</p>
+              <p className="text-2xl sm:text-3xl md:text-4xl font-bold mt-2">{resumenAnalytics?.totalEvents || 0}</p>
             </div>
             <div className="bg-blue-400 dark:bg-blue-500 rounded-full p-3">
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -142,9 +142,9 @@ export default function AnalyticsDashboard() {
         {/* First Event Card */}
         <div className="bg-gradient-to-br from-green-500 to-green-600 dark:from-green-600 dark:to-green-700 rounded-lg p-6 text-white shadow-lg border border-green-400 dark:border-green-600">
           <div className="flex items-start justify-between">
-            <div>
-              <p className="text-green-100 text-sm font-medium">Primer Evento</p>
-              <p className="text-base font-mono text-green-50 mt-2 break-words">
+            <div className="min-w-0">
+              <p className="text-green-100 text-xs sm:text-sm font-medium">Primer Evento</p>
+              <p className="text-xs sm:text-sm md:text-base font-mono text-green-50 mt-2 break-words">
                 {formatearFecha(resumenAnalytics?.firstEvent)}
               </p>
             </div>
@@ -159,9 +159,9 @@ export default function AnalyticsDashboard() {
         {/* Last Event Card */}
         <div className="bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-600 dark:to-purple-700 rounded-lg p-6 text-white shadow-lg border border-purple-400 dark:border-purple-600">
           <div className="flex items-start justify-between">
-            <div>
-              <p className="text-purple-100 text-sm font-medium">Último Evento</p>
-              <p className="text-base font-mono text-purple-50 mt-2 break-words">
+            <div className="min-w-0">
+              <p className="text-purple-100 text-xs sm:text-sm font-medium">Último Evento</p>
+              <p className="text-xs sm:text-sm md:text-base font-mono text-purple-50 mt-2 break-words">
                 {formatearFecha(resumenAnalytics?.lastEvent)}
               </p>
             </div>
@@ -176,19 +176,19 @@ export default function AnalyticsDashboard() {
 
       {/* Top 5 Event Types */}
       <div>
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+        <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4">
           Top 5 Eventos
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
           {obtenerTop5Eventos().map(([nombreEvento, conteo], indice) => (
             <div
               key={nombreEvento}
               className={`bg-gradient-to-br ${colorPorIndice(
                 indice
-              )} rounded-lg p-4 text-white shadow-lg border border-opacity-20 border-white`}
+              )} rounded-lg p-4 text-white shadow-lg border border-opacity-20 border-white min-w-0`}
             >
-              <p className="text-sm font-medium opacity-90 truncate">{nombreEvento}</p>
-              <p className="text-3xl font-bold mt-2">{conteo}</p>
+              <p className="text-xs sm:text-sm font-medium opacity-90 truncate" title={nombreEvento}>{nombreEvento}</p>
+              <p className="text-2xl sm:text-3xl font-bold mt-2">{conteo}</p>
               <div className="mt-2 bg-white bg-opacity-20 rounded px-2 py-1 text-xs font-medium w-fit">
                 {((conteo / (resumenAnalytics?.totalEvents || 1)) * 100).toFixed(1)}%
               </div>
@@ -204,7 +204,7 @@ export default function AnalyticsDashboard() {
 
       {/* Últimos Eventos */}
       <div>
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+        <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4">
           Últimos 20 Eventos
         </h2>
         <div className="bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">

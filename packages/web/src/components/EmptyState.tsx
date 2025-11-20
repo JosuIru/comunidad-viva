@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Button from './Button';
+import { ReactNode } from 'react';
 
 interface EmptyStateAction {
   label: string;
@@ -10,7 +11,7 @@ interface EmptyStateAction {
 }
 
 interface EmptyStateProps {
-  icon: string;
+  icon: string | ReactNode;
   title: string;
   description: string;
   actions?: EmptyStateAction[];

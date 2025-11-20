@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { api } from '@/lib/api';
 import { useRouter } from 'next/router';
 import { useTranslations } from 'next-intl';
+import toast from 'react-hot-toast';
 
 // Lazy load modals - only loaded when user clicks button
 const WalletModal = dynamic(() => import('./WalletModal'), {
@@ -72,7 +73,7 @@ export default function Web3WalletButton({ mode, onSuccess, onError }: Web3Walle
     if (!window.ethereum) {
       const error = t('errors.metamaskNotInstalled');
       onError?.(error);
-      alert(error);
+      toast.error(error);
       return;
     }
 
@@ -119,10 +120,10 @@ export default function Web3WalletButton({ mode, onSuccess, onError }: Web3Walle
 
         // Redirect to dashboard
         if (isNewUser) {
-          alert(t('alerts.metaWelcome'));
+          toast.success(t('alerts.metaWelcome'));
           router.push('/profile/edit');
         } else {
-          alert(t('alerts.metaLoginSuccess'));
+          toast.success(t('alerts.metaLoginSuccess'));
           router.push('/');
         }
       } else {
@@ -134,13 +135,13 @@ export default function Web3WalletButton({ mode, onSuccess, onError }: Web3Walle
         });
 
         onSuccess?.(linkResponse.data);
-        alert(t('alerts.linkSuccess'));
+        toast.success(t('alerts.linkSuccess'));
       }
     } catch (error: any) {
       console.error('MetaMask connection error:', error);
       const errorMessage = error.response?.data?.message || error.message || t('errors.metaConnect');
       onError?.(errorMessage);
-      alert(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsConnecting(false);
     }
@@ -150,7 +151,7 @@ export default function Web3WalletButton({ mode, onSuccess, onError }: Web3Walle
     if (!window.solana?.isPhantom) {
       const error = t('errors.phantomNotInstalled');
       onError?.(error);
-      alert(error);
+      toast.error(error);
       return;
     }
 
@@ -193,10 +194,10 @@ export default function Web3WalletButton({ mode, onSuccess, onError }: Web3Walle
 
         // Redirect to dashboard
         if (isNewUser) {
-          alert(t('alerts.phantomWelcome'));
+          toast.success(t('alerts.phantomWelcome'));
           router.push('/profile/edit');
         } else {
-          alert(t('alerts.phantomLoginSuccess'));
+          toast.success(t('alerts.phantomLoginSuccess'));
           router.push('/');
         }
       } else {
@@ -208,13 +209,13 @@ export default function Web3WalletButton({ mode, onSuccess, onError }: Web3Walle
         });
 
         onSuccess?.(linkResponse.data);
-        alert(t('alerts.linkSuccess'));
+        toast.success(t('alerts.linkSuccess'));
       }
     } catch (error: any) {
       console.error('Phantom connection error:', error);
       const errorMessage = error.response?.data?.message || error.message || t('errors.phantomConnect');
       onError?.(errorMessage);
-      alert(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsConnecting(false);
     }
@@ -244,7 +245,7 @@ export default function Web3WalletButton({ mode, onSuccess, onError }: Web3Walle
       isInstalled: false,
       installUrl: 'https://walletconnect.com/',
       onConnect: async () => {
-        alert(tToasts('walletComingSoon', { wallet: 'WalletConnect' }));
+        toast(tToasts('walletComingSoon', { wallet: 'WalletConnect' }), { icon: '🔗' });
       },
     },
     {
@@ -254,7 +255,7 @@ export default function Web3WalletButton({ mode, onSuccess, onError }: Web3Walle
       isInstalled: false,
       installUrl: 'https://www.coinbase.com/wallet',
       onConnect: async () => {
-        alert(tToasts('walletComingSoon', { wallet: 'Coinbase Wallet' }));
+        toast(tToasts('walletComingSoon', { wallet: 'Coinbase Wallet' }), { icon: '🔵' });
       },
     },
     {
@@ -264,7 +265,7 @@ export default function Web3WalletButton({ mode, onSuccess, onError }: Web3Walle
       isInstalled: false,
       installUrl: 'https://trustwallet.com/',
       onConnect: async () => {
-        alert(tToasts('walletComingSoon', { wallet: 'Trust Wallet' }));
+        toast(tToasts('walletComingSoon', { wallet: 'Trust Wallet' }), { icon: '🛡️' });
       },
     },
   ];
@@ -280,7 +281,8 @@ export default function Web3WalletButton({ mode, onSuccess, onError }: Web3Walle
         <button
           onClick={() => setIsModalOpen(true)}
           disabled={isConnecting}
-          className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg font-semibold"
+          aria-label={mode === 'login' ? 'Iniciar sesión con billetera Web3' : 'Vincular billetera Web3'}
+          className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg font-semibold focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />

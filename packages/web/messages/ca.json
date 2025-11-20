@@ -23,6 +23,8 @@
     "communityPools": "Pools Comunitaris",
     "platform": {
       "label": "Plataforma",
+      "main": "Principal",
+      "popularFeatures": "Funcions Populars",
       "sections": {
         "gamification": "🎮 GAMIFICACIÓ",
         "economy": "💰 ECONOMIA",
@@ -78,6 +80,33 @@
   },
   "auth": {
     "sessionClosed": "Sessió tancada"
+  },
+  "beginnerWelcome": {
+    "badge": "Benvingut a Truk",
+    "greeting": "Hola, {name}!",
+    "subtitle": "Tria què vols fer primer. Completa 2 accions per desbloquejar totes les funcions.",
+    "actions": {
+      "explore": {
+        "title": "Explorar ofertes",
+        "description": "Descobreix productes i serveis a prop teu"
+      },
+      "create": {
+        "title": "Crear una oferta",
+        "description": "Ofereix els teus productes o serveis a la comunitat"
+      },
+      "community": {
+        "title": "Unir-me a comunitat",
+        "description": "Connecta amb grups locals del teu interès"
+      }
+    },
+    "startNow": "Començar",
+    "progress": "{completed} de {total} completades",
+    "skipToFullDashboard": "Saltar al dashboard complet",
+    "completed": {
+      "title": "Genial!",
+      "message": "Ja coneixes el bàsic. Ara tens accés a totes les funcions de Truk.",
+      "button": "Anar al dashboard"
+    }
   },
   "common": {
     "menu": "Menú",
@@ -609,61 +638,6 @@
       "greatDescription": "La teva alta valoració demostra el teu compromís amb la comunitat. Continua així!"
     }
   },
-  "magicOnboarding": {
-    "steps": {
-      "welcome": {
-        "title": "Benvingut!",
-        "description": "Coneix Truk, on l'economia local pren vida."
-      },
-      "exploreOffers": {
-        "title": "Explora Ofertes",
-        "description": "Descobreix serveis i productes de la teva comunitat."
-      },
-      "createOffer": {
-        "title": "Crea la teva Primera Oferta",
-        "description": "Què pots oferir? Comparteix les teves habilitats amb la comunitat."
-      },
-      "localMap": {
-        "title": "Coneix el Mapa Local",
-        "description": "Troba negocis i persones a prop teu."
-      },
-      "sendCredits": {
-        "title": "Envia el teu Primer Crèdit",
-        "description": "Recolza algú de la comunitat amb crèdits."
-      },
-      "joinEvent": {
-        "title": "Uneix-te a un Esdeveniment",
-        "description": "Participa en esdeveniments comunitaris i coneix gent nova."
-      },
-      "completed": {
-        "title": "Llest!",
-        "description": "Ja formes part activa de la comunitat. A per els teus primers 50 crèdits de bonificació!"
-      },
-      "joinCommunity": {
-        "title": "Uneix-te i Participa",
-        "description": "Assisteix a esdeveniments, coneix veïns i comença a fer servir crèdits comunitaris."
-      }
-    },
-    "toast": {
-      "completed": "Onboarding completat! 🎉 Has guanyat 50 crèdits de bonificació"
-    },
-    "messages": {
-      "mapSoon": "Funció de mapa pròximament"
-    },
-    "buttons": {
-      "skip": "Saltar ✕",
-      "previous": "← Anterior",
-      "next": "Següent",
-      "goNow": "Anar-hi ara →",
-      "complete": "Completar! 🎉",
-      "createOffer": "Crear la meva primera oferta"
-    },
-    "progress": {
-      "step": "Pas {current} de {total}",
-      "percent": "{percent}% completat"
-    },
-    "reward": "🎁 Completa l'onboarding i rep 50 crèdits de bonificació!"
-  },
   "adminCommunities": {
     "layout": {
       "title": "Admin - Gestió de Comunitats",
@@ -883,6 +857,13 @@
         "EVENT": "Esdeveniment",
         "DONATION": "Donació"
       }
+    },
+    "contact": {
+      "title": "Contacte directe",
+      "telegram": "Contactar via Telegram",
+      "whatsapp": "Contactar via WhatsApp",
+      "email": "Contactar per correu electrònic",
+      "phone": "Contactar per telèfon"
     }
   },
   "offerCreate": {

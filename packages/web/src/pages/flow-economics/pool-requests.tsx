@@ -5,6 +5,7 @@ import { api } from '@/lib/api';
 import { CircleStackIcon, PlusIcon, HandThumbUpIcon, HandThumbDownIcon } from '@heroicons/react/24/outline';
 import { getI18nProps } from '@/lib/i18n';
 import { useTranslations } from 'next-intl';
+import toast from 'react-hot-toast';
 
 interface PoolRequest {
   id: string;
@@ -50,7 +51,7 @@ export default function PoolRequestsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['pool-requests'] });
       setShowCreateModal(false);
-      alert(tToasts('success.requestCreated'));
+      toast.success(tToasts('success.requestCreated'));
     },
   });
 
@@ -61,13 +62,13 @@ export default function PoolRequestsPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['pool-requests'] });
-      alert(tToasts('success.voteRegistered'));
+      toast.success(tToasts('success.voteRegistered'));
     },
   });
 
   const handleCreate = () => {
     if (!amount || !reason) {
-      alert(tToasts('error.completeAllFields'));
+      toast.error(tToasts('error.completeAllFields'));
       return;
     }
 

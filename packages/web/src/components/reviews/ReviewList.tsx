@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import StarRating from './StarRating';
 import ReviewCard from './ReviewCard';
 import ReviewForm from './ReviewForm';
+import toast from 'react-hot-toast';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -67,7 +68,7 @@ export default function ReviewList({
       setShowForm(false);
     },
     onError: (error: Error) => {
-      alert(error.message);
+      toast.error(error.message);
     },
   });
 

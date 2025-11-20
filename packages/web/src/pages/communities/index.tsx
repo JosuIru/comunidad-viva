@@ -308,7 +308,7 @@ function CommunitiesPageContent() {
                 {t('empty.description')}
               </p>
               <Link href="/admin/communities">
-                <Button variant="primary" size="lg">
+                <Button variant="primary" size="md">
                   {t('empty.action')}
                 </Button>
               </Link>

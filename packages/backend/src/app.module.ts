@@ -37,6 +37,8 @@ import { WebSocketModule } from './websocket/websocket.module';
 import { AchievementsModule } from './achievements/achievements.module';
 import { InstallerModule } from './installer/installer.module';
 import { CommunityPacksModule } from './community-packs/community-packs.module';
+import { ContactModule } from './contact/contact.module';
+import { IntegrationsModule } from './integrations/integrations.module';
 
 @Module({
   imports: [
@@ -89,6 +91,8 @@ import { CommunityPacksModule } from './community-packs/community-packs.module';
     AchievementsModule,  // Sistema completo de achievements/badges con 70+ badges
     InstallerModule,  // Instalador gráfico estilo WordPress
     CommunityPacksModule,  // Community onboarding packs for organized groups
+    ContactModule,  // Contact form submissions
+    IntegrationsModule,  // External platform integrations (Telegram, Discord, etc.)
   ],
   providers: [
     {

@@ -25,7 +25,7 @@ export default function NewHousingSolutionPage() {
     errors,
     isSubmitting,
     handleChange,
-    handleBlur,
+    createOnChange,
     validateForm,
   } = useFormValidation<CreateHousingFormData>({
     schema: createHousingSchema,
@@ -142,8 +142,8 @@ export default function NewHousingSolutionPage() {
                   <input
                     type="text"
                     name="title"
-                    value={formData.title}
-                    onChange={handleChange}
+                    value={formData.title ?? ''}
+                    onChange={createOnChange('title')}
                     required
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                     placeholder={t('titlePlaceholder')}
@@ -157,8 +157,8 @@ export default function NewHousingSolutionPage() {
                   </label>
                   <textarea
                     name="description"
-                    value={formData.description}
-                    onChange={handleChange}
+                    value={formData.description ?? ''}
+                    onChange={createOnChange('description')}
                     required
                     rows={4}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
@@ -174,8 +174,8 @@ export default function NewHousingSolutionPage() {
                   <input
                     type="text"
                     name="location"
-                    value={formData.location}
-                    onChange={handleChange}
+                    value={formData.location ?? ''}
+                    onChange={createOnChange('location')}
                     required
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                     placeholder={t('locationPlaceholder')}
@@ -193,8 +193,8 @@ export default function NewHousingSolutionPage() {
                         <input
                           type="number"
                           name="capacity"
-                          value={formData.capacity}
-                          onChange={handleChange}
+                          value={formData.capacity ?? ''}
+                          onChange={createOnChange('capacity', (v) => v === '' ? undefined : parseInt(v, 10))}
                           required
                           min="1"
                           className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
@@ -207,9 +207,9 @@ export default function NewHousingSolutionPage() {
                         </label>
                         <input
                           type="number"
-                          name="minStayDays"
-                          value={formData.minStayDays}
-                          onChange={handleChange}
+                          name="minStay"
+                          value={formData.minStay ?? ''}
+                          onChange={createOnChange('minStay', (v) => v === '' ? undefined : parseInt(v, 10))}
                           min="1"
                           className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                         />
@@ -220,9 +220,9 @@ export default function NewHousingSolutionPage() {
                         </label>
                         <input
                           type="number"
-                          name="maxStayDays"
-                          value={formData.maxStayDays}
-                          onChange={handleChange}
+                          name="maxStay"
+                          value={formData.maxStay ?? ''}
+                          onChange={createOnChange('maxStay', (v) => v === '' ? undefined : parseInt(v, 10))}
                           min="1"
                           className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                         />
@@ -235,8 +235,8 @@ export default function NewHousingSolutionPage() {
                       </label>
                       <textarea
                         name="amenities"
-                        value={formData.amenities}
-                        onChange={handleChange}
+                        value={Array.isArray(formData.amenities) ? formData.amenities.join(', ') : formData.amenities ?? ''}
+                        onChange={createOnChange('amenities', (v) => v.split(',').map(s => s.trim()).filter(Boolean))}
                         rows={3}
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                         placeholder={t('amenitiesPlaceholder')}
@@ -246,52 +246,36 @@ export default function NewHousingSolutionPage() {
                 )}
 
                 {solutionType === 'HOUSING_COOP' && (
-                  <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                          {t('newSolution.targetMembersLabel')}
-                        </label>
-                        <input
-                          type="number"
-                          name="targetMembers"
-                          value={formData.targetMembers}
-                          onChange={handleChange}
-                          required
-                          min="2"
-                          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                          {t('newSolution.initialContributionLabel')}
-                        </label>
-                        <input
-                          type="number"
-                          name="initialContribution"
-                          value={formData.initialContribution}
-                          onChange={handleChange}
-                          min="0"
-                          step="0.01"
-                          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                        />
-                      </div>
-                    </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        {t('newSolution.monthlyContributionLabel')}
+                        {t('newSolution.targetMembersLabel')}
                       </label>
                       <input
                         type="number"
-                        name="monthlyContribution"
-                        value={formData.monthlyContribution}
-                        onChange={handleChange}
+                        name="capacity"
+                        value={formData.capacity ?? ''}
+                        onChange={createOnChange('capacity', (v) => v === '' ? undefined : parseInt(v, 10))}
+                        required
+                        min="2"
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                        {t('newSolution.initialContributionLabel')}
+                      </label>
+                      <input
+                        type="number"
+                        name="pricePerNight"
+                        value={formData.pricePerNight ?? ''}
+                        onChange={createOnChange('pricePerNight', (v) => v === '' ? undefined : parseFloat(v))}
                         min="0"
                         step="0.01"
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                       />
                     </div>
-                  </>
+                  </div>
                 )}
 
                 {solutionType === 'COMMUNITY_GUARANTEE' && (
@@ -302,9 +286,9 @@ export default function NewHousingSolutionPage() {
                       </label>
                       <input
                         type="number"
-                        name="guaranteeAmount"
-                        value={formData.guaranteeAmount}
-                        onChange={handleChange}
+                        name="pricePerNight"
+                        value={formData.pricePerNight ?? ''}
+                        onChange={createOnChange('pricePerNight', (v) => v === '' ? undefined : parseFloat(v))}
                         min="0"
                         step="0.01"
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
@@ -312,45 +296,29 @@ export default function NewHousingSolutionPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        {t('newSolution.monthlyContributionLabel')}
+                        {t('newSolution.capacityLabel')}
                       </label>
                       <input
                         type="number"
-                        name="monthlyContribution"
-                        value={formData.monthlyContribution}
-                        onChange={handleChange}
-                        min="0"
-                        step="0.01"
+                        name="capacity"
+                        value={formData.capacity ?? ''}
+                        onChange={createOnChange('capacity', (v) => v === '' ? undefined : parseInt(v, 10))}
+                        min="1"
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                       />
                     </div>
                   </div>
                 )}
 
-                {/* Requirements */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    {t('newSolution.requirementsLabel')}
-                  </label>
-                  <textarea
-                    name="requirements"
-                    value={formData.requirements}
-                    onChange={handleChange}
-                    rows={4}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
-                    placeholder={t('requirementsPlaceholder')}
-                  />
-                </div>
-
-                {/* Rules */}
+                {/* House Rules */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     {t('newSolution.rulesLabel')}
                   </label>
                   <textarea
-                    name="rules"
-                    value={formData.rules}
-                    onChange={handleChange}
+                    name="houseRules"
+                    value={Array.isArray(formData.houseRules) ? formData.houseRules.join(', ') : formData.houseRules ?? ''}
+                    onChange={createOnChange('houseRules', (v) => v.split(',').map(s => s.trim()).filter(Boolean))}
                     rows={4}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100"
                     placeholder={t('rulesPlaceholder')}

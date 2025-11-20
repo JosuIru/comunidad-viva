@@ -63,7 +63,7 @@ const OnboardingTipDisplay: React.FC<OnboardingTipDisplayProps> = ({
 
   return (
     <div
-      className={`fixed bottom-6 right-6 z-50 max-w-sm transition-all duration-300 ease-out ${
+      className={`fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 z-50 sm:max-w-sm transition-all duration-300 ease-out ${
         isVisible
           ? 'opacity-100 translate-y-0'
           : 'opacity-0 translate-y-4 pointer-events-none'

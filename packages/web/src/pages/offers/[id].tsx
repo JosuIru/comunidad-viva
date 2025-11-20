@@ -32,6 +32,11 @@ interface OfferDetail {
     name: string;
     avatar?: string;
     bio?: string;
+    email?: string;
+    phone?: string;
+    contactPreference?: 'APP' | 'TELEGRAM' | 'WHATSAPP' | 'EMAIL' | 'PHONE';
+    telegramUsername?: string;
+    whatsappNumber?: string;
   };
   createdAt: string;
 }
@@ -158,6 +163,47 @@ export default function OfferDetailPage() {
     }
 
     interestMutation.mutate();
+  };
+
+  const getExternalContactLink = (
+    preference: string,
+    telegramUsername?: string,
+    whatsappNumber?: string,
+    email?: string,
+    phone?: string
+  ) => {
+    switch (preference) {
+      case 'TELEGRAM':
+        return telegramUsername ? `https://t.me/${telegramUsername.replace('@', '')}` : null;
+      case 'WHATSAPP':
+        return whatsappNumber ? `https://wa.me/${whatsappNumber.replace(/[^0-9]/g, '')}` : null;
+      case 'EMAIL':
+        return email ? `mailto:${email}` : null;
+      case 'PHONE':
+        return phone ? `tel:${phone}` : null;
+      default:
+        return null;
+    }
+  };
+
+  const getContactLabel = (preference: string) => {
+    const labels: Record<string, string> = {
+      TELEGRAM: t('contact.telegram'),
+      WHATSAPP: t('contact.whatsapp'),
+      EMAIL: t('contact.email'),
+      PHONE: t('contact.phone'),
+    };
+    return labels[preference] || preference;
+  };
+
+  const getContactIcon = (preference: string) => {
+    const icons: Record<string, string> = {
+      TELEGRAM: '📱',
+      WHATSAPP: '💬',
+      EMAIL: '✉️',
+      PHONE: '📞',
+    };
+    return icons[preference] || '📧';
   };
 
   if (isLoading) {
@@ -302,29 +348,80 @@ export default function OfferDetailPage() {
                 )}
 
                 {getCurrentUserId() !== offerData.user?.id && (
-                  <div className="space-y-3 mb-6">
-                    <button
-                      onClick={handleContact}
-                      className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
-                    >
-                      {t('buttons.contact')}
-                    </button>
-                    <button
-                      onClick={handleInterest}
-                      disabled={interestMutation.isPending}
-                      className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
-                        offerData.userIsInterested
-                          ? 'bg-blue-600 text-white hover:bg-blue-700'
-                          : 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 border-2 border-blue-600 dark:border-blue-400 hover:bg-blue-50 dark:hover:bg-gray-600'
-                      } ${interestMutation.isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    >
-                      {interestMutation.isPending
-                        ? t('buttons.processing')
-                        : offerData.userIsInterested
-                        ? t('buttons.alreadyInterested')
-                        : t('buttons.interest')}
-                    </button>
-                  </div>
+                  <>
+                    <div className="space-y-3 mb-6">
+                      <button
+                        onClick={handleContact}
+                        className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
+                      >
+                        {t('buttons.contact')}
+                      </button>
+                      <button
+                        onClick={handleInterest}
+                        disabled={interestMutation.isPending}
+                        className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
+                          offerData.userIsInterested
+                            ? 'bg-blue-600 text-white hover:bg-blue-700'
+                            : 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 border-2 border-blue-600 dark:border-blue-400 hover:bg-blue-50 dark:hover:bg-gray-600'
+                        } ${interestMutation.isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      >
+                        {interestMutation.isPending
+                          ? t('buttons.processing')
+                          : offerData.userIsInterested
+                          ? t('buttons.alreadyInterested')
+                          : t('buttons.interest')}
+                      </button>
+                    </div>
+
+                    {offerData.user?.contactPreference &&
+                      offerData.user.contactPreference !== 'APP' &&
+                      (() => {
+                        const contactLink = getExternalContactLink(
+                          offerData.user.contactPreference,
+                          offerData.user.telegramUsername,
+                          offerData.user.whatsappNumber,
+                          offerData.user.email,
+                          offerData.user.phone
+                        );
+                        if (!contactLink) return null;
+
+                        return (
+                          <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                              {t('contact.title')}
+                            </h4>
+                            <a
+                              href={contactLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center justify-between w-full py-2 px-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                            >
+                              <span className="flex items-center gap-2">
+                                <span className="text-lg">
+                                  {getContactIcon(offerData.user.contactPreference)}
+                                </span>
+                                <span className="font-medium">
+                                  {getContactLabel(offerData.user.contactPreference)}
+                                </span>
+                              </span>
+                              <svg
+                                className="w-5 h-5 text-gray-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                />
+                              </svg>
+                            </a>
+                          </div>
+                        );
+                      })()}
+                  </>
                 )}
 
                 <div className="pt-6 border-t border-gray-200 dark:border-gray-700">

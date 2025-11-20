@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
+import toast from 'react-hot-toast';
 import {
   ShieldCheckIcon,
   ExclamationTriangleIcon,
@@ -71,10 +72,10 @@ export default function ModerationPage() {
       queryClient.invalidateQueries({ queryKey: ['moderation-pending'] });
       setShowVoteModal(false);
       setSelectedCase(null);
-      alert(t('voteSuccess'));
+      toast.success(t('voteSuccess'));
     },
     onError: (error: any) => {
-      alert(error.response?.data?.message || t('voteError'));
+      toast.error(error.response?.data?.message || t('voteError'));
     },
   });
 

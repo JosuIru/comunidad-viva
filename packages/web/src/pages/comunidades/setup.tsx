@@ -5,7 +5,7 @@ import Layout from '@/components/Layout';
 import { getCommunityPack, type OrganizedCommunityType, type SetupStep } from '@/lib/communityPacks';
 import { Check, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import api from '@/lib/api';
+import { api } from '@/lib/api';
 import { useTranslations } from 'next-intl';
 
 interface SetupFormData {

@@ -125,27 +125,27 @@ export default function ImpactoDashboard() {
                   <span>{t('hero.badge')}</span>
                 </div>
 
-                <h1 className="text-4xl md:text-6xl font-bold mb-6">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
                   {t('hero.title')}
                 </h1>
 
-                <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
+                <p className="text-base sm:text-lg md:text-xl text-green-100 mb-8 max-w-2xl mx-auto">
                   {t('hero.subtitle')}
                 </p>
 
                 {summary && (
-                  <div className="grid md:grid-cols-3 gap-6 mt-12">
-                    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-                      <div className="text-4xl font-bold mb-2">{summary.totalCommunities}</div>
-                      <div className="text-green-100">{t('stats.activeCommunities')}</div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-12">
+                    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6">
+                      <div className="text-3xl sm:text-4xl font-bold mb-2">{summary.totalCommunities}</div>
+                      <div className="text-sm sm:text-base text-green-100">{t('stats.activeCommunities')}</div>
                     </div>
-                    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-                      <div className="text-4xl font-bold mb-2">{summary.totalMembers}</div>
-                      <div className="text-green-100">{t('stats.participatingPeople')}</div>
+                    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6">
+                      <div className="text-3xl sm:text-4xl font-bold mb-2">{summary.totalMembers}</div>
+                      <div className="text-sm sm:text-base text-green-100">{t('stats.participatingPeople')}</div>
                     </div>
-                    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-                      <div className="text-4xl font-bold mb-2">{summary.totalEvents}</div>
-                      <div className="text-green-100">{t('stats.eventsHeld')}</div>
+                    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6">
+                      <div className="text-3xl sm:text-4xl font-bold mb-2">{summary.totalEvents}</div>
+                      <div className="text-sm sm:text-base text-green-100">{t('stats.eventsHeld')}</div>
                     </div>
                   </div>
                 )}
@@ -158,7 +158,7 @@ export default function ImpactoDashboard() {
             <section className="py-20">
               <div className="container mx-auto px-4">
                 <div className="max-w-6xl mx-auto">
-                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-12 text-center">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-8 sm:mb-12 text-center">
                     {t('sections.impactByType')}
                   </h2>
 
@@ -169,15 +169,15 @@ export default function ImpactoDashboard() {
                         className="bg-white dark:bg-gray-800 rounded-2xl border-2 border-gray-200 dark:border-gray-700 overflow-hidden"
                       >
                         {/* Header */}
-                        <div className="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 p-6 border-b border-gray-200 dark:border-gray-700">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                              <div className="text-5xl">{getPackIcon(type)}</div>
-                              <div>
-                                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                        <div className="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700">
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                              <div className="text-4xl sm:text-5xl flex-shrink-0">{getPackIcon(type)}</div>
+                              <div className="min-w-0 flex-1">
+                                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white truncate">
                                   {getPackName(type)}
                                 </h3>
-                                <p className="text-gray-600 dark:text-gray-400 mt-1">
+                                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">
                                   {data.count} {data.count === 1 ? t('community') : t('communities')} ·{' '}
                                   {data.totalMembers} {t('members')}
                                 </p>
@@ -185,7 +185,7 @@ export default function ImpactoDashboard() {
                             </div>
                             <Link
                               href="/comunidades"
-                              className="text-green-600 dark:text-green-400 hover:underline flex items-center gap-2"
+                              className="text-green-600 dark:text-green-400 hover:underline flex items-center gap-2 text-sm sm:text-base whitespace-nowrap"
                             >
                               <span>{t('viewMore')}</span>
                               <ArrowRight className="h-4 w-4" />
@@ -194,8 +194,8 @@ export default function ImpactoDashboard() {
                         </div>
 
                         {/* Metrics Grid */}
-                        <div className="p-6">
-                          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="p-4 sm:p-6">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                             {Object.entries(data.metrics).map(([metricKey, value]) => (
                               <div
                                 key={metricKey}
@@ -205,10 +205,10 @@ export default function ImpactoDashboard() {
                                   <Target className="h-6 w-6 text-green-600 dark:text-green-400" />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                  <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                                  <div className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
                                     {formatValue(metricKey, value)}
                                   </div>
-                                  <div className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                                  <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 truncate" title={formatMetricName(metricKey)}>
                                     {formatMetricName(metricKey)}
                                   </div>
                                 </div>
@@ -228,25 +228,25 @@ export default function ImpactoDashboard() {
           <section className="py-20 bg-gray-50 dark:bg-gray-800/50">
             <div className="container mx-auto px-4">
               <div className="max-w-4xl mx-auto text-center">
-                <div className="text-5xl mb-6">🌱</div>
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
+                <div className="text-4xl sm:text-5xl mb-6">🌱</div>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
                   {t('cta.title')}
                 </h2>
-                <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
+                <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
                   {t('cta.subtitle')}
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                   <Link
                     href="/comunidades"
-                    className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                    className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl transition-all duration-200"
                   >
                     <Users className="h-5 w-5" />
-                    {t('cta.createCommunity')}
-                    <ArrowRight className="h-5 w-5" />
+                    <span className="truncate">{t('cta.createCommunity')}</span>
+                    <ArrowRight className="h-5 w-5 flex-shrink-0" />
                   </Link>
                   <Link
                     href="/communities"
-                    className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-xl font-semibold text-lg shadow-md hover:shadow-lg transition-all duration-200 border-2 border-gray-200 dark:border-gray-700"
+                    className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-xl font-semibold text-base sm:text-lg shadow-md hover:shadow-lg transition-all duration-200 border-2 border-gray-200 dark:border-gray-700"
                   >
                     <Activity className="h-5 w-5" />
                     {t('cta.exploreCommunities')}
@@ -275,10 +275,10 @@ export default function ImpactoDashboard() {
   );
 }
 
-export async function getStaticProps({ locale }: { locale: string }) {
+export async function getStaticProps(context: { locale?: string }) {
   return {
     props: {
-      ...(await getI18nProps(locale)),
+      ...(await getI18nProps(context)),
     },
   };
 }

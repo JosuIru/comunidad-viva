@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Layout from '@/components/Layout';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
+import toast from 'react-hot-toast';
 import {
   GlobeAltIcon,
   HeartIcon,
@@ -78,7 +79,7 @@ export default function FederatedFeed() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['federated-feed'] });
-      alert('¡Actividad compartida!');
+      toast.success('¡Actividad compartida!');
     },
   });
 

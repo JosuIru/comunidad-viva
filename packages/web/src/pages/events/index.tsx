@@ -80,17 +80,17 @@ function EventsPageContent() {
         <div className="container mx-auto px-4">
           {/* Header */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{t('pageTitle')}</h1>
-                <p className="text-gray-600 dark:text-gray-400 mt-2">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">{t('pageTitle')}</h1>
+                <p className="text-gray-600 dark:text-gray-400 mt-1 sm:mt-2 text-sm sm:text-base">
                   {t('pageSubtitle')}
                 </p>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 sm:gap-4">
                 <ViewToggle viewMode={viewMode} onViewModeChange={setViewMode} />
                 <Link href="/events/new">
-                  <Button variant="primary" size="lg">
+                  <Button variant="primary" size="md" className="whitespace-nowrap">
                     {t('create')}
                   </Button>
                 </Link>
@@ -216,7 +216,7 @@ function EventsPageContent() {
             <div className="text-center py-12">
               <p className="text-gray-600 dark:text-gray-400 text-lg mb-4">{t('noEvents')}</p>
               <Link href="/events/new">
-                <Button variant="success" size="lg">
+                <Button variant="success" size="md">
                   {t('createFirst')}
                 </Button>
               </Link>

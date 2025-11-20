@@ -13,15 +13,17 @@
  * ```
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, ChangeEvent } from 'react';
 import { z } from 'zod';
 import { formatZodError } from '@/lib/validations';
 
 interface UseFormValidationOptions<T> {
-  schema: z.ZodSchema<T>;
+  schema: z.ZodType<T, z.ZodTypeDef, any>;
   initialData: Partial<T>;
   onSubmit?: (data: T) => void | Promise<void>;
 }
+
+type InputElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
 export function useFormValidation<T extends Record<string, any>>({
   schema,
@@ -34,7 +36,7 @@ export function useFormValidation<T extends Record<string, any>>({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   /**
-   * Handle input change
+   * Handle input change - can be called directly with field and value
    */
   const handleChange = useCallback((
     field: keyof T,
@@ -53,32 +55,36 @@ export function useFormValidation<T extends Record<string, any>>({
   }, [errors]);
 
   /**
+   * Create an onChange handler for an input element
+   * This returns a function compatible with React's onChange prop
+   */
+  const createOnChange = useCallback((
+    field: keyof T,
+    transform?: (value: string) => any
+  ) => {
+    return (e: ChangeEvent<InputElement>) => {
+      const rawValue = e.target.value;
+      const value = transform ? transform(rawValue) : rawValue;
+      handleChange(field, value);
+    };
+  }, [handleChange]);
+
+  /**
    * Handle field blur - validate single field
    */
   const handleBlur = useCallback((field: keyof T) => {
     setTouched(prev => ({ ...prev, [field]: true }));
 
-    // Validate single field
-    try {
-      const fieldSchema = schema.shape?.[field as string];
-      if (fieldSchema) {
-        fieldSchema.parse(formData[field]);
-        // Clear error if validation passes
-        setErrors(prev => {
-          const newErrors = { ...prev };
-          delete newErrors[field as string];
-          return newErrors;
-        });
-      }
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        setErrors(prev => ({
-          ...prev,
-          [field as string]: error.errors[0]?.message || 'Invalid value',
-        }));
-      }
-    }
-  }, [schema, formData]);
+    // We skip single field validation since schema.shape is not always available
+    // Full validation happens on form submit
+  }, []);
+
+  /**
+   * Create an onBlur handler for an input element
+   */
+  const createOnBlur = useCallback((field: keyof T) => {
+    return () => handleBlur(field);
+  }, [handleBlur]);
 
   /**
    * Validate entire form
@@ -184,6 +190,43 @@ export function useFormValidation<T extends Record<string, any>>({
     return isFieldTouched(field) && !!getFieldError(field);
   }, [isFieldTouched, getFieldError]);
 
+  /**
+   * Get input props for a field - convenient helper
+   */
+  const getInputProps = useCallback((
+    field: keyof T,
+    options?: { transform?: (value: string) => any }
+  ) => {
+    return {
+      value: formData[field] ?? '',
+      onChange: createOnChange(field, options?.transform),
+      onBlur: createOnBlur(field),
+    };
+  }, [formData, createOnChange, createOnBlur]);
+
+  /**
+   * Get select props for a field
+   */
+  const getSelectProps = useCallback((field: keyof T) => {
+    return {
+      value: formData[field] ?? '',
+      onChange: createOnChange(field),
+      onBlur: createOnBlur(field),
+    };
+  }, [formData, createOnChange, createOnBlur]);
+
+  /**
+   * Get checkbox props for a field
+   */
+  const getCheckboxProps = useCallback((field: keyof T) => {
+    return {
+      checked: Boolean(formData[field]),
+      onChange: (e: ChangeEvent<HTMLInputElement>) => {
+        handleChange(field, e.target.checked);
+      },
+    };
+  }, [formData, handleChange]);
+
   return {
     // Form state
     formData,
@@ -193,15 +236,25 @@ export function useFormValidation<T extends Record<string, any>>({
     hasErrors,
     isValid,
 
-    // Handlers
+    // Core handlers
     handleChange,
     handleBlur,
     handleSubmit,
     validateForm,
     resetForm,
     setValues,
+    setFormData,
     setError,
     clearErrors,
+
+    // Event handler creators
+    createOnChange,
+    createOnBlur,
+
+    // Convenient prop getters
+    getInputProps,
+    getSelectProps,
+    getCheckboxProps,
 
     // Utilities
     getFieldError,
@@ -214,7 +267,7 @@ export function useFormValidation<T extends Record<string, any>>({
  * Type helper for form change events
  */
 export type FormChangeHandler = (
-  e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
 ) => void;
 
 /**

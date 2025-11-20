@@ -11,6 +11,7 @@ import { PolygonContractService } from './polygon-contract.service';
 import { SolanaContractService } from './solana-contract.service';
 import { BridgeWorkerService } from './bridge-worker.service';
 import { BlockchainService } from './blockchain.service';
+import { NotificationService } from './notification.service';
 import { FederationController } from './federation.controller';
 import { BridgeController } from './bridge.controller';
 import { BridgeAdminController } from './bridge-admin.controller';
@@ -36,6 +37,7 @@ import { BridgeAdminController } from './bridge-admin.controller';
     BridgeService,
     BridgeSecurityService,
     BlockchainService,
+    NotificationService,
     PolygonContractService,
     SolanaContractService,
     BridgeWorkerService,

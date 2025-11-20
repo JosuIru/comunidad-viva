@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { EmailService } from '../notifications/email.service';
+import { IntegrationsService } from '../integrations/integrations.service';
 import { OfferType, OfferStatus } from '@prisma/client';
 import { randomUUID } from 'crypto';
 
@@ -9,15 +10,28 @@ export class OffersService {
   constructor(
     private prisma: PrismaService,
     private emailService: EmailService,
+    private integrationsService: IntegrationsService,
   ) {}
 
   async create(userId: string, data: any) {
-    return this.prisma.offer.create({
+    const offer = await this.prisma.offer.create({
       data: {
         ...data,
         userId,
       },
     });
+
+    // Auto-publish to integrated channels if communityId is present
+    if (offer.communityId && offer.status === OfferStatus.ACTIVE) {
+      try {
+        await this.integrationsService.publishContent('offer', offer.id);
+      } catch (error) {
+        // Log error but don't fail the offer creation
+        console.error('Failed to publish offer to integrations:', error);
+      }
+    }
+
+    return offer;
   }
 
   async findAll(filters?: {
@@ -131,6 +145,11 @@ export class OffersService {
             name: true,
             avatar: true,
             bio: true,
+            email: true,
+            phone: true,
+            contactPreference: true,
+            telegramUsername: true,
+            whatsappNumber: true,
           },
         },
         GroupBuy: true,

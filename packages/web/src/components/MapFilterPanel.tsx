@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import Button from './Button';
+import toast from 'react-hot-toast';
 import {
   MagnifyingGlassIcon,
   FunnelIcon,
@@ -231,11 +232,11 @@ export default function MapFilterPanel({
           onProximityChange(5);
         }
       } else {
-        alert(tToasts('locationNotFound'));
+        toast.error(tToasts('locationNotFound'));
       }
     } catch (error) {
       console.error('Error geocoding:', error);
-      alert(tToasts('locationSearchError'));
+      toast.error(tToasts('locationSearchError'));
     } finally {
       setIsSearchingLocation(false);
     }

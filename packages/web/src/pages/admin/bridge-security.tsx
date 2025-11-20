@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import { api } from '@/lib/api';
 import { getI18nProps } from '@/lib/i18n';
 import { useTranslations } from 'next-intl';
+import toast from 'react-hot-toast';
 
 interface SecurityStats {
   totalEvents: number;
@@ -91,7 +92,7 @@ export default function BridgeSecurityDashboard() {
 
   const openCircuitBreaker = async () => {
     if (!circuitBreakerReason.trim()) {
-      alert(tAdmin('bridge.alerts.reasonRequired'));
+      toast.error(tAdmin('bridge.alerts.reasonRequired'));
       return;
     }
 
@@ -102,9 +103,9 @@ export default function BridgeSecurityDashboard() {
       setShowCircuitBreakerModal(false);
       setCircuitBreakerReason('');
       loadData();
-      alert(tAdmin('bridge.alerts.circuitBreakerOpened'));
+      toast.success(tAdmin('bridge.alerts.circuitBreakerOpened'));
     } catch (err: any) {
-      alert(tAdmin('bridge.alerts.error') + (err.response?.data?.message || tAdmin('bridge.alerts.unknownError')));
+      toast.error(tAdmin('bridge.alerts.error') + (err.response?.data?.message || tAdmin('bridge.alerts.unknownError')));
     }
   };
 
@@ -114,15 +115,15 @@ export default function BridgeSecurityDashboard() {
     try {
       await api.post('/bridge/admin/circuit-breaker/close');
       loadData();
-      alert(tAdmin('bridge.alerts.circuitBreakerClosed'));
+      toast.success(tAdmin('bridge.alerts.circuitBreakerClosed'));
     } catch (err: any) {
-      alert(tAdmin('bridge.alerts.error') + (err.response?.data?.message || tAdmin('bridge.alerts.unknownError')));
+      toast.error(tAdmin('bridge.alerts.error') + (err.response?.data?.message || tAdmin('bridge.alerts.unknownError')));
     }
   };
 
   const addToBlacklist = async () => {
     if (!blacklistValue.trim() || !blacklistReason.trim()) {
-      alert(tAdmin('bridge.alerts.completeAllFields'));
+      toast.error(tAdmin('bridge.alerts.completeAllFields'));
       return;
     }
 
@@ -140,9 +141,9 @@ export default function BridgeSecurityDashboard() {
       setBlacklistValue('');
       setBlacklistReason('');
       loadData();
-      alert(tAdmin('bridge.alerts.addedToBlacklist', { type: blacklistType }));
+      toast.success(tAdmin('bridge.alerts.addedToBlacklist', { type: blacklistType }));
     } catch (err: any) {
-      alert(tAdmin('bridge.alerts.error') + (err.response?.data?.message || tAdmin('bridge.alerts.unknownError')));
+      toast.error(tAdmin('bridge.alerts.error') + (err.response?.data?.message || tAdmin('bridge.alerts.unknownError')));
     }
   };
 
@@ -152,9 +153,9 @@ export default function BridgeSecurityDashboard() {
     try {
       await api.post(`/bridge/admin/blacklist/${id}/remove`);
       loadData();
-      alert(tAdmin('bridge.alerts.removedFromBlacklist'));
+      toast.success(tAdmin('bridge.alerts.removedFromBlacklist'));
     } catch (err: any) {
-      alert(tAdmin('bridge.alerts.error') + (err.response?.data?.message || tAdmin('bridge.alerts.unknownError')));
+      toast.error(tAdmin('bridge.alerts.error') + (err.response?.data?.message || tAdmin('bridge.alerts.unknownError')));
     }
   };
 
