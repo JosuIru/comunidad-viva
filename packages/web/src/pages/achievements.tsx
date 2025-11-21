@@ -285,5 +285,4 @@ function BadgeCard({ badge, isUnlocked, index }: BadgeCardProps) {
   );
 }
 
-// Disabled for client-side rendering with React Query
-// export const getStaticProps = async (context: any) => getI18nProps(context);
+export const getStaticProps = async (context: any) => getI18nProps(context);

@@ -1,5 +1,5 @@
 import { AppProps } from 'next/app';
-import { QueryClient, QueryClientProvider, Hydrate } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { NextIntlClientProvider } from 'next-intl';
 import { ThemeProvider } from 'next-themes';
@@ -126,14 +126,12 @@ export default function App({ Component, pageProps }: AppProps) {
         <ErrorBoundary>
           <WebSocketProvider token={authToken}>
             <QueryClientProvider client={queryClient}>
-              <Hydrate state={pageProps.dehydratedState}>
-                <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 transition-colors">
-                  <div className="flex-grow">
-                    <Component {...pageProps} />
-                  </div>
-                  {showFooter && <Footer />}
+              <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 transition-colors">
+                <div className="flex-grow">
+                  <Component {...pageProps} />
                 </div>
-              </Hydrate>
+                {showFooter && <Footer />}
+              </div>
               <BadgeUnlockedToast />
               <PWAInstallPrompt />
               <EconomyUnlockModal

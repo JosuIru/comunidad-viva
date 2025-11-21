@@ -6,5 +6,4 @@ export default function PuebloTransicionPage() {
   return <PackLandingPage pack={TRANSITION_TOWN_PACK} />;
 }
 
-// Disabled for client-side rendering with React Query
-// export const getStaticProps = async (context: any) => getI18nProps(context);
+export const getStaticProps = async (context: any) => getI18nProps(context);

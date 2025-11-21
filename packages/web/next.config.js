@@ -1,10 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-
-  // i18n disabled to allow client-side rendering for React Query
-  // Multi-language support handled by next-intl without forcing SSR
-
+  // Disable standalone for now - causes SSR errors
+  // output: 'standalone',
+  // i18n configuration for multi-language support
+  i18n: {
+    locales: ['es', 'eu', 'en', 'ca'],
+    defaultLocale: 'es',
+    localeDetection: false,
+  },
   // PWA Configuration
   headers: async () => [
     {
