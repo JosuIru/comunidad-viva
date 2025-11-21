@@ -1,7 +1,12 @@
+# Ignore frontend package completely to prevent Railway from detecting Next.js
+packages/web/
+packages/web/**
+**/packages/web/**
+
 # Ignore Prisma auto-detection - we handle it manually in build phase
 packages/backend/prisma/schema.prisma
 prisma/schema.prisma
 
-# Ignore frontend package to prevent auto-detection
-packages/web/
-packages/web/**
+# Ignore blockchain package
+packages/blockchain/
+packages/blockchain/**
