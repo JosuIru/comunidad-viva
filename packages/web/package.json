@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build || (test -d .next && echo 'Build completed with prerender warnings - .next folder generated successfully' && exit 0)",
+    "build": "next build || (test -d .next && echo 'Build completed with prerender warnings - .next folder generated successfully' && exit 0) && node scripts/fix-prerender-manifest.js",
     "build:safe": "next build || echo 'Build had errors but continuing'",
     "start": "next start",
     "lint": "next lint",
