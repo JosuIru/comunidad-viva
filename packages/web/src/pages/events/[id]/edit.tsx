@@ -533,4 +533,5 @@ export const getStaticPaths = async () => {
   };
 };
 
-export const getStaticProps = async (context: any) => getI18nProps(context);
+// Disabled for client-side rendering with React Query
+// export const getStaticProps = async (context: any) => getI18nProps(context);

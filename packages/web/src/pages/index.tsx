@@ -1452,4 +1452,6 @@ export default function HomePage() {
   );
 }
 
-export const getStaticProps = async (context: any) => getI18nProps(context);
+// Removed getStaticProps to allow full client-side rendering with React Query
+// Multi-language support is handled by next-intl on the client side
+// export const getStaticProps = async (context: any) => getI18nProps(context);

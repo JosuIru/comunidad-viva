@@ -31,23 +31,25 @@ const LocaleRedirect = () => {
   );
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const locales = ['es', 'eu', 'en', 'ca'];
+// Disabled for client-side rendering with React Query
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const locales = ['es', 'eu', 'en', 'ca'];
+//
+//   return {
+//     paths: locales.map((locale) => ({ params: { locale } })),
+//     fallback: false,
+//   };
+// };
 
-  return {
-    paths: locales.map((locale) => ({ params: { locale } })),
-    fallback: false,
-  };
-};
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const locale = params?.locale as string;
-
-  return {
-    props: {
-      locale,
-    },
-  };
-};
+// Disabled for client-side rendering with React Query
+// export const getStaticProps: GetStaticProps = async ({ params }) => {
+//   const locale = params?.locale as string;
+//
+//   return {
+//     props: {
+//       locale,
+//     },
+//   };
+// };
 
 export default LocaleRedirect;

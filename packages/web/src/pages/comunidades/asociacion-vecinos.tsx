@@ -6,4 +6,5 @@ export default function AsociacionVecinosPage() {
   return <PackLandingPage pack={NEIGHBORHOOD_ASSOCIATION_PACK} />;
 }
 
-export const getStaticProps = async (context: any) => getI18nProps(context);
+// Disabled for client-side rendering with React Query
+// export const getStaticProps = async (context: any) => getI18nProps(context);
