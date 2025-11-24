@@ -10,3 +10,4 @@ echo "JWT_SECRET set: ${JWT_SECRET:+YES}"
 echo "PORT: ${PORT:-not set}"
 echo "==================================="
 # Force redeploy lun 24 nov 2025 17:07:31 CET
+# Force redeploy with fixed buildCommand - lun 24 nov 2025 19:23:20 CET
