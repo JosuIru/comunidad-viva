@@ -1,20 +1,17 @@
 {
-  "name": "truk",
+  "name": "truk-backend",
   "version": "1.0.0",
   "private": true,
-  "description": "Truk - Plataforma de economía colaborativa local e intercambio comunitario",
-  "workspaces": [
-    "packages/*"
-  ],
+  "description": "Truk - Backend API (NestJS)",
   "scripts": {
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:web\"",
+    "dev": "cd packages/backend && npm run dev",
     "dev:backend": "cd packages/backend && npm run dev",
     "dev:web": "cd packages/web && npm run dev",
     "build": "bash build.sh",
     "start": "cd packages/backend && bash start.sh",
     "start:prod": "cd packages/backend && node dist/main",
-    "test": "npm run test --workspaces",
-    "lint": "npm run lint --workspaces"
+    "test": "cd packages/backend && npm test",
+    "lint": "cd packages/backend && npm run lint"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

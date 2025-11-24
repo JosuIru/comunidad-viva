@@ -1,18 +1,21 @@
 [phases.setup]
-nixPkgs = ["nodejs-18_x", "openssl"]
+nixPkgs = ["nodejs-18_x", "openssl", "bash"]
 nixpacksVersion = "1.21.0"
 
 [phases.install]
+dependsOn = ["setup"]
 cmds = [
-  "cd packages/backend",
-  "npm install"
+  "echo '=== Installing backend dependencies ==='",
+  "echo 'Current directory:' $(pwd)",
+  "ls -la",
+  "cd packages/backend && npm install"
 ]
 
 [phases.build]
+dependsOn = ["install"]
 cmds = [
-  "cd packages/backend",
-  "npx prisma generate",
-  "npm run build"
+  "echo '=== Building backend ==='",
+  "cd packages/backend && npx prisma generate && npm run build"
 ]
 
 [start]
