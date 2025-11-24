@@ -6,24 +6,22 @@ cmds = [
   "echo '=== NIXPACKS INSTALL PHASE ==='",
   "pwd",
   "ls -la | head -20",
-  "echo 'Changing to backend directory...'",
-  "cd packages/backend && pwd",
-  "echo 'Installing dependencies...'",
-  "cd packages/backend && npm install"
+  "echo 'Installing backend dependencies...'",
+  "npm install"
 ]
 
 [phases.build]
 cmds = [
   "echo '=== NIXPACKS BUILD PHASE ==='",
-  "cd packages/backend && pwd",
+  "pwd",
   "echo 'Generating Prisma Client...'",
-  "cd packages/backend && npx prisma generate",
+  "npx prisma generate",
   "echo 'Building TypeScript...'",
-  "cd packages/backend && npm run build",
+  "npm run build",
   "echo 'Verifying build output...'",
-  "cd packages/backend && ls -la dist/ | head -20",
-  "cd packages/backend && test -f dist/main.js && echo 'BUILD SUCCESS: dist/main.js exists' || echo 'BUILD FAILED: dist/main.js not found'"
+  "ls -la dist/ | head -20",
+  "test -f dist/main.js && echo 'BUILD SUCCESS: dist/main.js exists' || echo 'BUILD FAILED: dist/main.js not found'"
 ]
 
 [start]
-cmd = "cd packages/backend && bash start.sh"
+cmd = "bash start.sh"
