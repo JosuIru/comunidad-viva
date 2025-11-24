@@ -3,24 +3,26 @@ nixPkgs = ["nodejs-18_x", "openssl", "bash"]
 
 [phases.install]
 cmds = [
-  "echo '=== DEBUG: Current directory and contents ==='",
+  "echo '=== NIXPACKS INSTALL PHASE ==='",
   "pwd",
-  "ls -la",
-  "echo '=== Installing backend dependencies ==='",
-  "cd packages/backend",
-  "npm ci --production=false || npm install"
+  "ls -la | head -20",
+  "echo 'Changing to backend directory...'",
+  "cd packages/backend && pwd",
+  "echo 'Installing dependencies...'",
+  "cd packages/backend && npm install"
 ]
 
 [phases.build]
 cmds = [
-  "echo '=== Building backend ==='",
-  "cd packages/backend",
+  "echo '=== NIXPACKS BUILD PHASE ==='",
+  "cd packages/backend && pwd",
   "echo 'Generating Prisma Client...'",
-  "npx prisma generate",
-  "echo 'Compiling TypeScript...'",
-  "npm run build",
-  "echo '=== Build completed ==='",
-  "ls -la dist/ | head -20"
+  "cd packages/backend && npx prisma generate",
+  "echo 'Building TypeScript...'",
+  "cd packages/backend && npm run build",
+  "echo 'Verifying build output...'",
+  "cd packages/backend && ls -la dist/ | head -20",
+  "cd packages/backend && test -f dist/main.js && echo 'BUILD SUCCESS: dist/main.js exists' || echo 'BUILD FAILED: dist/main.js not found'"
 ]
 
 [start]
