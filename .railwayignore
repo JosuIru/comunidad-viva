@@ -1,3 +1,13 @@
 **/Dockerfile
 **/Dockerfile.*
 **/.dockerignore
+
+# Ignore web package - only deploy backend
+packages/web
+packages/blockchain
+packages/shared
+
+# Ignore non-essential directories
+.git
+node_modules
+*.log
