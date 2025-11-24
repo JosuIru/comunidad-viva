@@ -3,7 +3,7 @@
 **/.dockerignore
 
 # Ignore web package - only deploy backend
-packages/web
+packages/web.backup
 packages/blockchain
 packages/shared
 
