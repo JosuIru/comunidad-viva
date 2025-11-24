@@ -11,6 +11,7 @@
     "dev:backend": "cd packages/backend && npm run dev",
     "dev:web": "cd packages/web && npm run dev",
     "build": "bash build.sh",
+    "start": "cd packages/backend && bash start.sh",
     "start:prod": "cd packages/backend && node dist/main",
     "test": "npm run test --workspaces",
     "lint": "npm run lint --workspaces"
