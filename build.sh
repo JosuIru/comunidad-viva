@@ -13,14 +13,24 @@ npx prisma generate || exit 1
 
 echo ""
 echo "Step 2: Compiling TypeScript (errors are OK, files will be generated)..."
-echo "Running: ./node_modules/.bin/tsc"
 echo "Working directory: $(pwd)"
 echo "TypeScript config: tsconfig.json"
 
-# Run tsc and capture exit code but continue regardless
+# Try multiple approaches to run tsc
 set +e
-./node_modules/.bin/tsc
-TSC_EXIT_CODE=$?
+if [ -f "node_modules/.bin/tsc" ]; then
+    echo "Running: node_modules/.bin/tsc"
+    node_modules/.bin/tsc
+    TSC_EXIT_CODE=$?
+elif command -v tsc >/dev/null 2>&1; then
+    echo "Running: tsc (global)"
+    tsc
+    TSC_EXIT_CODE=$?
+else
+    echo "Running: npx typescript"
+    npx typescript
+    TSC_EXIT_CODE=$?
+fi
 set -e
 
 echo ""
