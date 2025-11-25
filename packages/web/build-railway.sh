@@ -28,15 +28,45 @@ fi
 
 echo "✓ .next directory exists"
 
-# Step 3: Create/fix prerender-manifest.json
+# Step 3: Create/fix critical manifest files
 echo ""
-echo "Step 2: Ensuring prerender-manifest.json exists..."
+echo "Step 2: Ensuring all required manifests exist..."
 
+# Create prerender-manifest.json if missing
 if [ ! -f ".next/prerender-manifest.json" ]; then
     echo "⚠️  prerender-manifest.json missing, creating it..."
-    echo '{"version":3,"routes":{},"dynamicRoutes":{},"notFoundRoutes":[],"preview":{"previewModeId":"development-id","previewModeSigningKey":"development-signing-key","previewModeEncryptionKey":"development-encryption-key"}}' > .next/prerender-manifest.json
+    cat > .next/prerender-manifest.json << 'EOL'
+{
+  "version": 3,
+  "routes": {},
+  "dynamicRoutes": {},
+  "notFoundRoutes": [],
+  "preview": {
+    "previewModeId": "development-id",
+    "previewModeSigningKey": "development-signing-key",
+    "previewModeEncryptionKey": "development-encryption-key"
+  }
+}
+EOL
 else
     echo "✓ prerender-manifest.json exists"
+fi
+
+# Create react-loadable-manifest.json if missing
+if [ ! -f ".next/react-loadable-manifest.json" ]; then
+    echo "⚠️  react-loadable-manifest.json missing, creating it..."
+    echo '{}' > .next/react-loadable-manifest.json
+else
+    echo "✓ react-loadable-manifest.json exists"
+fi
+
+# Create server/pages-manifest.json if missing
+mkdir -p .next/server
+if [ ! -f ".next/server/pages-manifest.json" ]; then
+    echo "⚠️  server/pages-manifest.json missing, creating minimal version..."
+    echo '{}' > .next/server/pages-manifest.json
+else
+    echo "✓ server/pages-manifest.json exists"
 fi
 
 # Step 4: Verify other critical files
