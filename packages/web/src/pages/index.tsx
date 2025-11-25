@@ -106,6 +106,7 @@ export default function HomePage() {
   const [adaptiveTour, setAdaptiveTour] = useState<AdaptiveTour | null>(null);
   const [showBeginnerMode, setShowBeginnerMode] = useState(false);
   const [userName, setUserName] = useState('');
+  const [hasVisitedBefore, setHasVisitedBefore] = useState(true); // Default to true to prevent landing page flash during SSR
 
   // Filter states
   const [selectedTypes, setSelectedTypes] = useState<Set<string>>(
@@ -130,6 +131,10 @@ export default function HomePage() {
     const hasAuthenticated = !!token;
     setIsAuthenticated(hasAuthenticated);
     setUserId(storedUserId);
+
+    // Check if user has visited before
+    const visited = localStorage.getItem('has_visited_public_view');
+    setHasVisitedBefore(!!visited);
 
     // Get user name for beginner welcome
     if (storedUser) {
@@ -647,14 +652,13 @@ export default function HomePage() {
 
   // Show landing page ONLY if user explicitly hasn't visited before
   // Allow public browsing for returning visitors
-  if (!isAuthenticated) {
-    const hasVisitedBefore = localStorage.getItem('has_visited_public_view');
-    if (!hasVisitedBefore) {
-      // First time visitor - show landing page
+  if (!isAuthenticated && !hasVisitedBefore) {
+    // First time visitor - show landing page
+    // Set the flag on client-side only
+    if (typeof window !== 'undefined') {
       localStorage.setItem('has_visited_public_view', 'true');
-      return <LandingPage />;
     }
-    // Returning visitor - allow public browsing with banner
+    return <LandingPage />;
   }
 
   // Tour steps - Use adaptive tour if available, otherwise use default

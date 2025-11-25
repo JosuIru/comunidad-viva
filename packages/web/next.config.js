@@ -7,14 +7,12 @@ const nextConfig = {
   // Skip static page generation
   skipTrailingSlashRedirect: true,
   skipMiddlewareUrlNormalize: true,
-  // i18n configuration - TEMPORARILY DISABLED to prevent prerendering
-  // Next.js with i18n ALWAYS prerenders locale routes which causes React Query errors
-  // TODO: Re-enable after migrating pages to 'use client'
-  // i18n: {
-  //   locales: ['es', 'eu', 'en', 'ca'],
-  //   defaultLocale: 'es',
-  //   localeDetection: false,
-  // },
+  // i18n configuration
+  i18n: {
+    locales: ['es', 'eu', 'en', 'ca'],
+    defaultLocale: 'es',
+    localeDetection: false,
+  },
   // PWA Configuration
   headers: async () => [
     {

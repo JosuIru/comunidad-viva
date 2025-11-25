@@ -8,10 +8,8 @@ import { useEffect, useState } from 'react';
 import { WebSocketProvider } from '../contexts/WebSocketContext';
 import BadgeUnlockedToast from '../components/achievements/BadgeUnlockedToast';
 import PWAInstallPrompt from '../components/PWAInstallPrompt';
-import Footer from '../components/Footer';
 import ErrorBoundary from '../components/ErrorBoundary';
-import EconomyUnlockModal from '../components/EconomyUnlockModal';
-import { useEconomyProgression } from '../hooks/useEconomyProgression';
+import AppContent from '../components/AppContent';
 import '../styles/globals.css';
 import 'leaflet/dist/leaflet.css';
 
@@ -41,14 +39,6 @@ const queryClient = new QueryClient({
 function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [authToken, setAuthToken] = useState<string | null>(null);
-
-  // Economy progression hook
-  const {
-    tier,
-    showUnlockModal,
-    unlockedTier,
-    setShowUnlockModal,
-  } = useEconomyProgression();
 
   // Extract JWT token from localStorage on mount
   useEffect(() => {
@@ -102,9 +92,6 @@ function App({ Component, pageProps }: AppProps) {
     }
   }, []);
 
-  // Don't show footer on landing page (it has its own integrated footer) or installer
-  const showFooter = router.pathname !== '/' && router.pathname !== '/installer';
-
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <NextIntlClientProvider
@@ -126,71 +113,56 @@ function App({ Component, pageProps }: AppProps) {
         <ErrorBoundary>
           <WebSocketProvider token={authToken}>
             <QueryClientProvider client={queryClient}>
-              <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900 transition-colors">
-                <div className="flex-grow">
-                  <Component {...pageProps} />
-                </div>
-                {showFooter && <Footer />}
-              </div>
+              <AppContent>
+                <Component {...pageProps} />
+              </AppContent>
               <BadgeUnlockedToast />
               <PWAInstallPrompt />
-              <EconomyUnlockModal
-                isOpen={showUnlockModal}
-                tier={unlockedTier}
-                onClose={() => setShowUnlockModal(false)}
-                onExplore={() => {
-                  if (unlockedTier === 'intermediate') {
-                    router.push('/offers?credits=true');
-                  } else if (unlockedTier === 'advanced') {
-                    router.push('/timebank');
-                  }
+              <Toaster
+                position="bottom-right"
+                toastOptions={{
+                  duration: 4000,
+                  style: {
+                    borderRadius: '12px',
+                    padding: '16px',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                  },
+                  success: {
+                    duration: 3000,
+                    iconTheme: {
+                      primary: '#10b981',
+                      secondary: '#fff',
+                    },
+                    style: {
+                      background: '#10b981',
+                      color: '#fff',
+                    },
+                  },
+                  error: {
+                    duration: 5000,
+                    iconTheme: {
+                      primary: '#ef4444',
+                      secondary: '#fff',
+                    },
+                    style: {
+                      background: '#ef4444',
+                      color: '#fff',
+                    },
+                  },
+                  loading: {
+                    iconTheme: {
+                      primary: '#3b82f6',
+                      secondary: '#fff',
+                    },
+                    style: {
+                      background: '#3b82f6',
+                      color: '#fff',
+                    },
+                  },
                 }}
               />
-            <Toaster
-              position="bottom-right"
-              toastOptions={{
-                duration: 4000,
-                style: {
-                  borderRadius: '12px',
-                  padding: '16px',
-                  fontSize: '14px',
-                  fontWeight: '500',
-                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-                },
-                success: {
-                  duration: 3000,
-                  iconTheme: {
-                    primary: '#10b981',
-                    secondary: '#fff',
-                  },
-                  style: {
-                    background: '#10b981',
-                    color: '#fff',
-                  },
-                },
-                error: {
-                  duration: 5000,
-                  iconTheme: {
-                    primary: '#ef4444',
-                    secondary: '#fff',
-                  },
-                  style: {
-                    background: '#ef4444',
-                    color: '#fff',
-                  },
-                },
-                loading: {
-                  iconTheme: {
-                    primary: '#3b82f6',
-                    secondary: '#fff',
-                  },
-                  style: {
-                    background: '#3b82f6',
-                    color: '#fff',
-                  },
-                },
-              }}
-            />
             </QueryClientProvider>
           </WebSocketProvider>
         </ErrorBoundary>
@@ -198,18 +170,5 @@ function App({ Component, pageProps }: AppProps) {
     </ThemeProvider>
   );
 }
-
-// CRITICAL: Disable Automatic Static Optimization by adding getInitialProps
-// This prevents Next.js from trying to prerender pages at build time
-// which causes "No QueryClient set" errors with React Query hooks
-App.getInitialProps = async ({ Component, ctx }: any) => {
-  let pageProps = {};
-
-  if (Component.getInitialProps) {
-    pageProps = await Component.getInitialProps(ctx);
-  }
-
-  return { pageProps };
-};
 
 export default App;
