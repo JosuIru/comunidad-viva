@@ -440,3 +440,6 @@ export default function CommunitySetupWizard() {
     </>
   );
 }
+
+// Force SSR to prevent React Query prerender errors
+export const getServerSideProps = async () => ({ props: {} });

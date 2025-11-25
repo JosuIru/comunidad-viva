@@ -268,3 +268,6 @@ export default function HousingCoopLandingPage() {
     </>
   );
 }
+
+// Force SSR to prevent React Query prerender errors
+export const getServerSideProps = async () => ({ props: {} });

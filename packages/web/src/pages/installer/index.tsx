@@ -809,3 +809,8 @@ export default function Installer() {
     </>
   );
 }
+
+// Force SSR to avoid prerender errors with React Query
+export const getServerSideProps = async () => {
+  return { props: {} };
+};
