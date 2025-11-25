@@ -82,11 +82,6 @@ const nextConfig = {
     maxInactiveAge: 25 * 1000,
     pagesBufferLength: 2,
   },
-  // Experimental: Allow build to continue despite prerender errors
-  experimental: {
-    // workerThreads: false,
-    // cpus: 1,
-  },
   // Generate error page fallback to allow build to complete
   // even if some pages fail during static generation
   generateBuildId: async () => {
