@@ -38,7 +38,7 @@ const queryClient = new QueryClient({
   },
 });
 
-export default function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [authToken, setAuthToken] = useState<string | null>(null);
 
@@ -198,3 +198,18 @@ export default function App({ Component, pageProps }: AppProps) {
     </ThemeProvider>
   );
 }
+
+// CRITICAL: Disable Automatic Static Optimization by adding getInitialProps
+// This prevents Next.js from trying to prerender pages at build time
+// which causes "No QueryClient set" errors with React Query hooks
+App.getInitialProps = async ({ Component, ctx }: any) => {
+  let pageProps = {};
+
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
+  }
+
+  return { pageProps };
+};
+
+export default App;

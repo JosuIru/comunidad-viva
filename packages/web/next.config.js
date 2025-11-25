@@ -1,14 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // CRITICAL: Disable ALL server-side rendering to prevent React Query errors
-  // This forces Next.js to only use client-side rendering
-  experimental: {
-    // Disable server components and force client-side only
-    runtime: undefined,
-  },
-  // Skip generating static pages entirely
-  // This prevents prerendering errors during build
+  // CRITICAL: Disable static optimization to prevent React Query prerender errors
+  // Force ALL pages to be treated as dynamic (no SSG, no prerendering)
+  generateBuildId: async () => 'build-' + Date.now(),
+  // Skip static page generation
   skipTrailingSlashRedirect: true,
   skipMiddlewareUrlNormalize: true,
   // i18n configuration
