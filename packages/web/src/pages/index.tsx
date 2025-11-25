@@ -86,7 +86,14 @@ interface MapPin {
   communityId?: string;
 }
 
-export default function HomePage() {
+function HomePage() {
+  // Prevent SSR to avoid localStorage errors
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const t = useTranslations('common');
   const tHome = useTranslations('home');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -135,6 +142,11 @@ export default function HomePage() {
     // Check if user has visited before
     const visited = localStorage.getItem('has_visited_public_view');
     setHasVisitedBefore(!!visited);
+
+    // Mark as visited on first load (for non-authenticated users)
+    if (!hasAuthenticated && !visited) {
+      localStorage.setItem('has_visited_public_view', 'true');
+    }
 
     // Get user name for beginner welcome
     if (storedUser) {
@@ -650,14 +662,15 @@ export default function HomePage() {
     return [42.8125, -1.6458];
   })();
 
+  // Don't render anything on the server - only on client
+  if (!isMounted) {
+    return null;
+  }
+
   // Show landing page ONLY if user explicitly hasn't visited before
   // Allow public browsing for returning visitors
   if (!isAuthenticated && !hasVisitedBefore) {
     // First time visitor - show landing page
-    // Set the flag on client-side only
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('has_visited_public_view', 'true');
-    }
     return <LandingPage />;
   }
 
@@ -1456,4 +1469,12 @@ export default function HomePage() {
   );
 }
 
-export const getStaticProps = async (context: any) => getI18nProps(context);
+// Export as client-only component to avoid localStorage SSR errors
+export default HomePage;
+
+export async function getServerSideProps(context: any) {
+  const i18nProps = await getI18nProps(context);
+  return {
+    props: i18nProps.props,
+  };
+}
