@@ -3,6 +3,7 @@ set -e
 
 echo "=== Build Process ==="
 echo "Current directory: $(pwd)"
+echo "Build script version: 2024-11-26-v2"
 
 # Navigate to backend directory
 if [ -d "packages/backend" ]; then
@@ -18,12 +19,17 @@ echo "Changed to: $(pwd)"
 
 echo ""
 echo "Step 0: Ensuring TypeScript is installed..."
+echo "Checking for: $(pwd)/node_modules/.bin/tsc"
+ls -la node_modules/.bin/tsc 2>/dev/null || echo "TypeScript binary not found"
+
 # Check if TypeScript is installed, if not install it
 if [ ! -f "node_modules/.bin/tsc" ]; then
     echo "TypeScript not found. Installing development dependencies..."
     npm install --include=dev
+    echo "After install, checking again:"
+    ls -la node_modules/.bin/tsc 2>/dev/null || echo "Still not found!"
 else
-    echo "TypeScript already installed"
+    echo "TypeScript already installed at: node_modules/.bin/tsc"
 fi
 
 echo ""
