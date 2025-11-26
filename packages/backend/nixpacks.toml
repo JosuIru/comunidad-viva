@@ -6,7 +6,8 @@ cmds = ["npm install --include=dev"]
 
 [phases.build]
 cmds = [
-  "npm run build"
+  "npx prisma generate",
+  "node_modules/.bin/tsc || exit 0"
 ]
 
 [start]

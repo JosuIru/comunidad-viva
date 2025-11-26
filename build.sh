@@ -4,8 +4,21 @@ set -e
 echo "=== Build Process ==="
 echo "Current directory: $(pwd)"
 
-cd packages/backend || exit 1
+# Navigate to backend directory
+if [ -d "packages/backend" ]; then
+    cd packages/backend || exit 1
+elif [ -d "../backend" ]; then
+    cd ../backend || exit 1
+elif [ ! -f "package.json" ]; then
+    echo "Error: Cannot find backend package.json"
+    exit 1
+fi
+
 echo "Changed to: $(pwd)"
+
+echo ""
+echo "Step 0: Installing dependencies (including TypeScript)..."
+npm install --include=dev
 
 echo ""
 echo "Step 1: Generating Prisma client..."
@@ -16,21 +29,17 @@ echo "Step 2: Compiling TypeScript (errors are OK, files will be generated)..."
 echo "Working directory: $(pwd)"
 echo "TypeScript config: tsconfig.json"
 
-# Try multiple approaches to run tsc
-set +e
-if [ -f "node_modules/.bin/tsc" ]; then
-    echo "Running: node_modules/.bin/tsc"
-    node_modules/.bin/tsc
-    TSC_EXIT_CODE=$?
-elif command -v tsc >/dev/null 2>&1; then
-    echo "Running: tsc (global)"
-    tsc
-    TSC_EXIT_CODE=$?
-else
-    echo "Running: npx typescript"
-    npx typescript
-    TSC_EXIT_CODE=$?
+# Ensure TypeScript is installed
+if [ ! -f "node_modules/.bin/tsc" ]; then
+    echo "TypeScript not found, installing it..."
+    npm install --save-dev typescript@^5.1.3
 fi
+
+# Run TypeScript compiler
+set +e
+echo "Running: node_modules/.bin/tsc"
+node_modules/.bin/tsc
+TSC_EXIT_CODE=$?
 set -e
 
 echo ""
