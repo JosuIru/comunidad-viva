@@ -2,10 +2,14 @@
 nixPkgs = ["nodejs-18_x", "openssl"]
 
 [phases.install]
-cmds = ["npm install --prefix packages/backend --include=dev"]
+cmds = [
+  "echo 'Installing backend dependencies with devDependencies - v2024-11-26'",
+  "npm install --prefix packages/backend --include=dev"
+]
 
 [phases.build]
 cmds = [
+  "echo 'Starting build phase - v2024-11-26'",
   "cd packages/backend && npx prisma generate",
   "./build.sh"
 ]

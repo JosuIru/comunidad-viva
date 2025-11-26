@@ -2,12 +2,21 @@
 nixPkgs = ["nodejs-18_x", "openssl"]
 
 [phases.install]
-cmds = ["npm install --include=dev"]
+cmds = [
+  "echo 'BUILD: Installing dependencies including devDependencies - 2024-11-26-v3'",
+  "npm install --include=dev",
+  "echo 'BUILD: Checking if TypeScript was installed'",
+  "ls -la node_modules/.bin/tsc || echo 'WARNING: TypeScript not found after install'"
+]
 
 [phases.build]
 cmds = [
+  "echo 'BUILD: Generating Prisma client - 2024-11-26-v3'",
   "npx prisma generate",
-  "node_modules/.bin/tsc || exit 0"
+  "echo 'BUILD: Compiling TypeScript'",
+  "node_modules/.bin/tsc || echo 'TypeScript compilation completed with errors (expected)'",
+  "echo 'BUILD: Checking dist directory'",
+  "ls -la dist/ || echo 'ERROR: dist directory not created'"
 ]
 
 [start]

@@ -1,0 +1,2 @@
+2024-11-26-v3-cache-bust
+This file forces Railway to invalidate Docker build cache
