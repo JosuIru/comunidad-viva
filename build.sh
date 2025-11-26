@@ -17,8 +17,14 @@ fi
 echo "Changed to: $(pwd)"
 
 echo ""
-echo "Step 0: Installing dependencies (including TypeScript)..."
-npm install --include=dev
+echo "Step 0: Ensuring TypeScript is installed..."
+# Check if TypeScript is installed, if not install it
+if [ ! -f "node_modules/.bin/tsc" ]; then
+    echo "TypeScript not found. Installing development dependencies..."
+    npm install --include=dev
+else
+    echo "TypeScript already installed"
+fi
 
 echo ""
 echo "Step 1: Generating Prisma client..."
@@ -28,12 +34,6 @@ echo ""
 echo "Step 2: Compiling TypeScript (errors are OK, files will be generated)..."
 echo "Working directory: $(pwd)"
 echo "TypeScript config: tsconfig.json"
-
-# Ensure TypeScript is installed
-if [ ! -f "node_modules/.bin/tsc" ]; then
-    echo "TypeScript not found, installing it..."
-    npm install --save-dev typescript@^5.1.3
-fi
 
 # Run TypeScript compiler
 set +e
