@@ -16,7 +16,10 @@ rm -rf .next
 rm -rf .next.bak
 rm -rf node_modules/.cache
 rm -rf .swc
+# Force webpack to generate new hashes
+touch src/components/MainDashboard.tsx
 echo "✓ Cleaned all build artifacts and cache"
+echo "✓ Touched MainDashboard.tsx to force new webpack hash"
 echo ""
 
 # Step 1: Build with Next.js - ALLOW ERRORS

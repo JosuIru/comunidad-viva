@@ -86,6 +86,7 @@ interface MapPin {
   communityId?: string;
 }
 
+// Force new webpack chunk - v2.0
 export default function MainDashboard() {
   const t = useTranslations('common');
   const tHome = useTranslations('home');
