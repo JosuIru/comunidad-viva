@@ -55,39 +55,14 @@ function App({ Component, pageProps }: AppProps) {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  // Register Service Worker for PWA
+  // Register Service Worker for PWA - TEMPORALMENTE DESHABILITADO
   useEffect(() => {
-    if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
-      navigator.serviceWorker
-        .register('/sw.js')
-        .then((registration) => {
-          // Actualizar SW cuando hay uno nuevo
-          registration.addEventListener('updatefound', () => {
-            const newWorker = registration.installing;
-            if (newWorker) {
-              newWorker.addEventListener('statechange', () => {
-                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  // Hay una nueva versión disponible
-                  if (confirm('¡Nueva versión disponible! ¿Actualizar ahora?')) {
-                    newWorker.postMessage({ type: 'SKIP_WAITING' });
-                    window.location.reload();
-                  }
-                }
-              });
-            }
-          });
-        })
-        .catch(() => {
-          // Service Worker registration failed silently
+    // Desregistrar cualquier Service Worker existente
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        registrations.forEach((registration) => {
+          registration.unregister();
         });
-
-      // Actualizar cuando el SW esté esperando
-      let refreshing = false;
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (!refreshing) {
-          refreshing = true;
-          window.location.reload();
-        }
       });
     }
   }, []);
