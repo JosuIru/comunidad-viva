@@ -39,6 +39,17 @@ const queryClient = new QueryClient({
 function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [authToken, setAuthToken] = useState<string | null>(null);
+  const [messages, setMessages] = useState(pageProps.messages || {});
+
+  // Load translations on client-side if not provided by SSR
+  useEffect(() => {
+    if (!pageProps.messages || Object.keys(pageProps.messages).length === 0) {
+      const locale = router.locale || 'es';
+      import(`../../messages/${locale}.json`)
+        .then((mod) => setMessages(mod.default))
+        .catch((err) => console.error('Failed to load translations:', err));
+    }
+  }, [router.locale, pageProps.messages]);
 
   // Extract JWT token from localStorage on mount
   useEffect(() => {
@@ -71,7 +82,7 @@ function App({ Component, pageProps }: AppProps) {
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <NextIntlClientProvider
         locale={router.locale || 'es'}
-        messages={pageProps.messages || {}}
+        messages={messages}
         timeZone="Europe/Madrid"
         onError={(error) => {
           // Silenciar errores de mensajes faltantes durante SSR
