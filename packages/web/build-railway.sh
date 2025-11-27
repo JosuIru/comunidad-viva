@@ -5,6 +5,12 @@ set +e
 echo "=== Building Next.js for Railway ==="
 echo ""
 
+# Step 0: Clean previous build
+echo "Step 0: Cleaning previous build..."
+rm -rf .next
+echo "✓ Cleaned .next directory"
+echo ""
+
 # Step 1: Build with Next.js - ALLOW ERRORS
 echo "Step 1: Running next build (errors expected for React Query pages)..."
 npm run build
