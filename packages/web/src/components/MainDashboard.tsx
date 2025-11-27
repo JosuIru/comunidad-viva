@@ -429,9 +429,12 @@ export default function MainDashboard() {
   }, [offersData, eventsData, needsData, projectsData, housingData, groupbuysData]);
 
   // Map all items to pins for the map view - memoized to prevent re-creation
-  const mapPins: MapPin[] = useMemo(() => [
+  const mapPins: MapPin[] = useMemo(() => {
+    const pins: MapPin[] = [];
+
     // Offers
-    ...offersWithCoords.map((offer: any) => ({
+    offersWithCoords.forEach((offer: any) => {
+      pins.push({
         id: `offer-${offer.id}`,
         type: offer.type === 'TIME_BANK' ? 'service' : 'offer' as const,
         position: [offer.lat, offer.lng] as [number, number],
@@ -440,9 +443,12 @@ export default function MainDashboard() {
         link: `/offers/${offer.id}`,
         image: offer.images?.[0],
         communityId: offer.communityId,
-      })),
+      });
+    });
+
     // Events
-    ...eventsWithCoords.map((event: any) => ({
+    eventsWithCoords.forEach((event: any) => {
+      pins.push({
       id: `event-${event.id}`,
       type: 'event' as const,
       position: [event.lat, event.lng] as [number, number],
@@ -451,9 +457,12 @@ export default function MainDashboard() {
       link: `/events/${event.id}`,
       image: event.image,
       communityId: event.communityId,
-    })),
+      });
+    });
+
     // Needs
-    ...needsWithCoords.map((need: any) => ({
+    needsWithCoords.forEach((need: any) => {
+      pins.push({
       id: `need-${need.id}`,
       type: 'need' as const,
       position: [need.latitude, need.longitude] as [number, number],
@@ -462,9 +471,12 @@ export default function MainDashboard() {
       link: `/mutual-aid/needs/${need.id}`,
       image: need.images?.[0],
       communityId: need.communityId,
-    })),
+      });
+    });
+
     // Projects
-    ...projectsWithCoords.map((project: any) => ({
+    projectsWithCoords.forEach((project: any) => {
+      pins.push({
       id: `project-${project.id}`,
       type: 'project' as const,
       position: [project.latitude, project.longitude] as [number, number],
@@ -473,9 +485,12 @@ export default function MainDashboard() {
       link: `/mutual-aid/projects/${project.id}`,
       image: project.images?.[0],
       communityId: project.communityId,
-    })),
+      });
+    });
+
     // Housing solutions
-    ...housingWithCoords.map((housing: any) => ({
+    housingWithCoords.forEach((housing: any) => {
+      pins.push({
       id: `housing-${housing.id}`,
       type: 'housing' as const,
       position: [housing.latitude, housing.longitude] as [number, number],
@@ -486,9 +501,12 @@ export default function MainDashboard() {
         : `/housing/${housing.id}`,
       image: housing.images?.[0],
       communityId: housing.communityId,
-    })),
+      });
+    });
+
     // Timebank offers
-    ...timebankWithCoords.map((offer: any) => ({
+    timebankWithCoords.forEach((offer: any) => {
+      pins.push({
       id: `timebank-${offer.id}`,
       type: 'service' as const,
       position: [offer.offer.lat, offer.offer.lng] as [number, number],
@@ -497,9 +515,12 @@ export default function MainDashboard() {
       link: `/timebank/offers/${offer.id}`,
       image: offer.offer.images?.[0],
       communityId: offer.offer.communityId,
-    })),
+      });
+    });
+
     // Group buys
-    ...groupbuysWithCoords.map((gb: any) => ({
+    groupbuysWithCoords.forEach((gb: any) => {
+      pins.push({
       id: `groupbuy-${gb.id}`,
       type: 'offer' as const,
       position: [gb.pickupLat, gb.pickupLng] as [number, number],
@@ -508,8 +529,11 @@ export default function MainDashboard() {
       link: `/groupbuys/${gb.id}`,
       image: gb.offer?.images?.[0],
       communityId: gb.offer?.communityId,
-    })),
-  ], [offersWithCoords, eventsWithCoords, needsWithCoords, projectsWithCoords, housingWithCoords, timebankWithCoords, groupbuysWithCoords]);
+      });
+    });
+
+    return pins;
+  }, [offersWithCoords, eventsWithCoords, needsWithCoords, projectsWithCoords, housingWithCoords, timebankWithCoords, groupbuysWithCoords]);
 
   // Filter pins based on active filters
   const filteredPins = useMemo(() => {
