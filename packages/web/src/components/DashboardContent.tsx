@@ -593,8 +593,8 @@ export default function HomePage() {
     return filteredPins;
   }, [filteredPins, proximityRadius, proximityCenter, userLocation, userData, customLocation]);
 
-  // Calculate map center based on proximity filter settings
-  const mapCenter: [number, number] = (() => {
+  // Calculate map center based on proximity filter settings - memoized
+  const mapCenter: [number, number] = useMemo(() => {
     // If proximity filter is active, center on the selected reference point
     if (proximityRadius !== null) {
       if (proximityCenter === 'custom' && customLocation) {
@@ -644,7 +644,7 @@ export default function HomePage() {
     // 4. Default to Navarra (Pamplona)
     logger.debug('Map center: Default (Navarra)', { coords: [42.8125, -1.6458] });
     return [42.8125, -1.6458];
-  })();
+  }, [proximityRadius, proximityCenter, customLocation, userLocation, userData, filteredPins]);
 
   // Show landing page ONLY if user explicitly hasn't visited before
   // Allow public browsing for returning visitors
