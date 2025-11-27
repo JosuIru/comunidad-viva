@@ -78,7 +78,7 @@ async function cacheFirst(request, cacheName) {
 
   try {
     const response = await fetch(request);
-    if (response.ok) {
+    if (response.ok && request.method === 'GET') {
       const cache = await caches.open(cacheName);
       cache.put(request, response.clone());
       await limitCacheSize(cacheName, CACHE_LIMITS.images);
