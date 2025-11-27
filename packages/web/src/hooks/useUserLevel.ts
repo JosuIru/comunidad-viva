@@ -19,6 +19,8 @@ export function useUserLevel() {
     const fetchLevel = async () => {
       const token = localStorage.getItem('access_token');
       if (!token) {
+        // For non-authenticated users, give access to all features
+        setLevel(10);
         setIsLoading(false);
         return;
       }
@@ -39,10 +41,14 @@ export function useUserLevel() {
           localStorage.setItem('user_level', userLevel.toString());
         }
       } catch (error) {
-        // If API fails, try localStorage
+        // If API fails, use cached level or default to level 10 (access to everything)
         const cachedLevel = localStorage.getItem('user_level');
         if (cachedLevel) {
           setLevel(parseInt(cachedLevel, 10));
+        } else {
+          // Default to level 10 if API fails and no cache - gives access to all features
+          console.warn('Failed to fetch user level, defaulting to level 10 (full access)');
+          setLevel(10);
         }
       } finally {
         setIsLoading(false);
