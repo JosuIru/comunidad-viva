@@ -1452,8 +1452,6 @@ export default function HomePage() {
   );
 }
 
-export async function getServerSideProps({ locale }: { locale: string }) {
-  return {
-    props: await getI18nProps(locale),
-  };
+export async function getServerSideProps(context: any) {
+  return getI18nProps(context);
 }
