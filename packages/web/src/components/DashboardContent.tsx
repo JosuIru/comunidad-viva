@@ -427,6 +427,7 @@ export default function HomePage() {
     return items;
   }, [offersData, eventsData, needsData, projectsData, housingData, groupbuysData]);
 
+  // Map all items to pins for the map view - memoized to prevent re-creation
   const mapPins: MapPin[] = useMemo(() => [
     // Offers
     ...offersWithCoords.map((offer: any) => ({
