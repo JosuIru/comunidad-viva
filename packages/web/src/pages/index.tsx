@@ -444,7 +444,7 @@ function HomePage() {
     return items;
   }, [offersData, eventsData, needsData, projectsData, housingData, groupbuysData]);
 
-  const mapPins: MapPin[] = [
+  const mapPins: MapPin[] = useMemo(() => [
     // Offers
     ...offersWithCoords.map((offer: any) => ({
         id: `offer-${offer.id}`,
@@ -524,7 +524,7 @@ function HomePage() {
       image: gb.offer?.images?.[0],
       communityId: gb.offer?.communityId,
     })),
-  ];
+  ], [offersWithCoords, eventsWithCoords, needsWithCoords, projectsWithCoords, housingWithCoords, timebankWithCoords, groupbuysWithCoords]);
 
   // Filter pins based on active filters
   const filteredPins = useMemo(() => {
