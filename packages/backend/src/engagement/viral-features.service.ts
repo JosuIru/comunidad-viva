@@ -957,8 +957,19 @@ export class ViralFeaturesService {
    * Get level progress
    */
   async getLevelProgress(userId: string) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    let user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) return null;
+
+    // Auto-initialize level and experience if missing or invalid
+    if (!user.level || user.level < 1 || user.experience === null || user.experience === undefined) {
+      user = await this.prisma.user.update({
+        where: { id: userId },
+        data: {
+          level: user.level && user.level >= 1 ? user.level : 1,
+          experience: user.experience ?? 0,
+        },
+      });
+    }
 
     const currentLevelXP = user.level * user.level * 100;
     const nextLevelXP = (user.level + 1) * (user.level + 1) * 100;
@@ -982,6 +993,32 @@ export class ViralFeaturesService {
   async getDailyStreak(userId: string) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     return user?.activeStreak || 0;
+  }
+
+  /**
+   * Initialize user levels for all users (admin utility)
+   */
+  async initializeUserLevels() {
+    // Update all users to have minimum level 1 and experience 0 if not set
+    const result = await this.prisma.user.updateMany({
+      where: {
+        OR: [
+          { level: { equals: null } },
+          { level: { lt: 1 } },
+          { experience: { equals: null } },
+        ],
+      },
+      data: {
+        level: 1,
+        experience: 0,
+      },
+    });
+
+    return {
+      success: true,
+      usersUpdated: result.count,
+      message: `Initialized levels for ${result.count} users`,
+    };
   }
 
   /**

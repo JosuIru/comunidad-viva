@@ -432,5 +432,13 @@ export class ViralFeaturesController {
   async adminUpdateStreaks() {
     return this.viralFeaturesService.updateActiveStreaks();
   }
+
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @Post('admin/init-user-levels')
+  async adminInitUserLevels() {
+    return this.viralFeaturesService.initializeUserLevels();
+  }
 }
 
