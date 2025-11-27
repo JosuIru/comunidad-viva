@@ -11,18 +11,13 @@ interface AppContentProps {
 export default function AppContent({ children }: AppContentProps) {
   const router = useRouter();
 
-  // Economy progression hook - TEMPORARILY DISABLED FOR DEBUGGING
-  // const {
-  //   tier,
-  //   showUnlockModal,
-  //   unlockedTier,
-  //   setShowUnlockModal,
-  // } = useEconomyProgression();
-
-  // Temporary fallback values
-  const showUnlockModal = false;
-  const unlockedTier = 'intermediate' as 'intermediate' | 'advanced';
-  const setShowUnlockModal = () => {};
+  // Economy progression hook - now inside QueryClientProvider
+  const {
+    tier,
+    showUnlockModal,
+    unlockedTier,
+    setShowUnlockModal,
+  } = useEconomyProgression();
 
   // Don't show footer on landing page (it has its own integrated footer) or installer
   const showFooter = router.pathname !== '/' && router.pathname !== '/installer';
