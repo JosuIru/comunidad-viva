@@ -11,13 +11,13 @@ interface AppContentProps {
 export default function AppContent({ children }: AppContentProps) {
   const router = useRouter();
 
-  // TEMPORARILY DISABLED: Economy progression hook causing initialization errors
-  // const {
-  //   tier,
-  //   showUnlockModal,
-  //   unlockedTier,
-  //   setShowUnlockModal,
-  // } = useEconomyProgression();
+  // Economy progression hook - re-enabled
+  const {
+    tier,
+    showUnlockModal,
+    unlockedTier,
+    setShowUnlockModal,
+  } = useEconomyProgression();
 
   // Don't show footer on landing page (it has its own integrated footer) or installer
   const showFooter = router.pathname !== '/' && router.pathname !== '/installer';
@@ -30,6 +30,18 @@ export default function AppContent({ children }: AppContentProps) {
         </div>
         {showFooter && <Footer />}
       </div>
+      <EconomyUnlockModal
+        isOpen={showUnlockModal}
+        tier={unlockedTier}
+        onClose={() => setShowUnlockModal(false)}
+        onExplore={() => {
+          if (unlockedTier === 'intermediate') {
+            router.push('/offers?credits=true');
+          } else if (unlockedTier === 'advanced') {
+            router.push('/timebank');
+          }
+        }}
+      />
     </>
   );
 }
