@@ -647,14 +647,20 @@ export default function HomePage() {
 
   // Show landing page ONLY if user explicitly hasn't visited before
   // Allow public browsing for returning visitors
-  if (!isAuthenticated) {
-    const hasVisitedBefore = localStorage.getItem('has_visited_public_view');
-    if (!hasVisitedBefore) {
-      // First time visitor - show landing page
-      localStorage.setItem('has_visited_public_view', 'true');
-      return <LandingPage />;
+  const [showLanding, setShowLanding] = useState(false);
+
+  useEffect(() => {
+    if (!isAuthenticated && typeof window !== 'undefined') {
+      const hasVisitedBefore = localStorage.getItem('has_visited_public_view');
+      if (!hasVisitedBefore) {
+        localStorage.setItem('has_visited_public_view', 'true');
+        setShowLanding(true);
+      }
     }
-    // Returning visitor - allow public browsing with banner
+  }, [isAuthenticated]);
+
+  if (showLanding) {
+    return <LandingPage />;
   }
 
   // Tour steps - Use adaptive tour if available, otherwise use default
