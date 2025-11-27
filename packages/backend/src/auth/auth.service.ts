@@ -109,8 +109,11 @@ export class AuthService {
     const user = await this.prisma.user.create({
       data: {
         id: randomUUID(),
-        ...data,
+        email: data.email,
+        name: data.name,
         password: hashedPassword,
+        phone: data.phone,
+        interests: [], // Required field - empty array by default
         updatedAt: new Date(),
       },
     });
