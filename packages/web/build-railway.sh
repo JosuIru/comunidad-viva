@@ -5,10 +5,11 @@ set +e
 echo "=== Building Next.js for Railway ==="
 echo ""
 
-# Step 0: Clean previous build
-echo "Step 0: Cleaning previous build..."
+# Step 0: Clean previous build and cache
+echo "Step 0: Cleaning previous build and cache..."
 rm -rf .next
-echo "✓ Cleaned .next directory"
+rm -rf node_modules/.cache
+echo "✓ Cleaned .next directory and cache"
 echo ""
 
 # Step 1: Build with Next.js - ALLOW ERRORS
