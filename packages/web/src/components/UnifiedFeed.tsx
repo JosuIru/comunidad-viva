@@ -68,6 +68,13 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
   return R * c;
 }
 
+// Helper function to get date X days ago - MUST be defined before component
+function getDaysAgo(days: number): string {
+  const date = new Date();
+  date.setDate(date.getDate() - days);
+  return date.toISOString();
+}
+
 const typeConfig = {
   event: {
     labelKey: 'event',
@@ -544,13 +551,6 @@ export default function UnifiedFeed({
 
     return [...blendedOffers, ...blendedEvents, ...otherResources];
   }, [unifiedResources, userLocation]);
-
-  // Helper function to get date X days ago
-  const getDaysAgo = (days: number): string => {
-    const date = new Date();
-    date.setDate(date.getDate() - days);
-    return date.toISOString();
-  };
 
   // Apply filters and sorting - Memoized for performance
   const filteredResources = useMemo(() => {

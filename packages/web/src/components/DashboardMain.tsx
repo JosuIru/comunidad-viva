@@ -86,8 +86,8 @@ interface MapPin {
   communityId?: string;
 }
 
-// Force new webpack chunk - v2.0
-export default function MainDashboard() {
+// Renamed from MainDashboard to DashboardMain to force new webpack chunk
+export default function DashboardMain() {
   const t = useTranslations('common');
   const tHome = useTranslations('home');
   const [isAuthenticated, setIsAuthenticated] = useState(false);

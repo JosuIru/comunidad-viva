@@ -25,7 +25,7 @@ rm -rf /tmp/.next* 2>/dev/null || true
 rm -rf /app/.next* 2>/dev/null || true
 
 # Force webpack to generate new hashes by modifying file
-echo "// Build timestamp: $(date +%s)" >> src/components/MainDashboard.tsx
+echo "// Build timestamp: $(date +%s)" >> src/components/DashboardMain.tsx
 
 echo "✓ Cleaned all build artifacts and cache"
 echo "✓ Modified MainDashboard.tsx to force new webpack hash"

@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 
 // Import components with SSR disabled to avoid localStorage errors
 const LandingPage = dynamic(() => import('@/components/LandingPage'), { ssr: false });
-const MainDashboard = dynamic(() => import('@/components/MainDashboard'), {
+const MainDashboard = dynamic(() => import('@/components/DashboardMain'), {
   ssr: false,
   loading: () => (
     <div className="flex items-center justify-center min-h-screen">
