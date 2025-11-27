@@ -1285,17 +1285,25 @@ export class DemoContentManager {
     }
 
     // Calculate how many demos to add
-    // Rule: Max 50% of total should be demos
-    const maxDemosAllowed = Math.min(
-      maximumDemos,
-      Math.floor(realCount * 0.5), // Max 50% demos
-      demoContent.length
-    );
+    let demosToAdd = 0;
 
-    // If we have very few real items, allow more demos but cap at maxDemos
-    const demosToAdd = realCount < 5
-      ? Math.min(maximumDemos, demoContent.length)
-      : maxDemosAllowed;
+    if (realCount === 0) {
+      // If no real content, show up to maximumDemos
+      demosToAdd = Math.min(maximumDemos, demoContent.length);
+    } else if (realCount < 5) {
+      // Very few items: add at least 5 demos to make the feed look populated
+      demosToAdd = Math.min(Math.max(5, maximumDemos), demoContent.length);
+    } else if (realCount < 10) {
+      // Some items: add demos to reach ~10 total items
+      demosToAdd = Math.min(10 - realCount, maximumDemos, demoContent.length);
+    } else {
+      // 10-19 real items: add a few demos (max 30% of real content)
+      demosToAdd = Math.min(
+        Math.ceil(realCount * 0.3),
+        maximumDemos,
+        demoContent.length
+      );
+    }
 
     // Take the first N demos (already sorted by relevance)
     const selectedDemos = demoContent.slice(0, demosToAdd);
