@@ -13,24 +13,29 @@ export function useEconomyProgression() {
   const [unlockedTier, setUnlockedTier] = useState<'intermediate' | 'advanced'>('intermediate');
   const [initialized, setInitialized] = useState(false);
 
-  // Fetch user balance data to initialize/migrate
+  // Check if user is authenticated
+  const isAuthenticated = typeof window !== 'undefined' && !!localStorage.getItem('access_token');
+
+  // Fetch user balance data to initialize/migrate - only if authenticated
   const { data: balanceData } = useQuery({
     queryKey: ['credits', 'balance'],
     queryFn: async () => {
       const response = await api.get('/credits/balance');
       return response.data;
     },
-    enabled: typeof window !== 'undefined',
+    enabled: isAuthenticated,
+    retry: false, // Don't retry on 401
   });
 
-  // Fetch timebank stats for migration
+  // Fetch timebank stats for migration - only if authenticated
   const { data: timebankData } = useQuery({
     queryKey: ['timebank-stats'],
     queryFn: async () => {
       const response = await api.get('/timebank/stats');
       return response.data;
     },
-    enabled: typeof window !== 'undefined',
+    enabled: isAuthenticated,
+    retry: false, // Don't retry on 401
   });
 
   // Initialize/migrate economy progression
