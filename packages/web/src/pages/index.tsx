@@ -1452,9 +1452,8 @@ export default function HomePage() {
   );
 }
 
-export async function getStaticProps({ locale }: { locale: string }) {
+export async function getServerSideProps({ locale }: { locale: string }) {
   return {
     props: await getI18nProps(locale),
-    revalidate: 60, // Revalidate every 60 seconds
   };
 }
