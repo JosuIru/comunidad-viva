@@ -86,7 +86,7 @@ interface MapPin {
   communityId?: string;
 }
 
-export default function HomePage() {
+export default function MainDashboard() {
   const t = useTranslations('common');
   const tHome = useTranslations('home');
   const [isAuthenticated, setIsAuthenticated] = useState(false);

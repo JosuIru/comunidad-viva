@@ -1,8 +1,7 @@
 import dynamic from 'next/dynamic';
 
-// Import dashboard with SSR disabled to avoid localStorage errors
-// Force rebuild: v2024-11-27-2
-const DashboardContent = dynamic(() => import('@/components/DashboardContent'), {
+// Import main dashboard with SSR disabled - renamed to force new webpack chunk
+const MainDashboard = dynamic(() => import('@/components/MainDashboard'), {
   ssr: false,
   loading: () => (
     <div className="flex items-center justify-center min-h-screen">
@@ -15,5 +14,5 @@ const DashboardContent = dynamic(() => import('@/components/DashboardContent'), 
 });
 
 export default function Dashboard() {
-  return <DashboardContent />;
+  return <MainDashboard />;
 }
