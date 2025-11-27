@@ -1452,6 +1452,9 @@ export default function HomePage() {
   );
 }
 
-export async function getServerSideProps(context: any) {
-  return getI18nProps(context);
+export async function getStaticProps(context: any) {
+  return {
+    ...(await getI18nProps(context)),
+    revalidate: 60, // Regenerar cada 60 segundos
+  };
 }
