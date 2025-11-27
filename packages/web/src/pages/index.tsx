@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 
 // Import dashboard with SSR disabled to avoid localStorage errors
+// Force rebuild: v2024-11-27-2
 const DashboardContent = dynamic(() => import('@/components/DashboardContent'), {
   ssr: false,
   loading: () => (

@@ -2,14 +2,21 @@
 # IMPORTANT: Do NOT use 'set -e' - we want to continue even if build has errors
 set +e
 
-echo "=== Building Next.js for Railway ==="
+# Force fresh build - disable Next.js cache
+export NEXT_TELEMETRY_DISABLED=1
+export NEXT_PRIVATE_STANDALONE=true
+
+echo "=== Building Next.js for Railway (FORCE FRESH BUILD) ==="
+echo "Build timestamp: $(date)"
 echo ""
 
-# Step 0: Clean previous build and cache
-echo "Step 0: Cleaning previous build and cache..."
+# Step 0: Clean previous build and cache completely
+echo "Step 0: Cleaning previous build and cache completely..."
 rm -rf .next
+rm -rf .next.bak
 rm -rf node_modules/.cache
-echo "✓ Cleaned .next directory and cache"
+rm -rf .swc
+echo "✓ Cleaned all build artifacts and cache"
 echo ""
 
 # Step 1: Build with Next.js - ALLOW ERRORS
