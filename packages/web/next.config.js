@@ -52,6 +52,15 @@ const nextConfig = {
   compress: true,
   // Force production mode behavior
   productionBrowserSourceMaps: false,
+  // CRITICAL: Disable webpack cache completely to prevent stale chunks
+  webpack: (config, { isServer }) => {
+    // Disable webpack persistent cache
+    config.cache = false;
+    // Force new chunk hashes by adding timestamp to output
+    config.output.hashFunction = 'xxhash64';
+    config.output.hashDigestLength = 16;
+    return config;
+  },
 };
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({

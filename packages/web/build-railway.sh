@@ -5,21 +5,30 @@ set +e
 # Force fresh build - disable Next.js cache
 export NEXT_TELEMETRY_DISABLED=1
 export NEXT_PRIVATE_STANDALONE=true
+# CRITICAL: Disable all webpack caching
+export WEBPACK_DISABLE_CACHE=1
 
 echo "=== Building Next.js for Railway (FORCE FRESH BUILD) ==="
 echo "Build timestamp: $(date)"
+echo "Build ID: $(date +%s)"
 echo ""
 
-# Step 0: Clean previous build and cache completely
-echo "Step 0: Cleaning previous build and cache completely..."
+# Step 0: NUCLEAR OPTION - Delete EVERYTHING
+echo "Step 0: NUCLEAR CLEAN - Removing all build artifacts..."
 rm -rf .next
 rm -rf .next.bak
 rm -rf node_modules/.cache
 rm -rf .swc
-# Force webpack to generate new hashes
-touch src/components/MainDashboard.tsx
+rm -rf out
+# Also clean any potential Railway cache
+rm -rf /tmp/.next* 2>/dev/null || true
+rm -rf /app/.next* 2>/dev/null || true
+
+# Force webpack to generate new hashes by modifying file
+echo "// Build timestamp: $(date +%s)" >> src/components/MainDashboard.tsx
+
 echo "✓ Cleaned all build artifacts and cache"
-echo "✓ Touched MainDashboard.tsx to force new webpack hash"
+echo "✓ Modified MainDashboard.tsx to force new webpack hash"
 echo ""
 
 # Step 1: Build with Next.js - ALLOW ERRORS
