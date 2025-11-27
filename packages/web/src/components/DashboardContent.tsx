@@ -335,14 +335,14 @@ export default function HomePage() {
     },
   });
 
-  // Transform data to map pins
-  const offersWithCoords = (offersData || []).filter((offer: any) => offer.lat && offer.lng && offer.lat !== 0 && offer.lng !== 0);
-  const eventsWithCoords = (eventsData || []).filter((event: any) => event.lat && event.lng && event.lat !== 0 && event.lng !== 0);
-  const needsWithCoords = (needsData || []).filter((need: any) => need.latitude && need.longitude);
-  const projectsWithCoords = (projectsData || []).filter((project: any) => project.latitude && project.longitude);
-  const housingWithCoords = (housingData || []).filter((housing: any) => housing.latitude && housing.longitude);
-  const timebankWithCoords = (timebankData || []).filter((offer: any) => offer.offer?.lat && offer.offer?.lng && offer.offer?.lat !== 0 && offer.offer?.lng !== 0);
-  const groupbuysWithCoords = (groupbuysData || []).filter((gb: any) => gb.pickupLat && gb.pickupLng);
+  // Transform data to map pins - memoized to prevent recalculation
+  const offersWithCoords = useMemo(() => (offersData || []).filter((offer: any) => offer.lat && offer.lng && offer.lat !== 0 && offer.lng !== 0), [offersData]);
+  const eventsWithCoords = useMemo(() => (eventsData || []).filter((event: any) => event.lat && event.lng && event.lat !== 0 && event.lng !== 0), [eventsData]);
+  const needsWithCoords = useMemo(() => (needsData || []).filter((need: any) => need.latitude && need.longitude), [needsData]);
+  const projectsWithCoords = useMemo(() => (projectsData || []).filter((project: any) => project.latitude && project.longitude), [projectsData]);
+  const housingWithCoords = useMemo(() => (housingData || []).filter((housing: any) => housing.latitude && housing.longitude), [housingData]);
+  const timebankWithCoords = useMemo(() => (timebankData || []).filter((offer: any) => offer.offer?.lat && offer.offer?.lng && offer.offer?.lat !== 0 && offer.offer?.lng !== 0), [timebankData]);
+  const groupbuysWithCoords = useMemo(() => (groupbuysData || []).filter((gb: any) => gb.pickupLat && gb.pickupLng), [groupbuysData]);
 
   logger.debug('Map data loaded', {
     dataFetched: {
