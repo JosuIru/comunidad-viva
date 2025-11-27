@@ -664,8 +664,8 @@ export default function HomePage() {
     return <LandingPage />;
   }
 
-  // Tour steps - Use adaptive tour if available, otherwise use default
-  const tourSteps = adaptiveTour ? adaptiveTour.steps : [
+  // Tour steps - Use adaptive tour if available, otherwise use default - memoized
+  const tourSteps = useMemo(() => adaptiveTour ? adaptiveTour.steps : [
     {
       target: '[data-tour="tabs"]',
       title: '¡Bienvenido a Comunidad Viva! 🎉',
@@ -690,7 +690,7 @@ export default function HomePage() {
       description: 'Filtra recursos por tipo, comunidad, proximidad o búsqueda de texto. Personaliza tu experiencia para ver solo lo que te interesa.',
       position: 'left' as const,
     },
-  ];
+  ], [adaptiveTour]);
 
   // Show beginner welcome for new users
   if (isAuthenticated && showBeginnerMode) {
