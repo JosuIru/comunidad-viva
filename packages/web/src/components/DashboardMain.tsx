@@ -233,6 +233,13 @@ export default function DashboardMain() {
     }
   }, [proximityRadius]);
 
+  // Auto-switch to feed view if map widget is disabled
+  useEffect(() => {
+    if (view === 'map' && !enabledWidgets.includes('map_view')) {
+      setView('feed');
+    }
+  }, [enabledWidgets, view]);
+
   // Fetch user's community
   const { data: userData } = useQuery({
     queryKey: ['user', userId],
@@ -823,7 +830,7 @@ export default function DashboardMain() {
                     Acciones Rápidas
                   </h3>
                 </div>
-                <div className="grid grid-cols-3 gap-3">
+                <div className={`grid ${enabledWidgets.includes('map_view') ? 'grid-cols-3' : 'grid-cols-2'} gap-3`}>
                   <Link
                     href="/offers/new"
                     className="flex flex-col items-center justify-center gap-2 px-4 py-5 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/50"
@@ -831,15 +838,17 @@ export default function DashboardMain() {
                     <ShoppingBagIcon className="h-8 w-8" />
                     <span className="text-xs font-semibold text-center">Publicar</span>
                   </Link>
-                  <button
-                    onClick={() => {
-                      setShowFilters(true);
-                    }}
-                    className="flex flex-col items-center justify-center gap-2 px-4 py-5 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg transition-all hover:scale-105 hover:shadow-lg hover:shadow-green-500/50"
-                  >
-                    <MagnifyingGlassIcon className="h-8 w-8" />
-                    <span className="text-xs font-semibold text-center">Buscar</span>
-                  </button>
+                  {enabledWidgets.includes('map_view') && (
+                    <button
+                      onClick={() => {
+                        setShowFilters(true);
+                      }}
+                      className="flex flex-col items-center justify-center gap-2 px-4 py-5 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg transition-all hover:scale-105 hover:shadow-lg hover:shadow-green-500/50"
+                    >
+                      <MagnifyingGlassIcon className="h-8 w-8" />
+                      <span className="text-xs font-semibold text-center">Buscar</span>
+                    </button>
+                  )}
                   <Link
                     href="/communities"
                     className="flex flex-col items-center justify-center gap-2 px-4 py-5 bg-gradient-to-br from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-lg transition-all hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50"
@@ -913,60 +922,64 @@ export default function DashboardMain() {
                       </div>
                     )}
 
-                    {/* View Toggle */}
-                    <div data-tour="map-toggle" className="flex items-center gap-3">
-                      <Button
-                        onClick={() => {
-                          setView('map');
-                          Analytics.track(ANALYTICS_EVENTS.VIEW_CHANGED, { view: 'map' });
-                        }}
-                        variant={view === 'map' ? 'primary' : 'ghost'}
-                        size="md"
-                      >
-                        <div className="flex items-center gap-2">
-                          <MapIcon className="h-5 w-5" />
-                          <span>{tHome('map')}</span>
-                        </div>
+                    {/* View Toggle - Only show if map widget is enabled */}
+                    {enabledWidgets.includes('map_view') && (
+                      <div data-tour="map-toggle" className="flex items-center gap-3">
+                        <Button
+                          onClick={() => {
+                            setView('map');
+                            Analytics.track(ANALYTICS_EVENTS.VIEW_CHANGED, { view: 'map' });
+                          }}
+                          variant={view === 'map' ? 'primary' : 'ghost'}
+                          size="md"
+                        >
+                          <div className="flex items-center gap-2">
+                            <MapIcon className="h-5 w-5" />
+                            <span>{tHome('map')}</span>
+                          </div>
+                          {view === 'map' && filteredPins.length > 0 && (
+                            <span className="ml-2 px-2 py-0.5 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 rounded-full text-xs">
+                              {filteredPins.length}
+                            </span>
+                          )}
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            setView('feed');
+                            Analytics.track(ANALYTICS_EVENTS.VIEW_CHANGED, { view: 'feed' });
+                          }}
+                          variant={view === 'feed' ? 'primary' : 'ghost'}
+                          size="md"
+                        >
+                          <div className="flex items-center gap-2">
+                            <NewspaperIcon className="h-5 w-5" />
+                            <span>{tHome('feed')}</span>
+                          </div>
+                        </Button>
                         {view === 'map' && filteredPins.length > 0 && (
-                          <span className="ml-2 px-2 py-0.5 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 rounded-full text-xs">
-                            {filteredPins.length}
+                          <span className="text-sm text-gray-600 dark:text-gray-400">
+                            {filteredPins.length} resultado{filteredPins.length !== 1 ? 's' : ''}
                           </span>
                         )}
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          setView('feed');
-                          Analytics.track(ANALYTICS_EVENTS.VIEW_CHANGED, { view: 'feed' });
-                        }}
-                        variant={view === 'feed' ? 'primary' : 'ghost'}
-                        size="md"
-                      >
-                        <div className="flex items-center gap-2">
-                          <NewspaperIcon className="h-5 w-5" />
-                          <span>{tHome('feed')}</span>
-                        </div>
-                      </Button>
-                      {view === 'map' && filteredPins.length > 0 && (
-                        <span className="text-sm text-gray-600 dark:text-gray-400">
-                          {filteredPins.length} resultado{filteredPins.length !== 1 ? 's' : ''}
-                        </span>
-                      )}
-                    </div>
+                      </div>
+                    )}
 
                     {view === 'map' ? (
                       <div className="space-y-6">
-                        {/* Map - Always visible as primary component */}
-                        <div className="relative z-0 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-                          <Map pins={pinsWithProximityMarker} center={mapCenter} zoom={mapZoom} height="600px" />
-                          {/* Fullscreen Button */}
-                          <button
-                            onClick={() => setIsFullscreenMap(true)}
-                            className="absolute top-4 right-4 z-[1000] bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 p-3 rounded-lg shadow-lg transition-all hover:scale-110 border-2 border-gray-200 dark:border-gray-600"
-                            title="Ver en pantalla completa"
-                          >
-                            <ArrowsPointingOutIcon className="h-5 w-5" />
-                          </button>
-                        </div>
+                        {/* Map - Conditional based on dashboard settings */}
+                        {enabledWidgets.includes('map_view') && (
+                          <div className="relative z-0 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                            <Map pins={pinsWithProximityMarker} center={mapCenter} zoom={mapZoom} height="600px" />
+                            {/* Fullscreen Button */}
+                            <button
+                              onClick={() => setIsFullscreenMap(true)}
+                              className="absolute top-4 right-4 z-[1000] bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 p-3 rounded-lg shadow-lg transition-all hover:scale-110 border-2 border-gray-200 dark:border-gray-600"
+                              title="Ver en pantalla completa"
+                            >
+                              <ArrowsPointingOutIcon className="h-5 w-5" />
+                            </button>
+                          </div>
+                        )}
 
                         {/* Unified Feed - Below Map */}
                         <UnifiedFeed
@@ -991,7 +1004,7 @@ export default function DashboardMain() {
                   </div>
 
             {/* Filter Panel - Desktop: Right Sidebar, Mobile: Modal */}
-            {view === 'map' && (
+            {view === 'map' && enabledWidgets.includes('map_view') && (
               <>
                 {/* Desktop Sidebar - Expandable with button */}
                 <motion.div
@@ -1237,7 +1250,7 @@ export default function DashboardMain() {
         )}
 
         {/* Mobile Filter Button - Floating (only visible on map view and mobile) */}
-        {view === 'map' && activeTab === 'explore' && (
+        {view === 'map' && activeTab === 'explore' && enabledWidgets.includes('map_view') && (
           <button
             onClick={() => setShowFilters(!showFilters)}
             className="lg:hidden fixed bottom-20 left-4 z-[10001] bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 font-semibold transition-all hover:scale-105"
