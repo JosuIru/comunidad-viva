@@ -955,20 +955,18 @@ export default function DashboardMain() {
 
                     {view === 'map' ? (
                       <div className="space-y-6">
-                        {/* Map - Conditional based on dashboard settings */}
-                        {enabledWidgets.includes('map_view') && (
-                          <div className="relative z-0 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-                            <Map pins={pinsWithProximityMarker} center={mapCenter} zoom={mapZoom} height="600px" />
-                            {/* Fullscreen Button */}
-                            <button
-                              onClick={() => setIsFullscreenMap(true)}
-                              className="absolute top-4 right-4 z-[1000] bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 p-3 rounded-lg shadow-lg transition-all hover:scale-110 border-2 border-gray-200 dark:border-gray-600"
-                              title="Ver en pantalla completa"
-                            >
-                              <ArrowsPointingOutIcon className="h-5 w-5" />
-                            </button>
-                          </div>
-                        )}
+                        {/* Map - Always visible as primary component */}
+                        <div className="relative z-0 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                          <Map pins={pinsWithProximityMarker} center={mapCenter} zoom={mapZoom} height="600px" />
+                          {/* Fullscreen Button */}
+                          <button
+                            onClick={() => setIsFullscreenMap(true)}
+                            className="absolute top-4 right-4 z-[1000] bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 p-3 rounded-lg shadow-lg transition-all hover:scale-110 border-2 border-gray-200 dark:border-gray-600"
+                            title="Ver en pantalla completa"
+                          >
+                            <ArrowsPointingOutIcon className="h-5 w-5" />
+                          </button>
+                        </div>
 
                         {/* Unified Feed - Below Map */}
                         <UnifiedFeed
