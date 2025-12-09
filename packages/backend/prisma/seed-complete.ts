@@ -407,7 +407,337 @@ async function main() {
     },
   });
 
-  console.log('✓ Ofertas creadas');
+  // Más ofertas de servicios
+  const offer6 = await prisma.offer.create({
+    data: {
+      id: randomUUID(),
+      userId: user1.id,
+      type: 'SERVICE',
+      category: 'Salud',
+      title: 'Clases de yoga al aire libre',
+      description: 'Sesiones de yoga en el parque para todos los niveles. Ambiente relajado y conexión con la naturaleza.',
+      priceCredits: 6,
+      lat: 42.9820,
+      lng: -1.7150,
+      address: 'Parque de la Taconera, Pamplona',
+      communityId: community.id,
+      tags: ['yoga', 'salud', 'bienestar', 'deporte'],
+      status: 'ACTIVE',
+      views: 52,
+      interested: 11,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const offer7 = await prisma.offer.create({
+    data: {
+      id: randomUUID(),
+      userId: user2.id,
+      type: 'SERVICE',
+      category: 'Transporte',
+      title: 'Servicio de bicicleta compartida',
+      description: 'Presto mi bicicleta eléctrica para desplazamientos por la ciudad. Ideal para recados.',
+      priceCredits: 3,
+      lat: 42.9870,
+      lng: -1.7280,
+      address: 'Avenida Baja Navarra, Pamplona',
+      communityId: community.id,
+      tags: ['transporte', 'bicicleta', 'movilidad sostenible'],
+      status: 'ACTIVE',
+      views: 34,
+      interested: 8,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const offer8 = await prisma.offer.create({
+    data: {
+      id: randomUUID(),
+      userId: user4.id,
+      type: 'PRODUCT',
+      category: 'Hogar',
+      title: 'Muebles reciclados restaurados',
+      description: 'Vendo muebles vintage restaurados con materiales sostenibles. Cada pieza es única.',
+      priceCredits: 45,
+      priceEur: 75,
+      stock: 5,
+      lat: 42.9600,
+      lng: -1.7400,
+      address: 'Calle Bergamín 28, Pamplona',
+      communityId: community.id,
+      tags: ['muebles', 'reciclaje', 'decoración', 'sostenible'],
+      status: 'ACTIVE',
+      views: 68,
+      interested: 15,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const offer9 = await prisma.offer.create({
+    data: {
+      id: randomUUID(),
+      userId: user3.id,
+      type: 'SERVICE',
+      category: 'Alimentación',
+      title: 'Repostería casera sin gluten',
+      description: 'Preparo tartas, galletas y postres sin gluten, lactosa ni azúcar refinado.',
+      priceCredits: 12,
+      lat: 42.9750,
+      lng: -1.7100,
+      address: 'Calle Monasterio de Urdax 5, Pamplona',
+      communityId: community.id,
+      tags: ['repostería', 'sin gluten', 'alimentación saludable'],
+      status: 'ACTIVE',
+      views: 41,
+      interested: 9,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const offer10 = await prisma.offer.create({
+    data: {
+      id: randomUUID(),
+      userId: user1.id,
+      type: 'SERVICE',
+      category: 'Educación',
+      title: 'Taller de compostaje comunitario',
+      description: 'Enseño a crear compost casero y gestionar residuos orgánicos de forma sostenible.',
+      priceCredits: 8,
+      lat: 42.9910,
+      lng: -1.7190,
+      address: 'Centro Cívico Iturrama, Pamplona',
+      communityId: community.id,
+      tags: ['compostaje', 'sostenibilidad', 'medio ambiente'],
+      status: 'ACTIVE',
+      views: 57,
+      interested: 13,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  console.log('✓ Ofertas creadas (10 ofertas)');
+
+  // ==========================================
+  // OFERTAS DE BANCO DE TIEMPO
+  // ==========================================
+  console.log('⏰ Creando ofertas de banco de tiempo...');
+
+  await Promise.all([
+    prisma.timeBankOffer.create({
+      data: {
+        id: randomUUID(),
+        offerId: offer1.id,
+        skillId: skill1.id,
+        estimatedHours: 2,
+        canTeach: true,
+        maxStudents: 6,
+        experienceLevel: 'INTERMEDIATE',
+        toolsNeeded: ['herramientas de jardinería'],
+      },
+    }),
+    prisma.timeBankOffer.create({
+      data: {
+        id: randomUUID(),
+        offerId: offer2.id,
+        skillId: skill2.id,
+        estimatedHours: 3,
+        canTeach: true,
+        maxStudents: 4,
+        experienceLevel: 'EXPERT',
+        toolsNeeded: ['herramientas de carpintería'],
+      },
+    }),
+    prisma.timeBankOffer.create({
+      data: {
+        id: randomUUID(),
+        offerId: offer3.id,
+        skillId: skill3.id,
+        estimatedHours: 1.5,
+        canTeach: true,
+        maxStudents: 8,
+        experienceLevel: 'BEGINNER',
+        toolsNeeded: [],
+      },
+    }),
+  ]);
+
+  console.log('✓ Ofertas de banco de tiempo creadas');
+
+  // ==========================================
+  // MÁS COMUNIDADES
+  // ==========================================
+  console.log('🏘️  Creando más comunidades...');
+
+  const community2 = await prisma.community.create({
+    data: {
+      id: randomUUID(),
+      slug: 'pamplona-rochapea',
+      name: 'Rochapea Solidaria',
+      description: 'Comunidad del barrio de Rochapea enfocada en ayuda mutua y economía circular',
+      type: 'NEIGHBORHOOD',
+      visibility: 'PUBLIC',
+      lat: 42.8200,
+      lng: -1.6450,
+      radiusKm: 3,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const community3 = await prisma.community.create({
+    data: {
+      id: randomUUID(),
+      slug: 'navarra-sostenible',
+      name: 'Navarra Sostenible',
+      description: 'Red regional de cooperación para la transición ecológica y social',
+      type: 'REGION',
+      visibility: 'PUBLIC',
+      lat: 42.6954,
+      lng: -1.6761,
+      radiusKm: 50,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  console.log('✓ Más comunidades creadas (3 comunidades totales)');
+
+  // ==========================================
+  // VIVIENDA TEMPORAL
+  // ==========================================
+  console.log('🏠 Creando viviendas temporales...');
+
+  const housing1 = await prisma.temporaryHousing.create({
+    data: {
+      id: randomUUID(),
+      hostId: user1.id,
+      communityId: community.id,
+      type: 'EXCHANGE',
+      title: 'Habitación luminosa en el centro',
+      description: 'Habitación privada en piso compartido. Ambiente tranquilo y acogedor. Perfecto para estancias cortas.',
+      images: [],
+      address: 'Calle San Nicolás 12, Pamplona',
+      lat: 42.8182,
+      lng: -1.6444,
+      accommodationType: 'PRIVATE_ROOM',
+      beds: 1,
+      bathrooms: 1,
+      squareMeters: 15,
+      amenities: ['wifi', 'cocina compartida', 'calefacción', 'ropa de cama'],
+      houseRules: ['no fumar', 'respetar horarios de descanso'],
+      availableFrom: new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000),
+      availableTo: new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000),
+      minNights: 3,
+      maxNights: 30,
+      exchangeType: 'CREDITS',
+      creditsPerNight: 8,
+      maxGuests: 1,
+      status: 'ACTIVE',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const housing2 = await prisma.temporaryHousing.create({
+    data: {
+      id: randomUUID(),
+      hostId: user2.id,
+      communityId: community.id,
+      type: 'GUEST',
+      title: 'Sofá-cama para viajeros',
+      description: 'Ofrezco mi sofá-cama para viajeros de paso. Ambiente familiar y buen rollo.',
+      images: [],
+      address: 'Plaza San Francisco 8, Pamplona',
+      lat: 42.8167,
+      lng: -1.6425,
+      accommodationType: 'COUCH',
+      beds: 1,
+      bathrooms: 1,
+      amenities: ['wifi', 'cocina', 'ducha'],
+      houseRules: ['no fumar', 'participar en tareas del hogar'],
+      availableFrom: now,
+      availableTo: new Date(now.getTime() + 180 * 24 * 60 * 60 * 1000),
+      minNights: 1,
+      maxNights: 5,
+      exchangeType: 'FREE',
+      isFree: true,
+      maxGuests: 1,
+      status: 'ACTIVE',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const housing3 = await prisma.temporaryHousing.create({
+    data: {
+      id: randomUUID(),
+      hostId: user4.id,
+      communityId: community.id,
+      type: 'NOMAD',
+      title: 'Apartamento para nómadas digitales',
+      description: 'Apartamento completo con espacio de trabajo. Ideal para trabajadores remotos.',
+      images: [],
+      address: 'Avenida del Ejército 15, Pamplona',
+      lat: 42.8090,
+      lng: -1.6380,
+      accommodationType: 'ENTIRE_PLACE',
+      beds: 1,
+      bathrooms: 1,
+      squareMeters: 45,
+      amenities: ['wifi fibra', 'escritorio', 'cocina equipada', 'lavadora'],
+      houseRules: ['no fiestas', 'mantener limpieza'],
+      availableFrom: new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000),
+      availableTo: new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000),
+      minNights: 7,
+      maxNights: 90,
+      exchangeType: 'MIXED',
+      pricePerNight: 35,
+      creditsPerNight: 25,
+      maxGuests: 2,
+      status: 'ACTIVE',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const housing4 = await prisma.temporaryHousing.create({
+    data: {
+      id: randomUUID(),
+      hostId: user3.id,
+      communityId: community2.id,
+      type: 'TRANSITION',
+      title: 'Vivienda comunitaria de transición',
+      description: 'Habitación en vivienda comunitaria para personas en situación de cambio vital. Apoyo mutuo y espacios compartidos.',
+      images: [],
+      address: 'Calle Aralar 22, Pamplona',
+      lat: 42.8220,
+      lng: -1.6470,
+      accommodationType: 'SHARED_ROOM',
+      beds: 1,
+      bathrooms: 2,
+      squareMeters: 12,
+      amenities: ['cocina comunitaria', 'sala común', 'jardín', 'wifi'],
+      houseRules: ['participar en asambleas', 'tareas compartidas', 'respeto mutuo'],
+      availableFrom: now,
+      availableTo: new Date(now.getTime() + 180 * 24 * 60 * 60 * 1000),
+      minNights: 30,
+      maxNights: 180,
+      exchangeType: 'TIME_HOURS',
+      hoursPerNight: 0.5,
+      maxGuests: 1,
+      minReputation: 5,
+      status: 'ACTIVE',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  console.log('✓ Viviendas temporales creadas (4 viviendas)');
 
   // ==========================================
   // COMPRA GRUPAL (GROUP BUY)
@@ -536,6 +866,121 @@ async function main() {
     },
   });
 
+  const event4 = await prisma.event.create({
+    data: {
+      id: randomUUID(),
+      organizerId: user4.id,
+      title: 'Mercadillo de intercambio de ropa',
+      description: 'Trae ropa que ya no uses y llévate algo nuevo. Economía circular en acción.',
+      lat: 42.9780,
+      lng: -1.7200,
+      address: 'Plaza del Castillo, Pamplona',
+      startsAt: new Date(now.getTime() + 8 * 24 * 60 * 60 * 1000),
+      endsAt: new Date(now.getTime() + 8 * 24 * 60 * 60 * 1000 + 5 * 60 * 60 * 1000),
+      capacity: 50,
+      creditsReward: 5,
+      tags: ['intercambio', 'ropa', 'sostenibilidad', 'economía circular'],
+      type: 'MARKET',
+      requirements: [],
+      communityId: community.id,
+      status: 'ACTIVE',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const event5 = await prisma.event.create({
+    data: {
+      id: randomUUID(),
+      organizerId: user1.id,
+      title: 'Paseo en bicicleta por el Casco Viejo',
+      description: 'Ruta guiada en bici descubriendo rincones históricos de Pamplona.',
+      lat: 42.8180,
+      lng: -1.6430,
+      address: 'Plaza Consistorial, Pamplona',
+      startsAt: new Date(now.getTime() + 10 * 24 * 60 * 60 * 1000),
+      endsAt: new Date(now.getTime() + 10 * 24 * 60 * 60 * 1000 + 3 * 60 * 60 * 1000),
+      capacity: 25,
+      creditsReward: 8,
+      tags: ['bicicleta', 'turismo', 'deporte', 'historia'],
+      type: 'SOCIAL',
+      requirements: ['Traer tu propia bicicleta'],
+      communityId: community.id,
+      status: 'ACTIVE',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const event6 = await prisma.event.create({
+    data: {
+      id: randomUUID(),
+      organizerId: user3.id,
+      title: 'Taller de cocina sin desperdicio',
+      description: 'Aprende a cocinar aprovechando todo y reduciendo el desperdicio alimentario.',
+      lat: 42.9850,
+      lng: -1.7180,
+      address: 'Centro Social de Iturrama, Pamplona',
+      startsAt: new Date(now.getTime() + 12 * 24 * 60 * 60 * 1000),
+      endsAt: new Date(now.getTime() + 12 * 24 * 60 * 60 * 1000 + 3 * 60 * 60 * 1000),
+      capacity: 15,
+      creditsReward: 7,
+      tags: ['cocina', 'sostenibilidad', 'alimentación', 'cero residuos'],
+      type: 'WORKSHOP',
+      requirements: [],
+      communityId: community.id,
+      status: 'ACTIVE',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const event7 = await prisma.event.create({
+    data: {
+      id: randomUUID(),
+      organizerId: user2.id,
+      title: 'Jornada de limpieza del río Arga',
+      description: 'Voluntariado para limpiar las riberas del río. Materiales proporcionados.',
+      lat: 42.8100,
+      lng: -1.6350,
+      address: 'Paseo fluvial del Arga, Pamplona',
+      startsAt: new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000),
+      endsAt: new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000 + 4 * 60 * 60 * 1000),
+      capacity: 40,
+      creditsReward: 12,
+      tags: ['medio ambiente', 'voluntariado', 'limpieza', 'naturaleza'],
+      type: 'CLEANUP',
+      requirements: ['Ropa cómoda y guantes'],
+      communityId: community.id,
+      status: 'ACTIVE',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const event8 = await prisma.event.create({
+    data: {
+      id: randomUUID(),
+      organizerId: user4.id,
+      title: 'Proyección de documental sobre economía colaborativa',
+      description: 'Proyección seguida de debate sobre alternativas económicas.',
+      lat: 42.9680,
+      lng: -1.7500,
+      address: 'Biblioteca de Navarra, Pamplona',
+      startsAt: new Date(now.getTime() + 18 * 24 * 60 * 60 * 1000),
+      endsAt: new Date(now.getTime() + 18 * 24 * 60 * 60 * 1000 + 2.5 * 60 * 60 * 1000),
+      capacity: 60,
+      creditsReward: 4,
+      tags: ['cine', 'economía', 'debate', 'cultura'],
+      type: 'SOCIAL',
+      requirements: [],
+      communityId: community.id,
+      status: 'ACTIVE',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
   // Asistentes a eventos
   await Promise.all([
     prisma.eventAttendee.create({
@@ -565,9 +1010,27 @@ async function main() {
         registeredAt: now,
       },
     }),
+    prisma.eventAttendee.create({
+      data: {
+        id: randomUUID(),
+        eventId: event4.id,
+        userId: user3.id,
+        role: 'PARTICIPANT',
+        registeredAt: now,
+      },
+    }),
+    prisma.eventAttendee.create({
+      data: {
+        id: randomUUID(),
+        eventId: event5.id,
+        userId: user4.id,
+        role: 'PARTICIPANT',
+        registeredAt: now,
+      },
+    }),
   ]);
 
-  console.log('✓ Eventos creados');
+  console.log('✓ Eventos creados (8 eventos)');
 
   // ==========================================
   // PUBLICACIONES (POSTS)
@@ -938,12 +1401,14 @@ async function main() {
   console.log('\n✅ Seed completo exitoso!');
   console.log('\n📊 Resumen de datos creados:');
   console.log('  - 5 usuarios (4 ciudadanos + 1 admin)');
-  console.log('  - 1 comunidad (Pamplona Centro)');
+  console.log('  - 3 comunidades (Pamplona Centro, Rochapea, Navarra Regional)');
   console.log('  - 4 conexiones entre usuarios');
   console.log('  - 4 habilidades');
-  console.log('  - 5 ofertas (4 servicios + 1 producto)');
+  console.log('  - 10 ofertas geolocalizadas (7 servicios + 3 productos)');
+  console.log('  - 3 ofertas de banco de tiempo');
+  console.log('  - 4 viviendas temporales (incluyendo Vivienda Comunitaria)');
   console.log('  - 1 compra grupal activa con 3 participantes');
-  console.log('  - 3 eventos comunitarios');
+  console.log('  - 8 eventos comunitarios geolocalizados');
   console.log('  - 4 publicaciones con comentarios');
   console.log('  - 2 desafíos semanales');
   console.log('  - 4 reseñas');
@@ -959,17 +1424,19 @@ async function main() {
   console.log('  Password (para todos): Test1234!');
   console.log('\n💡 La base de datos ahora tiene datos de prueba para:');
   console.log('  ✓ Sistema de usuarios y perfiles');
-  console.log('  ✓ Comunidades y membresías');
+  console.log('  ✓ Comunidades y membresías (3 comunidades)');
   console.log('  ✓ Red social (conexiones, posts, comentarios)');
-  console.log('  ✓ Marketplace (ofertas, búsquedas)');
+  console.log('  ✓ Marketplace (10 ofertas geolocalizadas)');
   console.log('  ✓ Compras grupales');
-  console.log('  ✓ Eventos y asistencia');
-  console.log('  ✓ Banco de tiempo (habilidades)');
+  console.log('  ✓ Eventos y asistencia (8 eventos geolocalizados)');
+  console.log('  ✓ Banco de tiempo (habilidades y ofertas)');
+  console.log('  ✓ Vivienda temporal (4 viviendas incluyendo comunitaria)');
   console.log('  ✓ Sistema de reputación (reseñas)');
   console.log('  ✓ Mensajería');
   console.log('  ✓ Gamificación (desafíos, logros)');
   console.log('  ✓ Sistema de créditos');
   console.log('  ✓ Notificaciones');
+  console.log('\n🗺️  Todos los datos tienen coordenadas geográficas para visualización en mapa');
 }
 
 main()
