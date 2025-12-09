@@ -122,16 +122,16 @@ export default function Map({
 
   return (
     <div
-      className="relative z-0 rounded-lg overflow-hidden shadow-lg"
-      style={{ height }}
+      className="relative rounded-lg overflow-hidden shadow-lg"
+      style={{ height, position: 'relative', zIndex: 1 }}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
       {/* Overlay cuando el scroll está desactivado */}
       {!scrollEnabled && isHovering && (
         <div
-          className="absolute inset-0 z-[1000] flex items-center justify-center pointer-events-none"
-          style={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
+          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0)', zIndex: 1000 }}
         >
           <div className="bg-black/70 text-white px-4 py-2 rounded-lg text-sm font-medium">
             {t('clickToEnableScroll')}
@@ -142,7 +142,7 @@ export default function Map({
       <MapContainer
         center={center}
         zoom={zoom}
-        style={{ height: '100%', width: '100%', zIndex: 1 }}
+        style={{ height: '100%', width: '100%', position: 'relative' }}
         scrollWheelZoom={false}
         ref={(map) => {
           if (map) {

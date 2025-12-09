@@ -218,7 +218,7 @@ export default function MapPage() {
           </div>
 
           {/* Map */}
-          <div className="bg-white rounded-lg shadow p-4">
+          <div className="bg-white rounded-lg shadow p-4" style={{ minHeight: '650px' }}>
             <Map
               center={mapCenter}
               zoom={13}
