@@ -1352,6 +1352,463 @@ async function main() {
   console.log('✓ Transacciones creadas');
 
   // ==========================================
+  // COMUNIDADES ADICIONALES (ALEJADAS)
+  // ==========================================
+  console.log('🏘️  Creando comunidades adicionales...');
+
+  const community4 = await prisma.community.create({
+    data: {
+      id: randomUUID(),
+      slug: 'barcelona-gracia',
+      name: 'Barcelona Gràcia',
+      description: 'Comunidad colaborativa del barrio de Gràcia, Barcelona',
+      type: 'NEIGHBORHOOD',
+      visibility: 'PUBLIC',
+      lat: 41.4036,
+      lng: 2.1564,
+      radiusKm: 3,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const community5 = await prisma.community.create({
+    data: {
+      id: randomUUID(),
+      slug: 'madrid-lavapies',
+      name: 'Lavapiés Coopera',
+      description: 'Red de ayuda mutua del barrio de Lavapiés, Madrid',
+      type: 'NEIGHBORHOOD',
+      visibility: 'PUBLIC',
+      lat: 40.4089,
+      lng: -3.7009,
+      radiusKm: 2,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const community6 = await prisma.community.create({
+    data: {
+      id: randomUUID(),
+      slug: 'valencia-sostenible',
+      name: 'Valencia Sostenible',
+      description: 'Comunidad regional de Valencia para la economía circular',
+      type: 'REGION',
+      visibility: 'PUBLIC',
+      lat: 39.4699,
+      lng: -0.3763,
+      radiusKm: 40,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const community7 = await prisma.community.create({
+    data: {
+      id: randomUUID(),
+      slug: 'sevilla-triana',
+      name: 'Sevilla Triana',
+      description: 'Comunidad del barrio de Triana enfocada en cultura y solidaridad',
+      type: 'NEIGHBORHOOD',
+      visibility: 'PUBLIC',
+      lat: 37.3828,
+      lng: -6.0023,
+      radiusKm: 3,
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  console.log('✓ Comunidades adicionales creadas (7 comunidades totales)');
+
+  // ==========================================
+  // NECESIDADES GEOLOCALIZADAS
+  // ==========================================
+  console.log('🆘 Creando necesidades...');
+
+  const need1 = await prisma.need.create({
+    data: {
+      id: randomUUID(),
+      creatorId: user3.id,
+      communityId: community.id,
+      scope: 'PERSONAL',
+      category: 'URGENT',
+      type: 'LIVELIHOOD',
+      title: 'Ayuda con mudanza este fin de semana',
+      description: 'Necesito ayuda para trasladar muebles de un piso a otro en el centro. Tengo una furgoneta pero necesito brazos fuertes.',
+      images: [],
+      location: 'Calle Mayor, Pamplona',
+      latitude: 42.8175,
+      longitude: -1.6437,
+      country: 'ES',
+      resourceTypes: ['TIME_HOURS'],
+      targetHours: 4,
+      neededSkills: ['fuerza física', 'disponibilidad fin de semana'],
+      urgencyLevel: 3,
+      deadline: new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000),
+      status: 'OPEN',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const need2 = await prisma.need.create({
+    data: {
+      id: randomUUID(),
+      creatorId: user4.id,
+      communityId: community.id,
+      scope: 'PERSONAL',
+      category: 'CHRONIC',
+      type: 'LIVELIHOOD',
+      title: 'Cuidado de mascota durante vacaciones',
+      description: 'Busco alguien que pueda cuidar de mi gato durante 10 días en agosto. Es muy tranquilo y sociable.',
+      images: [],
+      location: 'Barrio Rochapea, Pamplona',
+      latitude: 42.8195,
+      longitude: -1.6420,
+      country: 'ES',
+      resourceTypes: ['TIME_HOURS'],
+      targetHours: 20,
+      neededSkills: ['amor por los animales', 'responsabilidad'],
+      urgencyLevel: 2,
+      status: 'OPEN',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const need3 = await prisma.need.create({
+    data: {
+      id: randomUUID(),
+      creatorId: user1.id,
+      communityId: community4.id,
+      scope: 'PERSONAL',
+      category: 'URGENT',
+      type: 'INFRASTRUCTURE',
+      title: 'Reparación de lavadora',
+      description: 'Mi lavadora ha dejado de funcionar y no desagua. Busco alguien con conocimientos de reparación de electrodomésticos.',
+      images: [],
+      location: 'Calle Verdi, Barcelona',
+      latitude: 41.4042,
+      longitude: 2.1558,
+      country: 'ES',
+      resourceTypes: ['TIME_HOURS', 'SKILLS'],
+      targetHours: 2,
+      neededSkills: ['reparación electrodomésticos', 'electricidad'],
+      urgencyLevel: 4,
+      deadline: new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000),
+      status: 'OPEN',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const need4 = await prisma.need.create({
+    data: {
+      id: randomUUID(),
+      creatorId: user2.id,
+      communityId: community5.id,
+      scope: 'COMMUNITY',
+      category: 'PROJECT',
+      type: 'EDUCATION',
+      title: 'Clases de informática para mayores',
+      description: 'Buscamos voluntarios para dar clases básicas de informática y smartphone a personas mayores del barrio.',
+      images: [],
+      location: 'Centro Cultural Lavapiés, Madrid',
+      latitude: 40.4085,
+      longitude: -3.7015,
+      country: 'ES',
+      resourceTypes: ['TIME_HOURS', 'SKILLS'],
+      targetHours: 40,
+      neededSkills: ['informática', 'paciencia', 'comunicación'],
+      urgencyLevel: 2,
+      status: 'OPEN',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const need5 = await prisma.need.create({
+    data: {
+      id: randomUUID(),
+      creatorId: user3.id,
+      communityId: community6.id,
+      scope: 'COMMUNITY',
+      category: 'PROJECT',
+      type: 'ENVIRONMENT',
+      title: 'Huerto comunitario - voluntarios',
+      description: 'Necesitamos voluntarios para mantener el huerto comunitario. Actividades: riego, plantación, cosecha y mantenimiento.',
+      images: [],
+      location: 'Jardín del Turia, Valencia',
+      latitude: 39.4750,
+      longitude: -0.3700,
+      country: 'ES',
+      resourceTypes: ['TIME_HOURS'],
+      targetHours: 100,
+      neededSkills: ['jardinería', 'compromiso'],
+      urgencyLevel: 1,
+      status: 'OPEN',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const need6 = await prisma.need.create({
+    data: {
+      id: randomUUID(),
+      creatorId: user1.id,
+      communityId: community7.id,
+      scope: 'PERSONAL',
+      category: 'CHRONIC',
+      type: 'HOUSING',
+      title: 'Pintar habitación infantil',
+      description: 'Necesito ayuda para pintar una habitación. Tengo la pintura y herramientas, solo necesito manos extra.',
+      images: [],
+      location: 'Barrio Triana, Sevilla',
+      latitude: 37.3825,
+      longitude: -6.0020,
+      country: 'ES',
+      resourceTypes: ['TIME_HOURS'],
+      targetHours: 6,
+      neededSkills: ['pintura', 'bricolaje'],
+      urgencyLevel: 2,
+      deadline: new Date(now.getTime() + 10 * 24 * 60 * 60 * 1000),
+      status: 'OPEN',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  console.log('✓ Necesidades creadas (6 necesidades)');
+
+  // ==========================================
+  // MÁS OFERTAS DE BANCO DE TIEMPO
+  // ==========================================
+  console.log('⏰ Creando más ofertas de banco de tiempo...');
+
+  // Primero crear las ofertas base
+  const timebankOffer1 = await prisma.offer.create({
+    data: {
+      id: randomUUID(),
+      userId: user2.id,
+      type: 'SERVICE',
+      category: 'Educación',
+      title: 'Clases de inglés conversacional',
+      description: 'Ofrezco clases de inglés nivel intermedio-avanzado. Enfoque en conversación práctica.',
+      images: [],
+      lat: 42.8180,
+      lng: -1.6445,
+      address: 'Plaza del Castillo, Pamplona',
+      communityId: community.id,
+      status: 'ACTIVE',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const timebankOffer2 = await prisma.offer.create({
+    data: {
+      id: randomUUID(),
+      userId: user4.id,
+      type: 'SERVICE',
+      category: 'Cuidados',
+      title: 'Paseo de perros',
+      description: 'Ofrezco sacar a pasear perros por el parque. Me encantan los animales y tengo experiencia.',
+      images: [],
+      lat: 41.4040,
+      lng: 2.1560,
+      address: 'Parque Güell, Barcelona',
+      communityId: community4.id,
+      status: 'ACTIVE',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const timebankOffer3 = await prisma.offer.create({
+    data: {
+      id: randomUUID(),
+      userId: user1.id,
+      type: 'SERVICE',
+      category: 'Cuidados',
+      title: 'Cuidado de niños por la tarde',
+      description: 'Ofrezco cuidar niños de 4-10 años por las tardes. Actividades educativas y juegos.',
+      images: [],
+      lat: 40.4087,
+      lng: -3.7010,
+      address: 'Barrio Lavapiés, Madrid',
+      communityId: community5.id,
+      status: 'ACTIVE',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const timebankOffer4 = await prisma.offer.create({
+    data: {
+      id: randomUUID(),
+      userId: user3.id,
+      type: 'SERVICE',
+      category: 'Alimentación',
+      title: 'Clases de cocina vegetariana',
+      description: 'Enseño a cocinar platos vegetarianos deliciosos y nutritivos. Recetas fáciles y económicas.',
+      images: [],
+      lat: 39.4700,
+      lng: -0.3760,
+      address: 'Mercado Central, Valencia',
+      communityId: community6.id,
+      status: 'ACTIVE',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  const timebankOffer5 = await prisma.offer.create({
+    data: {
+      id: randomUUID(),
+      userId: user2.id,
+      type: 'SERVICE',
+      category: 'Reparación',
+      title: 'Reparación de bicicletas',
+      description: 'Reparo todo tipo de bicicletas: frenos, cambios, ruedas, cadenas, etc.',
+      images: [],
+      lat: 37.3827,
+      lng: -6.0022,
+      address: 'Puente Isabel II, Sevilla',
+      communityId: community7.id,
+      status: 'ACTIVE',
+      createdAt: now,
+      updatedAt: now,
+    },
+  });
+
+  // Crear habilidades adicionales para banco de tiempo
+  const skill5 = await prisma.skill.create({
+    data: {
+      id: randomUUID(),
+      userId: user2.id,
+      name: 'Inglés',
+      description: 'Nivel C1, experiencia dando clases particulares',
+      category: 'Idiomas',
+      verified: true,
+      endorsements: 8,
+    },
+  });
+
+  const skill6 = await prisma.skill.create({
+    data: {
+      id: randomUUID(),
+      userId: user4.id,
+      name: 'Cuidado de mascotas',
+      description: 'Experiencia con perros de todos los tamaños',
+      category: 'Cuidados',
+      verified: false,
+      endorsements: 3,
+    },
+  });
+
+  const skill7 = await prisma.skill.create({
+    data: {
+      id: randomUUID(),
+      userId: user1.id,
+      name: 'Cuidado infantil',
+      description: 'Madre con experiencia en actividades educativas',
+      category: 'Cuidados',
+      verified: false,
+      endorsements: 4,
+    },
+  });
+
+  const skill8 = await prisma.skill.create({
+    data: {
+      id: randomUUID(),
+      userId: user3.id,
+      name: 'Cocina vegetariana',
+      description: 'Chef vegetariana con formación profesional',
+      category: 'Cocina',
+      verified: true,
+      endorsements: 15,
+    },
+  });
+
+  const skill9 = await prisma.skill.create({
+    data: {
+      id: randomUUID(),
+      userId: user2.id,
+      name: 'Mecánica de bicicletas',
+      description: 'Mecánico profesional, especializado en bicis urbanas y de montaña',
+      category: 'Reparación',
+      verified: true,
+      endorsements: 12,
+    },
+  });
+
+  // Crear las ofertas de banco de tiempo
+  await Promise.all([
+    prisma.timeBankOffer.create({
+      data: {
+        id: randomUUID(),
+        offerId: timebankOffer1.id,
+        skillId: skill5.id,
+        estimatedHours: 1,
+        experienceLevel: 'EXPERT',
+        canTeach: true,
+        maxStudents: 4,
+        toolsNeeded: [],
+      },
+    }),
+    prisma.timeBankOffer.create({
+      data: {
+        id: randomUUID(),
+        offerId: timebankOffer2.id,
+        skillId: skill6.id,
+        estimatedHours: 1,
+        experienceLevel: 'INTERMEDIATE',
+        canTeach: false,
+        toolsNeeded: ['correa', 'bolsas'],
+      },
+    }),
+    prisma.timeBankOffer.create({
+      data: {
+        id: randomUUID(),
+        offerId: timebankOffer3.id,
+        skillId: skill7.id,
+        estimatedHours: 3,
+        experienceLevel: 'INTERMEDIATE',
+        canTeach: false,
+        toolsNeeded: [],
+      },
+    }),
+    prisma.timeBankOffer.create({
+      data: {
+        id: randomUUID(),
+        offerId: timebankOffer4.id,
+        skillId: skill8.id,
+        estimatedHours: 2,
+        experienceLevel: 'EXPERT',
+        canTeach: true,
+        maxStudents: 6,
+        toolsNeeded: ['ingredientes'],
+      },
+    }),
+    prisma.timeBankOffer.create({
+      data: {
+        id: randomUUID(),
+        offerId: timebankOffer5.id,
+        skillId: skill9.id,
+        estimatedHours: 1.5,
+        experienceLevel: 'EXPERT',
+        canTeach: true,
+        maxStudents: 2,
+        toolsNeeded: ['herramientas de bicicleta'],
+      },
+    }),
+  ]);
+
+  console.log('✓ Ofertas adicionales de banco de tiempo creadas (8 ofertas totales)');
+
+  // ==========================================
   // NOTIFICACIONES
   // ==========================================
   console.log('🔔 Creando notificaciones...');
@@ -1401,11 +1858,15 @@ async function main() {
   console.log('\n✅ Seed completo exitoso!');
   console.log('\n📊 Resumen de datos creados:');
   console.log('  - 5 usuarios (4 ciudadanos + 1 admin)');
-  console.log('  - 3 comunidades (Pamplona Centro, Rochapea, Navarra Regional)');
+  console.log('  - 7 comunidades distribuidas por España:');
+  console.log('    • Pamplona Centro, Rochapea, Navarra Regional');
+  console.log('    • Barcelona Gràcia, Madrid Lavapiés');
+  console.log('    • Valencia Sostenible, Sevilla Triana');
   console.log('  - 4 conexiones entre usuarios');
-  console.log('  - 4 habilidades');
-  console.log('  - 10 ofertas geolocalizadas (7 servicios + 3 productos)');
-  console.log('  - 3 ofertas de banco de tiempo');
+  console.log('  - 9 habilidades verificadas');
+  console.log('  - 15 ofertas geolocalizadas (12 servicios + 3 productos)');
+  console.log('  - 8 ofertas de banco de tiempo');
+  console.log('  - 6 necesidades geolocalizadas (ayuda mutua)');
   console.log('  - 4 viviendas temporales (incluyendo Vivienda Comunitaria)');
   console.log('  - 1 compra grupal activa con 3 participantes');
   console.log('  - 8 eventos comunitarios geolocalizados');
@@ -1424,19 +1885,25 @@ async function main() {
   console.log('  Password (para todos): Test1234!');
   console.log('\n💡 La base de datos ahora tiene datos de prueba para:');
   console.log('  ✓ Sistema de usuarios y perfiles');
-  console.log('  ✓ Comunidades y membresías (3 comunidades)');
+  console.log('  ✓ Comunidades y membresías (7 comunidades en España)');
   console.log('  ✓ Red social (conexiones, posts, comentarios)');
-  console.log('  ✓ Marketplace (10 ofertas geolocalizadas)');
+  console.log('  ✓ Marketplace (15 ofertas geolocalizadas)');
   console.log('  ✓ Compras grupales');
   console.log('  ✓ Eventos y asistencia (8 eventos geolocalizados)');
-  console.log('  ✓ Banco de tiempo (habilidades y ofertas)');
+  console.log('  ✓ Banco de tiempo (9 habilidades y 8 ofertas)');
+  console.log('  ✓ Necesidades / Ayuda Mutua (6 necesidades)');
   console.log('  ✓ Vivienda temporal (4 viviendas incluyendo comunitaria)');
   console.log('  ✓ Sistema de reputación (reseñas)');
   console.log('  ✓ Mensajería');
   console.log('  ✓ Gamificación (desafíos, logros)');
   console.log('  ✓ Sistema de créditos');
   console.log('  ✓ Notificaciones');
-  console.log('\n🗺️  Todos los datos tienen coordenadas geográficas para visualización en mapa');
+  console.log('\n🗺️  Todos los datos tienen coordenadas geográficas en:');
+  console.log('  📍 Pamplona (Navarra)');
+  console.log('  📍 Barcelona (Cataluña)');
+  console.log('  📍 Madrid (Comunidad de Madrid)');
+  console.log('  📍 Valencia (Comunidad Valenciana)');
+  console.log('  📍 Sevilla (Andalucía)');
 }
 
 main()
