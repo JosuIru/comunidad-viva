@@ -42,7 +42,7 @@
     "react-leaflet": "^4.2.1",
     "react-loading-skeleton": "^3.5.0",
     "react-window": "^2.2.2",
-    "recharts": "^3.4.1",
+    "recharts": "^3.5.1",
     "socket.io-client": "^4.8.1",
     "uuid": "^13.0.0",
     "zod": "^3.22.0",
